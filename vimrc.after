@@ -1,0 +1,2 @@
+set nonumber
+set relativenumber
