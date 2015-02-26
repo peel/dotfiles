@@ -1,14 +1,13 @@
-FILES = ideavimrc zshrc.after tmux.conf.user vimrc.after
-
-HOME := ~/wrk/dotfiles
-
+FILES = ideavimrc tmux.conf.user vimrc.after
+ZSH_FILES = my.zsh
+REPO := "~/wrk/dotfiles"
 default: update
 
-setup: download update link source
+install: download update link source
 
 download:
 	sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`"
-	sh $HOME/Brewfile
+	sudo sh $HOME/Brewfile
 
 update:
 	cd ~/.yadr
@@ -16,10 +15,12 @@ update:
 	rake update
 
 link:
-	@for f in $(FILES) ; do ln -fvs $(HOME)/$$f ~/.$$f; done
+	@for f in $(FILES) ; do ln -fvs $(REPO)/$$f ~/.$$f; done
+	@for f in $(ZSH_LIST) ; do ln -fvs ~/.zsh.after/$$f; done
 
 unlink:
-	@for f in $(LIST) ; do rm ~/.$$f; done
+	@for f in $(LIST) ; do rm -f ~/.$$f; done
+	@for f in $(ZSH_LIST) ; do rm -rf ~/.zsh.after/$$f; done
 
 source:
 	@for f in $(FILES) ; do source ~/.$$f; done

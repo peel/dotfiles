@@ -5,6 +5,8 @@ brew install caskroom/cask/brew-cask
 brew install zsh zsh-completions
 brew install wget
 brew install tree
+gem install tmuxinator
+brew install tmuxinator-completion
 
 #dev
 brew install jenv
