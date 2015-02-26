@@ -16,11 +16,12 @@ update:
 
 link:
 	@for f in $(FILES) ; do ln -fvs $(REPO)/$$f ~/.$$f; done
-	@for f in $(ZSH_LIST) ; do ln -fvs ~/.zsh.after/$$f; done
+	@for f in $(ZSH_LIST) ; do ln -fvs $(REPO)/$$f ~/.zsh.after/$$f; done
 
 unlink:
 	@for f in $(LIST) ; do rm -f ~/.$$f; done
-	@for f in $(ZSH_LIST) ; do rm -rf ~/.zsh.after/$$f; done
+	@for f in $(ZSH_LIST) ; do rm -f ~/.zsh.after/$$f; done
 
 source:
 	@for f in $(FILES) ; do source ~/.$$f; done
+	@for f in $(ZSH_FILES) ; do source ~/.zsh.after/$$f; done
