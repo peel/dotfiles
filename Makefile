@@ -8,11 +8,15 @@ install: download update link source
 download:
 	sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`"
 	sudo sh $HOME/Brewfile
+	git clone --recursive http://github.com/syl20bnr/spacemacs ~/.emacs.d
 
 update:
 	cd ~/.yadr
 	git pull --rebase
 	rake update
+	cd ~/.emacs.d
+  git pull --rebase
+  git submodule sync; git submodule update
 
 link:
 	@for f in $(FILES) ; do ln -fvs $(REPO)/$$f ~/.$$f; done
