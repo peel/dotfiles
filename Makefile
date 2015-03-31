@@ -1,4 +1,4 @@
-FILES = ideavimrc tmux.conf.user vimrc.after
+FILES = ideavimrc tmux.conf.user vimrc.after spacemacs
 ZSH_FILES = my.zsh
 REPO := "~/wrk/dotfiles"
 default: update
