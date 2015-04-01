@@ -3,6 +3,7 @@ function gi() { curl -L -s https://www.gitignore.io/api/\$@ ;}
 
 # aliases
 alias git=hub
+alias e=emacs
 alias present='scala -Dscala.color -language:_ -nowarn -i REPLesent.scala'
 
 # variables
