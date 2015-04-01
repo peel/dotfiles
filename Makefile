@@ -6,26 +6,26 @@ default: update
 install: download update link source
 
 download:
-	sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`"
-	sudo sh $HOME/Brewfile
-	git clone --recursive http://github.com/syl20bnr/spacemacs ~/.emacs.d
+		sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`"
+		sudo sh $HOME/Brewfile
+		git clone --recursive http://github.com/syl20bnr/spacemacs ~/.emacs.d
 
 update:
-	cd ~/.yadr
-	git pull --rebase
-	rake update
-	cd ~/.emacs.d
-  git pull --rebase
-  git submodule sync; git submodule update
+		cd ~/.yadr
+		git pull --rebase
+		rake update
+		cd ~/.emacs.d
+		git pull --rebase
+		git submodule sync; git submodule update
 
 link:
-	@for f in $(FILES) ; do ln -fvs $(REPO)/$$f ~/.$$f; done
-	@for f in $(ZSH_LIST) ; do ln -fvs $(REPO)/$$f ~/.zsh.after/$$f; done
+		@for f in $(FILES) ; do ln -fvs $(REPO)/$$f ~/.$$f; done
+		@for f in $(ZSH_LIST) ; do ln -fvs $(REPO)/$$f ~/.zsh.after/$$f; done
 
 unlink:
-	@for f in $(LIST) ; do rm -f ~/.$$f; done
-	@for f in $(ZSH_LIST) ; do rm -f ~/.zsh.after/$$f; done
+		@for f in $(LIST) ; do rm -f ~/.$$f; done
+		@for f in $(ZSH_LIST) ; do rm -f ~/.zsh.after/$$f; done
 
 source:
-	@for f in $(FILES) ; do source ~/.$$f; done
-	@for f in $(ZSH_FILES) ; do source ~/.zsh.after/$$f; done
+		@for f in $(FILES) ; do source ~/.$$f; done
+		@for f in $(ZSH_FILES) ; do source ~/.zsh.after/$$f; done
