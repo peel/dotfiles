@@ -22,6 +22,7 @@ npm install -g bower yo grunt-cli
 gem install ghi
 brew install task
 
+brew cask install mendeley-desktop
 brew cask install appcleaner
 brew cask install spotify
 brew cask install spotify-notifications
