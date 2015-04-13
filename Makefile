@@ -11,12 +11,12 @@ download:
 		git clone --recursive http://github.com/syl20bnr/spacemacs ~/.emacs.d
 
 update:
-		cd ~/.yadr
-		git pull --rebase
-		rake update
 		cd ~/.emacs.d
-		git pull --rebase
+		git pull -r -u
 		git submodule sync; git submodule update
+		cd ~/.yadr
+		git pull -r -u
+		rake update
 
 link:
 		@for f in $(FILES) ; do ln -fvs $(REPO)/$$f ~/.$$f; done
