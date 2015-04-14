@@ -10,7 +10,7 @@
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load. If it is the symbol `all' instead
    ;; of a list then all discovered layers will be installed.
-   dotspacemacs-configuration-layers '(ansible (colors :variables colors-enable-nyan-cat-progress-bar t colors-enable-rainbow-identifiers t) dash dockerfile fasd git osx scala vagrant)
+   dotspacemacs-configuration-layers '(ansible (colors :variables colors-enable-nyan-cat-progress-bar t colors-enable-rainbow-identifiers t) dash dockerfile fasd git html markdown org osx ruby scala vagrant)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -102,6 +102,7 @@ before layers configuration."
    ;; Not used for now.
    dotspacemacs-default-package-repository nil)
   ;; User initialization goes here
+  (setq-default ruby-version-manager 'rvm)
   )
 
 (defun dotspacemacs/config ()

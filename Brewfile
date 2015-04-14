@@ -21,6 +21,9 @@ brew cask install mysqlworkbench
 npm install -g bower yo grunt-cli
 gem install ghi
 brew install task
+#emacs related
+npm install -g tern
+gem install pry
 
 brew cask install mendeley-desktop
 brew cask install appcleaner
