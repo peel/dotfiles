@@ -1,15 +1,32 @@
 # functions
 function gi() { curl -L -s https://www.gitignore.io/api/\$@ ;}
 
+function ghidoing() {
+  if [[ "$1" = <-> ]]
+  then
+    ghi label "$1" -a "in progress"
+  else
+    ghi open -m "$1" -L "in progress"
+  fi
+}
+
+function ghidone() {
+  if [[ "$1" = <-> ]]
+  then
+    ghi close "$1"
+  else
+    ghi close $(ghi open -m "$1" -L "in progress" | head -n 1 | awk 'match($0, /[0-9]+/){print substr($0, RSTART, RLENGTH)}')
+  fi
+}
+
+
+
 # aliases
 alias git=hub
 alias e=emacs
-alias present='scala -Dscala.color -language:_ -nowarn -i REPLesent.scala'
 
 # variables
-export DOCKER_HOST=tcp://192.168.59.103:2376
-export DOCKER_CERT_PATH=~/.boot2docker/certs/boot2docker-vm
-export DOCKER_TLS_VERIFY=1
+eval $(docker-machine env docker)
 
-export EDITOR=/usr/bin/vim
+export EDITOR=/usr/bin/emacs
 export SHELL=/usr/local/bin/zsh
