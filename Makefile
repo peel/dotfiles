@@ -1,6 +1,6 @@
 FILES = ideavimrc tmux.conf.user vimrc.after spacemacs
 ZSH_FILES = my.zsh
-REPO := "~/wrk/dotfiles"
+REPO := "wrk/dotfiles"
 IDEA_V := 14
 IDEA_DIRS = colors fileTemplates inspection keymaps options quicklists templates
 default: update
@@ -15,18 +15,18 @@ download:
 update:
 		cd ~/.emacs.d && git pull -r && git submodule sync; git submodule update
 		cd ~/.yadr && git pull -r && rake update
-		sh -c "rm -rf $(REPO)/idea && unzip -o $(REPO)/settings.jar -d $(REPO)/idea"
+		sh -c "rm -rf ~/$(REPO)/idea && unzip -o ~/$(REPO)/settings.jar -d ~/$(REPO)/idea"
 
 config:
 		defaults write com.apple.PowerChime ChimeOnAllHardware -bool true; open /System/Library/CoreServices/PowerChime.app &
 
 brew:
-	sh $(REPO)/Brewfile
+	sh ~/$(REPO)/Brewfile
 
 link:
-		@for f in $(FILES) ; do ln -fvs $(REPO)/$$f ~/.$$f; done
-		@for f in $(ZSH_LIST) ; do ln -fvs $(REPO)/$$f ~/.zsh.after/$$f; done
-		@for d in $(IDEA_DIRS) ; do mv ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d.bak && ln -fvs $(REPO)/idea/$$d ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d; done
+		@for f in $(FILES) ; do ln -fvs ~/$(REPO)/$$f ~/.$$f; done
+		@for f in $(ZSH_LIST) ; do ln -fvs ~/$(REPO)/$$f ~/.zsh.after/$$f; done
+		@for d in $(IDEA_DIRS) ; do mv ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d.bak && ln -fvs ~/$(REPO)/idea/$$d ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d; done
 
 unlink:
 		@for f in $(LIST) ; do rm -f ~/.$$f; done
