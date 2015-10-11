@@ -17,8 +17,9 @@ brew install curl jq dialog
 brew install git gist
 brew install npm
 brew cask install intellij-idea
-brew cask install virtualbox
+brew cask install virtualbox virtualbox-extension-pack
 brew cask install vagrant
+brew install https://github.com/codekitchen/dinghy/raw/latest/dinghy.rb
 brew install mycli
 npm install -g bower yo grunt-cli
 gem install ghi
