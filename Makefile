@@ -5,17 +5,20 @@ IDEA_V := 14
 IDEA_DIRS = colors fileTemplates inspection keymaps options quicklists templates
 default: update
 
-install: download config brew update link source
+install: init config brew update link source
 
-download:
+init:
 		sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`"
 		sudo sh $HOME/Brewfile
 		git clone --recursive http://github.com/syl20bnr/spacemacs ~/.emacs.d
+		sh -c "unzip -o ~/$(REPO)/settings.jar -d ~/$(REPO)/idea"
+		sh -c "curl -o ~/$(REPO)/idea https://raw.githubusercontent.com/sirthias/BlueForest/master/BlueForest.xml"
 
 update:
 		cd ~/.emacs.d && git pull -r && git submodule sync; git submodule update
 		cd ~/.yadr && git pull -r && rake update
 		sh -c "rm -rf ~/$(REPO)/idea && unzip -o ~/$(REPO)/settings.jar -d ~/$(REPO)/idea"
+		sh -c "curl -o ~/$(REPO)/idea/BlueForest.xml https://raw.githubusercontent.com/sirthias/BlueForest/master/BlueForest.xml"
 
 config:
 		defaults write com.apple.PowerChime ChimeOnAllHardware -bool true; open /System/Library/CoreServices/PowerChime.app &
