@@ -5,7 +5,7 @@ IDEA_V := 14
 IDEA_DIRS = colors fileTemplates inspection keymaps options quicklists templates
 default: update
 
-install: download config update link source
+install: download config brew update link source
 
 download:
 		sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`"
@@ -23,6 +23,9 @@ update:
 
 config:
 		defaults write com.apple.PowerChime ChimeOnAllHardware -bool true; open /System/Library/CoreServices/PowerChime.app &
+
+brew:
+	sh $(REPO)/Brewfile
 
 link:
 		@for f in $(FILES) ; do ln -fvs $(REPO)/$$f ~/.$$f; done
