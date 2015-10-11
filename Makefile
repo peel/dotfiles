@@ -12,9 +12,11 @@ init:
 		sudo sh $HOME/Brewfile
 		git clone --recursive http://github.com/syl20bnr/spacemacs ~/.emacs.d
 		sh -c "unzip -o ~/$(REPO)/settings.jar -d ~/$(REPO)/idea"
-		sh -c "curl -o ~/$(REPO)/idea https://raw.githubusercontent.com/sirthias/BlueForest/master/BlueForest.xml"
+		sh -c "curl -o ~/$(REPO)/idea/BlueForest.xml https://raw.githubusercontent.com/sirthias/BlueForest/master/BlueForest.xml"
 
-update:
+update: update-deps unlink link
+
+update-deps:
 		cd ~/.emacs.d && git pull -r && git submodule sync; git submodule update
 		cd ~/.yadr && git pull -r && rake update
 		sh -c "rm -rf ~/$(REPO)/idea && unzip -o ~/$(REPO)/settings.jar -d ~/$(REPO)/idea"
