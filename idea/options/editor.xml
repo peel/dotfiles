@@ -1,0 +1,9 @@
+<application>
+  <component name="EditorSettings">
+    <option name="IS_VIRTUAL_SPACE" value="true" />
+    <option name="IS_RIGHT_MARGIN_SHOWN" value="false" />
+    <option name="IS_FOLDING_OUTLINE_SHOWN" value="false" />
+    <option name="IS_BLOCK_CURSOR" value="true" />
+    <option name="IS_WHEEL_FONTCHANGE_ENABLED" value="true" />
+  </component>
+</application>

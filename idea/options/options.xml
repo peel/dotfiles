@@ -1,0 +1,18 @@
+<application>
+  <component name="PropertiesComponent">
+    <property name="log.debug.categories" value="" />
+    <property name="DefaultHtmlDoctype.MigrateToHtml5" value="true" />
+    <property name="DefaultHtmlDoctype.Refreshed" value="1" />
+    <property name="com.chrisrm.idea.MaterialTheme.theme" value="default" />
+    <property name="installation.uid" value="d57c7052-13a1-4d36-8c87-bbe2a8afeca9" />
+    <property name="default.storage.format" value=".idea (directory based)" />
+    <property name="file.chooser.recent.files" value="$USER_HOME$/wrk/justplayin/build.sbt" />
+    <property name="last.imported.location" value="$USER_HOME$/wrk/justplayin/build.sbt" />
+    <property name="toolwindow.stripes.buttons.info.shown" value="true" />
+    <property name="DeploymentNotificationsComponent.WarnDisplayed.Java7&amp;Windows7FTPIssue" value="false" />
+    <property name="file.colors.enable.non.project" value="494539" />
+    <property name="file.colors.enable.tests" value="2a3b2c" />
+    <property name="Non-Project Files" value="494539" />
+    <property name="Tests" value="2a3b2c" />
+  </component>
+</application>

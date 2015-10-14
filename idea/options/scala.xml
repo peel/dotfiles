@@ -1,0 +1,14 @@
+<application>
+  <component name="Play2ExcludedModulesSettings">
+    <option name="SUITABLE_MODULES">
+      <set>
+        <option value="$USER_HOME$/Documents/wrk/images" />
+      </set>
+    </option>
+  </component>
+  <component name="ScalaSettings">
+    <option name="COMPILE_SERVER_PORT" value="52109" />
+    <option name="COMPILE_SERVER_ID" value="671acdc1-ce92-42b4-8035-abba711833ff" />
+    <option name="COMPILE_SERVER_SDK" value="1.8" />
+  </component>
+</application>
