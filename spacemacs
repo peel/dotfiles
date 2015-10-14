@@ -10,7 +10,7 @@
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load. If it is the symbol `all' instead
    ;; of a list then all discovered layers will be installed.
-   dotspacemacs-configuration-layers '(ansible (colors :variables colors-enable-nyan-cat-progress-bar t colors-enable-rainbow-identifiers t) dash dockerfile fasd git html markdown org osx ruby scala vagrant)
+   dotspacemacs-configuration-layers '(ansible (colors :variables colors-enable-nyan-cat-progress-bar t colors-enable-rainbow-identifiers t) dash dockerfile editorconfig elixir fasd git html markdown org osx perspectives ruby scala vagrant)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -44,8 +44,8 @@ before layers configuration."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Source Code Pro"
-                               :size 16
+   dotspacemacs-default-font '("Input Mono"
+                               :size 19
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -103,6 +103,9 @@ before layers configuration."
    dotspacemacs-default-package-repository nil)
   ;; User initialization goes here
   (setq-default ruby-version-manager 'rvm)
+  (define-key global-map (kbd "C-+") 'text-scale-increase)
+  (define-key global-map (kbd "C--") 'text-scale-decrease)
+  dotspacemacs-fullscreen-at-startup t
   )
 
 (defun dotspacemacs/config ()

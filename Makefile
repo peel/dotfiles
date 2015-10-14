@@ -1,5 +1,6 @@
 FILES = ideavimrc tmux.conf.user vimrc.after spacemacs
 ZSH_FILES = my.zsh
+SBT_FILES = plugins.sbt
 REPO := "wrk/dotfiles"
 IDEA_V := 14
 IDEA_DIRS = colors fileTemplates inspection keymaps options quicklists templates
@@ -32,11 +33,13 @@ link:
 		@for f in $(FILES) ; do ln -fvs ~/$(REPO)/$$f ~/.$$f; done
 		@for f in $(ZSH_LIST) ; do ln -fvs ~/$(REPO)/$$f ~/.zsh.after/$$f; done
 		@for d in $(IDEA_DIRS) ; do mv ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d.bak && ln -fvs ~/$(REPO)/idea/$$d ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d; done
+		@for f in $(SBT_FILES) ; do ln -fvs ~/$(REPO)/sbt/$$f ~/.sbt/$$f; done
 
 unlink:
 		@for f in $(LIST) ; do rm -f ~/.$$f; done
 		@for f in $(ZSH_LIST) ; do rm -f ~/.zsh.after/$$f; done
 		@for d in $(IDEA_DIRS) ; do rm -f ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d && mv ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d.bak ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d ; done
+		@for f in $(SBT_FILES) ; do rm -f ~/.sbt/$$f; done
 
 source:
 		@for f in $(FILES) ; do source ~/.$$f; done
