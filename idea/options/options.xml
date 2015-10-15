@@ -14,5 +14,6 @@
     <property name="file.colors.enable.tests" value="2a3b2c" />
     <property name="Non-Project Files" value="494539" />
     <property name="Tests" value="2a3b2c" />
+    <property name="HbCommenterLanguageId" value="HTML" />
   </component>
 </application>

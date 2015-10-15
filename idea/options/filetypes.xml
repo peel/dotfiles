@@ -5,10 +5,10 @@
       <removed_mapping ext="coffee" type="CoffeeScript" />
       <mapping pattern="GlobusServer" type="JAVA" />
       <mapping ext="coffee" type="JavaScript" />
-      <mapping pattern="Buildfile" type="PLAIN_TEXT" />
-      <mapping pattern="README" type="PLAIN_TEXT" />
-      <mapping pattern="Dockerfile" type="PLAIN_TEXT" />
       <mapping pattern="Procfile" type="PLAIN_TEXT" />
+      <mapping pattern="Dockerfile" type="PLAIN_TEXT" />
+      <mapping pattern="README" type="PLAIN_TEXT" />
+      <mapping pattern="Buildfile" type="PLAIN_TEXT" />
       <mapping pattern="key128" type="PLAIN_TEXT" />
       <mapping ext="md" type="PLAIN_TEXT" />
       <mapping ext="tmp" type="PLAIN_TEXT" />

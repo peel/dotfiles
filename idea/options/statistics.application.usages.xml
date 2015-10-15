@@ -1,7 +1,31 @@
 <application>
+  <component name="StatisticsApplicationUsages">
+    <group name="libraries">
+      <project id="eproxy" values="TransactionJavaee,Scala,CDI" collectionTime="1444898928254" />
+    </group>
+    <group name="language-level">
+      <project id="eproxy" values="JDK_1_8" collectionTime="1444898928257" />
+    </group>
+    <group name="JavaScript versions">
+      <project id="eproxy" values="DEFAULT" collectionTime="1444898928258" />
+    </group>
+    <group name="Scala">
+      <project id="eproxy" values="Scala  2.11.7,Library  Akka for Scala,Library  Scalacheck,Library  JUnit for Scala,Library  Play2 for Scala|false,Library  Scalaz,Library  Spray,Library  Specs2" collectionTime="1444898928265" />
+    </group>
+    <group name="file-type">
+      <project id="eproxy" values="SBT,UNKNOWN,PLAIN_TEXT,Git file,HOCON,Scala,Properties,YAML,XML" collectionTime="1444898928238" />
+    </group>
+    <group name="module type">
+      <project id="eproxy" values="SBT_MODULE,JAVA_MODULE" collectionTime="1444898927964" />
+    </group>
+    <group name="javaScript Scope Usages">
+      <project id="eproxy" values="Project,Project" collectionTime="1444898928258" />
+    </group>
+  </component>
   <component name="UsageTrigger">
     <counts>
-      <entry feature="ideaapp.started" count="1" />
+      <entry feature="ide.settings.Font" count="1" />
+      <entry feature="ideaapp.started" count="6" />
       <entry feature="welcome.screen.WelcomeScreen.ImportProject" count="1" />
     </counts>
   </component>

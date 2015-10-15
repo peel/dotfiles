@@ -12,6 +12,7 @@ init:
 		sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`"
 		sudo sh $HOME/Brewfile
 		git clone --recursive http://github.com/syl20bnr/spacemacs ~/.emacs.d
+		sh -c "mkdir ~/Library/Preferences/IntelliJIdea$(IDEA_V)/colors"
 		sh -c "curl -o ~/$(REPO)/idea/BlueForest.xml https://raw.githubusercontent.com/sirthias/BlueForest/master/BlueForest.xml"
 
 update: update-deps unlink link
