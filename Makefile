@@ -1,6 +1,7 @@
 FILES = ideavimrc tmux.conf.user vimrc.after spacemacs
 ZSH_FILES = my.zsh
-SBT_FILES = plugins.sbt
+SBT_V := 0.13
+SBT_FILES = plugins/plugins.sbt
 REPO := "wrk/dotfiles"
 IDEA_V := 14
 IDEA_DIRS = colors fileTemplates inspection keymaps options quicklists templates
@@ -14,6 +15,7 @@ init:
 		git clone --recursive http://github.com/syl20bnr/spacemacs ~/.emacs.d
 		sh -c "mkdir ~/Library/Preferences/IntelliJIdea$(IDEA_V)/colors"
 		sh -c "curl -o ~/$(REPO)/idea/BlueForest.xml https://raw.githubusercontent.com/sirthias/BlueForest/master/BlueForest.xml"
+		sh -c "mkdir -p ~/.sbt/$(SBT_V)/plugins/"
 
 update: update-deps unlink link
 
@@ -32,13 +34,13 @@ link:
 		@for f in $(FILES) ; do ln -fvs ~/$(REPO)/$$f ~/.$$f; done
 		@for f in $(ZSH_LIST) ; do ln -fvs ~/$(REPO)/$$f ~/.zsh.after/$$f; done
 		@for d in $(IDEA_DIRS) ; do mv ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d.bak && ln -fvs ~/$(REPO)/idea/$$d ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d; done
-		@for f in $(SBT_FILES) ; do ln -fvs ~/$(REPO)/sbt/$$f ~/.sbt/$$f; done
+		@for f in $(SBT_FILES) ; do ln -fvs ~/$(REPO)/sbt/$$f ~/.sbt/$(SBT_V)/$$f; done
 
 unlink:
 		@for f in $(LIST) ; do rm -f ~/.$$f; done
 		@for f in $(ZSH_LIST) ; do rm -f ~/.zsh.after/$$f; done
 		@for d in $(IDEA_DIRS) ; do rm -f ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d && mv ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d.bak ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d ; done
-		@for f in $(SBT_FILES) ; do rm -f ~/.sbt/$$f; done
+		@for f in $(SBT_FILES) ; do rm -f ~/.sbt/$(SBT_V)/$$f; done
 
 source:
 		@for f in $(FILES) ; do source ~/.$$f; done
