@@ -10,7 +10,7 @@
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load. If it is the symbol `all' instead
    ;; of a list then all discovered layers will be installed.
-   dotspacemacs-configuration-layers '(ansible (colors :variables colors-enable-nyan-cat-progress-bar t colors-enable-rainbow-identifiers t) dash dockerfile editorconfig elixir fasd git html markdown org osx perspectives ruby scala vagrant)
+   dotspacemacs-configuration-layers '(ansible (colors :variables colors-enable-nyan-cat-progress-bar t colors-enable-rainbow-identifiers t) dash dockerfile editorconfig elixir fasd git github html markdown org osx perspectives ruby scala vagrant)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -36,10 +36,7 @@ before layers configuration."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(solarized-light
-                         solarized-dark
-                         leuven
-                         monokai
-                         zenburn)
+                         solarized-dark)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -82,11 +79,11 @@ before layers configuration."
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'.
-   dotspacemacs-active-transparency 75
+   dotspacemacs-active-transparency 95
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's inactive or deselected.
    ;; Transparency can be toggled through `toggle-transparency'.
-   dotspacemacs-inactive-transparency 75
+   dotspacemacs-inactive-transparency 95
    ;; If non nil unicode symbols are displayed in the mode line.
    dotspacemacs-mode-line-unicode-symbols t
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
@@ -112,7 +109,9 @@ before layers configuration."
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
   (global-linum-mode t)
+  (linum-relative-toggle)
   (add-hook 'hack-local-variables-hook (lambda () (setq truncate-lines t)))
+  (setq-default line-spacing 6)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
