@@ -10,7 +10,26 @@
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load. If it is the symbol `all' instead
    ;; of a list then all discovered layers will be installed.
-   dotspacemacs-configuration-layers '(ansible (colors :variables colors-enable-nyan-cat-progress-bar t colors-enable-rainbow-identifiers t) dash dockerfile editorconfig elixir fasd git github html markdown org osx perspectives ruby scala vagrant)
+   dotspacemacs-configuration-layers '(
+        ansible
+        (colors :variables
+                colors-enable-nyan-cat-progress-bar t
+                colors-enable-rainbow-identifiers t)
+        dash
+        dockerfile
+        editorconfig
+        elixir
+        fasd
+        flycheck
+        git
+        github
+        html
+        markdown
+        org
+        osx
+        perspectives
+        ruby
+        scala)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -31,12 +50,12 @@ before layers configuration."
    ;; directory. A string value must be a path to a .PNG file.
    ;; If the value is nil then no banner is displayed.
    ;; dotspacemacs-startup-banner 'official
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner nil
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(solarized-light
-                         solarized-dark)
+   dotspacemacs-themes '(solarized-dark
+                         solarized-light)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
