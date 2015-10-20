@@ -131,6 +131,11 @@ layers configuration."
   (linum-relative-toggle)
   (add-hook 'hack-local-variables-hook (lambda () (setq truncate-lines t)))
   (setq-default line-spacing 6)
+
+  ;; Make screen grey when using avy
+  (setq avy-background t)
+  (setq avy-highlight-first nil)
+  (setq avy-all-windows t)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
