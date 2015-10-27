@@ -15,6 +15,7 @@
         (colors :variables
                 colors-enable-nyan-cat-progress-bar t
                 colors-enable-rainbow-identifiers t)
+        company-mode
         dash
         dockerfile
         editorconfig
@@ -23,6 +24,7 @@
         flycheck
         git
         github
+        golden-ratio
         html
         markdown
         org
@@ -132,6 +134,7 @@ layers configuration."
   (linum-relative-toggle)
   (add-hook 'hack-local-variables-hook (lambda () (setq truncate-lines t)))
   (setq-default line-spacing 6)
+  (golden-ratio-mode)
 
   ;; Make screen grey when using avy
   (setq avy-background t)
