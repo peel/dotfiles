@@ -30,9 +30,12 @@
         org
         osx
         perspectives
-        ranger
         ruby
-        scala)
+        scala
+        (wakatime :variables
+                  wakatime-api-key "715ff0a6-43f4-439c-9e81-78ade61cf522"
+                  wakatime-cli-path "/usr/local/bin/wakatime")
+        )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -135,12 +138,10 @@ layers configuration."
   (add-hook 'hack-local-variables-hook (lambda () (setq truncate-lines t)))
   (setq-default line-spacing 6)
   (golden-ratio-mode)
+  (global-wakatime-mode)
 
   ;; Make screen grey when using avy
   (setq avy-background t)
   (setq avy-highlight-first nil)
   (setq avy-all-windows t)
 )
-
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
