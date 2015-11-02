@@ -13,10 +13,12 @@ brew install tmuxinator-completion
 brew install jenv
 brew install maven
 brew install scala sbt
-brew install curl jq dialog
-brew install git gist
+brew install git gist ghi
 brew install npm
-brew cask install intellij-idea
+brew tap railwaycat/emacsmacport
+brew install emacs-mac --with-spacemacs-icon
+brew install aspell #spell checking
+#brew cask install intellij-idea
 brew cask install virtualbox virtualbox-extension-pack
 brew cask install vagrant
 brew install https://github.com/codekitchen/dinghy/raw/latest/dinghy.rb
