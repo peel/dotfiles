@@ -12,7 +12,7 @@ brew install tmuxinator-completion
 #dev
 brew install jenv
 brew install maven
-brew install scala sbt
+brew install scala sbt scalastyle
 brew install git gist ghi
 brew install npm
 brew tap railwaycat/emacsmacport
