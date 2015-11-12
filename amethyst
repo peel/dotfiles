@@ -1,0 +1,18 @@
+{
+    "layouts": [
+        "tall",
+        "wide",
+        "fullscreen",
+        "column",
+        ],
+
+    "mouse-follows-focus": true,
+
+    "floating": [
+        "com.apple.systempreferences",
+        "com.razerzone.RazerSynapse",
+        "com.tapbots.TweetbotMac",
+        "com.apple.iTunes",
+        "com.mr-brightside.ParcelOSX"
+    ]
+}

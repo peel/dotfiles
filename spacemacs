@@ -18,6 +18,7 @@
                 colors-enable-rainbow-identifiers t)
         company-mode
         dash
+        deft
         dockerfile
         editorconfig
         elixir
@@ -133,7 +134,7 @@ before layers configuration."
   (define-key global-map (kbd "C--") 'text-scale-decrease)
   )
 
-(defun dotspacemacs/config ()
+(defun dotspacemacs/user-config ()
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
@@ -144,8 +145,16 @@ layers configuration."
   (golden-ratio-mode)
   (global-wakatime-mode)
 
+  ;; Deft notes directory
+  (setq deft-directory "~/Dropbox/Documents/notes")
+
+  ;; Keep server alive
+  ;;(setq-default dotspacemacs-persistent-server t)
+
   ;; Make screen grey when using avy
   (setq avy-background t)
   (setq avy-highlight-first nil)
   (setq avy-all-windows t)
+
+  (evil-leader/set-key "n s" 'ensime)
 )
