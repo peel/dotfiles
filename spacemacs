@@ -21,6 +21,7 @@
         deft
         dockerfile
         editorconfig
+        emacs-lisp
         elixir
         fasd
         flycheck
@@ -34,6 +35,7 @@
         osx
         perspectives
         ruby
+        (shell :variables shell-default-shell 'eshell)
         (scala :variables
                flycheck-scalastyle-jar "/usr/local/bin/scalastyle"
         )
@@ -144,6 +146,7 @@ layers configuration."
   (setq-default line-spacing 6)
   (golden-ratio-mode)
   (global-wakatime-mode)
+  (indent-guide-global-mode)
 
   ;; Deft notes directory
   (setq deft-directory "~/Dropbox/Documents/notes")
