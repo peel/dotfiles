@@ -39,6 +39,7 @@
         (scala :variables
                flycheck-scalastyle-jar "/usr/local/bin/scalastyle"
         )
+        version-control
         (wakatime :variables
                   wakatime-api-key "715ff0a6-43f4-439c-9e81-78ade61cf522"
                   wakatime-cli-path "/usr/local/bin/wakatime")
