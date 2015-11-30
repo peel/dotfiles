@@ -30,6 +30,7 @@
         github
         golden-ratio
         html
+        javascript
         markdown
         org
         osx
@@ -161,4 +162,6 @@ layers configuration."
   (setq avy-all-windows t)
 
   (evil-leader/set-key "n s" 'ensime)
+
+  (setq-default ruby-version-manager 'rvm)
 )
