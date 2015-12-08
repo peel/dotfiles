@@ -42,6 +42,7 @@
         (scala :variables
                flycheck-scalastyle-jar "/usr/local/bin/scalastyle"
         )
+        syntax-checking
         version-control
         (wakatime :variables
                   wakatime-api-key "715ff0a6-43f4-439c-9e81-78ade61cf522"
@@ -144,6 +145,7 @@ before layers configuration."
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
+  (setq powerline-default-separator 'slant)
   (global-linum-mode t)
   (linum-relative-toggle)
   (add-hook 'hack-local-variables-hook (lambda () (setq truncate-lines t)))
