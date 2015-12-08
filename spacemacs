@@ -11,12 +11,14 @@
    ;; List of configuration layers to load. If it is the symbol `all' instead
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers '(
-        auto-completion
+        (auto-completion :variables
+                        auto-completion-enable-sort-by-usage t
+                        auto-completion-enable-snippets-in-popup t
+        )
         ansible
         (colors :variables
                 colors-enable-nyan-cat-progress-bar t
                 colors-enable-rainbow-identifiers t)
-        company-mode
         dash
         deft
         dockerfile
@@ -150,9 +152,6 @@ layers configuration."
   (global-wakatime-mode)
   (indent-guide-global-mode)
 
-  ;; Deft notes directory
-  (setq deft-directory "~/Dropbox/Documents/notes")
-
   ;; Keep server alive
   ;;(setq-default dotspacemacs-persistent-server t)
 
@@ -161,7 +160,12 @@ layers configuration."
   (setq avy-highlight-first nil)
   (setq avy-all-windows t)
 
+  ;; scala mode
   (evil-leader/set-key "n s" 'ensime)
 
+  ;; ruby mode
   (setq-default ruby-version-manager 'rvm)
+
+  ;; deft notes directory
+  (setq deft-directory "~/Dropbox/Documents/notes")
 )
