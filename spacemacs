@@ -26,6 +26,7 @@
         emacs-lisp
         elixir
         fasd
+        floobits
         flycheck
         (git :variables
              git-gutter-use-fringe t)
