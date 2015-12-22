@@ -18,7 +18,6 @@
           (progn
               (defun turn-on-magit-gh-issues ()
                                             (magit-gh-issues-mode 1))
-              (add-hook 'magit-mode-hook 'turn-on-magit-gh-issues)
-              (add-hook 'git-commit-mode-hook 'ac-source-gh-setup))
+              (add-hook 'magit-mode-hook 'turn-on-magit-gh-issues))
           :config
           (spacemacs|diminish magit-gh-issues-mode "#")))))
