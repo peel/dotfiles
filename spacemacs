@@ -13,7 +13,7 @@
    dotspacemacs-configuration-layers '(
         (auto-completion :variables
                         auto-completion-enable-sort-by-usage t
-                        auto-completion-enable-snippets-in-popup t
+                        ;;auto-completion-enable-snippets-in-popup t
         )
         ansible
         (colors :variables
@@ -31,6 +31,7 @@
         (git :variables
              git-gutter-use-fringe t)
         github
+        magit-gh-issues
         golden-ratio
         html
         javascript

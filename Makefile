@@ -1,4 +1,4 @@
-FILES = ideavimrc tmux.conf.user vimrc.after spacemacs wakatime.cfg floorc.json
+FILES = ideavimrc tmux.conf.user vimrc.after spacemacs wakatime.cfg floorc.json emacs.d/private
 ZSH_FILES = my.zsh
 SBT_V := 0.13
 REPO := "wrk/dotfiles"
