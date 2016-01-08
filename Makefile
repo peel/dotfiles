@@ -9,7 +9,7 @@ default: update
 install: init config brew update link source
 
 init:
-		sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`"
+		sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`" -s ask
 		sudo sh $HOME/Brewfile
 		git clone --recursive http://github.com/syl20bnr/spacemacs ~/.emacs.d
 		sh -c "mkdir ~/Library/Preferences/IntelliJIdea$(IDEA_V)/colors"
