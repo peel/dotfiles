@@ -157,7 +157,7 @@ layers configuration."
   (indent-guide-global-mode)
 
   ;; Keep server alive
-  ;;(setq-default dotspacemacs-persistent-server t)
+  (setq-default dotspacemacs-persistent-server t)
 
   ;; Make screen grey when using avy
   (setq avy-background t)
