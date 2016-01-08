@@ -1,0 +1,32 @@
+#+TITLE: Dotfiles
+
+#+BEGIN_SRC
+                        .s$$$Ss.
+            .8,         $$$. _. .              ..sS$$$$$"  ...,.;
+ o.   ,@..  88        =.$"$'  '          ..sS$$$$$$$$$$$$s. _;"'
+  @@@.@@@. .88.   `  ` ""l. .sS$$.._.sS$$$$$$$$$$$$S'"'
+   .@@@q@@.8888o.         .s$$$$$$$$$$$$$$$$$$$$$'
+     .:`@@@@33333.       .>$$$$$$$$$$$$$$$$$$$$'
+     .: `@@@@333'       ..>$$$$$$$$$$$$$$$$$$$'
+      :  `@@333.     `.,   s$$$$$$$$$$$$$$$$$'
+      :   `@33       $$ S.s$$$$$$$$$$$$$$$$$'
+      .S   `Y      ..`  ,"$' `$$$$$$$$$$$$$$
+      $s  .       ..S$s,    . .`$$$$$$$$$$$$.
+      $s .,      ,s ,$$$$,,sS$s.$$$$$$$$$$$$$.
+      / /$$SsS.s. ..s$$$$$$$$$$$$$$$$$$$$$$$$$.
+     /`.`$$$$$dN.ssS$$'`$$$$$$$$$$$$$$$$$$$$$$$.
+    ///   `$$$$$$$$$'    `$$$$$$$$$$$$$$$$$$$$$$.
+   ///|     `S$$S$'       `$$$$$$$$$$$$$$$$$$$$$$.
+  / /                      $$$$$$$$$$$$$$$$$$$$$.
+                           `$$$$$$$$$$$$$$$$$$$$$s.
+#+END_SRC
+
+#+BEGIN_QUOTE
+These are my dotfiles. There are many like them, but these ones are mine.
+My dotfiles are my best friends. They are my productivity. I must master them as I must master my productivity.
+My dotfiles, without me, are not productive. Without my dotfiles, I am not productive. I must perfect my dotfiles true. I must perfect more than my friend who is trying to fork me. I must fork him before he forks me. I will...
+My dotfiles and I know that what counts in coding is not the lines we fire, the noise of our typing, nor the push we make. We know that it is the impact that counts. We will impact...
+My dotfiles are human, even as I, because they are my productivity. Thus, I will learn them as a brother. I will learn their weaknesses, their strength, their parts, their accessorie, their sights and their commands. I will keep my dotfiles clean and ready, even as I am clean and ready. We will become part of each other. We will...
+Before GitHub, I swear this creed. My dotfiles and I are the defenders of the shell. We are the masters of our procrastination. We are the saviors of my productivity.
+So be it, until victory is mine and there is no issue!
+#+END_QUOTE
