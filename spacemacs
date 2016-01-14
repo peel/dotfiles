@@ -47,7 +47,7 @@
         syntax-checking
         version-control
         (wakatime :variables
-                  wakatime-api-key "715ff0a6-43f4-439c-9e81-78ade61cf522"
+                  wakatime-api-key "f88df4f1-afef-4208-a2b0-2e28521acb57"
                   wakatime-cli-path "/usr/local/bin/wakatime")
         )
    ;; A list of packages and/or extensions that will not be install and loaded.
