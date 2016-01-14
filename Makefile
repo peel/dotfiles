@@ -1,12 +1,14 @@
-FILES = ideavimrc tmux.conf.user vimrc.after spacemacs wakatime.cfg floorc.json emacs.d/private
+FILES = ideavimrc tmux.conf.user vimrc.after spacemacs  emacs.d/private
+PRIVATE_FILES = wakatime.cfg floorc.json
 ZSH_FILES = my.zsh
 SBT_V := 0.13
 REPO := "wrk/dotfiles"
 IDEA_V := 14
 IDEA_DIRS = colors fileTemplates inspection keymaps options quicklists templates
+PRIVATE_REPO := git@github.com:peel/dotfiles-private.git
 default: update
 
-install: init config brew update link source
+install: init config private brew update link source
 
 init:
 		sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`" -s ask
@@ -34,6 +36,7 @@ link:
 		@for f in $(ZSH_LIST) ; do ln -fvs ~/$(REPO)/$$f ~/.zsh.after/$$f; done
 		@for d in $(IDEA_DIRS) ; do mv ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d.bak && ln -fvs ~/$(REPO)/idea/$$d ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d; done
 		ln -fvs ~/$(REPO)/sbt/plugins.sbt ~/.sbt/$(SBT_V)/plugins/plugins.sbt
+		@for f in $(PRIVATE_FILES) ; do ln -fvs ~/$(REPO)/private/$$f ~/.$$f; done
 
 unlink:
 		@for f in $(LIST) ; do rm -f ~/.$$f; done
@@ -44,6 +47,9 @@ unlink:
 source:
 		@for f in $(FILES) ; do source ~/.$$f; done
 		@for f in $(ZSH_FILES) ; do source ~/.zsh.after/$$f; done
+
+private:
+		git clone $(PRIVATE_REPO) ~/$(REPO)/private || true
 
 uninstall:
 		defaults write com.apple.PowerChime ChimeOnAllHardware -bool false;killall PowerChime
