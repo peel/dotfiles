@@ -1,4 +1,4 @@
-FILES = ideavimrc tmux.conf.user vimrc.after spacemacs  emacs.d/private
+FILES = ideavimrc tmux.conf.user vimrc.after spacemacs  emacs.d/private/magit-gh-issues
 PRIVATE_FILES = wakatime.cfg floorc.json
 ZSH_FILES = my.zsh
 SBT_V := 0.13
@@ -37,12 +37,14 @@ link:
 		@for d in $(IDEA_DIRS) ; do mv ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d.bak && ln -fvs ~/$(REPO)/idea/$$d ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d; done
 		ln -fvs ~/$(REPO)/sbt/plugins.sbt ~/.sbt/$(SBT_V)/plugins/plugins.sbt
 		@for f in $(PRIVATE_FILES) ; do ln -fvs ~/$(REPO)/private/$$f ~/.$$f; done
+		@for f in $(REPO)/bin/* ; do chmod +x ~/$(REPO)/bin/$$f && ln -fvs ~/$(REPO)/bin/$$f /usr/local/bin/$$f; done
 
 unlink:
 		@for f in $(LIST) ; do rm -f ~/.$$f; done
 		@for f in $(ZSH_LIST) ; do rm -f ~/.zsh.after/$$f; done
 		@for d in $(IDEA_DIRS) ; do rm -f ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d && mv ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d.bak ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d ; done
 		rm -f ~/.sbt/$(SBT_V)/plugins/plugins.sbt
+		@for f in $(REPO)/bin/* ; do rm -f /usr/local/bin/$$f; done
 
 source:
 		@for f in $(FILES) ; do source ~/.$$f; done
