@@ -80,11 +80,11 @@ before layers configuration."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Input Mono"
+   dotspacemacs-default-font '("Pragmata Pro"
                                :size 19
                                :weight normal
-                               :width normal
-                               :powerline-scale 1.1)
+                               :width expanded
+                               :powerline-scale 1.3)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; Major mode leader key is a shortcut key which is the equivalent of
@@ -172,4 +172,7 @@ layers configuration."
 
   ;; deft notes directory
   (setq deft-directory "~/Dropbox/Documents/notes")
+
+  ;; enable ligatures
+  (mac-auto-operator-composition-mode)
 )
