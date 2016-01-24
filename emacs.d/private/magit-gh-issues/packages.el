@@ -2,7 +2,7 @@
     '(
       (magit-gh-issues :location (recipe
                                        :fetcher github
-                                       :repo "domtronn/magit-gh-issues.el"))
+                                       :repo "peel/magit-gh-issues.el"))
      )
 )
 
