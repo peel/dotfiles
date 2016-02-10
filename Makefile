@@ -6,6 +6,7 @@ REPO := "wrk/dotfiles"
 IDEA_V := 14
 IDEA_DIRS = colors fileTemplates inspection keymaps options quicklists templates
 PRIVATE_REPO := git@github.com:peel/dotfiles-private.git
+KARABINER_DIR := ~/Library/Application\ Support/Karabiner
 default: update
 
 install: init config private brew update link source
@@ -17,6 +18,7 @@ init:
 		sh -c "mkdir ~/Library/Preferences/IntelliJIdea$(IDEA_V)/colors"
 		sh -c "curl -o ~/$(REPO)/idea/BlueForest.xml https://raw.githubusercontent.com/sirthias/BlueForest/master/BlueForest.xml"
 		sh -c "mkdir -p ~/.sbt/$(SBT_V)/plugins/"
+		echo "[INFO] Remember to map Caps to 80 in Seil"
 
 update: update-deps unlink link
 
@@ -29,7 +31,7 @@ config:
 		defaults write com.apple.PowerChime ChimeOnAllHardware -bool true; open /System/Library/CoreServices/PowerChime.app &
 
 brew:
-	sh ~/$(REPO)/Brewfile
+		sh ~/$(REPO)/Brewfile
 
 link:
 		@for f in $(FILES) ; do ln -fvs ~/$(REPO)/$$f ~/.$$f; done
@@ -38,6 +40,7 @@ link:
 		ln -fvs ~/$(REPO)/sbt/plugins.sbt ~/.sbt/$(SBT_V)/plugins/plugins.sbt
 		@for f in $(PRIVATE_FILES) ; do ln -fvs ~/$(REPO)/private/$$f ~/.$$f; done
 		@for f in $(REPO)/bin/* ; do chmod +x ~/$(REPO)/bin/$$f && ln -fvs ~/$(REPO)/bin/$$f /usr/local/bin/$$f; done
+		mv $(KARABINER_DIR)/private.xml $(KARABINER_DIR)/private.xml.bak && ln -fvs ~/$(REPO)/karabiner/private.xml $(KARABINER_DIR)/private.xml
 
 unlink:
 		@for f in $(LIST) ; do rm -f ~/.$$f; done
@@ -45,6 +48,7 @@ unlink:
 		@for d in $(IDEA_DIRS) ; do rm -f ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d && mv ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d.bak ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d ; done
 		rm -f ~/.sbt/$(SBT_V)/plugins/plugins.sbt
 		@for f in $(REPO)/bin/* ; do rm -f /usr/local/bin/$$f; done
+		rm -f ~/$(KARABINER_DIR)/private.xml && mv $(KARABINER_DIR)/private.xml.bak $(KARABINER_DIR)/private.xml
 
 source:
 		@for f in $(FILES) ; do source ~/.$$f; done

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<root>
+  <item>
+    <name>F19 to F19</name>
+    <appendix>(F19 to Hyper (ctrl+shift+cmd+opt) + F19 Only, send escape)</appendix>
+    <identifier>private.f192f19_escape</identifier>
+    <autogen>
+      --KeyOverlaidModifier--
+      KeyCode::F19,
+      KeyCode::COMMAND_L,
+      ModifierFlag::OPTION_L | ModifierFlag::SHIFT_L | ModifierFlag::CONTROL_L,
+      KeyCode::ESCAPE
+    </autogen>
+  </item>
+</root>
