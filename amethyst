@@ -13,6 +13,8 @@
         "com.razerzone.RazerSynapse",
         "com.tapbots.TweetbotMac",
         "com.apple.iTunes",
-        "com.mr-brightside.ParcelOSX"
+        "com.mr-brightside.ParcelOSX",
+        "com.kapeli.dash",
+        "it.bloop.airmail2"
     ]
 }

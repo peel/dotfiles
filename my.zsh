@@ -29,11 +29,11 @@ ghidone() {
 
 # aliases
 alias git=hub
-alias e=emacs
+alias e="emacsclient -c || emacs"
 alias docker-up="docker-machine start docker && eval $(docker-machine env docker)"
 
 # variables
 eval $(docker-machine env docker)
 
-export EDITOR=/usr/bin/emacs
+export EDITOR="emacsclient -c"
 export SHELL=/usr/local/bin/zsh
