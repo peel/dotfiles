@@ -16,7 +16,8 @@ brew install git gist ghi
 brew install npm
 brew tap railwaycat/emacsmacport
 brew install emacs-mac --with-spacemacs-icon
-brew install aspell #spell checking
+brew install aspell
+brew cask install dash
 brew cask install virtualbox virtualbox-extension-pack
 brew cask install vagrant
 brew install mycli

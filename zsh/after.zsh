@@ -1,6 +1,3 @@
-# functions
-gi() { curl -L -s https://www.gitignore.io/api/\$@ ;}
-
 ghidoing() {
   if [[ "$1" = <-> ]]
   then
@@ -25,15 +22,14 @@ ghidone() {
   fi
 }
 
-
-
 # aliases
-alias git=hub
 alias e="emacsclient -c || emacs"
-alias docker-up="docker-machine start docker && eval $(docker-machine env docker)"
-
-# variables
-eval $(docker-machine env docker)
 
 export EDITOR="emacsclient -c"
 export SHELL=/usr/local/bin/zsh
+
+#autoload -Uz promptinit
+#promptinit
+prompt sorin
+PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
+

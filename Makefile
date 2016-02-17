@@ -1,6 +1,7 @@
 FILES = ideavimrc tmux.conf.user vimrc.after spacemacs  emacs.d/private/magit-gh-issues
 PRIVATE_FILES = wakatime.cfg floorc.json
-ZSH_FILES = my.zsh
+ZSH_BEFORE = before.zsh
+ZSH_AFTER = after.zsh
 SBT_V := 0.13
 REPO := "wrk/dotfiles"
 IDEA_V := 14
@@ -35,7 +36,8 @@ brew:
 
 link:
 		@for f in $(FILES) ; do ln -fvs ~/$(REPO)/$$f ~/.$$f; done
-		@for f in $(ZSH_LIST) ; do ln -fvs ~/$(REPO)/$$f ~/.zsh.after/$$f; done
+		@for f in $(ZSH_BEFORE) ; do ln -fvs ~/$(REPO)/$$f ~/.zsh.before/$$f; done
+		@for f in $(ZSH_AFTER) ; do ln -fvs ~/$(REPO)/$$f ~/.zsh.after/$$f; done
 		@for d in $(IDEA_DIRS) ; do mv ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d.bak && ln -fvs ~/$(REPO)/idea/$$d ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d; done
 		ln -fvs ~/$(REPO)/sbt/plugins.sbt ~/.sbt/$(SBT_V)/plugins/plugins.sbt
 		@for f in $(PRIVATE_FILES) ; do ln -fvs ~/$(REPO)/private/$$f ~/.$$f; done
@@ -45,7 +47,8 @@ link:
 
 unlink:
 		@for f in $(LIST) ; do rm -f ~/.$$f; done
-		@for f in $(ZSH_LIST) ; do rm -f ~/.zsh.after/$$f; done
+		@for f in $(ZSH_BEFORE) ; do rm -f ~/.zsh.before/$$f; done
+		@for f in $(ZSH_AFTER) ; do rm -f ~/.zsh.after/$$f; done
 		@for d in $(IDEA_DIRS) ; do rm -f ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d && mv ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d.bak ~/Library/Preferences/IntelliJIdea$(IDEA_V)/$$d ; done
 		rm -f ~/.sbt/$(SBT_V)/plugins/plugins.sbt
 		@for f in $(REPO)/bin/* ; do rm -f /usr/local/bin/$$f; done
