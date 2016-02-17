@@ -59,7 +59,7 @@ segment() {
 
   # don't show output if the result is empty
   # or if the screen is small and has autohide enabled
-  if [ $TMUX_PANE_WIDTH -lt $4 ]; then
+  if [[ $TMUX_PANE_WIDTH -lt $4 ]]; then
     local display="hidden"
   fi
 
