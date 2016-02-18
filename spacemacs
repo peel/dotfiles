@@ -31,7 +31,7 @@
         (git :variables
              git-gutter-use-fringe t)
         github
-        magit-gh-issues
+        ;; magit-gh-issues
         golden-ratio
         html
         javascript
@@ -48,7 +48,7 @@
         version-control
         (wakatime :variables
                   wakatime-api-key "d405f27b-007d-411f-9e0f-e1e1545c9d6b"
-                  wakatime-cli-path "/usr/local/bin/wakatime")
+                  wakatime-cli-path "/usr/local/Cellar/wakatime-cli/4.0.14/libexec/lib/python2.7/site-packages/wakatime/cli.py")
         )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
@@ -74,7 +74,8 @@ before layers configuration."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
+   dotspacemacs-themes '(gotham
+                         spacemacs-dark
                          spacemacs-light)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
@@ -84,7 +85,7 @@ before layers configuration."
                                :size 19
                                :weight normal
                                :width expanded
-                               :powerline-scale 1.3)
+                               :powerline-scale 1)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; Major mode leader key is a shortcut key which is the equivalent of
