@@ -23,9 +23,9 @@ ghidone() {
 }
 
 # aliases
-alias e="emacsclient -c || emacs"
+alias e="emacsclient -tc"
 
-export EDITOR="emacsclient -c"
+export EDITOR="emacsclient -tc"
 export SHELL=/usr/local/bin/zsh
 
 #autoload -Uz promptinit
