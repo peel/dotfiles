@@ -173,6 +173,7 @@ layers configuration."
 
   ;; deft notes directory
   (setq deft-directory "~/Dropbox/Documents/notes")
+  (setq deft-recursive t)
 
   ;; enable ligatures
   (mac-auto-operator-composition-mode)
