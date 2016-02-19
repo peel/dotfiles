@@ -30,6 +30,8 @@ update-deps:
 
 config:
 		defaults write com.apple.PowerChime ChimeOnAllHardware -bool true; open /System/Library/CoreServices/PowerChime.app &
+		defaults write NSGlobalDomain KeyRepeat -int 1
+		defaults write -g InitialKeyRepeat -int 10
 
 brew:
 		sh ~/$(REPO)/Brewfile
