@@ -20,8 +20,9 @@ init:
 		sh -c "curl -o ~/$(REPO)/idea/BlueForest.xml https://raw.githubusercontent.com/sirthias/BlueForest/master/BlueForest.xml"
 		sh -c "mkdir -p ~/.sbt/$(SBT_V)/plugins/"
 		ln -sfv /usr/local/opt/kwm/*.plist ~/Library/LaunchAgents
-		launchctl load ~/Library/LaunchAgents/homebrew.mxcl.kwm.plist
-		echo "[INFO] Remember to map Caps to 80 in Seil"
+		sh -c "launchctl load ~/Library/LaunchAgents/homebrew.mxcl.kwm.plist"
+		sh -c "xcode-select --install"
+		sh -c echo "[INFO] Remember to map Caps to 80 in Seil"
 
 update: update-deps unlink link
 
@@ -32,8 +33,17 @@ update-deps:
 
 config:
 		defaults write com.apple.PowerChime ChimeOnAllHardware -bool true; open /System/Library/CoreServices/PowerChime.app &
+		defaults write -g ApplePressAndHoldEnabled -bool false #disable default hold-button behaviour
 		defaults write NSGlobalDomain KeyRepeat -int 1
 		defaults write -g InitialKeyRepeat -int 10
+		defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true # no .DS_Store on USB
+		defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true # no DS_Store on network
+		defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false # disable autocorrect
+		defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true # display icons on desktop
+		defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
+		defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
+		defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+		chflags nohidden ~/Library
 
 brew:
 		sh ~/$(REPO)/Brewfile
