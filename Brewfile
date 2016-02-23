@@ -25,11 +25,12 @@ gem install ghi
 #emacs related
 npm install -g tern
 gem install tldrb
+brew install homebrew/binary/kwm
 
 brew cask install appcleaner
 brew cask install dropbox
 brew cask install the-unarchiver
-brew cask install spectacle amethyst seil
+brew cask install karabiner seil
 brew cask install vlc transmission qnapi
 brew cask install skype
 brew cask install calibre

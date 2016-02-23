@@ -1,0 +1,199 @@
+# The commands listed here can be of
+# two types.
+# Commands prefixed with 'kwmc' will call
+# local functions corresponding to the
+# kwmc syntax.
+#
+# To run a system command, use the prefix
+# 'sys' and then the requested command
+# e.g 'sys mvim' would open macvim
+
+# Read file and execute commands as
+# if they were written inside kwmrc.
+#
+# include filename
+#
+# e.g: bind-commands in a separate file called 'binds'
+# include binds
+
+# Set default values for screen padding
+kwmc config padding top 0
+kwmc config padding bottom 0
+kwmc config padding left 0
+kwmc config padding right 0
+
+# Set default values for container gaps
+kwmc config gap vertical  0
+kwmc config gap horizontal 0 
+
+# Allow Kwm to tile windows
+kwmc config tiling enable
+
+# Let Kwm listen for hotkeys
+kwmc config hotkeys enable
+
+# Set prefix for Kwms hotkeys
+kwmc config prefix ctrl-x
+
+# Prefix is not applied globally
+kwmc config prefix-global disable
+
+# Time in seconds, before prefix must be re-activated
+kwmc config prefix-timeout 0.75
+
+# Automatically float windows that fail to resize
+kwmc config float-non-resizable enable
+
+# Float a window if moved using the mouse
+kwmc config dragndrop disable
+
+# Set focus-follows-mouse-mode to autoraise
+kwmc config focus autoraise
+
+# Focus-follows-mouse is temporarily disabled when
+# a floating window has focus
+kwmc config focus standby-on-float enable
+
+# The mouse will automatically move to the center
+# of the focused window
+kwmc config focus mouse-follows enable
+
+# Allow window focus to wrap-around
+kwmc config cycle-focus screen # all | disabled
+
+# Default tiling mode for new spaces
+kwmc config space bsp
+
+# Override default tiling mode for given monitors
+# kwmc config screen 0 bsp
+# kwmc config screen 1 monocle
+
+# Set default container split-ratio
+kwmc config split-ratio 0.5
+
+# New splits become the left leaf-node
+kwmc config spawn left
+
+# Add custom tiling rules for applications that
+# does not get tiled by Kwm by default.
+# This is because some applications do not have the
+# AXWindowRole and AXStandardWindowSubRole
+kwmc config add-role AXDialog iTerm2
+
+# The following command blacklists a specific application
+# from Kwms tiling (PS: The app name is case-sensitive)
+# If the name consist of multiple words, the command
+# looks like: kwmc config float Google Chrome
+kwmc config float Steam
+kwmc config float Photoshop
+kwmc config float Tweetbot
+kwmc config float iTunes 
+
+# The following command captures an application to the
+# given screen, if the screen exists. By doing this
+# the application can no longer be moved to other screens
+# kwmc config capture 1 iTunes
+
+# Enable border for focused window
+kwmc config focused-border enable
+kwmc config focused-border size 5
+kwmc config focused-border color FFBDD322
+
+# Enable border for marked window
+kwmc config marked-border enable
+kwmc config marked-border size 5
+kwmc config marked-border color FFCC5577
+
+########  Default Keybinds ########
+
+# Quit Kwm
+kwmc bind cmd+alt+ctrl-q quit
+
+# Launch iTerm2
+kwmc bind cmd-return sys open -na /Applications/iTerm2.app
+
+# Toggle Focus Autoraise
+kwmc bind cmd+alt+ctrl-t config focus toggle
+
+# Set Space Tiling Mode To BSP
+kwmc bind cmd+ctrl-a space -t bsp
+
+# Set Space Tiling Mode To Monocle
+kwmc bind cmd+ctrl-s space -t monocle
+
+# Set Space Tiling Mode To Floating
+kwmc bind cmd+ctrl-d space -t float
+
+# Rotate Window-Tree By 90* (Clockwise)
+kwmc bind cmd+ctrl-r tree -r 90
+
+# Modify Container
+kwmc bind prefix-s window -c split
+kwmc bind prefix-h window -c reduce 0.05
+kwmc bind prefix-l window -c expand 0.05
+
+# Set Temporary Window Container
+kwmc bind prefix-f window -t fullscreen
+kwmc bind prefix-p window -t parent
+kwmc bind prefix-w window -t float
+
+# Mark Window
+kwmc bind cmd+alt+ctrl-m mark -w focused
+kwmc bind cmd+alt+ctrl-h mark -w west wrap
+kwmc bind cmd+alt+ctrl-l mark -w east wrap
+kwmc bind cmd+alt+ctrl-j mark -w south wrap
+kwmc bind cmd+alt+ctrl-k mark -w north wrap
+
+# Give Focus To Window
+kwmc bind cmd+alt-h window -f west
+kwmc bind cmd+alt-l window -f east
+kwmc bind cmd+alt-j window -f south
+kwmc bind cmd+alt-k window -f north
+
+# Give Focus To Screen
+kwmc bind cmd+alt-1 screen -f 0
+kwmc bind cmd+alt-2 screen -f 1
+kwmc bind cmd+alt-3 screen -f 2
+
+# Move Focused Window
+kwmc bind ctrl+alt-h window -s west
+kwmc bind ctrl+alt-j window -s south
+kwmc bind ctrl+alt-k window -s north
+kwmc bind ctrl+alt-l window -s east
+
+# Swap With Marked Window
+kwmc bind ctrl+alt-m window -s mark
+
+# Detach Focused Window And Reinsert In Direction
+kwmc bind ctrl+shift-k window -x north
+kwmc bind ctrl+shift-l window -x east
+kwmc bind ctrl+shift-j window -x south
+kwmc bind ctrl+shift-h window -x west
+
+# Detach Marked Window And Reinsert At Focused Window
+kwmc bind ctrl+shift-x window -x mark
+
+# Move Focused Window To Screen
+kwmc bind ctrl+alt-1 screen -m 0
+kwmc bind ctrl+alt-2 screen -m 1
+kwmc bind ctrl+alt-3 screen -m 2
+
+# Increase Container Gaps
+kwmc bind prefix-x space -g increase horizontal
+kwmc bind prefix-y space -g increase vertical
+
+# Decrease Container Gaps
+kwmc bind prefix+shift-x space -g decrease horizontal
+kwmc bind prefix+shift-y space -g decrease vertical
+
+# Increase Screen Padding
+kwmc bind prefix-left space -p increase left
+kwmc bind prefix-right space -p increase right
+kwmc bind prefix-up space -p increase top
+kwmc bind prefix-down space -p increase bottom
+
+# Decrease Screen Padding
+kwmc bind prefix+shift-left space -p decrease left
+kwmc bind prefix+shift-right space -p decrease right
+kwmc bind prefix+shift-up space -p decrease top
+kwmc bind prefix+shift-down space -p decrease bottom

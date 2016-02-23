@@ -1,4 +1,4 @@
-FILES = ideavimrc tmux.conf.user vimrc.after spacemacs  emacs.d/private/magit-gh-issues
+FILES = ideavimrc tmux tmux.conf.user vimrc.after spacemacs  emacs.d/private/magit-gh-issues kwm/kwmrc
 PRIVATE_FILES = wakatime.cfg floorc.json
 ZSH_BEFORE = before.zsh
 ZSH_AFTER = after.zsh
@@ -19,6 +19,8 @@ init:
 		sh -c "mkdir ~/Library/Preferences/IntelliJIdea$(IDEA_V)/colors"
 		sh -c "curl -o ~/$(REPO)/idea/BlueForest.xml https://raw.githubusercontent.com/sirthias/BlueForest/master/BlueForest.xml"
 		sh -c "mkdir -p ~/.sbt/$(SBT_V)/plugins/"
+		ln -sfv /usr/local/opt/kwm/*.plist ~/Library/LaunchAgents
+		launchctl load ~/Library/LaunchAgents/homebrew.mxcl.kwm.plist
 		echo "[INFO] Remember to map Caps to 80 in Seil"
 
 update: update-deps unlink link
@@ -44,7 +46,6 @@ link:
 		ln -fvs ~/$(REPO)/sbt/plugins.sbt ~/.sbt/$(SBT_V)/plugins/plugins.sbt
 		@for f in $(PRIVATE_FILES) ; do ln -fvs ~/$(REPO)/private/$$f ~/.$$f; done
 		@for f in $(REPO)/bin/* ; do chmod +x ~/$(REPO)/bin/$$f && ln -fvs ~/$(REPO)/bin/$$f /usr/local/bin/$$f; done
-		ln -fvs ~/$(REPO)/tmux ~/.tmux
 		mv $(KARABINER_DIR)/private.xml $(KARABINER_DIR)/private.xml.bak && ln -fvs ~/$(REPO)/karabiner/private.xml $(KARABINER_DIR)/private.xml
 
 unlink:
