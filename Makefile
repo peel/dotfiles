@@ -44,6 +44,7 @@ config:
 		defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 		defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 		chflags nohidden ~/Library
+		launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist # disable spotlight
 
 brew:
 		sh ~/$(REPO)/Brewfile

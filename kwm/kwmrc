@@ -17,14 +17,14 @@
 # include binds
 
 # Set default values for screen padding
-kwmc config padding top 0
-kwmc config padding bottom 0
-kwmc config padding left 0
-kwmc config padding right 0
+kwmc config padding top 40
+kwmc config padding bottom 20
+kwmc config padding left 20
+kwmc config padding right 20
 
 # Set default values for container gaps
-kwmc config gap vertical  0
-kwmc config gap horizontal 0 
+kwmc config gap vertical 15
+kwmc config gap horizontal 15
 
 # Allow Kwm to tile windows
 kwmc config tiling enable
