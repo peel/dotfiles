@@ -69,7 +69,7 @@ kwmc config space bsp
 # kwmc config screen 1 monocle
 
 # Set default container split-ratio
-kwmc config split-ratio 0.5
+kwmc config split-ratio 0.618
 
 # New splits become the left leaf-node
 kwmc config spawn left
@@ -97,12 +97,12 @@ kwmc config float iTunes
 # Enable border for focused window
 kwmc config focused-border enable
 kwmc config focused-border size 5
-kwmc config focused-border color FFBDD322
+kwmc config focused-border color 99d1ce
 
 # Enable border for marked window
 kwmc config marked-border enable
 kwmc config marked-border size 5
-kwmc config marked-border color FFCC5577
+kwmc config marked-border color 245361
 
 ########  Default Keybinds ########
 
