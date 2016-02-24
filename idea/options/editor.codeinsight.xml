@@ -1,9 +1,0 @@
-<application>
-  <component name="CodeInsightSettings">
-    <option name="OPTIMIZE_IMPORTS_ON_THE_FLY" value="true" />
-  </component>
-  <component name="DaemonCodeAnalyzerSettings" profile="TempProfile">
-    <option name="NEXT_ERROR_ACTION_GOES_TO_ERRORS_FIRST" value="false" />
-    <option name="SHOW_METHOD_SEPARATORS" value="true" />
-  </component>
-</application>

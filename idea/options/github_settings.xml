@@ -1,8 +1,0 @@
-<application>
-  <component name="GithubSettings">
-    <option name="LOGIN" value="peel" />
-    <option name="HOST" value="https://github.com" />
-    <option name="AUTH_TYPE" value="BASIC" />
-    <option name="VALID_GIT_AUTH" value="false" />
-  </component>
-</application>

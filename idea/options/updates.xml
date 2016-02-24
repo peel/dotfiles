@@ -1,7 +1,0 @@
-<application>
-  <component name="UpdatesConfigurable">
-    <outdatedPlugins>
-      <item value="jenv-idea-plugin" />
-    </outdatedPlugins>
-  </component>
-</application>

@@ -1,8 +1,0 @@
-<application>
-  <component name="ScalaApplicationSettings">
-    <option name="OPTIMIZE_IMPORTS_ON_THE_FLY" value="true" />
-  </component>
-  <component name="TypeAwareHighlightingApplicationState">
-    <option name="SUGGEST_TYPE_AWARE_HIGHLIGHTING_ENABLED" value="true" />
-  </component>
-</application>
