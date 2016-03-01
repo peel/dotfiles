@@ -45,7 +45,7 @@ brew:
 		sh ~/$(REPO)/Brewfile
 
 link:
-		@for f in $(FILES) ; do ln -fvs ~/$(REPO)/$$f ~/.$$f; done
+		@for f in $(FILES) ; do ln -s ~/$(REPO)/$$f ~/.$$f; done
 		@for f in $(ZSH_BEFORE) ; do ln -fvs ~/$(REPO)/$$f ~/.zsh.before/$$f; done
 		@for f in $(ZSH_AFTER) ; do ln -fvs ~/$(REPO)/$$f ~/.zsh.after/$$f; done
 		ln -fvs ~/$(REPO)/sbt/plugins.sbt ~/.sbt/$(SBT_V)/plugins/plugins.sbt
