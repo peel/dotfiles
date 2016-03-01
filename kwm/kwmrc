@@ -84,10 +84,11 @@ kwmc config add-role AXDialog iTerm2
 # from Kwms tiling (PS: The app name is case-sensitive)
 # If the name consist of multiple words, the command
 # looks like: kwmc config float Google Chrome
-kwmc config float Steam
-kwmc config float Photoshop
+kwmc config float Pixelmator
 kwmc config float Tweetbot
 kwmc config float iTunes 
+kwmc config float Dash
+kwmc config float 1Password
 
 # The following command captures an application to the
 # given screen, if the screen exists. By doing this
