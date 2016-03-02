@@ -17,4 +17,14 @@
     <identifier>com.jasonrudolph.double_lshift_to_caps</identifier>
     <autogen>__DoublePressModifier__ KeyCode::SHIFT_L, KeyCode::SHIFT_L, KeyCode::CAPSLOCK</autogen>
   </item>
+  <item>
+    <name>Disable CMD-H for Hiding</name>
+    <identifier>io.github.peel.disable_cmd_h</identifier>
+    <autogen>__KeyToKey__ KeyCode::H, VK_COMMAND | ModifierFlag::NONE, KeyCode::VK_NONE</autogen>
+  </item>
+  <item>
+    <name>Disable CMD-ALT-H for hiding all but one</name>
+    <identifier>io.github.peel.disable_cmd_alt_h</identifier>
+    <autogen>__KeyToKey__ KeyCode::H, KeyCode::OPTION_L, VK_COMMAND | ModifierFlag::NONE, KeyCode::VK_NONE</autogen>
+  </item>
 </root>
