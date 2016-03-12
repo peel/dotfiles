@@ -78,7 +78,7 @@ kwmc config cycle-focus screen
 # kwmc config display 1 gap 40 40
 
 # Set default container split-ratio
-kwmc config split-ratio 0.5
+kwmc config split-ratio 0.618
 
 # New splits become the left leaf-node
 kwmc config spawn left
