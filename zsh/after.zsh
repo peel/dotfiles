@@ -22,6 +22,10 @@ ghidone() {
   fi
 }
 
+find-ips() {
+  nmap -sP $(ipconfig getifaddr en0)/24
+}
+
 # aliases
 alias e="emacsclient -tc"
 
