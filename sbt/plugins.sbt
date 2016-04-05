@@ -10,4 +10,3 @@ addSbtPlugin("org.ensime" % "ensime-sbt" % "0.4.0")
 
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.7")
 
-addSbtPlugin("com.softwaremill.clippy" % "plugin-sbt" % "0+")
