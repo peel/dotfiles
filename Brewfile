@@ -26,6 +26,7 @@ gem install ghi
 npm install -g tern
 gem install tldrb
 brew install homebrew/binary/kwm
+curl -o /tmp/LingonX4.zip -L https://www.peterborgapps.com/downloads/LingonX4.zip && unzip /tmp/LingonX4.zip && mv /tmp/LingonX4.app ~/Applications/ && rm -f /tmp/Lingon.+
 
 brew cask install appcleaner
 brew cask install dropbox
