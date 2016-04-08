@@ -17,6 +17,7 @@ init:
 		sh -c "mkdir -p ~/.sbt/$(SBT_V)/plugins/"
 		ln -sfv /usr/local/opt/kwm/*.plist ~/Library/LaunchAgents
 		sh -c "launchctl load ~/Library/LaunchAgents/homebrew.mxcl.kwm.plist"
+		sh -c "launchctl load ~/Library/LaunchAgents/homebrew.mxcl.kwm.plist"
 		sh -c "xcode-select --install"
 		sh -c echo "[INFO] Remember to map Caps to 80 in Seil"
 
@@ -48,6 +49,7 @@ link:
 		@for f in $(FILES) ; do ln -s ~/$(REPO)/$$f ~/.$$f; done
 		@for f in $(ZSH_BEFORE) ; do ln -fvs ~/$(REPO)/$$f ~/.zsh.before/$$f; done
 		@for f in $(ZSH_AFTER) ; do ln -fvs ~/$(REPO)/$$f ~/.zsh.after/$$f; done
+		@for f in $(REPO)/LaunchAgents/* ; do ln -fvs ~/$(REPO)/LaunchAgents/$$f ~/Library/LaunchAgents/$$f; done
 		ln -fvs ~/$(REPO)/sbt/plugins.sbt ~/.sbt/$(SBT_V)/plugins/plugins.sbt
 		@for f in $(PRIVATE_FILES) ; do ln -fvs ~/$(REPO)/private/$$f ~/.$$f; done
 		@for f in $(REPO)/bin/* ; do chmod +x ~/$(REPO)/bin/$$f && ln -fvs ~/$(REPO)/bin/$$f /usr/local/bin/$$f; done
