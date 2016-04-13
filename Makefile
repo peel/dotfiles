@@ -1,4 +1,4 @@
-FILES = tmux tmux.conf.user vimrc.after spacemacs  emacs.d/private/magit-gh-issues kwm/kwmrc
+FILES = tmux tmux.conf.user vimrc.after spacemacs.d emacs.d/private/magit-gh-issues kwm/kwmrc
 PRIVATE_FILES = wakatime.cfg floorc.json
 ZSH_BEFORE = before.zsh
 ZSH_AFTER = after.zsh
@@ -16,7 +16,6 @@ init:
 		git clone --recursive http://github.com/syl20bnr/spacemacs ~/.emacs.d
 		sh -c "mkdir -p ~/.sbt/$(SBT_V)/plugins/"
 		ln -sfv /usr/local/opt/kwm/*.plist ~/Library/LaunchAgents
-		sh -c "launchctl load ~/Library/LaunchAgents/homebrew.mxcl.kwm.plist"
 		sh -c "launchctl load ~/Library/LaunchAgents/homebrew.mxcl.kwm.plist"
 		sh -c "xcode-select --install"
 		sh -c echo "[INFO] Remember to map Caps to 80 in Seil"
