@@ -11,10 +11,7 @@
    ;; List of configuration layers to load. If it is the symbol `all' instead
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers '(
-        (auto-completion :variables
-                        auto-completion-enable-sort-by-usage t
-                        ;;auto-completion-enable-snippets-in-popup t
-        )
+        auto-completion
         ansible
         (colors :variables
                 colors-enable-nyan-cat-progress-bar t
@@ -181,6 +178,14 @@ layers configuration."
   ;; deft notes directory
   (setq deft-directory "~/Dropbox/Documents/notes")
   (setq deft-recursive t)
+
+  ;; blogging
+  (add-to-list 'load-path "~/.spacemacs.d/ox-jekyll-subtree/")
+  (require 'ox-jekyll-subtree)
+  (autoload 'endless/export-to-blog "ox-jekyll-subtree")
+  (setq org-jekyll-use-src-plugin t)
+  (setq endless/blog-base-url "https://codearsonist.com/")
+  (setq endless/blog-dir (expand-file-name "~/wrk/peel.github.com/"))
 
   ;; enable ligatures
   (mac-auto-operator-composition-mode))
