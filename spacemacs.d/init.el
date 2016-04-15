@@ -185,7 +185,7 @@ layers configuration."
   (autoload 'endless/export-to-blog "ox-jekyll-subtree")
   (setq org-jekyll-use-src-plugin t)
   (setq endless/blog-base-url "https://codearsonist.com/")
-  (setq endless/blog-dir (expand-file-name "~/wrk/peel.github.com/"))
+  (setq endless/blog-dir (expand-file-name "~/wrk/blog/site/"))
 
   ;; enable ligatures
   (mac-auto-operator-composition-mode))
