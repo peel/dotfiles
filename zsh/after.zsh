@@ -22,12 +22,25 @@ ghidone() {
   fi
 }
 
-find-ips() {
-  nmap -sP $(ipconfig getifaddr en0)/24
-}
-
 # aliases
+alias find-ips="nmap -sP $(ipconfig getifaddr en0)/24"
 alias e="emacsclient -tc"
+alias dm="docker-machine"
+alias dmi="dm ip"
+alias dme="eval $(dm env)"
+alias dms="dm start && dme"
+alias dmR="dm rm default"
+alias dmc="dm create --driver virtualbox default"
+alias dc="docker-compose"
+alias dcu="dc up"
+alias dck="dc kill"
+alias dcR="dc rm -f"
+alias dckR="dck && dcR"
+alias dR="docker rmi $(docker images | grep "^<none>" | awk "{print $3}")"
+alias di="docker images"
+alias dps="docker ps"
+alias dex="docker exec"
+alias d="docker run"
 
 export EDITOR="emacsclient -tc"
 export SHELL=/usr/local/bin/zsh
@@ -36,4 +49,3 @@ export SHELL=/usr/local/bin/zsh
 #promptinit
 prompt sorin
 PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
-
