@@ -27,7 +27,7 @@ alias find-ips="nmap -sP $(ipconfig getifaddr en0)/24"
 alias e="emacsclient -tc"
 alias dm="docker-machine"
 alias dmi="dm ip"
-alias dme="eval $(dm env)"
+alias dme="dm env"
 alias dms="dm start && dme"
 alias dmR="dm rm default"
 alias dmc="dm create --driver virtualbox default"
@@ -44,10 +44,11 @@ alias d="docker run"
 
 export EDITOR="emacsclient -tc"
 export SHELL=/usr/local/bin/zsh
+export HOMEBREW_NO_ANALYTICS=1
 
 #autoload -Uz promptinit
 #promptinit
 prompt sorin
 PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 
-dme
+eval $(dme)
