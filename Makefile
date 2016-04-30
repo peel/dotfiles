@@ -15,6 +15,7 @@ init:
 		sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`" -s ask
 		sudo sh $HOME/Brewfile
 		git clone --recursive http://github.com/syl20bnr/spacemacs ~/.emacs.d
+		git clone https://github.com/Malabarba/ox-jekyll-subtree.git spacemacs.d/ox-jekyll-subtree
 		sh -c "mkdir -p ~/.sbt/$(SBT_V)/plugins/"
 		ln -sfv /usr/local/opt/kwm/*.plist ~/Library/LaunchAgents
 		sh -c "launchctl load ~/Library/LaunchAgents/homebrew.mxcl.kwm.plist"

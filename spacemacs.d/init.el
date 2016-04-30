@@ -22,6 +22,7 @@
         editorconfig
         emacs-lisp
         elixir
+        elm
         fasd
         floobits
         flycheck
