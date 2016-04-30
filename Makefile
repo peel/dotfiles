@@ -1,5 +1,6 @@
 FILES = tmux tmux.conf.user vimrc.after spacemacs.d emacs.d/private/magit-gh-issues kwm/kwmrc
 PRIVATE_FILES = wakatime.cfg floorc.json
+ZSH_DIR := zsh
 ZSH_BEFORE = before.zsh
 ZSH_AFTER = after.zsh
 SBT_V := 0.13
@@ -46,21 +47,23 @@ brew:
 
 link:
 		@for f in $(FILES) ; do ln -s ~/$(REPO)/$$f ~/.$$f; done
-		@for f in $(ZSH_BEFORE) ; do ln -fvs ~/$(REPO)/$$f ~/.zsh.before/$$f; done
-		@for f in $(ZSH_AFTER) ; do ln -fvs ~/$(REPO)/$$f ~/.zsh.after/$$f; done
-		@for f in $(REPO)/LaunchAgents/* ; do ln -fvs ~/$(REPO)/LaunchAgents/$$f ~/Library/LaunchAgents/$$f; done
+		@for f in $(ZSH_BEFORE) ; do ln -fvs ~/$(REPO)/$(ZSH_DIR)/$$f ~/.zsh.before/$$f; done
+		@for f in $(ZSH_AFTER) ; do ln -fvs ~/$(REPO)/$(ZSH_DIR)/$$f ~/.zsh.after/$$f; done
 		ln -fvs ~/$(REPO)/sbt/plugins.sbt ~/.sbt/$(SBT_V)/plugins/plugins.sbt
 		@for f in $(PRIVATE_FILES) ; do ln -fvs ~/$(REPO)/private/$$f ~/.$$f; done
-		@for f in $(REPO)/bin/* ; do chmod +x ~/$(REPO)/bin/$$f && ln -fvs ~/$(REPO)/bin/$$f /usr/local/bin/$$f; done
-		mv $(KARABINER_DIR)/private.xml $(KARABINER_DIR)/private.xml.bak && ln -fvs ~/$(REPO)/karabiner/private.xml $(KARABINER_DIR)/private.xml
+		@for f in $(wildcard $(REPO)/bin/*) ; do chmod +x ~/$(REPO)/bin/$$f && ln -fvs ~/$(REPO)/bin/$$f /usr/local/bin/$$f; done
+		ln -fvs ~/$(REPO)/karabiner/private.xml $(KARABINER_DIR)/private.xml
+		@for f in $(wildcard $(REPO)/LaunchAgents/*) ; do ln -fvs $$f ~/Library/LaunchAgents/$$f; done
 
 unlink:
-		@for f in $(LIST) ; do rm -f ~/.$$f; done
+		@for f in $(FILES) ; do rm -f ~/.$$f; done
 		@for f in $(ZSH_BEFORE) ; do rm -f ~/.zsh.before/$$f; done
 		@for f in $(ZSH_AFTER) ; do rm -f ~/.zsh.after/$$f; done
 		rm -f ~/.sbt/$(SBT_V)/plugins/plugins.sbt
-		@for f in $(REPO)/bin/* ; do rm -f /usr/local/bin/$$f; done
-		rm -f ~/$(KARABINER_DIR)/private.xml && mv $(KARABINER_DIR)/private.xml.bak $(KARABINER_DIR)/private.xml
+		@for f in $(PRIVATE_FILES) ; do rm -f ~/.$$f; done
+		@for f in $(wildcard $(REPO)/bin/*) ; do rm -f /usr/local/bin/$$f; done
+		rm -f ~/$(KARABINER_DIR)/private.xml
+		@for f in $(wildcard $(REPO)/LaunchAgents/*) ; do rm -f ~/Library/LaunchAgents/$$f; done
 
 source:
 		@for f in $(FILES) ; do source ~/.$$f; done
