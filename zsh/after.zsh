@@ -25,6 +25,13 @@ ghidone() {
 # aliases
 alias find-ips="nmap -sP $(ipconfig getifaddr en0)/24"
 alias e="emacsclient -tc"
+
+#docker
+alias dR="docker rmi $(docker images | grep "^<none>" | awk "{print $3}")"
+alias di="docker images"
+alias dps="docker ps"
+alias dex="docker exec"
+alias d="docker run"
 alias dm="docker-machine"
 alias dmi="dm ip"
 alias dme="dm env"
@@ -36,11 +43,16 @@ alias dcu="dc up"
 alias dck="dc kill"
 alias dcR="dc rm -f"
 alias dckR="dck && dcR"
-alias dR="docker rmi $(docker images | grep "^<none>" | awk "{print $3}")"
-alias di="docker images"
-alias dps="docker ps"
-alias dex="docker exec"
-alias d="docker run"
+
+#elixir
+alias ni="npm install"
+alias nib="ni && node node_modules/brunch/bin/brunch build"
+alias ism="iex -S mix"
+alias mdg="mix deps.get"
+alias mpn="mix phoenix.new"
+alias mps="mix phoenix.server"
+alias ismps="iex -S mix phoenix.server"
+alias mec="mix ecto.create"
 
 export EDITOR="emacsclient -tc"
 export SHELL=/usr/local/bin/zsh
@@ -50,5 +62,3 @@ export HOMEBREW_NO_ANALYTICS=1
 #promptinit
 prompt sorin
 PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
-
-eval $(dme)
