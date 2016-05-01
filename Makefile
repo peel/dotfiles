@@ -26,7 +26,7 @@ update: update-deps unlink link
 
 update-deps:
 		cd ~/.emacs.d && git pull -r && git submodule sync; git submodule update
-		cd ~/.yadr && git pull -r && rake update
+		cd ~/.yadr && git stash && git pull -r && rake update && git stash pop
 
 config:
 		defaults write com.apple.PowerChime ChimeOnAllHardware -bool true; open /System/Library/CoreServices/PowerChime.app &
