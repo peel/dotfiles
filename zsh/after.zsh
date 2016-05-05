@@ -36,11 +36,16 @@ alias dcu="dc up"
 alias dck="dc kill"
 alias dcR="dc rm -f"
 alias dckR="dck && dcR"
-alias dR="docker rmi $(docker images | grep "^<none>" | awk "{print $3}")"
-alias di="docker images"
-alias dps="docker ps"
-alias dex="docker exec"
-alias d="docker run"
+alias d="docker"
+alias ds="d start"
+alias dS="d stop"
+alias dr="d restart"
+alias dl="d log"
+alias di="d images"
+alias diRu="d rmi $(docker images | grep '^<none>' | awk '{print $3}')"
+alias diR="d rmi -f $(di -aq)"
+alias dps="d ps"
+alias dex="d exec"
 
 export EDITOR="emacsclient -tc"
 export SHELL=/usr/local/bin/zsh
@@ -50,5 +55,3 @@ export HOMEBREW_NO_ANALYTICS=1
 #promptinit
 prompt sorin
 PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
-
-eval $(dme)
