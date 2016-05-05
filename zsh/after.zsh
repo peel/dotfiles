@@ -25,6 +25,8 @@ ghidone() {
 # aliases
 alias find-ips="nmap -sP $(ipconfig getifaddr en0)/24"
 alias e="emacsclient -tc"
+
+#docker
 alias dm="docker-machine"
 alias dmi="dm ip"
 alias dme="dm env"
@@ -46,6 +48,16 @@ alias diRu="d rmi $(docker images | grep '^<none>' | awk '{print $3}')"
 alias diR="d rmi -f $(di -aq)"
 alias dps="d ps"
 alias dex="d exec"
+
+#elixir
+alias ni="npm install"
+alias nib="ni && node node_modules/brunch/bin/brunch build"
+alias ism="iex -S mix"
+alias mdg="mix deps.get"
+alias mpn="mix phoenix.new"
+alias mps="mix phoenix.server"
+alias ismps="iex -S mix phoenix.server"
+alias mec="mix ecto.create"
 
 export EDITOR="emacsclient -tc"
 export SHELL=/usr/local/bin/zsh
