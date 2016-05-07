@@ -25,6 +25,8 @@ ghidone() {
 # aliases
 alias find-ips="nmap -sP $(ipconfig getifaddr en0)/24"
 alias e="emacsclient -tc"
+alias r="$(fc -ln -1)"
+alias R="sudo $(fc -ln -1)"
 
 #docker
 alias dm="docker-machine"
