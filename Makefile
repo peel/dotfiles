@@ -40,6 +40,7 @@ config:
 		defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
 		defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 		defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+		defaults write NSGlobalDomain _HIHideMenuBar -bool true # hide menu bar
 		chflags nohidden ~/Library
 		launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist # disable spotlight
 
