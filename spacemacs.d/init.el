@@ -36,17 +36,19 @@
         markdown
         org
         osx
+        pdftools
         perspectives
         ruby
-        (shell :variables shell-default-shell 'eshell)
         (scala :variables
-               flycheck-scalastyle-jar "/usr/local/bin/scalastyle"
-        )
+               flycheck-scalastyle-jar "/usr/local/bin/scalastyle")
+        (shell :variables shell-default-shell 'eshell)
+        slack
+        sql
         syntax-checking
         version-control
-        (wakatime :variables
-                  wakatime-api-key "d405f27b-007d-411f-9e0f-e1e1545c9d6b"
-                  wakatime-cli-path "/usr/local/Cellar/wakatime-cli/4.0.14/libexec/lib/python2.7/site-packages/wakatime/cli.py")
+        ;; (wakatime :variables
+        ;;           wakatime-api-key "d405f27b-007d-411f-9e0f-e1e1545c9d6b"
+        ;;           wakatime-cli-path "/usr/local/Cellar/wakatime-cli/6.0.9/libexec/lib/python2.7/site-packages/wakatime/cli.py")
         )
 
    ;; List of additional packages that will be installed wihout being
@@ -56,9 +58,9 @@
    dotspacemacs-additional-packages '(speed-type)
 
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '()
-   ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
-   ;; are declared in a layer which is not a member of
+   ;; dotspacemacs-excluded-packages '()
+   ;; ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
+   ;; ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'
    dotspacemacs-delete-orphan-packages t))
 
@@ -80,7 +82,6 @@ before layers configuration."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(gotham
-                         spacemacs-dark
                          spacemacs-light)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
@@ -159,7 +160,7 @@ layers configuration."
   (add-hook 'hack-local-variables-hook (lambda () (setq truncate-lines t)))
   (setq-default line-spacing 6)
   (golden-ratio-mode)
-  (global-wakatime-mode)
+  ;; (global-wakatime-mode)
   (indent-guide-global-mode)
 
   ;; Keep server alive
@@ -180,6 +181,11 @@ layers configuration."
   (setq deft-directory "~/Dropbox/Documents/notes")
   (setq deft-recursive t)
 
+  ;; slack config
+  (add-to-list 'load-path "~/.spacemacs.d/peel/")
+  (require 'peel)
+  (peel/slack-teams)
+
   ;; blogging
   (add-to-list 'load-path "~/.spacemacs.d/ox-jekyll-subtree/")
   (require 'ox-jekyll-subtree)
@@ -187,6 +193,22 @@ layers configuration."
   (setq org-jekyll-use-src-plugin t)
   (setq endless/blog-base-url "https://codearsonist.com/")
   (setq endless/blog-dir (expand-file-name "~/wrk/blog/site/"))
+  (setq ensime-startup-snapshot-notification nil)
 
   ;; enable ligatures
   (mac-auto-operator-composition-mode))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (slack emojify circe oauth2 websocket sql-indent org goto-chg undo-tree diminish uuidgen rake pug-mode osx-dictionary org-projectile org-download livid-mode skewer-mode simple-httpd link-hint jinja2-mode github-search flycheck-mix eyebrowse evil-visual-mark-mode evil-unimpaired evil-ediff eshell-z dumb-jump column-enforce-mode color-identifiers-mode xterm-color ws-butler window-numbering web-mode web-beautify volatile-highlights vi-tilde-fringe toc-org tagedit speed-type spacemacs-theme spaceline powerline smooth-scrolling smeargle slim-mode shell-pop scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-end rubocop rspec-mode robe reveal-in-osx-finder restart-emacs rbenv rainbow-mode rainbow-identifiers rainbow-delimiters popwin persp-mode pcre2el pbcopy paradox hydra spinner page-break-lines osx-trash orgit org-repo-todo org-present org-pomodoro alert log4e gntp org-plus-contrib org-bullets open-junk-file noflet neotree multi-term move-text mmm-mode markdown-toc markdown-mode magit-gitflow magit-gh-pulls macrostep lorem-ipsum linum-relative leuven-theme less-css-mode launchctl json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc jade-mode info+ indent-guide ido-vertical-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile helm-gitignore request helm-flx helm-descbinds helm-dash helm-css-scss helm-company helm-c-yasnippet helm-ag haml-mode google-translate golden-ratio gnuplot gitignore-mode github-clone github-browse-file gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gist gh marshal logito pcache ht gh-md flycheck-pos-tip flycheck-elm flycheck flx-ido flx floobits fill-column-indicator fasd grizzl fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit magit-popup git-commit with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-args evil-anzu anzu eval-sexp-fu highlight eshell-prompt-extras esh-help ensime sbt-mode scala-mode emmet-mode elm-mode elisp-slime-nav dockerfile-mode diff-hl deft define-word dash-at-point company-web web-completion-data company-tern dash-functional tern company-statistics company-quickhelp pos-tip coffee-mode clean-aindent-mode chruby bundler inf-ruby buffer-move bracketed-paste auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed ansible-doc ansible f s alchemist company dash elixir-mode pkg-info epl aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup quelpa package-build use-package which-key bind-key bind-map evil gotham-theme))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))

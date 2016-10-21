@@ -7,7 +7,7 @@ set -g terminal-overrides "screen.xterm-new"
 # Status options
 set-option -g status on
 set-option -g status-interval 1
-set-option -g status-utf8 on
+#set-option -g status-utf8 on
 set-option -g status-justify "left"
 set-option -g status-left-length 200
 set-option -g status-right-length 200
