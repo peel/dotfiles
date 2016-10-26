@@ -55,7 +55,7 @@ alias dex="d exec"
 alias k8="kubectl --context nwtprod --namespace auth"
 alias k8g="k8 get pod"
 alias k8l="k8 logs"
-alias k8lf="k8 logs"
+alias k8lf="k8l -f"
 alias k8e="k8 exec -it"
 k8G() {
     k8g | awk -v service="${1}-[0-9]+-.*" '$0 ~ service { print $1 }'
