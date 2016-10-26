@@ -13,7 +13,7 @@ install: init config private brew update link source
 
 init:
 		sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`" -s ask
-		sudo sh $HOME/Brewfile
+		sudo sh ${HOME}/Brewfile
 		git clone --recursive http://github.com/syl20bnr/spacemacs ~/.emacs.d
 		git clone https://github.com/Malabarba/ox-jekyll-subtree.git spacemacs.d/ox-jekyll-subtree
 		sh -c "mkdir -p ~/.sbt/$(SBT_V)/plugins/"
