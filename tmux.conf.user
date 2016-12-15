@@ -1,3 +1,6 @@
+# mouse support
+set -g mouse on
+
 # shell & terminal
 # set -g defaut-terminal "xterm-256color"
 set -g default-command /bin/zsh
