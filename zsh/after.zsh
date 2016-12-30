@@ -1,3 +1,10 @@
+ghi-mass-open(){
+  for project in *(e:'[[ -e $REPLY/src/main/scala ]]':); do
+    ghi open "[$project] $1"
+  done
+}
+alias "ghi opens"="ghi-mass-open"
+
 ghidoing() {
   if [[ "$1" = <-> ]]
   then
