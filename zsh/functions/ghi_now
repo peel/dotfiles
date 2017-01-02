@@ -1,0 +1,17 @@
+#!/usr/bin/env zsh
+
+function ghi_now() {
+    if [[ "$1" = <-> ]]; then
+        echo "Setting $1 as in-progress" &&
+        ghi label "$1" -a "in progress" &&
+        echo "Assigning $1 to self" &&
+        ghi assign $1 -u $(git config user.name)
+    else
+        echo "Setting $1 as in-progress" &&
+        ghi open -m "$1" -L "in progress" | xargs -0 bash -c 'for id; do git checkout -b "f-issue-$id"' &&
+        echo "Assigning $1 to self" &&
+        ghi assign $1 -u $(git config --global user.name)
+    fi
+}
+
+ghi_now $@

@@ -1,0 +1,9 @@
+#!/usr/bin/env zsh
+
+function ghi_opens(){
+    for project in *(e:'[[ -e $REPLY/src/main/scala ]]':); do
+        ghi open "[$project] $1"
+    done
+}
+
+ghi_opens $@

@@ -1,0 +1,26 @@
+#!/usr/bin/env zsh
+
+function ghi_epic_close() {
+    local MILESTONE=$(<.milestone)
+    local PULLREQUEST=$(<.pullrequest)
+    local BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    local TITLE=${BRANCH[2,50]//-/ }
+    if [[ -n $MILESTONE && ! -n $PULLREQUEST ]]; then
+        echo "Pushing to origin/$BRANCH" &&
+        git push -u origin $BRANCH &&
+        echo "Creating a milestone $MILESTONE" &&
+        ghi milestone -s closed $MILESTONE &&
+        echo "Creating a pull-request $TITLE" &&
+        hub pull-request -m "[wip] ${TITLE}" &&
+        echo "Checking back master" &&
+        git checkout master &&
+        echo "Removing branch $BRANCH" &&
+        git branch -d $BRANCH &&
+        echo "Removing .milestone config" &&
+        rm -f .milestone
+    else
+        git push
+    fi
+}
+
+ghi_epic_close

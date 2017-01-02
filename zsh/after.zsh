@@ -1,91 +1,15 @@
-# open issues for all scala projects in directory
-ghi-mass-open(){
-  for project in *(e:'[[ -e $REPLY/src/main/scala ]]':); do
-    ghi open "[$project] $1"
-  done
-}
-alias "ghi opens"="ghi-mass-open"
+#load custom functions
+FUNCTIONS_DIR=$HOME/.zsh.after/functions
+fpath=($FUNCTIONS_DIR $fpath)
+autoload $FUNCTIONS_DIR/*(:t)
 
-# open an epic
-# 0. create a new branch
-# 1. create a [wip] pull request
-# 2. create a milestone
-# 3. set env variable with milestone id
+#git workflow aliases
 alias gp=ghi_epic_push
 alias ghe=ghi_epic_open
+alias ghios=ghi_opens
 alias ghio=ghi_epic_issue_open
 alias ghic=ghi_close
 alias ghE=ghi_epic_close
-function ghi_epic_open() {
-    if [[ -n "$1" ]]
-    then
-        TITLE=$1
-        FORMATTED=${1// /-}
-        git checkout -b "f-${FORMATTED}"
-        echo "switching to branch f-${FORMATTED}"
-        local MILESTONE=$(ghi milestone -m "${TITLE}" | awk 'match($0, /[0-9]+/){print substr($0, RSTART, RLENGTH)}')
-        ${MILESTONE} > .milestone
-        echo "opened milestone ${MILESTONE} and set up env"
-    else
-        echo "Please provide epic title"
-    fi
-}
-function ghi_epic_push(){
-    local MILESTONE < .milestone
-    local PULLREQUEST < .pullrequest
-    local BRANCH = git rev-parse --abbrev-ref HEAD
-    local TITLE = ${BRANCH[2,50]//-/ }
-    if [[ -n $MILESTONE && ! -n $PULLREQUEST ]]; then
-        git push -u origin "${BRANCH}"
-        local PULLREQUEST = $(hub pull-request -m "[wip] ${TITLE}" | awk 'match($0, /[0-9]+/){print substr($0, RSTART, RLENGTH)}')
-        ${PULLREQUEST} > .pullrequest
-    elif [[ -n $MILESTONE && -n $PULLREQUEST ]]; then
-         git push -u origin "${BRANCH}"
-    else
-        git push
-    fi
-}
-ghi_epic_close(){
-    local MILESTONE < .milestone
-    local BRANCH = git rev-parse --abbrev-ref HEAD
-    local TITLE = ${BRANCH[2,50]//-/ }
-    if [[ -n $MILESTONE && ! -n $PULLREQUEST ]]; then
-        git push
-        ghi milestone -s 'closed' $MILESTONE
-        hub pull-request -m "[wip] ${TITLE}"
-        git checkout master
-        git branch -d $BRANCH
-    else
-        git push
-    fi
-}
-ghi_epic_issue_open() {
-    local MILESTONE < .milestone
-    if [[ -n $MILESTONE ]]; then
-        ghi open $1 -M $MILESTONE
-    else
-        ghi open $1
-    fi
-}
-
-ghi_doing() {
-  if [[ "$1" = <-> ]]; then
-    ghi label "$1" -a "in progress"
-    ghi assign $1 -u $(git config user.name)
-  else
-    ghi open -m "$1" -L "in progress" | xargs -0 bash -c 'for id; do git checkout -b "f-issue-$id"'
-    ghi assign $1 -u $(git config --global user.name)
-  fi
-}
-
-ghi_close() {
-  if [[ "$1" = <-> ]]; then
-    ghi close "$1"
-  else
-    ghi close $(ghi open -m "$1" -L "in progress" | head -n 1 | awk 'match($0, /[0-9]+/){print substr($0, RSTART, RLENGTH)}')
-    ghi assign $1 -u $(git config --global user.name)
-  fi
-}
 
 # aliases
 alias find-ips="nmap -sP $(ipconfig getifaddr en0)/24"

@@ -1,0 +1,20 @@
+#!/usr/bin/env zsh
+
+function ghi_epic_open() {
+    if [[ -n "$1" ]]
+    then
+        local TITLE=$1
+        local FORMATTED=${1// /-}
+        echo "Checking out a new branch f-${FORMATTED}" &&
+        git checkout -b "f-${FORMATTED}" &&
+        echo "Creating a new milestone $TITLE" &&
+        local MILESTONE=$(ghi milestone -m "${TITLE}" | awk 'match($0, /[0-9]+/){print substr($0, RSTART, RLENGTH)}') &&
+        echo "Setting .milestone" &&
+        echo ${MILESTONE} > .milestone
+        echo "opened milestone ${MILESTONE} and set up env"
+    else
+        echo "Please provide epic title"
+    fi
+}
+
+ghi_epic_open $@
