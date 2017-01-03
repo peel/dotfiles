@@ -9,7 +9,7 @@ function ghi_epic_push(){
         echo "Pushing to origin/$BRANCH" &&
         git push -u origin "${BRANCH}" &&
         echo "Creating a pull-request $TITLE" &&
-        local PULLREQUEST = $(hub pull-request -m "[wip] ${TITLE}" | awk 'match($0, /[0-9]+/){print substr($0, RSTART, RLENGTH)}') &&
+        local PULLREQUEST=$(hub pull-request -m "[wip] ${TITLE}" | awk 'match($0, /[0-9]+/){print substr($0, RSTART, RLENGTH)}') &&
         echo "Setting up .pullrequest" &&
         ${PULLREQUEST} > .pullrequest
     elif [[ -n $MILESTONE && -n $PULLREQUEST ]]; then
