@@ -10,12 +10,15 @@ alias ghios=ghi_opens
 alias ghic=ghi_close
 alias ghe=ghi_epic_open
 alias ghE=ghi_epic_close
+alias gn=ghi_nows
+alias fp=for_projects
 
 # aliases
 alias find-ips="nmap -sP $(ipconfig getifaddr en0)/24"
 alias e="emacsclient -tc"
 alias r="fc -ln -1"
 alias R="fc -ln -1"
+alias cx="chmod +x"
 
 #docker
 alias dm="docker-machine"

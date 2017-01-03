@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+
+# Execute command for all projects in directory
+#
+# Example:
+# for_projects sbt "project $1" "~test"
+
+function for_projects(){
+    for project in *(e:'[[ -e $REPLY/src/main ]]':); do
+        $@
+    done
+}
+
+for_projects $@

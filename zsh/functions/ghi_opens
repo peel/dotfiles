@@ -6,9 +6,7 @@
 # ghi_opens "some issue"
 
 function ghi_opens(){
-    for project in *(e:'[[ -e $REPLY/src/main ]]':); do
-        ghi open "[$project] $1"
-    done
+    for_projects ghi open "[$project] $1"
 }
 
 ghi_opens $@
