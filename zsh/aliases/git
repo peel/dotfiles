@@ -1,0 +1,9 @@
+#git workflow aliases
+alias gp=ghi_epic_push
+alias ghio=ghi_epic_issue_open
+alias ghios=ghi_opens
+alias ghic=ghi_close
+alias ghe=ghi_epic_open
+alias ghE=ghi_epic_close
+alias gn=ghi_nows
+alias fp=for_projects
