@@ -1,5 +1,16 @@
 #!/usr/bin/env zsh
 
+# Opens an "epic" in github
+# If a milestone exists, close it.
+# Otherwise simply push changes.
+#
+# 1. Checkout a new feature branch
+# 2. Open a new milestone
+# 3. Setup local environment for milestone
+#
+# Example:
+# ghi_epic_open "epic title"
+
 function ghi_epic_open() {
     if [[ -n "$1" ]]
     then

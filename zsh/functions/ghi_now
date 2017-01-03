@@ -1,5 +1,11 @@
 #!/usr/bin/env zsh
 
+# Mark an issue as in progress in github
+#
+# Example:
+# ghi_now 1            # set issue #1 as in-progress
+# ghi_now "some issue" # open a new issue and mark as in-progress
+
 function ghi_now() {
     if [[ "$1" = <-> ]]; then
         echo "Setting $1 as in-progress" &&

@@ -1,5 +1,12 @@
 #!/usr/bin/env zsh
 
+# Opens an issue on github
+# If a milestone exists, attach issue to to the milestone.
+# Otherwise simply open an issue.
+#
+# Example:
+# ghi_epic_issue_open "some title"
+
 function ghi_epic_issue_open() {
     local MILESTONE=$(<.milestone)
     if [[ -n $MILESTONE ]]; then

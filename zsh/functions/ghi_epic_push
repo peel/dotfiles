@@ -1,5 +1,15 @@
 #!/usr/bin/env zsh
 
+# Pushes changes to an epic in github
+# If a milestone exists.
+# Otherwise simply push changes.
+#
+# 1. Push changes
+# 2. Open a pull request if not exists
+#
+# Example:
+# ghi_epic_push
+
 function ghi_epic_push(){
     local MILESTONE=$(<.milestone)
     local PULLREQUEST=$(<.pullrequest)
@@ -12,8 +22,6 @@ function ghi_epic_push(){
         local PULLREQUEST=$(hub pull-request -m "[wip] ${TITLE}" | awk 'match($0, /[0-9]+/){print substr($0, RSTART, RLENGTH)}') &&
         echo "Setting up .pullrequest" &&
         ${PULLREQUEST} > .pullrequest
-    elif [[ -n $MILESTONE && -n $PULLREQUEST ]]; then
-        git push -u origin "${BRANCH}"
     else
         git push -u origin "${BRANCH}"
     fi
