@@ -5,10 +5,10 @@ autoload $FUNCTIONS_DIR/*(:t)
 
 #git workflow aliases
 alias gp=ghi_epic_push
-alias ghe=ghi_epic_open
-alias ghios=ghi_opens
 alias ghio=ghi_epic_issue_open
+alias ghios=ghi_opens
 alias ghic=ghi_close
+alias ghe=ghi_epic_open
 alias ghE=ghi_epic_close
 
 # aliases
