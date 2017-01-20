@@ -6,6 +6,7 @@ ZSH_AFTER = after.zsh functions aliases
 SBT_V := 0.13
 REPO := "wrk/dotfiles"
 PRIVATE_REPO := git@github.com:peel/dotfiles-private.git
+ELIXIR_EXTRAS := git@github.com:peel/dcdeps.gt
 KARABINER_DIR := ~/Library/Application\ Support/Karabiner
 default: update
 
@@ -70,6 +71,9 @@ unlink:
 source:
 		@for f in $(FILES) ; do source ~/.$$f; done
 		@for f in $(ZSH_FILES) ; do source ~/.zsh.after/$$f; done
+
+elixir-extras:
+		@for f in $(ELIXIR_EXTRAS) ; do git clone $$f ~/wrk/$$f && mix escript.build && mix escript.install; done
 
 private:
 		git clone $(PRIVATE_REPO) ~/$(REPO)/private || true

@@ -159,6 +159,7 @@ layers configuration."
   (setq powerline-default-separator 'slant)
   (global-linum-mode t)
   (linum-relative-toggle)
+  (global-prettify-symbols-mode t)
   (add-hook 'hack-local-variables-hook (lambda () (setq truncate-lines t)))
   (setq-default line-spacing 6)
   (golden-ratio-mode)
