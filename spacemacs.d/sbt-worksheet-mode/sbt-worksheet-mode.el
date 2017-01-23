@@ -10,7 +10,16 @@ Syncs buffer's contents to initiated sbt console session."
 
 (defun sbt-worksheet-sync ()
   "Pass current buffer to SBT REPL. The REPL has to be started first."
-  (progn (message "Syncing...")
-         (sbt:paste-region (point-min)(point-max) nil)))
+  (message "Syncing...")
+  (sbt:paste-region (point-min)(point-max) nil))
+
+(defun sbt-worksheet-paste (rStart rEnd)
+  "Pass marked region to console"
+  (interactive "r")
+  (message "Syncing: L%d-L%d" rStart rEnd)
+  (sbt:paste-region rStart rEnd))
+
+(spacemacs/set-leader-keys-for-minor-mode 'sbt-worksheet-mode
+  ";" 'sbt-worksheet-paste)
 
 (provide 'sbt-worksheet-mode)
