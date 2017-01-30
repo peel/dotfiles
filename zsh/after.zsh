@@ -4,7 +4,7 @@ ALIASES_DIR=$HOME/.zsh.after/aliases
 fpath=($FUNCTIONS_DIR $fpath)
 autoload $FUNCTIONS_DIR/*(:t)
 
-source $ALIASES_DIR/*
+for f in $ALIASES_DIR/*(:t); do source $ALIASES_DIR/$f; done
 
 export EDITOR="emacsclient -tc"
 export SHELL=/usr/local/bin/zsh
