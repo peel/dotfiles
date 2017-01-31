@@ -12,3 +12,8 @@ k8E() {
 k8L() {
     k8lf $(k8G "$1")
 }
+
+k88(){
+  local HOST=$(egrep -o '^[^/]+' <<< $1)
+  echo curl -sS $1 2> /dev/null | tee >(k8E $HOST bash)
+}
