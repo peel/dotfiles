@@ -12,8 +12,5 @@ k8E() {
 k8L() {
     k8lf $(k8G "$1")
 }
-
-k88(){
-  local HOST=$(egrep -o '^[^/]+' <<< $1)
-  echo curl -sS $1 2> /dev/null | tee >(k8E $HOST bash)
-}
+alias k8h=kubernetes_http_get
+alias k8hg=kubernetes_http_get
