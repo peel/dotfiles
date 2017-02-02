@@ -25,7 +25,10 @@ gem install ghi
 #emacs related
 npm install -g tern
 gem install tldrb
-brew install homebrew/binary/kwm
+brew install koekeishiya/formulae/kwm
+brew install koekeishiya/formulae/khd
+brew services start khd
+brew services start kwm
 brew cask install lingon-x
 
 brew cask install appcleaner

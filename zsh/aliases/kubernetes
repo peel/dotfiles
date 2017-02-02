@@ -4,7 +4,7 @@ alias k8l="k8 logs"
 alias k8lf="k8l -f"
 alias k8e="k8 exec -it"
 k8G() {
-    k8g | awk -v service="${1}-[0-9]+-.*" '$0 ~ service { print $1 }'
+    k8g | awk -v service="${1}-[0-9]+-.*" '$0 ~ service { print $1 }' | head -1
 }
 k8E() {
     k8e $(k8G "$1") "$2"

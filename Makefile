@@ -1,4 +1,4 @@
-FILES = tmux tmux.conf.user vimrc.after spacemacs.d emacs.d/private/magit-gh-issues kwm/kwmrc
+FILES = tmux tmux.conf.user vimrc.after spacemacs.d emacs.d/private/magit-gh-issues kwm/kwmrc khdrc
 PRIVATE_FILES = spacemacs.d/peel/ wakatime.cfg floorc.json
 ZSH_DIR := zsh
 ZSH_BEFORE = before.zsh
