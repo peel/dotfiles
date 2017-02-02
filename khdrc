@@ -1,3 +1,37 @@
+# vi-mode for non-terminal applications
+
+# remap left-control h/j/k/l -> arrow keys
+lctrl - h         ![HyperTerm,Terminal,iTerm2]      :   khd -p "- left"
+lctrl - j         ![HyperTerm,Terminal,iTerm2]      :   khd -p "- down"
+lctrl - k         ![HyperTerm,Terminal,iTerm2]      :   khd -p "- up"
+lctrl - l         ![HyperTerm,Terminal,iTerm2]      :   khd -p "- right"
+
+shift + lctrl - h ![HyperTerm,Terminal,iTerm2]      :   khd -p "shift - left"
+shift + lctrl - j ![HyperTerm,Terminal,iTerm2]      :   khd -p "shift - down"
+shift + lctrl - k ![HyperTerm,Terminal,iTerm2]      :   khd -p "shift - up"
+shift + lctrl - l ![HyperTerm,Terminal,iTerm2]      :   khd -p "shift - right"
+
+# remap left-control 0 / 4   -> start / end of line
+lctrl - 0         ![HyperTerm,Terminal,iTerm2]      :   khd -p "cmd - left"
+lctrl - 4         ![HyperTerm,Terminal,iTerm2]      :   khd -p "cmd - right"
+
+# remap left-control g / G   -> start / end of text
+lctrl - g         ![HyperTerm,Terminal,iTerm2]      :   khd -p "cmd - up"
+lctrl + shift - g ![HyperTerm,Terminal,iTerm2]      :   khd -p "cmd - down"
+
+shift + lctrl - 0 ![HyperTerm,Terminal,iTerm2]      :   khd -p "shift + cmd - left"
+shift + lctrl - 4 ![HyperTerm,Terminal,iTerm2]      :   khd -p "shift + cmd - right"
+
+# remap left-control b / e   -> start / end of word
+lctrl - b         ![HyperTerm,Terminal,iTerm2]      :   khd -p "alt - left"
+lctrl - e         ![HyperTerm,Terminal,iTerm2]      :   khd -p "alt - right"
+
+shift + lctrl - b ![HyperTerm,Terminal,iTerm2]      :   khd -p "shift + alt - left"
+shift + lctrl - e ![HyperTerm,Terminal,iTerm2]      :   khd -p "shift + alt - right"
+
+# remap left-control x       -> forward delete
+lctrl - x         ![HyperTerm,Terminal,iTerm2]      :   khd -p "- delete"
+
 # Enable kwm compatibility mode
 khd kwm on
 
@@ -13,11 +47,14 @@ khd mode prefix color 0xFF458588
 # Activate prefix mode
 ctrl - s                 :    khd -e "mode activate prefix"
 
+# Raload KHD config
+prefix - r               :    khd -e "reload" # reload config
+
 # Quit Kwm
 cmd + alt + ctrl - q     :    kwmc quit
 
 # Launch iTerm2
-cmd - return             :    open -na /Applications/iTerm.app
+cmd - return             :    open -na ~/Applications/iTerm.app
 
 # Set Space Tiling Mode To BSP
 cmd + ctrl - a           :    kwmc space -t bsp
