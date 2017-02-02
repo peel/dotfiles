@@ -10,18 +10,17 @@ ELIXIR_EXTRAS := git@github.com:peel/dcdeps.gt
 KARABINER_DIR := ~/Library/Application\ Support/Karabiner
 default: update
 
-install: init config private brew update link source
+install: init config private update link source
 
 init:
+		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+		sh -c "sudo xcodebuild -license"
+		brew install mas
 		sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`" -s ask
-		sudo sh ${HOME}/Brewfile
+		brew bundle
 		git clone --recursive http://github.com/syl20bnr/spacemacs ~/.emacs.d
 		git clone https://github.com/Malabarba/ox-jekyll-subtree.git spacemacs.d/ox-jekyll-subtree
 		sh -c "mkdir -p ~/.sbt/$(SBT_V)/plugins/"
-		ln -sfv /usr/local/opt/kwm/*.plist ~/Library/LaunchAgents
-		sh -c "launchctl load ~/Library/LaunchAgents/homebrew.mxcl.kwm.plist"
-		sh -c "xcode-select --install"
-		sh -c echo "[INFO] Remember to map Caps to 80 in Seil"
 
 update: update-deps unlink link
 
@@ -44,9 +43,6 @@ config:
 		defaults write NSGlobalDomain _HIHideMenuBar -bool true # hide menu bar
 		chflags nohidden ~/Library
 		launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist # disable spotlight
-
-brew:
-		sh ~/$(REPO)/Brewfile
 
 link:
 		@for f in $(FILES) ; do ln -s ~/$(REPO)/$$f ~/.$$f; done

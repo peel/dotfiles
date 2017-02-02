@@ -111,6 +111,7 @@ kwmc config spawn left
     AXWindowRole and AXStandardWindowSubRole
 */
 kwmc rule owner="iTerm2" properties={role="AXDialog"}
+kwmc rule owner="Hyper" properties={role="AXDialog"}
 
 /*
 The following commands create rules that
