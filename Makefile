@@ -1,4 +1,4 @@
-FILES = tmux tmux.conf.user vimrc.after spacemacs.d emacs.d/private/magit-gh-issues kwm/kwmrc khdrc
+FILES = tmux tmux.conf.user vimrc.after spacemacs.d emacs.d/private/magit-gh-issues kwm/kwmrc khdrc config/karabiner/karabiner.json
 PRIVATE_FILES = spacemacs.d/peel/ wakatime.cfg floorc.json
 ZSH_DIR := zsh
 ZSH_BEFORE = before.zsh
@@ -7,7 +7,6 @@ SBT_V := 0.13
 REPO := "wrk/dotfiles"
 PRIVATE_REPO := git@github.com:peel/dotfiles-private.git
 ELIXIR_EXTRAS := git@github.com:peel/dcdeps.gt
-KARABINER_DIR := ~/Library/Application\ Support/Karabiner
 default: update
 
 install: init config private update link source
@@ -51,7 +50,6 @@ link:
 		ln -fvs ~/$(REPO)/sbt/plugins.sbt ~/.sbt/$(SBT_V)/plugins/plugins.sbt
 		@for f in $(PRIVATE_FILES) ; do ln -fvs ~/$(REPO)/private/$$f ~/.$$f; done
 		@for f in $(wildcard $(REPO)/bin/*) ; do chmod +x ~/$(REPO)/bin/$$f && ln -fvs ~/$(REPO)/bin/$$f /usr/local/bin/$$f; done
-		ln -fvs ~/$(REPO)/karabiner/private.xml $(KARABINER_DIR)/private.xml
 		@for f in $(wildcard $(REPO)/LaunchAgents/*) ; do ln -fvs $$f ~/Library/LaunchAgents/$$f; done
 
 unlink:
@@ -61,7 +59,6 @@ unlink:
 		rm -f ~/.sbt/$(SBT_V)/plugins/plugins.sbt
 		@for f in $(PRIVATE_FILES) ; do rm -f ~/.$$f; done
 		@for f in $(wildcard $(REPO)/bin/*) ; do rm -f /usr/local/bin/$$f; done
-		rm -f ~/$(KARABINER_DIR)/private.xml
 		@for f in $(wildcard $(REPO)/LaunchAgents/*) ; do rm -f ~/Library/LaunchAgents/$$f; done
 
 source:

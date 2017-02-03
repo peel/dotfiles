@@ -98,7 +98,7 @@ cask 'transmission'
 cask 'vlc'
 
 #### communication
-mas 'Airmail 2', id: 918858936
+mas 'Airmail 3', id: 918858936
 mas 'Slack', id: 803453959
 mas 'Tweetbot', id: 557168941
 
