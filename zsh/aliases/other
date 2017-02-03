@@ -1,6 +1,14 @@
+# navigation
+alias o = "open"
+
 # aliases
 alias find-ips="nmap -sP $(ipconfig getifaddr en0)/24"
 alias e="emacsclient -tc"
 alias r="fc -ln -1"
 alias R="fc -ln -1"
 alias cx="chmod +x"
+
+# pasteboard
+alias pbc="pbcopy"
+alias pbp="pbpaste"
+
