@@ -192,10 +192,16 @@ layers configuration."
   ;; scala-related
   (evil-leader/set-key "n s" 'ensime)
   (setq ensime-startup-snapshot-notification nil)
+  (require 'mode-local)
+  (setq-mode-local ensime-mode company-idle-delay 1)
   ;; sbt-worksheet-like experience
   (add-to-list 'load-path "~/.spacemacs.d/sbt-worksheet-mode/")
   (require 'sbt-worksheet-mode)
   (autoload 'sbt-worksheet-mode "sbt-worksheet-mode")
+  ;; scala formatter
+  (add-to-list 'load-path "~/.spacemacs.d/scalafmt/")
+  (require 'scalafmt)
+  (autoload 'scalafmt "scalafmt")
 
   ;; blogging
   (add-to-list 'load-path "~/.spacemacs.d/ox-jekyll-subtree/")

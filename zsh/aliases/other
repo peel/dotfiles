@@ -1,5 +1,5 @@
 # navigation
-alias o = "open"
+alias o="open"
 
 # aliases
 alias find-ips="nmap -sP $(ipconfig getifaddr en0)/24"
