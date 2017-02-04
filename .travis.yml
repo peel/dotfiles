@@ -9,4 +9,7 @@ install:
   - ruby
 
 script:
-  - make init osx link extras unlink
+  - make init
+  - make osx
+  - make link
+  - make unlink
