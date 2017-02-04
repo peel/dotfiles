@@ -25,9 +25,7 @@ cask 'istat-menus'
 mas 'PopClip', id: 445189367
 
 #### shell
-brew 'zsh'
-brew 'zsh-completions'
-brew 'zplug'
+brew 'fish'
 brew 'tmux'
 brew 'ravenac95/sudolikeaboss/sudolikeaboss'
 brew 'reattach-to-user-namespace'

@@ -1,5 +1,10 @@
 # set your user tokens as environment variables, such as ~/.secrets
 # See the README for examples.
+[user]
+  email = plimanowski@codearsonist.com
+  name = Piotr Limanowski
+[include]
+  path = ~/.private/gitconfig.secret
 [color]
   ui = true
 [color "branch"]
@@ -130,5 +135,3 @@
 	pushInsteadOf = "git://gist.github.com/"
 [url "git://gist.github.com/"]
 	insteadOf = "gist:"
-[include]
-  path = .gitconfig.user
