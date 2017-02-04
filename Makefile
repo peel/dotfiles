@@ -6,7 +6,7 @@ PRIVATE_REPO := git@github.com:peel/dotfiles-private.git
 ELIXIR_EXTRAS := git@github.com:peel/dcdeps.gt
 default: update
 
-install: init config private update link source
+install: init osx private update
 
 init:
 		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -20,13 +20,12 @@ init:
 		git clone https://github.com/Malabarba/ox-jekyll-subtree.git spacemacs.d/ox-jekyll-subtree
 		sh -c "mkdir -p ~/.sbt/$(SBT_V)/plugins/"
 
-update: update-deps unlink link
+update: spacemacs unlink link
 
-update-deps:
+spacemacs:
 		cd ~/.emacs.d && git pull -r && git submodule sync; git submodule update
-		cd ~/.yadr && git stash && git pull -r && rake update && git stash pop
 
-config:
+osx:
 		defaults write com.apple.PowerChime ChimeOnAllHardware -bool true; open /System/Library/CoreServices/PowerChime.app &
 		defaults write -g ApplePressAndHoldEnabled -bool false #disable default hold-button behaviour
 		defaults write NSGlobalDomain KeyRepeat -int 1
@@ -57,14 +56,8 @@ unlink:
 		@for f in $(wildcard $(REPO)/bin/*) ; do rm -f /usr/local/bin/$$f; done
 		@for f in $(wildcard $(REPO)/LaunchAgents/*) ; do rm -f ~/Library/LaunchAgents/$$f; done
 
-source:
-		@for f in $(FILES) ; do source ~/.$$f; done
-
 elixir-extras:
 		@for f in $(ELIXIR_EXTRAS) ; do git clone $$f $(HOME)/wrk/$$f && mix escript.build && mix escript.install; done
 
 private:
 		git clone $(PRIVATE_REPO) ~/$(REPO)/private || true
-
-uninstall:
-		defaults write com.apple.PowerChime ChimeOnAllHardware -bool false;killall PowerChime
