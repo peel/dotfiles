@@ -5,4 +5,4 @@ os:
 sudo: required
 
 script:
-  - make install
+  - make init osx link extras unlink

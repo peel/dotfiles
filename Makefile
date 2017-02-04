@@ -15,15 +15,15 @@ init:
 		brew bundle
 		echo "/usr/local/bin/fish" | sudo tee -a /etc/shells
 		sh -c "chsh -s /usr/local/bin/fish"
-		curl -Lo ~/.config/fish/functions/fisher.fish --create-dirs git.io/fisher
-		git clone --recursive http://github.com/syl20bnr/spacemacs ~/.emacs.d
+		curl -Lo $(HOME)/.config/fish/functions/fisher.fish --create-dirs git.io/fisher
+		git clone --recursive http://github.com/syl20bnr/spacemacs $(HOME)/.emacs.d
 		git clone https://github.com/Malabarba/ox-jekyll-subtree.git spacemacs.d/ox-jekyll-subtree
-		sh -c "mkdir -p ~/.sbt/$(SBT_V)/plugins/"
+		sh -c "mkdir -p $(HOME)/.sbt/$(SBT_V)/plugins/"
 
-update: spacemacs unlink link
+update: spacemacs unlink private-unlink link private-link
 
 spacemacs:
-		cd ~/.emacs.d && git pull -r && git submodule sync; git submodule update
+		cd $(HOME)/.emacs.d && git pull -r && git submodule sync; git submodule update
 
 osx:
 		defaults write com.apple.PowerChime ChimeOnAllHardware -bool true; open /System/Library/CoreServices/PowerChime.app &
@@ -38,26 +38,31 @@ osx:
 		defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 		defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 		defaults write NSGlobalDomain _HIHideMenuBar -bool true # hide menu bar
-		chflags nohidden ~/Library
+		chflags nohidden $(HOME)/Library
 		launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist # disable spotlight
 
 link:
-		@for f in $(FILES) ; do ln -s ~/$(REPO)/$$f ~/.$$f; done
-		ln -fvs $(HOME)/$(REPO)/sbt/plugins.sbt ~/.sbt/$(SBT_V)/plugins/plugins.sbt
-		ln -fvs $(HOME)/$(REPO)/private/spacemacs.d/peel ~/.spacemacs.d/peel
-		@for f in $(PRIVATE_FILES) ; do ln -fvs ~/$(REPO)/private/$$f ~/.$$f; done
-		@for f in $(wildcard $(REPO)/bin/*) ; do chmod +x ~/$(REPO)/bin/$$f && ln -fvs ~/$(REPO)/bin/$$f /usr/local/bin/$$f; done
-		@for f in $(wildcard $(REPO)/LaunchAgents/*) ; do ln -fvs $$f ~/Library/LaunchAgents/$$f; done
+		@for f in $(FILES) ; do ln -s $(HOME)/$(REPO)/$$f $(HOME)/.$$f; done
+		ln -fvs $(HOME)/$(REPO)/sbt/plugins.sbt $(HOME)/.sbt/$(SBT_V)/plugins/plugins.sbt
+		@for f in $(wildcard $(REPO)/bin/*) ; do chmod +x $(HOME)/$(REPO)/bin/$$f && ln -fvs $(HOME)/$(REPO)/bin/$$f /usr/local/bin/$$f; done
+		@for f in $(wildcard $(REPO)/LaunchAgents/*) ; do ln -fvs $$f $(HOME)/Library/LaunchAgents/$$f; done
 
 unlink:
-		@for f in $(FILES) ; do rm -f ~/.$$f; done
+		@for f in $(FILES) ; do rm -f $(HOME)/.$$f; done
 		rm -f $(HOME)/.sbt/$(SBT_V)/plugins/plugins.sbt
-		@for f in $(PRIVATE_FILES) ; do rm -f ~/.$$f; done
 		@for f in $(wildcard $(REPO)/bin/*) ; do rm -f /usr/local/bin/$$f; done
-		@for f in $(wildcard $(REPO)/LaunchAgents/*) ; do rm -f ~/Library/LaunchAgents/$$f; done
+		@for f in $(wildcard $(REPO)/LaunchAgents/*) ; do rm -f $(HOME)/Library/LaunchAgents/$$f; done
 
-elixir-extras:
+extras:
 		@for f in $(ELIXIR_EXTRAS) ; do git clone $$f $(HOME)/wrk/$$f && mix escript.build && mix escript.install; done
 
-private:
-		git clone $(PRIVATE_REPO) ~/$(REPO)/private || true
+private-clone:
+		git clone $(PRIVATE_REPO) $(HOME)/$(REPO)/private || true
+
+private-link:
+		@for f in $(PRIVATE_FILES) ; do ln -fvs $(HOME)/$(REPO)/private/$$f $(HOME)/.$$f; done
+		ln -fvs $(HOME)/$(REPO)/private/spacemacs.d/peel $(HOME)/.spacemacs.d/peel
+
+private-unlink:
+		@for f in $(PRIVATE_FILES) ; do rm -f $(HOME)/.$$f; done
+		rm -rf $(HOME)/.spacemacs.d/peel
