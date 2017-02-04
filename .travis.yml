@@ -10,7 +10,10 @@ before-install:
 
 install:
   - brew install stow
+  - brew install fish
 
 script:
-  - make utils
+  - make osx
+  - make shell
+  - make editor
   - make link 
