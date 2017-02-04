@@ -10,4 +10,4 @@ install:
   - brew
 
 script:
-  - make init osx link spacemacs unlink
+  - "make init osx link spacemacs unlink"
