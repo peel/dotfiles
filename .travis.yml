@@ -4,10 +4,15 @@ os:
 
 sudo: required
 
+before-install:
+  - brew update
+  - brew tap Homebrew/bundle
+
 install:
-  - make
-  - ruby
-  - brew
+  - brew instal make
+  - brew install ruby
+  - brew install stow
 
 script:
-  - "make init osx link spacemacs unlink"
+  - make utils
+  - make link 
