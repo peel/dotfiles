@@ -8,3 +8,4 @@ options/recentProjects.xml
 options/statistics.application.usages.xml
 private/
 spacemacs.d/peel/
+config/fish/fishd.*

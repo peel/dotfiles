@@ -2,8 +2,8 @@
 set LC_ALL en_US.UTF-8
 set LANG en_US.UTF-8
 set TERM xterm-256color
-set SHELL /usr/local/bin/fish
-set EDITOR "emacsclient -tc"
+set -x SHELL /usr/local/bin/fish
+set -x EDITOR "emacsclient -tc"
 set -U fish $HOME/.config/fish
 
 # aliases

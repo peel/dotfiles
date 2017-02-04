@@ -13,7 +13,8 @@ init:
 		sh -c "sudo xcodebuild -license"
 		brew install mas
 		brew bundle
-		chsh -s /usr/local/bin/fish
+		echo "/usr/local/bin/fish" | sudo tee -a /etc/shells
+		sh -c "chsh -s /usr/local/bin/fish"
 		git clone --recursive http://github.com/syl20bnr/spacemacs ~/.emacs.d
 		git clone https://github.com/Malabarba/ox-jekyll-subtree.git spacemacs.d/ox-jekyll-subtree
 		sh -c "mkdir -p ~/.sbt/$(SBT_V)/plugins/"
