@@ -1,33 +1,94 @@
-idea/colors/BlueForest.xml
-idea/colors/*.icls
-idea/options/recentProjects.xml
-idea/options/statistics.application.usages.xml
-options/dimensions.xml
-options/feature.usage.statistics.xml
-options/recentProjects.xml
-options/statistics.application.usages.xml
 private/
 spacemacs.d/peel
-**fishd*
-config/fish/completions/a.fish
-config/fish/completions/d.fish
-config/fish/completions/f.fish
-config/fish/completions/fasd.fish
-config/fish/completions/fasd_cd.fish
-config/fish/completions/fisher.fish
-config/fish/completions/s.fish
-config/fish/completions/sd.fish
-config/fish/completions/sf.fish
-config/fish/completions/z.fish
-config/fish/completions/zz.fish
-config/fish/conf.d/
-config/fish/functions/__fasd_print_completion.fish
-config/fish/functions/a.fish
-config/fish/functions/d.fish
-config/fish/functions/f.fish
-config/fish/functions/fisher.fish
-config/fish/functions/s.fish
-config/fish/functions/sd.fish
-config/fish/functions/sf.fish
-config/fish/functions/z.fish
-config/fish/functions/zz.fish
+a.fish
+d.fish
+f.fish
+fasd.fish
+fasd_cd.fish
+fisher.fish
+s.fish
+sd.fish
+sf.fish
+z.fish
+zz.fish
+__fasd_print_completion.fish
+
+
+# Created by https://www.gitignore.io/api/emacs,osx
+
+### Emacs ###
+# -*- mode: gitignore; -*-
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Org-mode
+.org-id-locations
+*_archive
+
+# flymake-mode
+*_flymake.*
+
+# eshell files
+/eshell/history
+/eshell/lastdir
+
+# elpa packages
+/elpa/
+
+# reftex files
+*.rel
+
+# AUCTeX auto folder
+/auto/
+
+# cask packages
+.cask/
+dist/
+
+# Flycheck
+flycheck_*.el
+
+# server auth directory
+/server/
+
+# projectiles files
+.projectile
+
+# directory configuration
+.dir-locals.el
+
+### OSX ###
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# End of https://www.gitignore.io/api/emacs,osx

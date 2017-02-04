@@ -4,6 +4,7 @@ tap 'ravenac95/sudolikeaboss'
 
 #### os
 brew 'mas'
+brew 'stow'
 tap 'Homebrew/bundle'
 cask 'xquartz'
 brew 'coreutils'
