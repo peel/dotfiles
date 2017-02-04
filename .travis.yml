@@ -4,5 +4,9 @@ os:
 
 sudo: required
 
+install:
+  - make
+  - ruby
+
 script:
   - make init osx link extras unlink
