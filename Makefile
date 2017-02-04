@@ -6,11 +6,13 @@ PRIVATE_REPO := git@github.com:peel/dotfiles-private.git
 ELIXIR_EXTRAS := git@github.com:peel/dcdeps.gt
 default: update
 
-install: init osx private update
+install: brew init osx private update
 
-init:
+brew:
 		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 		sh -c "sudo xcodebuild -license" || true
+
+init:
 		brew install mas
 		brew bundle
 		echo "/usr/local/bin/fish" | sudo tee -a /etc/shells
@@ -20,9 +22,9 @@ init:
 		git clone https://github.com/Malabarba/ox-jekyll-subtree.git spacemacs.d/ox-jekyll-subtree
 		sh -c "mkdir -p $(HOME)/.sbt/$(SBT_V)/plugins/"
 
-update: spacemacs unlink private-unlink link private-link
+update: update-spacemacs unlink link private-update
 
-spacemacs:
+update-spacemacs:
 		cd $(HOME)/.emacs.d && git pull -r && git submodule sync; git submodule update
 
 osx:
@@ -58,6 +60,11 @@ extras:
 
 private-clone:
 		git clone $(PRIVATE_REPO) $(HOME)/$(REPO)/private || true
+
+private-update: private-pull private-unlink private-link
+
+private-pull:
+	cd $(HOME)/$(REPO)/private && git pull
 
 private-link:
 		@for f in $(PRIVATE_FILES) ; do ln -fvs $(HOME)/$(REPO)/private/$$f $(HOME)/.$$f; done

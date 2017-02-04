@@ -1,4 +1,4 @@
-language: c
+language: generic
 os:
   - osx
 
@@ -7,9 +7,7 @@ sudo: required
 install:
   - make
   - ruby
+  - brew
 
 script:
-  - make init
-  - make osx
-  - make link
-  - make unlink
+  - make init osx link spacemacs unlink
