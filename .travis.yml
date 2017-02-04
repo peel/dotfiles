@@ -9,8 +9,6 @@ before-install:
   - brew tap Homebrew/bundle
 
 install:
-  - brew instal make
-  - brew install ruby
   - brew install stow
 
 script:
