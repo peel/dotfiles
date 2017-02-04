@@ -1,0 +1,19 @@
+alias e "$EDITOR"
+alias cx "chmod +x"
+alias c "clear"
+alias cls "clear;ls"
+
+# processes
+alias psa "ps aux"
+alias pasg "psa | grep"
+alias k9 "kill -9"
+
+# pasteboard
+alias pbc "pbcopy"
+alias pbp "pbpaste"
+
+# dotfiles
+alias ee "$EDITOR $HOME/emacs.d/init.el"
+alias et "$EDITOR $HOME/.tmux.conf"
+alias ez "$EDITOR $HOME/.config/fish/config.fish"
+alias ea "$EDITOR $fhome/aliases/"

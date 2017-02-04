@@ -1,0 +1,16 @@
+alias k8 "kubectl --context nwtprod --namespace auth"
+alias k8g "k8 get pod"
+alias k8l "k8 logs"
+alias k8lf "k8l -f"
+alias k8e "k8 exec -it"
+function k8G
+    k8g | awk -v service="$argv[0]-[0-9]+-.*" '$argv[0] ~ service { print $argv[0] }' | head -1
+end
+function k8E
+    k8e (k8G "$agv[0]") "$argv[1]"
+end
+function k8L
+    k8lf (k8G "$argv[0]")
+end
+alias k8h kubernetes_http_get
+alias k8hg kubernetes_http_get

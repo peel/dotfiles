@@ -1,4 +1,0 @@
-function sbt_project(){
-  sbt "project $1" $2
-}
-alias sp=sbt_project

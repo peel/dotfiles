@@ -1,8 +1,5 @@
-FILES = tmux tmux.conf.user vimrc.after spacemacs.d emacs.d/private/magit-gh-issues kwm/kwmrc khdrc config/karabiner/karabiner.json
+FILES = tmux tmux.conf config/fish vimrc spacemacs.d emacs.d/private/magit-gh-issues kwm/kwmrc khdrc config/karabiner/karabiner.json git/gitconfig git/gitignore
 PRIVATE_FILES = spacemacs.d/peel/ wakatime.cfg floorc.json
-ZSH_DIR := zsh
-ZSH_BEFORE = before.zsh
-ZSH_AFTER = after.zsh functions aliases
 SBT_V := 0.13
 REPO := "wrk/dotfiles"
 PRIVATE_REPO := git@github.com:peel/dotfiles-private.git
@@ -15,8 +12,8 @@ init:
 		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 		sh -c "sudo xcodebuild -license"
 		brew install mas
-		sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`" -s ask
 		brew bundle
+		chsh -s /usr/local/bin/fish
 		git clone --recursive http://github.com/syl20bnr/spacemacs ~/.emacs.d
 		git clone https://github.com/Malabarba/ox-jekyll-subtree.git spacemacs.d/ox-jekyll-subtree
 		sh -c "mkdir -p ~/.sbt/$(SBT_V)/plugins/"
@@ -45,8 +42,6 @@ config:
 
 link:
 		@for f in $(FILES) ; do ln -s ~/$(REPO)/$$f ~/.$$f; done
-		@for f in $(ZSH_BEFORE) ; do ln -fvs ~/$(REPO)/$(ZSH_DIR)/$$f ~/.zsh.before/$$f; done
-		@for f in $(ZSH_AFTER) ; do ln -fvs ~/$(REPO)/$(ZSH_DIR)/$$f ~/.zsh.after/$$f; done
 		ln -fvs ~/$(REPO)/sbt/plugins.sbt ~/.sbt/$(SBT_V)/plugins/plugins.sbt
 		@for f in $(PRIVATE_FILES) ; do ln -fvs ~/$(REPO)/private/$$f ~/.$$f; done
 		@for f in $(wildcard $(REPO)/bin/*) ; do chmod +x ~/$(REPO)/bin/$$f && ln -fvs ~/$(REPO)/bin/$$f /usr/local/bin/$$f; done
@@ -54,8 +49,6 @@ link:
 
 unlink:
 		@for f in $(FILES) ; do rm -f ~/.$$f; done
-		@for f in $(ZSH_BEFORE) ; do rm -f ~/.zsh.before/$$f; done
-		@for f in $(ZSH_AFTER) ; do rm -f ~/.zsh.after/$$f; done
 		rm -f ~/.sbt/$(SBT_V)/plugins/plugins.sbt
 		@for f in $(PRIVATE_FILES) ; do rm -f ~/.$$f; done
 		@for f in $(wildcard $(REPO)/bin/*) ; do rm -f /usr/local/bin/$$f; done
@@ -63,7 +56,6 @@ unlink:
 
 source:
 		@for f in $(FILES) ; do source ~/.$$f; done
-		@for f in $(ZSH_FILES) ; do source ~/.zsh.after/$$f; done
 
 elixir-extras:
 		@for f in $(ELIXIR_EXTRAS) ; do git clone $$f ~/wrk/$$f && mix escript.build && mix escript.install; done

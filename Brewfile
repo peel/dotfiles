@@ -27,6 +27,7 @@ mas 'PopClip', id: 445189367
 #### shell
 brew 'zsh'
 brew 'zsh-completions'
+brew 'zplug'
 brew 'tmux'
 brew 'ravenac95/sudolikeaboss/sudolikeaboss'
 brew 'reattach-to-user-namespace'
@@ -34,6 +35,7 @@ cask 'iterm2'
 brew 'tldr'
 
 #### files
+brew 'fasd'
 brew 'the_silver_searcher'
 brew 'ranger'
 cask 'dropbox'

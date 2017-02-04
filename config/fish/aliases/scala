@@ -1,0 +1,4 @@
+function sbt_project
+  sbt "project $argv[0]" $argv[1]
+end
+alias sp sbt_project

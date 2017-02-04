@@ -1,0 +1,20 @@
+# navigation
+alias o "open"
+alias :q "exit"
+alias .. "cd .."
+alias ... '../..'
+alias .... '../../..'
+alias ..... '../../../..'
+
+# browsing
+alias l "less"
+alias less "l -r"
+alias tailf "tail -f"
+alias ls "ls -Gh"
+alias ll "ls -al"
+alias lsg "ll | grep"
+alias rr "ranger"
+
+# disk
+alias df "df -h"
+alias du "du -h -d 2"
