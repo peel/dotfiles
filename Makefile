@@ -10,7 +10,7 @@ install: init osx private update
 
 init:
 		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-		sh -c "sudo xcodebuild -license"
+		sh -c "sudo xcodebuild -license" || true
 		brew install mas
 		brew bundle
 		echo "/usr/local/bin/fish" | sudo tee -a /etc/shells
