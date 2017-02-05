@@ -3,10 +3,6 @@ div#content,div#postamble{
     max-width:760px;
     margin: 0 auto;
 }
-div#postamble p,div.outline-2,div.outline-2 p{
+div#content pre.example{
     text-align: center;
-}
-div#content>pre.example{
-    font-size: 7pt;
-    line-height: 6pt;
 }

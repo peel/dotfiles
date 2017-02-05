@@ -7,15 +7,23 @@ PRIVATE_REPO := git@github.com:peel/dotfiles-private.git
 ELIXIR_EXTRAS := git@github.com:peel/dcdeps.gt
 
 default: install
-
-install: brew osx shell editor link
+install: minimal osx brew-packages
+minimal: brew brew-minimal shell editor link
 
 brew:
 ifndef BREW
 		@echo "Installing homebrew"
 		@ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 		@sh -c "sudo xcodebuild -license" || true
+else
+		@echo "homebrew already installed."
 endif
+
+brew-minimal:
+		@echo "Installing base packages"
+		@brew install git stow fish tmux
+
+brew-packages:
 		@echo "Installing packages"
 		@brew bundle
 

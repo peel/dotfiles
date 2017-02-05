@@ -9,10 +9,12 @@ before-install:
   - brew tap Homebrew/bundle
 
 install:
-  - brew install stow
-  - brew install fish
+  - brew uninstall git 
+  - brew uninstall tmux
 
 script:
+  - make brew
+  - make brew-minimal
   - make osx
   - make editor
   - make link 
