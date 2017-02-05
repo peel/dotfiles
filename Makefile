@@ -1,3 +1,5 @@
+DOTFILES := $(HOME)/Documents/wrk/dotfiles
+IGNORED := Brewfile Makefile README.org
 PRIVATE_REPO := git@github.com:peel/dotfiles-private.git
 ELIXIR_EXTRAS := git@github.com:peel/dcdeps.gt
 
@@ -22,10 +24,10 @@ editor:
 		git clone https://github.com/Malabarba/ox-jekyll-subtree.git spacemacs.d/ox-jekyll-subtree
 
 link:
-		@for f in $(wildcard $(PWD)/*) ; do stow -d $$f; done
+		@for f in $(filter-out $(IGNORED),$(notdir $(wildcard $(PWD)/*))) ; do stow -t ~ $$f; done
 
 clean:
-		@for f in $(wildcard $(PWD)/*) ; do stow -D $$f; done
+		@for f in $(filter-out $(IGNORED),$(notdir $(wildcard $(PWD)/*))) ; do stow -t ~ -D $$f; done
 
 osx:
 		defaults write com.apple.PowerChime ChimeOnAllHardware -bool true; open /System/Library/CoreServices/PowerChime.app &
