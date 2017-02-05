@@ -18,4 +18,5 @@ sh -c "`https://dotfiles.codearsonist.com/install.sh`"
 - ~minimal~ - minimal settings and packages
 - ~clean~ - remove configured links 
 * Sources
-See[[https://github.com/peel/dotfiles][ peel/dotfiles]] at Github.
+See[[https://github.com/peel/dotfiles][ peel/dotfiles]] at Github 
+[[https://travis-ci.org/peel/dotfiles.svg]]

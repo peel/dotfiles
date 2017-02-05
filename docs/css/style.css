@@ -3,6 +3,9 @@ div#content,div#postamble{
     max-width:760px;
     margin: 0 auto;
 }
+object.org-svg{
+    width: auto;
+}
 div#content pre.example{
     text-align: center;
 }
