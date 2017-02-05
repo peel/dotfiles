@@ -34,7 +34,7 @@ So be it, until victory is mine and there is no issue!
 * Installation
 To install dotfiles along with all the dependencies:
 #+BEGIN_SRC
-sh -c "`https://raw.githubusercontent.com/peel/dotfiles/master/install.sh`"
+sh -c "`https://dotfiles.codearsonist.com/install.sh`"
 #+END_SRC
 or by hand:
 #+BEGIN_SRC
