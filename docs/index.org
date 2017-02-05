@@ -1,0 +1,17 @@
+#+TITLE: dotfiles.codearsonist.com
+#+AUTHOR: Piotr Limanowski
+#+OPTIONS: toc:nil timestamp:nil
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="css/style.css" />
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="https://codearsonist.com/assets/css/screen.css" />
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto+Slab:700,300,400|Source+Code+Pro:500" />
+
+* Installation
+#+BEGIN_SRC
+sh -c "`https://dotfiles.codearsonist.com/install.sh`"
+#+END_SRC
+or by hand by cloning and running make directly
+#+BEGIN_SRC
+git clone git@github.com:peel/dotfiles.git && cd dotfiles && make
+#+END_SRC
+* Sources
+See[[https://github.com/peel/dotfiles][ peel/dotfiles]] at Github.
