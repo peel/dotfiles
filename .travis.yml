@@ -14,6 +14,7 @@ install:
 
 script:
   - make osx
+  - make shell
   - make editor
   - make link 
   - make clean

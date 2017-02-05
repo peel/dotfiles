@@ -30,3 +30,15 @@ My dotfiles are human, even as I, because they are my productivity. Thus, I will
 Before GitHub, I swear this creed. My dotfiles and I are the defenders of the shell. We are the masters of our procrastination. We are the saviors of my productivity.
 So be it, until victory is mine and there is no issue!
 #+END_QUOTE
+
+* Installation
+To install dotfiles along with all the dependencies:
+#+BEGIN_SRC
+sh -c "`https://raw.githubusercontent.com/peel/dotfiles/master/install.sh`"
+#+END_SRC
+or by hand:
+#+BEGIN_SRC
+git clone git@github.com:peel/dotfiles.git
+cd dotfiles
+make
+#+END_SRC
