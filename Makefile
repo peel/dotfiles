@@ -24,8 +24,11 @@ brew-minimal:
 		@brew install git stow fish tmux
 
 brew-packages:
+		@echo "Sign into Mac App Store to proceed"
+		@read -p "AppStore email: " email; \
+		mas signin $email || true
 		@echo "Installing packages"
-		@brew bundle
+		brew bundle
 
 shell:
 ifneq ($(NEW_SHELL),$(CURRENT_SHELL))
@@ -41,7 +44,7 @@ editor:
 ifeq ("$(wildcard $(HOME)/.emacs.d/)","")
 		@echo "Setting up Emacs"
 		@git clone --recursive http://github.com/syl20bnr/spacemacs $(HOME)/.emacs.d
-		@git clone https://github.com/Malabarba/ox-jekyll-subtree.git spacemacs.d/ox-jekyll-subtree
+		@git clone https://github.com/Malabarba/ox-jekyll-subtree.git $(HOME)/.spacemacs.d/ox-jekyll-subtree
 else
 		@echo "Emacs already set up"
 endif
