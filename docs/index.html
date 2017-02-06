@@ -232,25 +232,29 @@ for the JavaScript code in this tag.
 <div id="content">
 <h1 class="title">dotfiles.codearsonist.com</h1>
 
-<div id="outline-container-org9bf5bda" class="outline-2">
-<h2 id="org9bf5bda"><span class="section-number-2">1</span> Installation</h2>
+<div id="outline-container-org74da875" class="outline-2">
+<h2 id="org74da875"><span class="section-number-2">1</span> Installation</h2>
 <div class="outline-text-2" id="text-1">
+<p>
+Full install (installs brew/appstore applications):
+</p>
 <pre class="example">
-sh -c "`https://dotfiles.codearsonist.com/install.sh`"
+sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`"
+</pre>
+<p>
+Minimal install:
+</p>
+<pre class="example">
+sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`" -s minimal
 </pre>
 </div>
-<div id="outline-container-org88fdb45" class="outline-4">
-<h4 id="org88fdb45"><span class="section-number-4">1.0.1</span> Manual install</h4>
-<div class="outline-text-4" id="text-1-0-1">
+</div>
+<div id="outline-container-orge96cde9" class="outline-2">
+<h2 id="orge96cde9"><span class="section-number-2">2</span> Usage</h2>
+<div class="outline-text-2" id="text-2">
 <pre class="example">
 git clone git@github.com:peel/dotfiles.git &amp;&amp; cd dotfiles &amp;&amp; make
 </pre>
-</div>
-</div>
-</div>
-<div id="outline-container-org3c0c626" class="outline-2">
-<h2 id="org3c0c626"><span class="section-number-2">2</span> Usage</h2>
-<div class="outline-text-2" id="text-2">
 <ul class="org-ul">
 <li><code>default</code> (<code>install</code>) - install everything</li>
 <li><code>minimal</code> - minimal settings and packages</li>
@@ -258,8 +262,8 @@ git clone git@github.com:peel/dotfiles.git &amp;&amp; cd dotfiles &amp;&amp; mak
 </ul>
 </div>
 </div>
-<div id="outline-container-orgfe70772" class="outline-2">
-<h2 id="orgfe70772"><span class="section-number-2">3</span> Sources</h2>
+<div id="outline-container-org9f5c417" class="outline-2">
+<h2 id="org9f5c417"><span class="section-number-2">3</span> Sources</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 See<a href="https://github.com/peel/dotfiles"> peel/dotfiles</a> at Github 

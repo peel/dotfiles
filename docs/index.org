@@ -6,14 +6,18 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto+Slab:700,300,400|Source+Code+Pro:500" />
 
 * Installation
+Full install (installs brew/appstore applications):
 #+BEGIN_SRC
-sh -c "`https://dotfiles.codearsonist.com/install.sh`"
+sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`"
 #+END_SRC
-*** Manual install
-  #+BEGIN_SRC
-  git clone git@github.com:peel/dotfiles.git && cd dotfiles && make
-  #+END_SRC
+Minimal install:
+#+BEGIN_SRC
+sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`" -s minimal
+#+END_SRC
 * Usage
+#+BEGIN_SRC
+git clone git@github.com:peel/dotfiles.git && cd dotfiles && make
+#+END_SRC
 - ~default~ (~install~) - install everything
 - ~minimal~ - minimal settings and packages
 - ~clean~ - remove configured links 
