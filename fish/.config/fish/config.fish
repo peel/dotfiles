@@ -5,6 +5,7 @@ set TERM xterm-256color
 set -x SHELL /usr/local/bin/fish
 set -x EDITOR "emacsclient -tc"
 set -U fish $HOME/.config/fish
+set -x fish_greeting ''
 
 # aliases
 each 'source $_1' (ls $fish/aliases/*)

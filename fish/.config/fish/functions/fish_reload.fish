@@ -2,4 +2,5 @@
 
 function fish_reload -d "Reloads fish configuration"
   . "$fish/config.fish"
+  echo 🌀
 end
