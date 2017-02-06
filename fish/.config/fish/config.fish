@@ -7,6 +7,9 @@ set -x EDITOR "emacsclient -tc"
 set -U fish $HOME/.config/fish
 set -x fish_greeting ''
 
+# key bindings
+set -g fish_key_bindings fish_vi_key_bindings
+
 # aliases
 each 'source $_1' (ls $fish/aliases/*)
 

@@ -21,7 +21,7 @@ endif
 
 brew-minimal:
 		@echo "Installing base packages"
-		@brew install git stow fish tmux
+		@brew install git stow tmux
 
 brew-packages:
 		@echo "Sign into Mac App Store to proceed"
@@ -32,6 +32,7 @@ brew-packages:
 
 shell:
 ifneq ($(NEW_SHELL),$(CURRENT_SHELL))
+		@brew install fish
 		@echo "Setting up .$(NEW_SHELL). for $(USER) instead of.$(CURRENT_SHELL)."
 		@echo "/usr/local/bin/fish" | sudo tee -a /etc/shells
 		@sh -c "chsh -s /usr/local/bin/fish"
@@ -39,6 +40,8 @@ ifneq ($(NEW_SHELL),$(CURRENT_SHELL))
 else
 		@echo "Not setting up shell for $(USER) instead of $(CURRENT_SHELL)"
 endif
+		@echo "Installing fish plugins"
+		@/usr/local/bin/fish -c "fisher"
 
 editor:
 ifeq ("$(wildcard $(HOME)/.emacs.d/)","")
