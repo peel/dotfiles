@@ -8,6 +8,7 @@ brew 'stow'
 tap 'Homebrew/bundle'
 cask 'xquartz'
 brew 'coreutils'
+brew 'less'
 brew 'gawk'
 cask 'appcleaner'
 brew 'parallel'
@@ -89,6 +90,7 @@ brew 'node'
 brew 'elm'
 
 #### misc dev
+brew 'mycli'
 brew 'asciinema'
 brew 'wakatime-cli'
 
