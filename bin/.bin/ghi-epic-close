@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 # Closes an "epic" in github
 # If a milestone exists, close it.
@@ -14,7 +14,7 @@
 # Example:
 # ghi_epic_close  # close currently open epic
 
-function ghi_epic_close() {
+function ghi-epic-close() {
     local MILESTONE=$(<.milestone)
     local PULLREQUEST=$(<.pullrequest)
     local BRANCH=$(git rev-parse --abbrev-ref HEAD)

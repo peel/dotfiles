@@ -73,6 +73,8 @@ brew 'hub'
 brew 'awscli'
 brew 'kubernetes-cli'
 brew 'homebrew/boneyard/ngrok'
+tap 'concourse/tap'
+brew 'fly', args: ['HEAD']
 mas 'CCMenu', id: 603117688
 
 #### languages

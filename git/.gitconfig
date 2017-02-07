@@ -135,3 +135,7 @@
 	pushInsteadOf = "git://gist.github.com/"
 [url "git://gist.github.com/"]
 	insteadOf = "gist:"
+[github]
+	user = peel
+[ghi]
+	token = !security find-internet-password -a peel -s github.com -l 'ghi token' -w

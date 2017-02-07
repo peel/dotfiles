@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 # Opens an "epic" in github
 # If a milestone exists, close it.
