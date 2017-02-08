@@ -7,8 +7,7 @@ alias .... '../../..'
 alias ..... '../../../..'
 
 # browsing
-alias l "less"
-alias less "l -r"
+alias less "less -R"
 alias tailf "tail -f"
 alias ls "ls -Gh"
 alias ll "ls -al"

@@ -56,10 +56,10 @@ alias gbb 'git bisect bad'
 alias gdmb 'git branch --merged | grep -v "\*" | xargs -n 1 git branch -d'
 
 #git workflow aliases
-alias gp ghi_epic_push
-alias ghio ghi_epic_issue_open
-alias ghios ghi_opens
-alias ghic ghi_close
-alias ghe ghi_epic_open
-alias ghE ghi_epic_close
-alias gn ghi_nows
+alias gp ghi-epic-push
+alias ghio ghi-epic-issue-open
+alias ghios ghi-opens
+alias ghic ghi-close
+alias ghe ghi-epic-open
+alias ghE ghi-epic-close
+alias gn ghi-nows

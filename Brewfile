@@ -77,6 +77,10 @@ tap 'concourse/tap'
 brew 'fly', args: ['HEAD']
 mas 'CCMenu', id: 603117688
 
+#### vm
+cask 'virtualbox'
+cask 'vagrant'
+
 #### languages
 cask 'java'
 brew 'ammonite-repl'
