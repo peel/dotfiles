@@ -53,6 +53,9 @@ else
 endif
 
 link:
+ifeq ("$(wildcard $(HOME)/.spacemacs.d/)","")
+		@mkdir "$(HOME)/.spacemacs.d"
+endif
 		@echo "Linking dotfiles"
 		@for f in $(filter-out $(IGNORED),$(notdir $(wildcard $(PWD)/*))) ; do stow -t ~ $$f; done
 

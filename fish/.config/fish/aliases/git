@@ -1,3 +1,5 @@
+#hub
+alias git hub
 #git
 alias gs 'git status'
 alias gst 'git stash'

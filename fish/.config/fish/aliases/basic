@@ -1,4 +1,4 @@
-alias e "$EDITOR"
+alias e "em"
 alias cx "chmod +x"
 alias c "clear"
 alias cls "clear;ls"
