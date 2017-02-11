@@ -1,7 +1,6 @@
 BREW := $(shell command -v brew 2> /dev/null)
 NEW_SHELL := $(shell which fish)
 CURRENT_SHELL := $(shell dscl . -read /Users/$(USER) UserShell | awk '{ print $$(2) }' | tr -d [:blank:])
-DOTFILES := $(HOME)/Documents/wrk/dotfiles
 IGNORED := Brewfile Makefile README.org CNAME install.sh docs
 PRIVATE_REPO := git@github.com:peel/dotfiles-private.git
 ELIXIR_EXTRAS := git@github.com:peel/dcdeps.gt
