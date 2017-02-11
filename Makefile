@@ -1,6 +1,5 @@
 BREW := $(shell command -v brew 2> /dev/null)
 NEW_SHELL := $(shell which fish)
-CURRENT_SHELL := $(shell dscl . -read /Users/$(USER) UserShell | awk '{ print $$(2) }' | tr -d [:blank:])
 IGNORED := Brewfile Makefile README.org CNAME install.sh docs
 PRIVATE_REPO := git@github.com:peel/dotfiles-private.git
 ELIXIR_EXTRAS := git@github.com:peel/dcdeps.gt
@@ -9,27 +8,44 @@ default: install
 install: minimal osx brew-packages
 minimal: brew brew-minimal shell editor link
 
+#if uname == darwin ... else do nothing
 brew:
-ifndef BREW
+ifndef BREW and ifeq($(shell uname -s),Darwin)
 		@echo "Installing homebrew"
 		@ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 		@sh -c "sudo xcodebuild -license" || true
 else
-		@echo "homebrew already installed."
+		@echo "package manager already available"
 endif
 
+#if uname == darwin brew install else do nix-env -i
+# nix: gitAndTools
 brew-minimal:
-		@echo "Installing base packages"
-		@brew install git stow tmux fish
+ifeq($(shell uname -s),Darwin)
+		@echo "Installing base brew packages"
+		@brew install git hub stow tmux fish
+else
+		@echo "Installing base nix packages"
+    @nix-env -i git hub stow fish
+endif
 
+#if uname == darwin ... else do nix provision?
 brew-packages:
+ifeq($(shell uname -s),Darwin)
 		@echo "Sign into Mac App Store to proceed"
 		@read -p "AppStore email: " email; \
 		mas signin $email || true
 		@echo "Installing packages"
 		brew bundle
+endif
 
+#if uname == darwin CURRENT_SHELL should be determined differently
 shell:
+ifeq($(shell uname -s),Darwin)
+		CURRENT_SHELL := $(shell dscl . -read /Users/$(USER) UserShell | awk '{ print $$(2) }' | tr -d [:blank:])
+else
+		CURRENT_SHELL := $(shell grep ^$(id -un): /etc/passwd | cut -d : -f 7-)
+endif
 ifneq ($(NEW_SHELL),$(CURRENT_SHELL))
 		@echo "Setting up .$(NEW_SHELL). for $(USER) instead of.$(CURRENT_SHELL)."
 		@echo "$(NEW_SHELL)" | sudo tee -a /etc/shells
