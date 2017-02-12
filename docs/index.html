@@ -230,45 +230,61 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">dotfiles.codearsonist.com</h1>
+<h1 class="title">dotfiles.codearsonist.com
+<br>
+<span class="subtitle">well-tailored dotfiles for macOS &amp; NixOS</span>
+</h1>
 
-<div id="outline-container-org74da875" class="outline-2">
-<h2 id="org74da875"><span class="section-number-2">1</span> Installation</h2>
+<div id="outline-container-orgf18f73b" class="outline-2">
+<h2 id="orgf18f73b"><span class="section-number-2">1</span> Installation</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-Full install (installs brew/appstore applications):
+macOS minimal install:
+</p>
+<pre class="example">
+sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`" -s minimal
+</pre>
+<p>
+Nix install (macOS &amp; NixOS):
+</p>
+<pre class="example">
+sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`" -s nix
+</pre>
+<p>
+Full install: 
 </p>
 <pre class="example">
 sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`"
 </pre>
 <p>
-Minimal install:
+Config-only install (requires <a href="https://www.gnu.org/software/stow/">stow</a>)
 </p>
 <pre class="example">
-sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`" -s minimal
+sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`" -s link
 </pre>
 </div>
 </div>
-<div id="outline-container-orge96cde9" class="outline-2">
-<h2 id="orge96cde9"><span class="section-number-2">2</span> Usage</h2>
+<div id="outline-container-org5cf1f2f" class="outline-2">
+<h2 id="org5cf1f2f"><span class="section-number-2">2</span> Usage</h2>
 <div class="outline-text-2" id="text-2">
 <pre class="example">
 git clone git@github.com:peel/dotfiles.git &amp;&amp; cd dotfiles &amp;&amp; make
 </pre>
 <ul class="org-ul">
-<li><code>default</code> (<code>install</code>) - install everything</li>
-<li><code>minimal</code> - minimal settings and packages</li>
-<li><code>clean</code> - remove configured links</li>
+<li><code>default</code> (<code>install</code>) - install everything - dotfiles and packages (incl. desktop apps on macOS)</li>
+<li><code>minimal</code> - install dotfiles and package manager only</li>
+<li><code>nix</code> - installs using Nix package manager</li>
+<li><code>clean</code> - remove configured links (requires <a href="https://www.gnu.org/software/stow/">stow</a>)</li>
+<li><code>link</code> - link dotfiles (requires <a href="https://www.gnu.org/software/stow/">stow</a>)</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org9f5c417" class="outline-2">
-<h2 id="org9f5c417"><span class="section-number-2">3</span> Sources</h2>
+<div id="outline-container-orgc0ab265" class="outline-2">
+<h2 id="orgc0ab265"><span class="section-number-2">3</span> Sources</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 See<a href="https://github.com/peel/dotfiles"> peel/dotfiles</a> at Github 
-<object type="image/svg+xml" data="https://travis-ci.org/peel/dotfiles.svg" class="org-svg">
-Sorry, your browser does not support SVG.</object>
+<a href="https://travis-ci.org/peel/dotfiles.svg?branch=master">https://travis-ci.org/peel/dotfiles.svg?branch=master</a>
 </p>
 </div>
 </div>

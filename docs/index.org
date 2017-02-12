@@ -1,4 +1,5 @@
 #+TITLE: dotfiles.codearsonist.com
+#+SUBTITLE: well-tailored dotfiles for macOS & NixOS
 #+AUTHOR: Piotr Limanowski
 #+OPTIONS: toc:nil timestamp:nil
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="css/style.css" />
@@ -6,21 +7,31 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto+Slab:700,300,400|Source+Code+Pro:500" />
 
 * Installation
-Full install (installs brew/appstore applications):
+macOS minimal install:
+#+BEGIN_SRC
+sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`" -s minimal
+#+END_SRC
+Nix install (macOS & NixOS):
+#+BEGIN_SRC
+sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`" -s nix
+#+END_SRC
+Full install: 
 #+BEGIN_SRC
 sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`"
 #+END_SRC
-Minimal install:
+Config-only install (requires [[https://www.gnu.org/software/stow/][stow]])
 #+BEGIN_SRC
-sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`" -s minimal
+sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`" -s link
 #+END_SRC
 * Usage
 #+BEGIN_SRC
 git clone git@github.com:peel/dotfiles.git && cd dotfiles && make
 #+END_SRC
-- ~default~ (~install~) - install everything
-- ~minimal~ - minimal settings and packages
-- ~clean~ - remove configured links 
+- ~default~ (~install~) - install everything - dotfiles and packages (incl. desktop apps on macOS)
+- ~minimal~ - install dotfiles and package manager only
+- ~nix~ - installs using Nix package manager
+- ~clean~ - remove configured links (requires [[https://www.gnu.org/software/stow/][stow]])
+- ~link~ - link dotfiles (requires [[https://www.gnu.org/software/stow/][stow]])
 * Sources
 See[[https://github.com/peel/dotfiles][ peel/dotfiles]] at Github 
-[[https://travis-ci.org/peel/dotfiles.svg]]
+[[https://travis-ci.org/peel/dotfiles.svg?branch=master]]

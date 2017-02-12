@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: with pkgs;
+{ config, pkgs, ... }:
 
 {
   services.emacs.enable = true;

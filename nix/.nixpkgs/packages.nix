@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
     coreutils
@@ -52,7 +52,7 @@
   ];
 }
 
-#missing:
+# GUI:
 # boom
 # send-to-kindle
 # qnapi
@@ -72,8 +72,8 @@
 # flux
 # istat-menus
 # PopClip
-# ravenac95/sudolikeaboss/sudolikeaboss
 # iterm2
+# ravenac95/sudolikeaboss/sudolikeaboss
 # tldr
 # dropbox
 # The Unarchiver

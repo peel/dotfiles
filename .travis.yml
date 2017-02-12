@@ -1,20 +1,29 @@
 language: generic
 os:
   - osx
+  - linux
 
 sudo: required
 
+cache:
+  directories:
+    - /nix/store
+
 before-install:
-  - brew update
-  - brew tap Homebrew/bundle
+  - if [[ "$TRAVIS_OS_NAME" == osx ]]; brew update ; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx ]];  brew tap Homebrew/bundle ; fi
 
 install:
-  - brew uninstall git 
-  - brew uninstall tmux
+  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then brew uninstall git ; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then brew uninstall tmux ; fi
+  - if [[ "$TRAVIS_OS_NAME" == linux ]]; then rm -rf ~/.nix-defexpr ; fi
 
 script:
-  - make nix
+  - if [[ "$TRAVIS_OS_NAME" == linux ]]; then make nix-env ; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then make brew ; fi
+  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then make brew-minimal ; fi
   - make link
+  - make shell
   - make editor
   - make osx
   - make clean

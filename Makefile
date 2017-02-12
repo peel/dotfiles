@@ -1,5 +1,6 @@
 BREW := $(shell command -v brew 2> /dev/null)
 STOW := $(shell command -v stow 2> /dev/null)
+SHELL :=  $(shell which bash)
 NEW_SHELL := $(shell which fish)
 IGNORED := Brewfile Makefile README.org CNAME install.sh docs
 PRIVATE_REPO := git@github.com:peel/dotfiles-private.git
@@ -8,7 +9,8 @@ UNAME := $(shell uname -s)
 
 default: install
 install: minimal osx brew-packages
-minimal: brew brew-minimal shell editor link
+minimal: brew brew-minimal link
+nix: nix-env link nix-build osx
 
 brew:
 ifndef BREW
@@ -24,7 +26,7 @@ endif
 brew-minimal: brew
 ifeq ($(UNAME),Darwin)
 		@echo "Installing base brew packages"
-		@brew install git hub stow tmux fish
+		@brew install git hub stow fish
 endif
 
 brew-packages: brew
@@ -70,22 +72,19 @@ else
 endif
 
 link:
-ifndef STOW
-		$(shell nix-env -i stow)
-endif
 ifeq ("$(wildcard $(HOME)/.spacemacs.d/)","")
 		@mkdir "$(HOME)/.spacemacs.d"
 endif
 		@echo "Linking dotfiles"
-		@for f in $(filter-out $(IGNORED),$(notdir $(wildcard $(PWD)/*))) ; do stow -t ~ $$f; done
+		@for f in $(filter-out $(IGNORED),$(notdir $(wildcard $(PWD)/*))) ; do bash -c "source $(HOME)/.profile && echo \"Setting up $$f\" && stow -t ~ $$f"; done
 
 clean:
 		@echo "Removing dotfiles"
-		@for f in $(filter-out $(IGNORED),$(notdir $(wildcard $(PWD)/*))) ; do stow -t ~ -D $$f; done
+		@for f in $(filter-out $(IGNORED),$(notdir $(wildcard $(PWD)/*))) ; do bash -c "source $(HOME)/.profile && echo \"Setting up $$f\" && stow -t ~ -D $$f"; done
 
 osx:
 ifeq ($(UNAME),Darwin)
-		@echo "Power dis-/connected chime"
+		@echo "Power dis/connected chime"
 		@defaults write com.apple.PowerChime ChimeOnAllHardware -bool true; open /System/Library/CoreServices/PowerChime.app &
 		@echo "disable default hold-button behaviour"
 		@defaults write -g ApplePressAndHoldEnabled -bool false
@@ -123,27 +122,33 @@ ifeq ($(UNAME),Darwin)
 		@defaults write org.m0k.transmission BlocklistAutoUpdate -bool true
 endif
 
-nix: shell
-ifeq ($(UNAME),Darwin)
-ifeq ("$(wildcard $(HOME)/.nix-defexpr/darwin)","")
+nix-env:
+ifeq ("$(wildcard $(HOME)/.nix-profile/)","")
 		@echo "Installing Nix"
-		@sh -c "curl https://nixos.org/nix/install | sh"
-		@echo "Setting up Nix-Darwin"
-		@git clone https://github.com/LnL7/nix-darwin.git $(HOME)/.nix-defexpr/darwin
-		@echo "Setting nix in env"
-		@$(shell export NIX_PATH=darwin=$HOME/.nix-defexpr/darwin:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix:$NIX_PATH)
-		@$(shell source $(HOME)/.nix-profile/etc/profile.d/nix.sh)
-		@echo "Updating Nix"
-		@$(shell nix-env -iA nixpkgs.nix)
-else
-		@echo "Nix-Darwin already set up"
-endif
+		@curl "https://nixos.org/nix/install" | sh
+		@echo ". $(HOME)/.nix-profile/etc/profile.d/nix.sh" >> $(HOME)/.profile
+		@echo "export PATH=$(PATH):$(HOME)/.nix-profile/bin:$(HOME)/.nix-profile/sbin" >> $(HOME)/.profile
+		@echo "export NIX_PATH=nixpkgs=$(HOME)/.nix-defexpr/channels/nixpkgs" >> $(HOME)/.profile
 else
 		@echo "Nix already set up"
 endif
+ifeq ($(UNAME),Darwin)
+ifeq ("$(wildcard $(HOME)/.nix-defexpr/darwin)","")
+		@echo "Setting up Nix-Darwin"
+		@git clone https://github.com/LnL7/nix-darwin.git $(HOME)/.nix-defexpr/darwin
+		@echo "Setting nix in env"
+		@echo "export NIX_PATH=darwin=$(HOME)/.nix-defexpr/darwin:darwin-config=$(HOME)/.nixpkgs/darwin-configuration.nix:$(NIX_PATH)" >> $(HOME)/.profile
+else
+		@echo "Nix-Darwin already set up"
+endif
+endif
+		@echo "Fetching nix updates"
+		@source $(HOME)/.profile && nix-env -iA nixpkgs.nix
+		@echo "Installing stow"
+		@source $(HOME)/.profile && nix-env -i stow
 
-nix-build:
+nix-build: nix-env link
 		@echo "Installing nix config files"
-		@$(shell $(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild build)
-		@$(shell $(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild switch)
+		@source $(HOME)/.profile && $(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild build
+		@source $(HOME)/.profile && $(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild switch
 

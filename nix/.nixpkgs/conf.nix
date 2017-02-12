@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: with pkgs;
+{ config, pkgs, ... }:
 
 {
   users.defaultUserShell = "/run/current-system/sw/bin/fish";
