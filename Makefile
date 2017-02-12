@@ -72,7 +72,7 @@ clean:
 		@for f in $(filter-out $(IGNORED),$(notdir $(wildcard $(PWD)/*))) ; do stow -t ~ -D $$f; done
 
 osx:
-ifeq($(shell uname -s),Darwin)
+ifeq ($(shell uname -s),Darwin)
 		@echo "Power dis-/connected chime"
 		@defaults write com.apple.PowerChime ChimeOnAllHardware -bool true; open /System/Library/CoreServices/PowerChime.app &
 		@echo "disable default hold-button behaviour"
