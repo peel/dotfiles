@@ -1,4 +1,5 @@
 BREW := $(shell command -v brew 2> /dev/null)
+STOW := $(shell command -v stow 2> /dev/null)
 NEW_SHELL := $(shell which fish)
 IGNORED := Brewfile Makefile README.org CNAME install.sh docs
 PRIVATE_REPO := git@github.com:peel/dotfiles-private.git
@@ -69,6 +70,9 @@ else
 endif
 
 link:
+ifndf STOW
+	$(shell nix-env -i stow)
+endif
 ifeq ("$(wildcard $(HOME)/.spacemacs.d/)","")
 		@mkdir "$(HOME)/.spacemacs.d"
 endif
@@ -137,5 +141,9 @@ endif
 else
 		@echo "Nix already set up"
 endif
+
+nix-build:
+		@echo "Installing nix config files"
 		@$(shell $(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild build)
 		@$(shell $(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild switch)
+
