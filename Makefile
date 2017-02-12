@@ -71,7 +71,7 @@ endif
 
 link:
 ifndf STOW
-	$(shell nix-env -i stow)
+		$(shell nix-env -i stow)
 endif
 ifeq ("$(wildcard $(HOME)/.spacemacs.d/)","")
 		@mkdir "$(HOME)/.spacemacs.d"
