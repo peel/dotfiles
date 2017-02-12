@@ -1,10 +1,9 @@
 #!/bin/sh
 
-if [ ! -d "$HOME/wrk/dotfiles" ]; then
+if [ ! -d "$HOME/dotfiles" ]; then
     echo "Installing Dotfils for the first time"
-    mkdir -p "$(HOME)/wrk" || true
     git clone --depth=1 https://github.com/peel/dotfiles.git "$HOME/wrk/dotfiles"
-    cd "$HOME/wrk/dotfiles"
+    cd "$HOME/dotfiles"
     if [ "$1" = "minimal" ]; then
         make minimal
     else
