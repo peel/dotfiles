@@ -70,7 +70,7 @@ else
 endif
 
 link:
-ifndf STOW
+ifndef STOW
 		$(shell nix-env -i stow)
 endif
 ifeq ("$(wildcard $(HOME)/.spacemacs.d/)","")
