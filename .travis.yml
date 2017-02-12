@@ -13,9 +13,8 @@ install:
   - brew uninstall tmux
 
 script:
-  - make brew
-  - make brew-minimal
-  - make osx
+  - make nix
+  - make link
   - make editor
-  - make link 
+  - make osx
   - make clean

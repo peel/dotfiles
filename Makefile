@@ -7,7 +7,7 @@ UNAME := $(shell uname -s)
 
 default: install
 install: minimal osx brew-packages
-minimal: brew-minimal link shell editor
+minimal: brew brew-minimal shell editor link
 
 brew:
 ifndef BREW
@@ -63,7 +63,7 @@ ifeq ("$(wildcard $(HOME)/.emacs.d/)","")
 ifeq ("$(wildcard $(HOME)/.spacemacs.d/)","")
 		@mkdir "$(HOME)/.spacemacs.d"
 endif
-		@git clone https://github.com/Malabarba/ox-jekyll-subtree.git $(HOME)/.spacemacs.d/ox-jekyll-subtree
+		@git clone --depth=1 https://github.com/Malabarba/ox-jekyll-subtree.git $(HOME)/.spacemacs.d/ox-jekyll-subtree
 else
 		@echo "Emacs already set up"
 endif
@@ -118,3 +118,24 @@ ifeq ($(UNAME),Darwin)
 		@defaults write org.m0k.transmission BlocklistURL -string "http://john.bitsurge.net/public/biglist.p2p.gz"
 		@defaults write org.m0k.transmission BlocklistAutoUpdate -bool true
 endif
+
+nix: shell
+ifeq ($(UNAME),Darwin)
+ifeq ("$(wildcard $(HOME)/.nix-defexpr/darwin)","")
+		@echo "Installing Nix"
+		@sh -c "curl https://nixos.org/nix/install | sh"
+		@echo "Setting up Nix-Darwin"
+		@git clone https://github.com/LnL7/nix-darwin.git $(HOME)/.nix-defexpr/darwin
+		@echo "Setting nix in env"
+		@$(shell export NIX_PATH=darwin=$HOME/.nix-defexpr/darwin:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix:$NIX_PATH)
+		@$(shell source $(HOME)/.nix-profile/etc/profile.d/nix.sh)
+		@echo "Updating Nix"
+		@$(shell nix-env -iA nixpkgs.nix)
+else
+		@echo "Nix-Darwin already set up"
+endif
+else
+		@echo "Nix already set up"
+endif
+		@$(shell $(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild build)
+		@$(shell $(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild switch)
