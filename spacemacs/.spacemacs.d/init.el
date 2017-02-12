@@ -31,7 +31,6 @@
         github
         html
         javascript
-        markdown
         org
         osx
         restclient

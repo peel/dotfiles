@@ -13,7 +13,7 @@ set -g fish_key_bindings fish_vi_key_bindings
 # aliases
 each 'source $_1' (ls $fish/aliases/*)
 
-set PATH $PATH $HOME/.mix/escripts/ $HOME/.bin/
+set PATH $PATH $HOME/.bin/
 
 # homebrew
 set HOMEBREW_NO_ANALYTICS 1
