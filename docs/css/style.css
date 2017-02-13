@@ -1,3 +1,12 @@
+img{
+    width: 60px;
+    height: 60px;
+    margin: 60px 0 0 -70px;
+    border-radius: 60px;
+}
+.status p{
+    text-align: center;
+}
 div#content,div#postamble{
     width:90%;
     max-width:760px;
@@ -8,4 +17,5 @@ object.org-svg{
 }
 div#content pre.example{
     text-align: center;
+    background-color: #fff;
 }

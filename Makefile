@@ -132,6 +132,10 @@ ifeq ("$(wildcard $(HOME)/.nix-profile/)","")
 else
 		@echo "Nix already set up"
 endif
+		@echo "Fetching nix updates"
+		@source $(HOME)/.profile && nix-env -iA nixpkgs.nix
+		@echo "Installing stow"
+		@source $(HOME)/.profile && nix-env -i stow git
 ifeq ($(UNAME),Darwin)
 ifeq ("$(wildcard $(HOME)/.nix-defexpr/darwin)","")
 		@echo "Setting up Nix-Darwin"
@@ -142,10 +146,6 @@ else
 		@echo "Nix-Darwin already set up"
 endif
 endif
-		@echo "Fetching nix updates"
-		@source $(HOME)/.profile && nix-env -iA nixpkgs.nix
-		@echo "Installing stow"
-		@source $(HOME)/.profile && nix-env -i stow
 
 nix-build: nix-env link
 		@echo "Installing nix config files"
