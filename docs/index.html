@@ -230,46 +230,69 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">dotfiles.codearsonist.com</h1>
+<h1 class="title">dotfiles.codearsonist.com
+<br>
+<span class="subtitle">well-tailored dotfiles for macOS &amp; NixOS</span>
+</h1>
 
-<div id="outline-container-org74da875" class="outline-2">
-<h2 id="org74da875"><span class="section-number-2">1</span> Installation</h2>
+<div id="outline-container-orgde25e9f" class="outline-2">
+<h2 id="orgde25e9f"><span class="section-number-2">1</span> Installation</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-Full install (installs brew/appstore applications):
+Tailored Install:
+</p>
+<pre class="example">
+sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`" -s tailored
+</pre>
+<p>
+Full install: 
 </p>
 <pre class="example">
 sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`"
 </pre>
-<p>
-Minimal install:
-</p>
-<pre class="example">
-sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`" -s minimal
-</pre>
 </div>
 </div>
-<div id="outline-container-orge96cde9" class="outline-2">
-<h2 id="orge96cde9"><span class="section-number-2">2</span> Usage</h2>
+<div id="outline-container-orgfe3493b" class="outline-2">
+<h2 id="orgfe3493b"><span class="section-number-2">2</span> Requirements</h2>
 <div class="outline-text-2" id="text-2">
+<p>
+Depending on your flavour of installation you'll need at least:
+</p>
+<ul class="org-ul">
+<li><code>make</code></li>
+<li><code>curl</code></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgad9e344" class="outline-2">
+<h2 id="orgad9e344"><span class="section-number-2">3</span> Usage</h2>
+<div class="outline-text-2" id="text-3">
 <pre class="example">
 git clone git@github.com:peel/dotfiles.git &amp;&amp; cd dotfiles &amp;&amp; make
 </pre>
 <ul class="org-ul">
-<li><code>default</code> (<code>install</code>) - install everything</li>
-<li><code>minimal</code> - minimal settings and packages</li>
-<li><code>clean</code> - remove configured links</li>
+<li><code>default</code> (<code>install</code>) - install everything - dotfiles and packages (incl. desktop apps on macOS)</li>
+<li><code>minimal</code> - install dotfiles and package manager only</li>
+<li><code>nix</code> - installs using Nix package manager</li>
+<li><code>clean</code> - remove configured links (requires <a href="https://www.gnu.org/software/stow/">stow</a>)</li>
+<li><code>link</code> - link dotfiles (requires <a href="https://www.gnu.org/software/stow/">stow</a>)</li>
+<li><code>nix-build</code> - sets up nix environment</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org9f5c417" class="outline-2">
-<h2 id="org9f5c417"><span class="section-number-2">3</span> Sources</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-org47bec24" class="outline-2">
+<h2 id="org47bec24"><span class="section-number-2">4</span> Sources</h2>
+<div class="outline-text-2" id="text-4">
 <p>
-See<a href="https://github.com/peel/dotfiles"> peel/dotfiles</a> at Github 
-<object type="image/svg+xml" data="https://travis-ci.org/peel/dotfiles.svg" class="org-svg">
+See<a href="https://github.com/peel/dotfiles"> peel/dotfiles</a> at Github <object type="image/svg+xml" data="https://travis-ci.org/peel/dotfiles.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
+
+
+<div class="figure">
+<p><img src="https://codearsonist.com/assets/img/bloglogo.png" alt="bloglogo.png" />
+</p>
+</div>
 </div>
 </div>
 </div>
