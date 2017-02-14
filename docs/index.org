@@ -1,18 +1,19 @@
 #+TITLE: dotfiles.codearsonist.com
 #+SUBTITLE: well-tailored dotfiles for macOS & NixOS
 #+AUTHOR: Piotr Limanowski
-#+OPTIONS: toc:nil timestamp:nil
+#+OPTIONS: toc:nil timestamp:nil HTML_DOCTYPE:html5
+#+HTML_HEAD_EXTRA: <link rel="shortcut icon" href="https://codearsonist.com/favicon.ico" />
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="css/style.css" />
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="https://codearsonist.com/assets/css/screen.css" />
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto+Slab:700,300,400|Source+Code+Pro:500" />
 
 * Installation
 Tailored Install:
-#+BEGIN_SRC
+#+BEGIN_SRC shell
 sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`" -s tailored
 #+END_SRC
 Full install: 
-#+BEGIN_SRC
+#+BEGIN_SRC shell
 sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`"
 #+END_SRC
 * Requirements
@@ -20,7 +21,7 @@ Depending on your flavour of installation you'll need at least:
 - ~make~
 - ~curl~ 
 * Usage
-#+BEGIN_SRC
+#+BEGIN_SRC shell
 git clone git@github.com:peel/dotfiles.git && cd dotfiles && make
 #+END_SRC
 - ~default~ (~install~) - install everything - dotfiles and packages (incl. desktop apps on macOS)
@@ -32,5 +33,5 @@ git clone git@github.com:peel/dotfiles.git && cd dotfiles && make
 * Sources
 See[[https://github.com/peel/dotfiles][ peel/dotfiles]] at Github [[https://travis-ci.org/peel/dotfiles.svg]]
 
+#+ATTR_HTML: :alt codearsonist.com image :title codearsonist.com
 [[https://codearsonist.com/assets/img/bloglogo.png]]
-

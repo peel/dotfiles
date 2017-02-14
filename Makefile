@@ -126,6 +126,7 @@ nix-env:
 ifeq ("$(wildcard $(HOME)/.nix-profile/)","")
 		@echo "Installing Nix"
 		@curl "https://nixos.org/nix/install" | sh
+		@touch $(HOME)/.profile
 		@echo ". $(HOME)/.nix-profile/etc/profile.d/nix.sh" >> $(HOME)/.profile
 		@echo "export PATH=$(PATH):$(HOME)/.nix-profile/bin:$(HOME)/.nix-profile/sbin" >> $(HOME)/.profile
 		@echo "export NIX_PATH=nixpkgs=$(HOME)/.nix-defexpr/channels/nixpkgs" >> $(HOME)/.profile
@@ -133,7 +134,7 @@ else
 		@echo "Nix already set up"
 endif
 		@echo "Fetching nix updates"
-		@source $(HOME)/.profile && nix-env -iA nixpkgs.nix
+		@source $(HOME)/.profile && nix-env -iA nixpkgs.nix || true
 		@echo "Installing stow"
 		@source $(HOME)/.profile && nix-env -i stow git
 ifeq ($(UNAME),Darwin)
@@ -149,6 +150,12 @@ endif
 
 nix-build: nix-env link
 		@echo "Installing nix config files"
+ifeq ($(UNAME),Darwin)
+		@echo "Installing Darwin config"
 		@source $(HOME)/.profile && $(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild build
 		@source $(HOME)/.profile && $(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild switch
+else
+		@echo "Installing NixOS config"
+		@source $(HOME)/.profile && sudo nixos-rebuild switch
+endif
 
