@@ -81,6 +81,9 @@ endif
 clean:
 		@echo "Removing dotfiles"
 		@for f in $(filter-out $(IGNORED),$(notdir $(wildcard $(PWD)/*))) ; do bash -c "source $(HOME)/.profile && echo \"Setting up $$f\" && stow -t ~ -D $$f"; done
+ifneq ("$(wildcard $(HOME)/.spacemacs.d/)","")
+		@rm -rf "$(HOME)/.spacemacs.d" || true
+endif
 
 osx:
 ifeq ($(UNAME),Darwin)
