@@ -1,4 +1,4 @@
-i/*
+/*
 This is a sample config for Kwm
 
 The following statements can be used to set Kwms internal directory structure.
@@ -37,7 +37,7 @@ e.g: window-rules in a separate file called 'rules'
 */
 
 # Set default values for screen padding
-kwmc config padding 40 20 20 20
+kwmc config padding 30 10 10 10
 
 # Set default values for container gaps
 kwmc config gap 15 15
