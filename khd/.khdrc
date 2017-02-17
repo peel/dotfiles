@@ -40,7 +40,7 @@ khd mode default color 0xFFD5C4A1
 
 # Enable the prefix mode
 khd mode prefix prefix on
-khd mode prefix timeout 0.75
+khd mode prefix timeout 1
 khd mode prefix restore default
 khd mode prefix color 0xFF458588
 

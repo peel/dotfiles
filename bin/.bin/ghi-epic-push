@@ -8,9 +8,9 @@
 # 2. Open a pull request if not exists
 #
 # Example:
-# ghi_epic_push
+# ghi-epic-push
 
-function ghi_epic_push(){
+function ghi-epic-push(){
     local MILESTONE=$(<.milestone)
     local PULLREQUEST=$(<.pullrequest)
     local BRANCH=$(git rev-parse --abbrev-ref HEAD)
@@ -27,4 +27,4 @@ function ghi_epic_push(){
     fi
 }
 
-ghi_epic_push
+ghi-epic-push

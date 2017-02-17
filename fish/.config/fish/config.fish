@@ -16,11 +16,16 @@ each 'source $_1' (ls $fish/aliases/*)
 set PATH $PATH $HOME/.bin/
 
 # nix
-set -x NIX_PATH $HOME/.nix-defexpr/darwin:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix:$NIX_PATH
-set -x PATH $PATH $HOME/.nix-profile/bin $HOME/.nix-profile/sbin
-set -x NIX_PATH nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs
-set -x NIX_PATH darwin=$HOME/.nix-defexpr/darwin:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix:$NIX_PATH
+if test -e $HOME/.nix-profile
+  set -x NIX_PATH $HOME/.nix-defexpr/darwin:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix:$NIX_PATH
+  set -x PATH $PATH $HOME/.nix-profile/bin $HOME/.nix-profile/sbin
+  set -x NIX_PATH nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs
+  set -x NIX_PATH darwin=$HOME/.nix-defexpr/darwin:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix:$NIX_PATH
+  set -x SSL_CERT_FILE $HOME/.nix-profile/etc/ssl/certs/ca-bundle.crt
+end
 
 # homebrew
-set HOMEBREW_NO_ANALYTICS 1
-set HOMEBREW_CASK_OPTS "--appdir=~/Applications --caskroom=/usr/local/Caskroom"
+if test -e /usr/local/bin/brew
+  set HOMEBREW_NO_ANALYTICS 1
+  set HOMEBREW_CASK_OPTS "--appdir=~/Applications --caskroom=/usr/local/Caskroom"
+end
