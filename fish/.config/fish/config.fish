@@ -16,7 +16,10 @@ each 'source $_1' (ls $fish/aliases/*)
 set PATH $PATH $HOME/.bin/
 
 # nix
-set -x NIX_PATH "$HOME/.nix-defexpr/darwin:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix:$NIX_PATH"
+set -x NIX_PATH $HOME/.nix-defexpr/darwin:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix:$NIX_PATH
+set -x PATH $PATH $HOME/.nix-profile/bin $HOME/.nix-profile/sbin
+set -x NIX_PATH nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs
+set -x NIX_PATH darwin=$HOME/.nix-defexpr/darwin:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix:$NIX_PATH
 
 # homebrew
 set HOMEBREW_NO_ANALYTICS 1

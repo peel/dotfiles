@@ -1,54 +1,50 @@
 { config, pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
+    asciinema
+    aspell
+    #calibre
     coreutils
-    gnumake
     curl
-    emacs
-    nox
+    ##diff-so-fancy
+    #elixir
+    #elmPackages.elm
+    #emacs
+    #erlang
     fasd
     fish
+    gawk
+    gist
     git
     gitAndTools.hub
-    stow
-    nix-repl
-    tmux
-    less
-    gawk
-    parallel
-    fasd
-    silver-searcher
-    ranger
+    gnumake
     httpie
     jq
-    xquartz
-    kwm
     khd
-    emacs
-    aspell
-    diff-so-fancy
-    gist
-    hub
-    awscli
-    kubernetes
-    virtualbox
-    vagrant
-    openjdk
-    sbt
-    scala
-    scalafmt
-    erlang
-    elixir
-    elmPackages.elm
-    nodejs
-    mycli
+    #kubernetes
+    kwm
+    less
+    ##mycli
     ngrok
-    asciinema
+    nix-repl
+    #nodejs
+    #nox
+    #openjdk
+    parallel
+    ranger
+    #sbt
+    #scala
+    #scalafmt
+    silver-searcher
+    ##spotify
+    stow
+    tmux
+    #transmission
+    #vagrant
+    #virtualbox
+    #vlc
     wakatime
-    calibre
-    transmission
-    vlc
-    spotify
+    #xquartz
   ];
 }
 

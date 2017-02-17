@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   system = {
@@ -7,7 +7,5 @@
      orientation = "bottom";
      showhidden = true;
    }
-  }
-  environment.etc = {
   }
 }

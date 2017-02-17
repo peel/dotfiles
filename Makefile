@@ -9,8 +9,8 @@ UNAME := $(shell uname -s)
 
 default: install
 install: minimal osx brew-packages
-minimal: brew brew-minimal link
-nix: nix-env link nix-build osx
+minimal: brew brew-minimal brew-basic brew-extras link
+nix: nix-env link nix-build brew brew-extras osx
 
 brew:
 ifndef BREW
@@ -29,13 +29,20 @@ ifeq ($(UNAME),Darwin)
 		@brew install git hub stow fish
 endif
 
-brew-packages: brew
+brew-basic: brew
+ifeq ($(UNAME),Darwin)
+		@echo "Installing basic packages"
+		brew bundle --file=Brewfile
+endif
+
+brew-extras: brew
 ifeq ($(UNAME),Darwin)
 		@echo "Sign into Mac App Store to proceed"
 		@read -p "AppStore email: " email; \
 		mas signin $email || true
-		@echo "Installing packages"
-		brew bundle
+		@echo "Installing extras packages"
+		brew bundle --file=Brewfile-extras
+
 endif
 
 shell-config:
@@ -128,7 +135,7 @@ ifeq ("$(wildcard $(HOME)/.nix-profile/)","")
 		@curl "https://nixos.org/nix/install" | sh
 		@touch $(HOME)/.profile
 		@echo ". $(HOME)/.nix-profile/etc/profile.d/nix.sh" >> $(HOME)/.profile
-		@echo "export PATH=$(PATH):$(HOME)/.nix-profile/bin:$(HOME)/.nix-profile/sbin" >> $(HOME)/.profile
+		@echo "export PATH=$$PATH:$(HOME)/.nix-profile/bin:$(HOME)/.nix-profile/sbin" >> $(HOME)/.profile
 		@echo "export NIX_PATH=nixpkgs=$(HOME)/.nix-defexpr/channels/nixpkgs" >> $(HOME)/.profile
 else
 		@echo "Nix already set up"
@@ -142,7 +149,7 @@ ifeq ("$(wildcard $(HOME)/.nix-defexpr/darwin)","")
 		@echo "Setting up Nix-Darwin"
 		@git clone https://github.com/LnL7/nix-darwin.git $(HOME)/.nix-defexpr/darwin
 		@echo "Setting nix in env"
-		@echo "export NIX_PATH=darwin=$(HOME)/.nix-defexpr/darwin:darwin-config=$(HOME)/.nixpkgs/darwin-configuration.nix:$(NIX_PATH)" >> $(HOME)/.profile
+		@echo "export NIX_PATH=darwin=$(HOME)/.nix-defexpr/darwin:darwin-config=$(HOME)/.nixpkgs/darwin-configuration.nix:$$NIX_PATH" >> $(HOME)/.profile
 else
 		@echo "Nix-Darwin already set up"
 endif
@@ -152,10 +159,9 @@ nix-build: nix-env link
 		@echo "Installing nix config files"
 ifeq ($(UNAME),Darwin)
 		@echo "Installing Darwin config"
-		@source $(HOME)/.profile && $(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild build
-		@source $(HOME)/.profile && $(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild switch
+		@source $(HOME)/.profile && $$(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild build
+		@source $(HOME)/.profile && $$(nix-build '<darwin>' -A system --no-out-link)/sw/bin/darwin-rebuild switch
 else
 		@echo "Installing NixOS config"
 		@source $(HOME)/.profile && sudo nixos-rebuild switch
 endif
-

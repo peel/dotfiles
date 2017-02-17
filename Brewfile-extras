@@ -1,0 +1,55 @@
+tap 'Homebrew/bundle'
+tap 'concourse/tap'
+tap 'koekeishiya/formulae'
+tap 'olafurpg/scalafmt'
+tap 'railwaycat/emacsmacport'
+tap 'ravenac95/sudolikeaboss'
+brew 'ammonite-repl'
+brew 'ansible'
+brew 'esphen/wsta/wsta'
+brew 'fly', args: ['HEAD']
+brew 'mas'
+brew 'ravenac95/sudolikeaboss/sudolikeaboss'
+brew 'reattach-to-user-namespace'
+brew 'scalariform'
+brew 'scalastyle'
+brew 'tldr'
+cask 'airvpn'
+cask 'alfred'
+cask 'appcleaner'
+cask 'boom'
+cask 'dash'
+cask 'dropbox'
+cask 'flux'
+cask 'garmin-express'
+cask 'iridium-extra'
+cask 'istat-menus'
+cask 'iterm2'
+cask 'java'
+cask 'karabiner-elements'
+cask 'lingon-x'
+cask 'qnapi'
+cask 'razer-synapse'
+cask 'rubitrack-pro'
+cask 'send-to-kindle'
+cask 'spotify'
+cask 'transmission'
+cask 'ubersicht'
+cask 'vagrant'
+cask 'virtualbox'
+cask 'vlc'
+cask 'xquartz'
+
+cask_args appdir: '/Applications'
+mas '1Password', id: 443987910
+mas 'Affinity Designer', id: 824171161
+mas 'Airmail 3', id: 918858936
+mas 'CCMenu', id: 603117688
+mas 'Deckset', id: 847496013
+mas 'Irvue', id: 1039633667
+mas 'Parcel', id: 639968404
+mas 'Pixelmator', id: 407963104
+mas 'PopClip', id: 445189367
+mas 'Slack', id: 803453959
+mas 'The Unarchiver', id: 425424353
+mas 'Tweetbot', id: 557168941
