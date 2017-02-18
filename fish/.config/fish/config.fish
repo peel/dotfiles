@@ -18,7 +18,7 @@ set PATH $PATH $HOME/.bin/
 # nix
 if test -e $HOME/.nix-profile
   set -x NIX_PATH $HOME/.nix-defexpr/darwin:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix:$NIX_PATH
-  set -x PATH $PATH $HOME/.nix-profile/bin $HOME/.nix-profile/sbin
+  set -x PATH $PATH $HOME/.nix-profile/bin $HOME/.nix-profile/sbin /run/current-system/sw/bin
   set -x NIX_PATH nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs
   set -x NIX_PATH darwin=$HOME/.nix-defexpr/darwin:darwin-config=$HOME/.nixpkgs/darwin-configuration.nix:$NIX_PATH
   set -x SSL_CERT_FILE $HOME/.nix-profile/etc/ssl/certs/ca-bundle.crt

@@ -145,7 +145,7 @@ else
 endif
 		@echo "Fetching nix updates"
 		@source $(HOME)/.profile && nix-env -iA nixpkgs.nix || true
-		@sudo ln -s private/var/run /run
+		@sudo ln -s private/var/run /run || true
 		@echo "Installing stow"
 		@source $(HOME)/.profile && nix-env -i stow git
 ifeq ($(UNAME),Darwin)
