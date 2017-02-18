@@ -1,10 +1,16 @@
-command: "/usr/local/bin/kwmc query space active name"
+command: "
+  if [[ -z /usr/local/bin/kwmc ]]; then
+    export KWMC_PATH=/usr/local/bin/;
+  else
+    export KWMC_PATH=/run/current-system/sw/bin/;
+  fi;
+  echo $(${KWMC_PATH}kwmc query space active name)"
 
 refreshFrequency: 1000 # ms
 
 render: (output) ->
   """
-  <link rel="stylesheet" href="./assets/font-awesome/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
   <div class="ac"
     <span></span>
     <span class="icon"></span>
@@ -32,8 +38,8 @@ icon: (status) =>
 style: """
   -webkit-font-smoothing: antialiased
   text-align: right
-  color: #d5c4a1
-  font: 10px Input
+  color: #98d1ce
+  font: 10px "Pragmata Pro"
   height: 16px
   overflow: hidden
   text-overflow: ellipsis

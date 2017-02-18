@@ -4,7 +4,7 @@ refreshFrequency: 10000
 
 render: (output) ->
   """
-  <link rel="stylesheet" href="./assets/font-awesome/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
   <div class="cal"
     <span></span>
     <span class="icon"></span>
@@ -19,8 +19,8 @@ update: (output, el) ->
 
 style: """
   -webkit-font-smoothing: antialiased
-  color: #d5c4a1
-  font: 10px Input
+  color: #98d1ce
+  font: 10px Pragmata Pro
   right: 70px
   top: 6px
 """
