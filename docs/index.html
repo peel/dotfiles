@@ -236,18 +236,18 @@ for the JavaScript code in this tag.
 <span class="subtitle">well-tailored dotfiles for macOS &amp; NixOS</span>
 </h1>
 
-<div id="outline-container-orgb68c69b" class="outline-2">
-<h2 id="orgb68c69b"><span class="section-number-2">1</span> Installation</h2>
+<div id="outline-container-orgbed0653" class="outline-2">
+<h2 id="orgbed0653"><span class="section-number-2">1</span> Installation</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-Tailored Install:
+✂️ Tailored Install:
 </p>
 <div class="org-src-container">
 <pre class="src src-shell">sh -c <span style="color: #2aa889;">"`curl -fsSL https://dotfiles.codearsonist.com/install.sh`"</span> -s tailored
 </pre>
 </div>
 <p>
-Full install: 
+🔋 Full install: 
 </p>
 <div class="org-src-container">
 <pre class="src src-shell">sh -c <span style="color: #2aa889;">"`curl -fsSL https://dotfiles.codearsonist.com/install.sh`"</span>
@@ -255,11 +255,11 @@ Full install:
 </div>
 </div>
 </div>
-<div id="outline-container-orgab1d4f9" class="outline-2">
-<h2 id="orgab1d4f9"><span class="section-number-2">2</span> Requirements</h2>
+<div id="outline-container-org2faf3c8" class="outline-2">
+<h2 id="org2faf3c8"><span class="section-number-2">2</span> Requirements</h2>
 <div class="outline-text-2" id="text-2">
 <p>
-Depending on your flavour of installation you'll need at least:
+Depending on your flavour of installation you'll need at least (see: <a href="#org15ec482">Usage</a>)
 </p>
 <ul class="org-ul">
 <li><code>make</code></li>
@@ -267,25 +267,25 @@ Depending on your flavour of installation you'll need at least:
 </ul>
 </div>
 </div>
-<div id="outline-container-orgc3dc807" class="outline-2">
-<h2 id="orgc3dc807"><span class="section-number-2">3</span> Usage</h2>
+<div id="outline-container-org15ec482" class="outline-2">
+<h2 id="org15ec482"><span class="section-number-2">3</span> Usage</h2>
 <div class="outline-text-2" id="text-3">
 <div class="org-src-container">
 <pre class="src src-shell">git clone git@github.com:peel/dotfiles.git &amp;&amp; <span style="color: #d26937;">cd</span> dotfiles &amp;&amp; make
 </pre>
 </div>
 <ul class="org-ul">
-<li><code>default</code> (<code>install</code>) - install everything - dotfiles and packages (incl. desktop apps on macOS)</li>
-<li><code>minimal</code> - install dotfiles and package manager only</li>
-<li><code>nix</code> - installs using Nix package manager</li>
+<li><code>default</code> (<code>install</code>) - install everything - dotfiles, <i>homebrew</i> and packages (incl. desktop apps on macOS)</li>
+<li><code>minimal</code> - install dotfiles and <i>homebrew</i> package manager only</li>
+<li><code>nix-build</code> - sets up nix environment</li>
+<li><code>nix</code> - installs using <i>Nix</i> package manager, on osx installs GUI apps with homebrew</li>
 <li><code>clean</code> - remove configured links (requires <a href="https://www.gnu.org/software/stow/">stow</a>)</li>
 <li><code>link</code> - link dotfiles (requires <a href="https://www.gnu.org/software/stow/">stow</a>)</li>
-<li><code>nix-build</code> - sets up nix environment</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org82f4ffa" class="outline-2">
-<h2 id="org82f4ffa"><span class="section-number-2">4</span> Sources</h2>
+<div id="outline-container-org867f8ea" class="outline-2">
+<h2 id="org867f8ea"><span class="section-number-2">4</span> Sources</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 See<a href="https://github.com/peel/dotfiles"> peel/dotfiles</a> at Github <object type="image/svg+xml" data="https://travis-ci.org/peel/dotfiles.svg" class="org-svg">
