@@ -6,10 +6,11 @@
     allowUnfree = true;
     allowUnfreeRedistributable = true;
   };
-  # users.defaultUserShell = "/run/current-system/sw/bin/fish";
+
   programs = {
     fish = {
       enable = true;
     };
   };
+  environment.loginShell = "/run/current-system/sw/bin/fish";
 }

@@ -1,10 +1,10 @@
 # vi-mode for non-terminal applications
 
 # remap left-control h/j/k/l -> arrow keys
-lctrl - h         ![HyperTerm,Terminal,iTerm2]      :   khd -p "- left"
-lctrl - j         ![HyperTerm,Terminal,iTerm2]      :   khd -p "- down"
-lctrl - k         ![HyperTerm,Terminal,iTerm2]      :   khd -p "- up"
-lctrl - l         ![HyperTerm,Terminal,iTerm2]      :   khd -p "- right"
+lctrl - h         ![HyperTerm,Terminal,iTerm2,Emacs]      :   khd -p "- left"
+lctrl - j         ![HyperTerm,Terminal,iTerm2,Emacs]      :   khd -p "- down"
+lctrl - k         ![HyperTerm,Terminal,iTerm2,Emacs]      :   khd -p "- up"
+lctrl - l         ![HyperTerm,Terminal,iTerm2,Emacs]      :   khd -p "- right"
 
 shift + lctrl - h ![HyperTerm,Terminal,iTerm2]      :   khd -p "shift - left"
 shift + lctrl - j ![HyperTerm,Terminal,iTerm2]      :   khd -p "shift - down"
@@ -54,7 +54,7 @@ prefix - r               :    khd -e "reload" # reload config
 cmd + alt + ctrl - q     :    kwmc quit
 
 # Launch iTerm2
-cmd - return             :    open -na ~/Applications/iTerm.app
+cmd - return             :    open -na /Applications/iTerm.app
 
 # Set Space Tiling Mode To BSP
 cmd + ctrl - a           :    kwmc space -t bsp

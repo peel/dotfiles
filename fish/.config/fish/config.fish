@@ -2,7 +2,7 @@
 set LC_ALL en_US.UTF-8
 set LANG en_US.UTF-8
 set TERM xterm-256color
-set -x SHELL /usr/local/bin/fish
+set -x SHELL (which fish)
 set -x EDITOR "em"
 set -U fish $HOME/.config/fish
 set -x fish_greeting ''
