@@ -1,10 +1,11 @@
-{ config, pkgs, ... }: 
-
 {
+  nixpkgs.config.packageOverrides = pkgs : rec {
+    emacs = (if pkgs.stdenv.isDarwin then pkgs.emacs25Macport else pkgs.emacs);
+  };
   require = [
-    ./packages.nix
-    ./conf.nix
-    ./emacs.nix
-    ./osx.nix
+    ./setup/packages.nix
+    ./setup/conf.nix
+    ./setup/emacs.nix
+    ./setup/osx.nix
   ];
 }

@@ -1,12 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  nixpkgs.config = {
-    allowBroken = true;
-    allowUnfree = true;
-    allowUnfreeRedistributable = true;
-  };
-
   programs = {
     fish = {
       enable = true;
