@@ -9,7 +9,7 @@
     ##diff-so-fancy
     #elixir
     #elmPackages.elm
-    emacs
+    #emacs
     #erlang
     fasd
     fish
@@ -20,8 +20,8 @@
     gnumake
     httpie
     jq
-    khd
     #kubernetes
+    khd
     kwm
     less
     ##mycli

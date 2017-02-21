@@ -54,8 +54,9 @@ prefix - r               :    khd -e "reload" # reload config
 cmd + alt + ctrl - q     :    kwmc quit
 
 # Launch iTerm2
-cmd - return             :    open -na /Applications/iTerm.app
-
+cmd - return             :    open -na ~/Applications/iTerm.app
+cmd + shift - return     :    open -na ~/Applications/Emacs.app
+    
 # Set Space Tiling Mode To BSP
 cmd + ctrl - a           :    kwmc space -t bsp
 

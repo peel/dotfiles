@@ -16,6 +16,7 @@
     khd.enable = true;
     kwm.enable = true;
     activate-system.enable = true;
+    nix-daemon.enable = false;
   };
   launchd.user.agents.fetch-nixpkgs = {
     command = "${pkgs.git}/bin/git -C ~/.nix-defexpr/nixpkgs fetch origin master";

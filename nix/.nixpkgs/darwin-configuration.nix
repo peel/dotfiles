@@ -6,9 +6,11 @@ with nixpkgs;
 {
   nixpkgs.config.packageOverrides = pkgs : rec {
     emacs25Macport = pkgs.stdenv.lib.overrideDerivation pkgs.emacs25Macport (oldattrs: {
+      emacsName = "emacs-25.2-rc1";
+      name = "emacs-25.2-rc1-mac-6.2";
       src = fetchurl {
-        url = "https://bitbucket.org/mituharu/emacs-mac/get/emacs-25.1-mac-6.1.tar.gz";
-        sha256 = "3ede57b06a20b361d5ed66d040e3b0adb1a84cbccabb6eaf21e2d8e8398de3b6";
+        url = "https://bitbucket.org/mituharu/emacs-mac/get/emacs-25.2-rc1-mac-6.2.tar.gz";
+        sha256 = "c379201838677834158cff57d97b045d0e837662715c90009967905c3da83648";
       };
       hiresSrc = fetchurl {
         url = "https://s3.amazonaws.com/emacs-mac-port/Emacs.icns.modern";
@@ -17,6 +19,7 @@ with nixpkgs;
       postPatch = ''
         cp $hiresSrc mac/Emacs.app/Contents/Resources/Emacs.icns
       '';
+      doCheck=false;
       postUnpack = null;
       macportSrc = null;
     });

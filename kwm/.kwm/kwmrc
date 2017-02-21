@@ -111,7 +111,7 @@ kwmc config spawn left
     AXWindowRole and AXStandardWindowSubRole
 */
 kwmc rule owner="iTerm2" properties={role="AXDialog"}
-kwmc rule owner="Emacs" properties={role="AXDialog"}
+kwmc rule owner="Emacs" properties={role="AXStandardWindow"}
 
 /*
 The following commands create rules that
