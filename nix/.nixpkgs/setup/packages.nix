@@ -24,7 +24,7 @@
     khd
     kwm
     less
-    ##mycli
+    #pythonPackages.mycli
     ngrok
     nix-repl
     #nodejs
