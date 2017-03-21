@@ -1,3 +1,4 @@
+cask_args appdir: '/Applications'
 tap 'Homebrew/bundle'
 tap 'concourse/tap'
 tap 'koekeishiya/formulae'
@@ -27,6 +28,7 @@ cask 'iterm2'
 cask 'java'
 cask 'karabiner-elements'
 cask 'keybase'
+cask 'kmbmpdc'
 cask 'lingon-x'
 cask 'qnapi'
 cask 'razer-synapse'
@@ -40,7 +42,6 @@ cask 'virtualbox'
 cask 'vlc'
 cask 'xquartz'
 
-cask_args appdir: '/Applications'
 mas '1Password', id: 443987910
 mas 'Affinity Designer', id: 824171161
 mas 'Airmail 3', id: 918858936
