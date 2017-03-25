@@ -5,6 +5,9 @@ in
 with nixpkgs;
 {
   nixpkgs.config.packageOverrides = pkgs : rec {
+    weechat = pkgs.weechat.override {
+      extraBuildInputs = [ pkgs.python27Packages.websocket_client ];
+    };
     emacs25Macport = pkgs.stdenv.lib.overrideDerivation pkgs.emacs25Macport (oldattrs: {
       emacsName = "emacs-25.2-rc1";
       name = "emacs-25.2-rc1-mac-6.2";

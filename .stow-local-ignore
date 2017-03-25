@@ -1,0 +1,9 @@
+.gitignore
+.travis.yml
+Makefile
+Brewfile
+Brewfile-extras
+^/README.*
+^/LICENSE.*
+.+~          # emacs backup files
+\#.*\#       # emacs autosave files

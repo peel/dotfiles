@@ -44,6 +44,7 @@
     #virtualbox
     #vlc
     wakatime
+    # weechat
     #xquartz
   ];
 }
