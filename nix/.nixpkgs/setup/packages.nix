@@ -19,6 +19,7 @@
     gitAndTools.hub
     gnumake
     httpie
+    hoverfly
     jq
     #kubernetes
     khd
