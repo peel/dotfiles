@@ -11,9 +11,6 @@
    ;; List of configuration layers to load. If it is the symbol `all' instead
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers '(
-                                       yaml
-                                       shell-scripts
-                                       vimscript
         auto-completion
         (colors :variables
                 colors-enable-nyan-cat-progress-bar t
@@ -36,10 +33,10 @@
         (scala :variables
                flycheck-scalastyle-jar "/usr/local/bin/scalastyle")
         (shell :variables shell-default-shell 'eshell)
-        slack
-        spotify
+        shell-scripts
         sql
         syntax-checking
+        yaml
         version-control
         ;; (wakatime :variables
         ;;           wakatime-api-key "d405f27b-007d-411f-9e0f-e1e1545c9d6b"
@@ -139,6 +136,14 @@ before layers configuration."
    ;; specified with an installed package.
    ;; Not used for now.
    dotspacemacs-default-package-repository nil)
+   dotspacemacs-line-numbers '(:relative nil
+              ;;   :disabled-for-modes dired-mode
+              ;;                       doc-view-mode
+              ;;                       markdown-mode
+              ;;                       org-mode
+              ;;                       pdf-view-mode
+              ;;                       text-mode
+                :size-limit-kb 1000)
   ;; User initialization goes here
   (setq-default ruby-version-manager 'rvm)
   (define-key global-map (kbd "C-+") 'text-scale-increase)
@@ -154,8 +159,6 @@ before layers configuration."
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
   (setq powerline-default-separator 'slant)
-  (global-linum-mode t)
-  (linum-relative-toggle)
   (global-prettify-symbols-mode t)
   (add-hook 'hack-local-variables-hook (lambda () (setq truncate-lines t)))
   (setq-default line-spacing 6)
