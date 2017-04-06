@@ -1,3 +1,6 @@
+*.log
+*.cache
+logs/
 private/
 spacemacs.d/peel
 a.fish
