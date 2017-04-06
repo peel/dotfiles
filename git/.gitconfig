@@ -1,10 +1,5 @@
-# set your user tokens as environment variables, such as ~/.secrets
-# See the README for examples.
-[user]
-  email = plimanowski@codearsonist.com
-  name = Piotr Limanowski
 [include]
-  path = ~/.private/gitconfig.secret
+  path = ~/.gitconfig.secret
 [color]
   ui = true
 [color "branch"]
@@ -99,7 +94,9 @@
 [merge]
   summary = true
   verbosity = 1
-  tool = mvimdiff
+	tool = mvimdiff
+	ff = only
+  conflictstyle = diff3
 [apply]
   whitespace = nowarn
 [branch]
@@ -135,7 +132,3 @@
 	pushInsteadOf = "git://gist.github.com/"
 [url "git://gist.github.com/"]
 	insteadOf = "gist:"
-[github]
-	user = peel
-[ghi]
-	token = !security find-internet-password -a peel -s github.com -l 'ghi token' -w
