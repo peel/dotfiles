@@ -1,7 +1,12 @@
 #+TITLE: dotfiles.codearsonist.com
 #+SUBTITLE: well-tailored dotfiles for macOS & NixOS
 #+AUTHOR: Piotr Limanowski
-#+OPTIONS: toc:nil timestamp:nil HTML_DOCTYPE:html5
+#+CREATOR: Piotr Limanowski
+#+HTML_LINK_UP: https://codearsonist.com
+#+HTML_LINK_HOME: https://dotfiles.codearsonist.com
+#+OPTIONS: toc:nil timestamp:nil todo:nil HTML_DOCTYPE:html5
+#+KEYWORDS: code arsonist, codearsonist, limanowski, piotr limanowski, scala, elixir, erlang, haskell
+#+DESCRIPTION: a personal page for Piotr Limanowski - a full-time señor '(#scala #elixir #haskell) code arsonist & el modo evil brujito. Part-time #hoverboard'er lifting heavy shit 🏴 Time considered monotonic.
 #+HTML_HEAD_EXTRA: <link rel="shortcut icon" href="https://codearsonist.com/favicon.ico" />
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="css/style.css" />
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="https://codearsonist.com/assets/css/screen.css" />

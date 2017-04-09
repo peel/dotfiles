@@ -37,3 +37,6 @@ pre.src{
     text-align: center;
     background-color: #fff;
 }
+#org-div-home-and-up{
+    display:none;
+}
