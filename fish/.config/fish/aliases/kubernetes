@@ -1,10 +1,2 @@
-alias k kubectl
-alias kk! "echo -e \"--context qa-auth --namespace warp \n--context nwtprod --namespace auth\""
-alias kk "k config use-context"
-alias kp "k get pods"
-alias kl "k logs -f"
-alias ke "k exec -it"
-alias k8e "k8 exec -it"
-function kP -a service
-  kp | awk -v service="$service-[0-9]+-.*" '$service ~ service { print $1 }' | head -1
-end
+alias kk "kubectl config use-context"
+alias kc "kubectl config current-context"
