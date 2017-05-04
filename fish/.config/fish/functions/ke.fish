@@ -1,3 +1,3 @@
-function ke -a service -d "exec command via kubernetes"
-  k exec -it (kp $service)
+function ke -a service -a cmd -d "exec command via kubernetes"
+  k exec -it (kp $service) -- $cmd
 end
