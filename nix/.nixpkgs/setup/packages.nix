@@ -21,7 +21,6 @@
     httpie
     hoverfly
     jq
-    #kubernetes
     khd
     kwm
     less
@@ -32,6 +31,7 @@
     #nox
     #openjdk
     parallel
+    purescript
     ranger
     #sbt
     #scala
