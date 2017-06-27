@@ -1,9 +1,8 @@
 { config, pkgs, ... }:
 
 {
-  programs.fish.enable = true;
+  environment.variables.EDITOR = "emacsclient -tc";
   environment.variables.HOMEBREW_CASK_OPTS = "--appdir=/Applications/cask";
-  environment.loginShell = "/run/current-system/sw/bin/fish";
   environment.shellAliases = {
     e = "em";
     cx = "chmod +x";
@@ -135,6 +134,12 @@
     kk = "kubectl config use-context";
     kc = "kubectl config current-context";
   };
+  environment.loginShell = "/run/current-system/sw/bin/fish";
+  programs.fish.enable = true;
+  programs.fish.variables.cfg = "$HOME/.nixpkgs/darwin-configuration.nix";
+  programs.fish.variables.darwin = "$HOME/.nix-defexpr/darwin";
+  programs.fish.variables.pkgs = "$HOME/.nix-defexpr/channels/nixpkgs";
+  programs.fish.variables.fish_key_bindings = "fish_vi_key_bindings";
   services.mopidy.package = "/usr/local";
   services.mopidy.enable = true;
   services.mopidy.mediakeys.package = "/usr/local";

@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
-    asciinema
+    autojump
     aspell
     #calibre
     coreutils
