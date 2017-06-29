@@ -4,8 +4,23 @@ let
 in
 with nixpkgs;
 {
+  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfreeRedistributable = true;
+
   nixpkgs.config.packageOverrides = pkgs : rec {
     hoverfly = pkgs.callPackage ./pkgs/development/tools/hoverfly {};
+    chunkwm-core = pkgs.callPackage ./pkgs/os-specific/darwin/chunkwm/core.nix {
+        inherit (pkgs.darwin.apple_sdk.frameworks) Carbon Cocoa;
+    };
+    chunkwm-ffm = pkgs.callPackage ./pkgs/os-specific/darwin/chunkwm/ffm.nix {
+        inherit (pkgs.darwin.apple_sdk.frameworks) Carbon Cocoa ApplicationServices;
+    };
+    chunkwm-tiling = pkgs.callPackage ./pkgs/os-specific/darwin/chunkwm/tiling.nix {
+        inherit (pkgs.darwin.apple_sdk.frameworks) Carbon Cocoa ApplicationServices;
+    };
+    chunkwm-border = pkgs.callPackage ./pkgs/os-specific/darwin/chunkwm/border.nix {
+        inherit (pkgs.darwin.apple_sdk.frameworks) Carbon Cocoa ApplicationServices;
+    };
     weechat = pkgs.weechat.override {
       extraBuildInputs = [ pkgs.python27Packages.websocket_client ];
     };

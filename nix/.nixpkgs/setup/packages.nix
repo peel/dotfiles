@@ -21,8 +21,11 @@
     httpie
     hoverfly
     jq
+    chunkwm-core
+    chunkwm-ffm
+    chunkwm-border
+    chunkwm-tiling
     khd
-    kwm
     less
     #pythonPackages.mycli
     ngrok

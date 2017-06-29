@@ -1,3 +1,4 @@
+result/
 .gitignore
 .travis.yml
 Makefile
