@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   #HACKY way to get macOS' clang++
   prePatch = ''
     substituteInPlace makefile \
-      --replace clang++ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
+      --replace clang++ /usr/bin/clang++
   '';
 
   buildPhase = ''
