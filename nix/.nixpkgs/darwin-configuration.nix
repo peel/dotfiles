@@ -43,6 +43,18 @@ with nixpkgs;
       macportSrc = null;
     });
     emacs = (if pkgs.stdenv.isDarwin then emacs25Macport else pkgs.emacs);
+    rustNightly = callPackage ( fetchFromGitHub {
+      owner = "solson";
+      repo = "rust-nightly-nix";
+      rev = "878a8aea8866c51b7f6b4d212536785c1034973f";
+      sha256 = "05isbx0fvvj1pqx7k4d3jffy2xnp7wivhv6qdcv7k134axjrdp64";
+    }){};
+    remacs = pkgs.callPackage ./pkgs/applications/editors/emacs/remacs.nix {
+      rust = rustNightly.rust { date = "2017-06-29"; hash="0axqij16dir0mj5k84hlka3rdm1ri5d2k6s94xbpcysd0vq1j2ag"; };
+      inherit (darwin.apple_sdk.frameworks)
+          AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
+          ImageCaptureCore GSS ImageIO;
+    };
   };
   require = [
     ./setup/packages.nix

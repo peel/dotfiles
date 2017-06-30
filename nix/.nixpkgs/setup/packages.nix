@@ -9,7 +9,7 @@
     ##diff-so-fancy
     #elixir
     #elmPackages.elm
-    #emacs
+    remacs
     #erlang
     fasd
     fish
