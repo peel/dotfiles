@@ -21,10 +21,10 @@
     httpie
     hoverfly
     jq
-    chunkwm-core
-    chunkwm-ffm
-    chunkwm-border
-    chunkwm-tiling
+    chunkwm.core
+    chunkwm.ffm
+    chunkwm.border
+    chunkwm.tiling
     khd
     less
     #pythonPackages.mycli

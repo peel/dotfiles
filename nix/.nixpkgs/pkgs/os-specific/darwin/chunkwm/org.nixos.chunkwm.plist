@@ -6,7 +6,7 @@
 	<string>org.nixos.chunkwm</string>
 	<key>ProgramArguments</key>
 	<array>
-        <string>@out/chunkwm</string>
+        <string>@out/bin/chunkwm</string>
 	</array>
 	<key>RunAtLoad</key>
 	<true/>

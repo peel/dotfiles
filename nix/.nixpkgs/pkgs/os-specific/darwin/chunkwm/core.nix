@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, Carbon, Cocoa }:
+{cfg, stdenv, fetchFromGitHub, Carbon, Cocoa }:
 
 stdenv.mkDerivation rec {
-  name = "chunkwm-core-${version}";
-  version = "0.1.0";
+  name = "chunkwm-core-${cfg.version}";
+  version = "${cfg.version}";
 
   src = fetchFromGitHub {
     owner = "koekeishiya";
     repo = "chunkwm";
-    rev = "core-${version}";
-    sha256 = "1kh87kby33qpkss0j4xf2dbqam087bsmng78nbasjb2ca0m40mmv";
+    rev = "v${cfg.version}";
+    sha256 = "${cfg.sha256}";
   };
 
   buildInputs = [ Carbon Cocoa ];
