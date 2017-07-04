@@ -42,7 +42,7 @@
     silver-searcher
     ##spotify
     stow
-    tmux
+    #tmux #loaded by a service
     #transmission
     #vagrant
     #virtualbox
