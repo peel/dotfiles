@@ -18,6 +18,8 @@
   services.chunkwm.package = pkgs.chunkwm.core;
   services.chunkwm.extraConfig = ''
     chunkc tiling::rule --owner Emacs --state tile
+    chunkc tiling::rule --owner Emacs.* --state tile
+    chunkc tiling::rule --owner .*Emacs --state tile
   '';
   services.khd.enable = true;
   services.khd.khdConfig = ''
