@@ -30,7 +30,8 @@
     cmd + alt + ctrl - r : khd -e "reload"
 
     # open terminal, blazingly fast compared to iTerm/Hyper
-    cmd - return : open -na /Applications/Kitty.app
+    cmd + shift - return : open -na /run/current-system/Applications/Emacs.app
+    cmd - return : open -na ~/Applications/iTerm.app
 
     # focus window
     alt - h : chunkc tiling::window --focus west

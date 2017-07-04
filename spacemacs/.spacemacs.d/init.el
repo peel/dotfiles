@@ -328,10 +328,10 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   (push '("melpa-stable" . "stable.melpa.org/packages/") configuration-layer--elpa-archives)
-  (push '(ensime . "melpa-stable") package-pinned-packages)
+  (push '(ensime . "melpa-stable") package-pinned-packages))
   ;; enable ligatures
-  (mac-auto-operator-composition-mode t)
-  (mac-auto-ascii-mode t))
+  ;;(mac-auto-operator-composition-mode t)
+  ;;(mac-auto-ascii-mode t))
 
 
 (defun dotspacemacs/user-config ()
