@@ -13,6 +13,7 @@
     remacs
     #erlang
     fasd
+    firefox-darwin
     fish
     gawk
     gist

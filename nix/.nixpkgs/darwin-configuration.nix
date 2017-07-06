@@ -8,6 +8,7 @@ with nixpkgs;
   nixpkgs.config.allowUnfreeRedistributable = true;
 
   nixpkgs.config.packageOverrides = pkgs : rec {
+    firefox-darwin = pkgs.callPackage ./pkgs/networking/browsers/firefox-bin/darwin.nix {};
     hoverfly = pkgs.callPackage ./pkgs/development/tools/hoverfly {};
     chunkwm = pkgs.callPackage ./pkgs/os-specific/darwin/chunkwm/default.nix {
         inherit (pkgs.darwin.apple_sdk.frameworks) Carbon Cocoa ApplicationServices;
