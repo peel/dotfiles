@@ -5,6 +5,7 @@ rec {
   allowUnfree = true;
   allowUnfreeRedistributable = true;
 
+  networking.hostname = "fff666";
   packageOverrides = pkgs : rec {
     hoverfly = pkgs.callPackage ./pkgs/development/tools/hoverfly {};
     weechat = pkgs.weechat.override {

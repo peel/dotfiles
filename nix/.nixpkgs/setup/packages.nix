@@ -6,6 +6,7 @@
     #calibre
     coreutils
     curl
+    chromium
     ##diff-so-fancy
     #elixir
     #elmPackages.elm
@@ -17,6 +18,7 @@
     gist
     git
     gitAndTools.hub
+    graphviz
     gnumake
     httpie
     hoverfly
@@ -48,7 +50,7 @@
     #virtualbox
     #vlc
     wakatime
-    # weechat
+    weechat
     #xquartz
   ];
 }
