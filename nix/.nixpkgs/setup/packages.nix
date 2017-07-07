@@ -6,14 +6,13 @@
     #calibre
     coreutils
     curl
-    chromium
     ##diff-so-fancy
     #elixir
     #elmPackages.elm
     remacs
     #erlang
     fasd
-    firefox-darwin
+    firefox-bin
     fish
     gawk
     gist
