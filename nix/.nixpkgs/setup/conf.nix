@@ -321,7 +321,6 @@
     kk = "kubectl config use-context";
     kc = "kubectl config current-context";
   };
-  environment.loginShell = "/run/current-system/sw/bin/fish";
   programs.fish.enable = true;
   programs.fish.variables.cfg = "$HOME/.nixpkgs/darwin-configuration.nix";
   programs.fish.variables.darwin = "$HOME/.nix-defexpr/darwin";
