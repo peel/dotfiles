@@ -136,27 +136,19 @@ nix-env:
 ifeq ("$(wildcard $(HOME)/.nix-profile/)","")
 		@echo "Installing Nix"
 		@curl "https://nixos.org/nix/install" | sh
-		@touch $(HOME)/.profile
-		@echo ". $(HOME)/.nix-profile/etc/profile.d/nix.sh" >> $(HOME)/.profile
-		@echo "export PATH=$$PATH:$(HOME)/.nix-profile/bin:$(HOME)/.nix-profile/sbin" >> $(HOME)/.profile
-		@echo "export NIX_PATH=nixpkgs=$(HOME)/.nix-defexpr/channels/nixpkgs" >> $(HOME)/.profile
 else
 		@echo "Nix already set up"
 endif
-		@echo "Fetching nix updates"
-		@source $(HOME)/.profile && nix-env -iA nixpkgs.nix || true
-		@sudo ln -s private/var/run /run || true
 		@echo "Installing stow"
-		@source $(HOME)/.profile && nix-env -i stow git
 ifeq ($(UNAME),Darwin)
 ifeq ("$(wildcard $(HOME)/.nix-defexpr/darwin)","")
 		@echo "Setting up Nix-Darwin"
-		@git clone https://github.com/LnL7/nix-darwin.git $(HOME)/.nix-defexpr/darwin
-		@echo "Setting nix in env"
-		@echo "export NIX_PATH=darwin=$(HOME)/.nix-defexpr/darwin:darwin-config=$(HOME)/.nixpkgs/darwin-configuration.nix:$$NIX_PATH" >> $(HOME)/.profile
+		@bash <(curl https://raw.githubusercontent.com/LnL7/nix-darwin/master/bootstrap.sh)
+		@rm -rf ~/.nixpkgs/darwin-configuration.nix
 else
 		@echo "Nix-Darwin already set up"
 endif
+		@nix-env -i stow git
 endif
 
 nix-build: nix-env link
