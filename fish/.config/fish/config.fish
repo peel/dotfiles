@@ -1,7 +1,7 @@
 # global env
 set LC_ALL en_US.UTF-8
 set LANG en_US.UTF-8
-set TERM xterm-256color
+set -x TERMINFO /usr/share/terminfo
 set -x SHELL (which fish)
 set -x EDITOR "em"
 set -U fish $HOME/.config/fish

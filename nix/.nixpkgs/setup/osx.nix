@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
 {
+  environment.variables.HOMEBREW_CASK_OPTS = "--appdir=/Applications/cask";
+  environment.variables.TERMINFO = "/usr/share/terminfo";
   system.defaults = {
     dock = {
       autohide = true;

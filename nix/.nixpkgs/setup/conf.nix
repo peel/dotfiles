@@ -2,7 +2,6 @@
 
 {
   environment.variables.EDITOR = "emacsclient -tc";
-  environment.variables.HOMEBREW_CASK_OPTS = "--appdir=/Applications/cask";
   environment.etc."per-user/peel/editorconfig".text = ''
     # top-most EditorConfig file
     root = true
@@ -322,7 +321,7 @@
     kc = "kubectl config current-context";
   };
   programs.bash.enable = false;
-  # programs.fish.enable = true;
+  programs.fish.enable = true;
   programs.fish.variables.cfg = "$HOME/.nixpkgs/darwin-configuration.nix";
   programs.fish.variables.darwin = "$HOME/.nix-defexpr/darwin";
   programs.fish.variables.pkgs = "$HOME/.nix-defexpr/channels/nixpkgs";
