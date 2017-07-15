@@ -6,6 +6,13 @@ with nixpkgs;
 {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreeRedistributable = true;
+  nix.nixPath =
+    [ 
+      "darwin=$HOME/.nix-defexpr/darwin"
+      "darwin-config=$HOME/.nixpkgs/darwin-configuration.nix"
+      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixpkgs"
+      "/nix/var/nix/profiles/per-user/root/channels"
+    ];
 
   nixpkgs.config.packageOverrides = pkgs : rec {
     firefox-bin = pkgs.callPackage ./pkgs/networking/browsers/firefox-bin/darwin.nix {};

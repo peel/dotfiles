@@ -15,16 +15,13 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -F/System/Library/Frameworks"
-    substituteInPlace $src/src/plugins/${cfg.name}/makefile --replace "clang++" "/usr/bin/clang++"
-    substituteInPlace $src/src/plugins/${cfg.name}/makefile --replace "BUILD_PATH		= ./../../../plugins"  "BUILD_PATH		= /tmp/chunkwm-plugins"
-    substituteInPlace $src/src/plugins/${cfg.name}/makefile --replace "./../../" ${src}/src/
-    cd $src/src/plugins/${cfg.name} && make install
+    substituteInPlace src/plugins/${cfg.name}/makefile --replace "clang++" "/usr/bin/clang++"
   '';
 
   installPhase = ''
+    cd src/plugins/${cfg.name} && make all
     mkdir -p $out/lib/chunkwm/plugins
-    cp /tmp/chunkwm-plugins/${cfg.name}.so $out/lib/chunkwm/plugins/
-    rm -rf /tmp/chunkwm-plugins
+    cp ../../../plugins/${cfg.name}.so $out/lib/chunkwm/plugins/
   '';
 
   meta = with stdenv.lib; {

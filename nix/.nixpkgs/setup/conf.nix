@@ -320,7 +320,7 @@
     kk = "kubectl config use-context";
     kc = "kubectl config current-context";
   };
-  programs.bash.enable = false;
+  programs.bash.enable = true;
   programs.fish.enable = true;
   programs.fish.variables.cfg = "$HOME/.nixpkgs/darwin-configuration.nix";
   programs.fish.variables.darwin = "$HOME/.nix-defexpr/darwin";

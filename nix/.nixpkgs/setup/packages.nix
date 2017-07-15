@@ -27,6 +27,7 @@
     chunkwm.ffm
     chunkwm.border
     chunkwm.tiling
+    chunkwm.transparency
     khd
     less
     #pythonPackages.mycli

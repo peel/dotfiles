@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   #HACKY way to get macOS' clang++
   prePatch = ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -F/System/Library/Frameworks"
     substituteInPlace makefile \
       --replace clang++ /usr/bin/clang++
   '';

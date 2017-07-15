@@ -1,8 +1,8 @@
 { pkgs, stdenv, fetchFromGitHub, Carbon, Cocoa, ApplicationServices }:
 
 let
-    repoV = "0.2.13";
-    repoSha = "1c7803nz3fr703grkm8h4k1g6xqwsfbf0w5kkhzr5n5g7ricxdmi";
+    repoV = "0.2.20";
+    repoSha = "1hrhws2qa8h55f3qnwv2mk61kk6fmam59j1a9b7yzbj2azmjpw95";
 in
 stdenv.mkDerivation rec {
 
@@ -32,6 +32,14 @@ stdenv.mkDerivation rec {
 
     tiling = pkgs.callPackage ./plugin.nix {
       cfg = { name = "tiling";
+          version = repoV;
+          sha256 = repoSha;
+        };
+      inherit Carbon Cocoa ApplicationServices;
+    };
+
+    transparency = pkgs.callPackage ./plugin.nix {
+      cfg = { name = "transparency";
           version = repoV;
           sha256 = repoSha;
         };
