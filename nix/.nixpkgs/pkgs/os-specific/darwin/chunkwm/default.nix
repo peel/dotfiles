@@ -1,8 +1,8 @@
 { pkgs, stdenv, fetchFromGitHub, Carbon, Cocoa, ApplicationServices }:
 
 let
-    repoV = "0.2.20";
-    repoSha = "1hrhws2qa8h55f3qnwv2mk61kk6fmam59j1a9b7yzbj2azmjpw95";
+    repoV = "0.2.24";
+    repoSha = "0yv4wi6956qmqna5cmi89k0c06g9qzddabkmpap14qpjz3dj4pk8";
 in
 stdenv.mkDerivation rec {
 
