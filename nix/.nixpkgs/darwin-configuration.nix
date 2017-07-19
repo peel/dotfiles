@@ -6,8 +6,9 @@ with nixpkgs;
 {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreeRedistributable = true;
+  nix.package = nixpkgs.nixUnstable;
   nix.nixPath =
-    [ 
+    [
       "darwin=$HOME/.nix-defexpr/darwin"
       "darwin-config=$HOME/.nixpkgs/darwin-configuration.nix"
       "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixpkgs"

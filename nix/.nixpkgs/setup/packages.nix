@@ -3,7 +3,6 @@
   environment.systemPackages = with pkgs; [
     autojump
     aspell
-    #calibre
     coreutils
     curl
     ##diff-so-fancy
@@ -27,11 +26,11 @@
     chunkwm.ffm
     chunkwm.border
     chunkwm.tiling
-    chunkwm.transparency
     khd
     less
     #pythonPackages.mycli
     ngrok
+    nixUnstable
     nix-repl
     #nodejs
     #nox
