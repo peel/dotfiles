@@ -57,8 +57,9 @@ with nixpkgs;
     };
   };
   require = [
+    ./setup/common.nix
+    ./setup/darwin.nix
     ./setup/packages.nix
-    ./setup/conf.nix
     ./setup/emacs.nix
     ./setup/osx.nix
   ];
