@@ -1,0 +1,54 @@
+#!/bin/sh
+
+# Events to run on resume from sleep
+
+set -eu
+
+# ----------------------------------------------------------------------
+# Standard Boilerplate
+# ----------------------------------------------------------------------
+# I use this standard boilerplate in multiple scripts where I might
+# need to re-run as the X user. Some items are not necessary in all
+# scripts but I'd rather keep it consistent. In general, the *ctl
+# scripts (audioctl, displayctl) require this as they may be called
+# by udev or acpi and thus by root.
+
+# script values and config file if we need it
+SCRIPTNAME=$(basename $0)
+SCRIPTPATH=$(readlink -f $0)
+SCRIPTDIR=$(dirname $SCRIPTPATH)
+SCRIPTOWNER=$(stat -c '%U' $SCRIPTPATH)
+
+# rerun as X user if running as root
+# ------------------------------------------------------------------------
+# attempt to grab xuser assuming it has been run "normally" via a
+# display manager or startx
+XUSER=$(ps -C Xorg -C X -ouser=)
+# if we are running via xlogin@ systemd service, it will be running
+# as root, so attempt to match based on the script owner
+#[ "$XUSER" = root ] && systemctl is-active xlogin@$SCRIPTOWNER && XUSER=$SCRIPTOWNER
+[ "$XUSER" = root ] && XUSER=$SCRIPTOWNER
+# if at this point our XUSER is not root, restart as the XUSER
+[ "$(id -un)" = root ] && [ "$XUSER" != root ] && exec su -c "$0 $*" "$XUSER"
+
+# grab X user id if necessary
+XUSERID=$(id -u $XUSER)
+
+# key environment variables
+export DISPLAY=":0"
+export XAUTHORITY=$HOME/.Xauthority
+export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$XUSERID/bus"
+export PULSE_RUNTIME_PATH="/run/user/${XUSERID}/pulse/"
+
+CONFIG=/home/$XUSER/.config/$SCRIPTNAME
+
+# ----------------------------------------------------------------------
+# Main
+# ----------------------------------------------------------------------
+main () {
+    audioctl reset
+}
+
+main $*
+
+# vim: ft=sh:expandtab:ts=4:shiftwidth=4

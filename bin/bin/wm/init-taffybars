@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+set -euf -o pipefail
+
+# Find and kill any running taffybars.
+echo "Killing old taffybars"
+for pid in `ps -C taffybar-linux-x86_64 -o pid=`; do
+    echo "Killing $pid"
+    kill $pid
+done
+
+# Find out how many monitors we have. Every active monitor will have a * next to
+# its refresh rate. This is probably not the best way to do this.
+count=`xrandr -q | grep '*' | wc -l`
+
+# TODO: forcing to one taffybar for now
+count=1
+
+echo "Starting new taffybars for $count monitors"
+for n in $(seq 1 $count); do
+    i=$(( $n - 1 ))
+    echo "Starting for monitor $i"
+    (export MONITOR=$i && taffybar &)
+done

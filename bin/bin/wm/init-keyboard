@@ -1,0 +1,132 @@
+#!/bin/sh
+
+# ----------------------------------------------------------------------
+# reference
+# ----------------------------------------------------------------------
+
+# compose key in this setup is shift+ralt, release, then hit dead key and live key
+# e.g. shift+ralt, ', e = é
+
+# both shifts simultaneously switches between first and second group (en and gr)
+
+# /etc/udev/rules.d/00-keyboard.rules
+# ACTION=="add", SUBSYSTEM=="input", ENV{DISPLAY}=":0", ENV{XAUTHORITY}="/home/ethan/.Xauthority", RUN+="/home/ethan/bin/wm/init-keyboard"
+
+# $HOME/.config/systemd/user/xcape.service
+# [Unit]
+# Description=Xcape Daemon
+# After=graphical.target
+# 
+# [Service]
+# Type=forking
+# Environment=DISPLAY=:0
+# ExecStart=/usr/bin/xcape -e "Hyper_L=Tab;Hyper_R=backslash"
+# Restart=always
+# RestartSec=1
+# 
+# [Install]
+# WantedBy=default.target
+
+# ----------------------------------------------------------------------
+# Standard Boilerplate
+# ----------------------------------------------------------------------
+# I use this standard boilerplate in multiple scripts where I might
+# need to re-run as the X user. Some items are not necessary in all
+# scripts but I'd rather keep it consistent. In general, the *ctl
+# scripts (audioctl, displayctl) require this as they may be called
+# by udev or acpi and thus by root.
+
+# script values and config file if we need it
+SCRIPTNAME=$(basename $0)
+SCRIPTPATH=$(readlink -f $0)
+SCRIPTDIR=$(dirname $SCRIPTPATH)
+SCRIPTOWNER=$(stat -c '%U' $SCRIPTPATH)
+
+# rerun as X user if running as root
+# ------------------------------------------------------------------------
+# attempt to grab xuser assuming it has been run "normally" via a
+# display manager or startx
+XUSER=$(ps -C Xorg -C X -ouser=)
+# if we are running via xlogin@ systemd service, it will be running
+# as root, so attempt to match based on the script owner
+#[ "$XUSER" = root ] && systemctl is-active xlogin@$SCRIPTOWNER && XUSER=$SCRIPTOWNER
+[ "$XUSER" = root ] && XUSER=$SCRIPTOWNER
+# if at this point our XUSER is not root, restart as the XUSER
+[ "$(id -un)" = root ] && [ "$XUSER" != root ] && exec su -c "$0 $*" "$XUSER"
+
+# grab X user id if necessary
+XUSERID=$(id -u $XUSER)
+
+# key environment variables
+export DISPLAY=":0"
+export XAUTHORITY=$HOME/.Xauthority
+export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$XUSERID/bus"
+export PULSE_RUNTIME_PATH="/run/user/${XUSERID}/pulse/"
+
+CONFIG=/home/$XUSER/.config/$SCRIPTNAME
+
+# ----------------------------------------------------------------------
+# Lock
+# ----------------------------------------------------------------------
+
+# locking not working properly... udev triggers this but locking is
+# present it fails... possibly it it running before udev has populated
+# all attached usb devices?
+
+# going to try adding a sleep here to give it time to get its act together
+
+#LOCKFILE=/tmp/${SCRIPTNAME}.lock
+#exec 200>$LOCKFILE
+#flock -n 200 || exit 0
+#sleep 1 # give udev time to finish
+
+# ----------------------------------------------------------------------
+# dump config to file
+# ----------------------------------------------------------------------
+
+# rather than dump these to a file, I could keep them in static files
+# in, say, .config/xkb or .xkb, but I prefer this method as it centralizes
+# the configuration data to just this file
+
+XKBDIR=/tmp/xkb
+[ -d ${XKBDIR}/symbols ] || mkdir -p ${XKBDIR}/{keymap,symbols}
+
+# the following is generated first from a setxkbmap command similar to:
+#     setxkbmap -layout "us,gr(polytonic)" -option "ctrl:nocaps,grp:shifts_toggle,misc:typo,shift:break_caps,lv3:alt_switch"
+# and then:
+#     setxkbmap -print
+# the final tweak being the addition of the "+custom(hypers)" to use my local customizations
+
+# lv3:ralt_switch_multikey
+# level3(alt_switch)
+# level3(ralt_switch_multikey)
+
+cat > $XKBDIR/keymap/custom.xkb << EOF
+xkb_keymap {
+    xkb_keycodes  { include "evdev+aliases(qwerty)"	};
+    xkb_types     { include "complete"	};
+    xkb_compat    { include "complete"	};
+    xkb_symbols   { include "pc+us+gr(polytonic):2+inet(evdev)+group(shifts_toggle)+level3(ralt_switch_multikey)+ctrl(nocaps)+typo(base):1+typo(base):2+custom(hypers)" };
+    xkb_geometry  { include "pc(pc104)"	};
+};
+EOF
+
+cat > $XKBDIR/symbols/custom << EOF
+default partial
+xkb_symbols "hypers" {
+    key  <TAB> { [ Hyper_L, Hyper_L ] };
+    key <BKSL> { [ Hyper_R, Hyper_R ] };
+    key <I252> { [ Tab,	ISO_Left_Tab ] };
+    key <I253> { [ backslash, bar ] };
+    modifier_map Mod4 { Super_L, Super_R, Hyper_L, Hyper_R };
+};
+EOF
+
+# ----------------------------------------------------------------------
+# reinitialize keyboard
+# ----------------------------------------------------------------------
+
+export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$XUSERID/bus"
+notify-send -u low "Keyboard initialized"
+xkbcomp -synch -w3 -I$XKBDIR $XKBDIR/keymap/custom.xkb $DISPLAY &>/dev/null
+(exec killall -q xcape) & # gets restarted by the xcape systemd user service

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+systemctl --user start xcape@$DISPLAY
+systemctl --user start compton@$DISPLAY
+

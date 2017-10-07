@@ -1,0 +1,481 @@
+#!/bin/sh
+
+# ----------------------------------------------------------------------
+# displayctl internal|external|span|spanex|mirror|auto
+#
+# Control display output using xrandr. Primarily useful for laptops.
+#
+# Can auto detect connected displays and select output based on a
+# simple heuristic (external preferred over internal laptop display,
+# previously manually selected display mode preferred over that).
+#
+# Remembers state of any given configuration of specific displays
+# by "fingerprinting" their collective EDIDs.
+#
+# Expects to be called directly as a command by the user or by, for
+# example, root via a udev script on display hotplug events.
+#
+# Should work on most systems without much/any modification but should
+# be tested. I've tried to make it as portable as possible.
+# ----------------------------------------------------------------------
+
+set -eu
+
+# ----------------------------------------------------------------------
+# Standard Boilerplate
+# ----------------------------------------------------------------------
+# I use this standard boilerplate in multiple scripts where I might
+# need to re-run as the X user. Some items are not necessary in all
+# scripts but I'd rather keep it consistent. In general, the *ctl
+# scripts (audioctl, displayctl) require this as they may be called
+# by udev or acpi and thus by root.
+
+# script values and config file if we need it
+SCRIPTNAME=$(basename $0)
+SCRIPTPATH=$(readlink -f $0)
+SCRIPTDIR=$(dirname $SCRIPTPATH)
+SCRIPTOWNER=$(stat -c '%U' $SCRIPTPATH)
+
+# rerun as X user if running as root
+# ------------------------------------------------------------------------
+# attempt to grab xuser assuming it has been run "normally" via a
+# display manager or startx
+XUSER=$(ps -C Xorg -C X -ouser=)
+# if we are running via xlogin@ systemd service, it will be running
+# as root, so attempt to match based on the script owner
+#[ "$XUSER" = root ] && systemctl is-active xlogin@$SCRIPTOWNER && XUSER=$SCRIPTOWNER
+[ "$XUSER" = root ] && XUSER=$SCRIPTOWNER
+# if at this point our XUSER is not root, restart as the XUSER
+[ "$(id -un)" = root ] && [ "$XUSER" != root ] && exec su -c "$0 $*" "$XUSER"
+
+# grab X user id if necessary
+XUSERID=$(id -u $XUSER)
+
+# key environment variables
+export DISPLAY=":0"
+export XAUTHORITY=$HOME/.Xauthority
+export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$XUSERID/bus"
+export PULSE_RUNTIME_PATH="/run/user/${XUSERID}/pulse/"
+
+CONFIG=/home/$XUSER/.config/$SCRIPTNAME
+
+# ----------------------------------------------------------------------
+# Notes
+# ----------------------------------------------------------------------
+#
+# note that udev sets a HOTPLUG env variable. Might be useful on
+# a script revision so I'm leaving this here as a reminder.
+#
+# logger "$SCRIPTNAME HOTPLUG is ${HOTPLUG:-UNSET}"
+
+# ----------------------------------------------------------------------
+# Lock
+# ----------------------------------------------------------------------
+
+LOCKFILE=/tmp/${SCRIPTNAME}.lock
+exec 200>$LOCKFILE
+flock -n 200 || { (>&2 echo "$SCRIPTNAME already running (locked)"); exit 1; }
+
+# ----------------------------------------------------------------------
+# Main
+# ----------------------------------------------------------------------
+
+main () {
+
+    CMDBASE="xrandr -d $DISPLAY"
+
+    # cache xrandr output since it's the slowest call
+    #XRANDRV="$(xrandr -q --verbose)"
+    XRANDRV="$(${CMDBASE} --verbose)"
+
+    # parse cached xrandr output to identify outputs
+    # TODO: test on a system without an "internal" laptop display
+    INTERNAL_OUTPUT="$(echo "$XRANDRV" | get_internal_output)"
+    INTERNAL_OUTPUT_MODE="$(echo "$XRANDRV" | get_default_mode $INTERNAL_OUTPUT)"
+    ALL_OUTPUTS="$(echo $(echo "$XRANDRV" | awk '/.*connected/ {print $1}'))"
+    CONNECTED_OUTPUTS="$(echo $(echo "$XRANDRV" | awk '/ connected/ {print $1}') | sed 's/ \+/|/g')"
+    DISCONNECTED_OUTPUTS="$(echo $(echo "$XRANDRV" | awk '/disconnected/ {print $1}') | sed 's/ \+/|/g')"
+    CONNECTED_ACTIVE_OUTPUTS="$(echo $(echo "$XRANDRV" | awk '/ connected.*[[:digit:]]/ {print $1}') | sed 's/ \+/|/g')"
+    DISCONNECTED_ACTIVE_OUTPUTS="$(echo $(echo "$XRANDRV" | awk '/disconnected.*[[:digit:]]/ {print $1}') | sed 's/ \+/|/g')"
+
+    # execute function based on command line arguments
+    case ${1:-auto} in
+        menu)   menu ;;
+        in*)    internal ;;
+        ex*)    external ;;
+        span)   span     ;;
+        spanex) spanex   ;;
+        mirror) mirror   ;;
+        toggle) toggle   ;;
+        auto)   auto     ;;
+        backlight|back|bl|bright) backlight ${2:-} ;;
+        fing*)  report_fingerprint ;;
+        *)      usage ;;
+    esac
+
+}
+
+
+menu () {
+    items="auto internal external span spanex mirror"
+    result=$((for item in $items; do echo $item; done) | launcher "Display Mode")
+    case ${result:-} in
+        in*)    internal ;;
+        ex*)    external ;;
+        span)   span     ;;
+        spanex) spanex   ;;
+        mirror) mirror   ;;
+        auto)   auto     ;;
+        *)      :        ;;
+    esac
+}
+
+usage () {
+    (>&2 echo "
+    Usage:
+
+    $SCRIPTNAME [mode]
+    $SCRIPTNAME [backlight up|down]
+    $SCRIPTNAME [fingerprint]   
+
+    where [mode] is one of:
+    internal
+    external
+    span
+    spanex
+    mirror
+    auto
+    ")
+}
+
+# ----------------------------------------------------------------------
+# Helper functions
+# ----------------------------------------------------------------------
+
+log_notify () {
+    logger "$SCRIPTNAME ${*:-}"
+    notify-send -u low "$SCRIPTNAME ${*:-}"
+}
+
+notifications () {
+    case $1 in
+        kill) killall dunst || : ;;
+        init) dunst -config $HOME/.dunstrc &
+    esac
+}
+
+execute () {
+
+    # record mode (should be $1 via colling mode function)
+    mode="${1:-}"
+
+    # TODO: the restart of dunst is probably messing with our flock on the
+    # lockfile so I'm removing it here till I can test or change my lockfile
+    # method or change the way I restart dunst
+    #notifications kill
+
+    # execute the output change
+    eval $CMD
+
+    # sleep in specific cases to keep x from crashing when we run subsequent
+    # commands (we have to wait for the display to fully switch on or change
+    # mode/resolution prior to trying anything further)
+    case $mode in
+        span*)  sleep 3 ;;
+        ex*)    sleep 3 ;;
+        mirror) sleep 4 ;;
+    esac
+
+    # get xscreensaver status and eat any error with a null function
+    # (otherwise script errors out)
+    xsaver_status="$(xscreensaver-command -time 2>&1)" || :
+
+    # if not locked, restart xmonad, largely to deal with xmobar & tray pos,
+    # otherwise send an Esc key event to "awaken" the screensaver on external
+    # screens (for some reason xscreensaver will stay dark in some savers when
+    # just switching displays unless a key event occurs)
+
+#TODO: testing with this off to see if my current xmobar and xmonad config
+# handles screen resizing (appears to)
+#    [ "${xsaver_status#* locked}" = "$xsaver_status" ] \
+#    && xmonad --restart || xdotool key Escape
+
+# TEST: changing to just hitting "escape" on the screensaver
+    [ "${xsaver_status#* locked}" = "$xsaver_status" ] || xdotool key Escape
+
+    # reset wallpaper
+    feh --bg-fill /home/ethan/tmp/lowpoly6.jpg
+
+    # remember what our preferred config is for this output combination
+    save_fingerprint ${mode:-}
+
+    # TODO: the restart of dunst is probably messing with our flock on the
+    # lockfile (see above note)
+    #notifications init
+    
+    # journal and notification
+    log_notify "${mode:-} ${LOGIC:-}"
+
+}
+
+save_fingerprint () {
+    fingerprint="$(generate_fingerprint)" 
+    if [ -f "$CONFIG" ]
+    then
+        CONFIG_VALUES="$(grep -v $fingerprint $CONFIG)"
+        echo "${CONFIG_VALUES:-}" > "$CONFIG"
+    fi
+    echo "${fingerprint}=${1:-}" >> "$CONFIG"
+}
+
+generate_fingerprint () {
+    # get a fingerprint for current connected displays based on EDIDs
+    EDID_FINGERPRINT="$(echo "$XRANDRV" | get_edids)"
+    echo FINGERPRINT_$(echo $EDID_FINGERPRINT | sha1sum - | cut -d " " -f 1)
+}
+
+report_fingerprint () {
+    fingerprint=$(generate_fingerprint)
+    if [ -f $CONFIG ]
+    then
+        . $CONFIG
+        eval "fingerprint_mode=\"\${${fingerprint}:-}\""
+    fi
+    echo "Using config file: $CONFIG"
+    echo "Fingerprint for currently connected displays is: ${fingerprint##FINGERPRINT_}"
+    echo "Saved mode for this fingerprint is: ${fingerprint_mode:-unset}"
+}
+
+get_edids () {
+    while read line
+    do
+        if [ "${line#*EDID:}" != "$line" ]
+        then
+            EDID=true
+            while $EDID
+            do
+                read edidline
+                if [ "${edidline#*:}" = "$edidline" ]
+                then
+                    export FINGERPRINT="${FINGERPRINT:-}$edidline"
+                else
+                    EDID=false
+                fi
+            done
+        fi
+    done
+    echo "$FINGERPRINT"
+}
+
+get_internal_output () {
+    read line # eat first line
+    while read line
+    do
+        if [ "${line#*connected}" != "${line}" ]
+        then
+            output="$line"
+        elif [ "${line#*Backlight}" != "${line}" ]
+        then
+            internal="$(echo $output | cut -d ' ' -f1)"
+        fi
+    done
+    echo "$internal"
+}
+
+get_default_mode () {
+    output=$1
+    while read line
+    do
+        if [ "${line#*$INTERNAL_OUTPUT }" != "$line" ]
+        then
+            reading_modes=true
+            while $reading_modes
+            do
+                read modeval
+                if [ "${modeval#*+}" != "$modeval" ]
+                then
+                    mode="$(echo -n ${modeval} | cut -d ' ' -f 1)"
+                    reading_modes=false
+                fi
+            done
+        fi
+    done
+    echo "$mode"
+}
+
+# ----------------------------------------------------------------------
+# Display change logic functions
+# ----------------------------------------------------------------------
+
+toggle () {
+    LOGIC=toggle
+    log_notify $FUNCNAME
+    # if internal is only active display but there are also inactive
+    # connected displays, switch to the external display, otherwise
+    # switch to the internal
+    if [ "$CONNECTED_ACTIVE_OUTPUTS" = "$INTERNAL_OUTPUT" ] \
+    && [ "$CONNECTED_OUTPUTS" != "$INTERNAL_OUTPUT" ]
+    then
+        external
+    else
+        internal
+    fi
+}
+
+auto () {
+    LOGIC=auto
+    # if internal is only display, use it, otherwise check for
+    # existing configuration fingerprint using it if it is present,
+    # otherwise just run external
+    if [ "$CONNECTED_OUTPUTS" = "$INTERNAL_OUTPUT" ]
+    then # internal mode
+        internal
+    else # external mode
+        # first check for an existing recorded fingerprint
+        # of this combination of displays
+        if [ -f $CONFIG ]
+        then
+            fingerprint=$(generate_fingerprint)
+            . $CONFIG
+            eval "fingerprint_mode=\"\${${fingerprint}:-}\""
+        fi
+        # then run the fingerprinted mode or simply switch to
+        # external if no (or invalid) fingerprint is found
+        case ${fingerprint_mode:-} in
+            internal|external|span|spanex|mirror) $fingerprint_mode ;;
+            *) external ;;
+        esac
+    fi
+}
+
+# ----------------------------------------------------------------------
+# Display mode functions
+# ----------------------------------------------------------------------
+
+internal () {
+    if [ -z "$DISCONNECTED_ACTIVE_OUTPUTS" ] \
+    && [ "$CONNECTED_ACTIVE_OUTPUTS" = "$INTERNAL_OUTPUT" ]
+    then
+        log_notify "Internal display already active"
+        return
+    fi
+    CMD="$CMDBASE"
+    for OUTPUT in $ALL_OUTPUTS
+    do
+    case $OUTPUT in
+        $INTERNAL_OUTPUT) CMD="$CMD --output $OUTPUT --primary --auto" ;;
+        *) CMD="$CMD --output $OUTPUT --off" ;;
+    esac
+    done
+    execute $FUNCNAME
+}
+
+external () {
+    [ "$CONNECTED_OUTPUTS" = "$INTERNAL_OUTPUT" ] \
+    && { log_notify "$SCRIPTNAME: no external displays connected"; exit; }
+    CMD="$CMDBASE"
+    for OUTPUT in $ALL_OUTPUTS
+    do
+        eval '
+        case $OUTPUT in
+            $INTERNAL_OUTPUT) CMD="$CMD --output $OUTPUT --off" ;;
+	        '$CONNECTED_OUTPUTS') CMD="$CMD --output $OUTPUT --primary --auto" ;;
+	     *) CMD="$CMD --output $OUTPUT --off" ;;
+        esac'
+    done
+    execute $FUNCNAME
+}
+
+span () {
+    CMD="$CMDBASE --output $INTERNAL_OUTPUT --scale 1x1 --primary --mode $INTERNAL_OUTPUT_MODE --pos 0x0"
+    NEIGHBOR=$INTERNAL_OUTPUT
+
+    for OUTPUT in $ALL_OUTPUTS
+    do
+        eval '
+        case $OUTPUT in
+            $INTERNAL_OUTPUT) : ;; 
+            '$CONNECTED_OUTPUTS') CMD="$CMD --output $OUTPUT --scale 1x1 --auto --right-of $NEIGHBOR"; NEIGHBOR=$OUTPUT ;;
+            *) : ;;
+        esac'
+    done
+
+    log_notify "Switch to spanned displays"
+    execute "$FUNCNAME"
+    }
+
+spanex () {
+    CMD="$CMDBASE --output $INTERNAL_OUTPUT --off"
+    NEIGHBOR=$INTERNAL_OUTPUT
+    PRIMARY_SET=false
+    for OUTPUT in $ALL_OUTPUTS
+    do
+        if ! $PRIMARY_SET
+        then
+            eval '
+            case $OUTPUT in
+                $INTERNAL_OUTPUT) : ;;
+                '$CONNECTED_OUTPUTS') PRIMARY_SET=true; CMD="$CMD --output $OUTPUT --scale 1x1 --auto --primary"; NEIGHBOR=$OUTPUT ;;
+                *) : ;;
+            esac'
+        else
+            eval '
+            case $OUTPUT in
+                $INTERNAL_OUTPUT) : ;;
+                '$CONNECTED_OUTPUTS') CMD="$CMD --output $OUTPUT --scale 1x1 --auto --right-of $NEIGHBOR"; NEIGHBOR=$OUTPUT ;;
+                *) : ;;
+            esac'
+        fi
+    done
+
+    log_notify "Switch to spanned displays"
+    echo "CMD is $CMD"
+    execute "$FUNCNAME"
+    }
+
+oldspan () {
+    CMD="$CMDBASE --output $INTERNAL_OUTPUT --scale 1x1 --primary --mode $INTERNAL_OUTPUT_MODE --pos 0x0"
+    NEIGHBOR=$INTERNAL_OUTPUT
+    OFFSET="$(echo $INTERNAL_OUTPUT_MODE | cut -d 'x' -f 1)"
+    for OUTPUT in $ALL_OUTPUTS
+    do
+        eval '
+        case $OUTPUT in
+            $INTERNAL_OUTPUT) : ;; 
+            '$CONNECTED_OUTPUTS') CMD="$CMD --output $OUTPUT --scale 1x1 --auto --pos '$OFFSET'x0" ;;
+            *) : ;;
+        esac'
+    done
+    log_notify "Switch to spanned displays"
+    execute "$FUNCNAME"
+    }
+
+mirror () {
+    CMD="$CMDBASE"
+    for OUTPUT in $ALL_OUTPUTS
+    do
+        eval '
+        case $OUTPUT in
+            $INTERNAL_OUTPUT) CMD="$CMD --output $OUTPUT --primary --mode $INTERNAL_OUTPUT_MODE --pos 0x0 --rotate normal --panning 0x0" ;; 
+            '$CONNECTED_OUTPUTS') CMD="$CMD --output $OUTPUT --mode $INTERNAL_OUTPUT_MODE --same-as $INTERNAL_OUTPUT" ;;
+            *) CMD="$CMD --output $OUTPUT --off" ;;
+        esac'
+    done
+    log_notify "Switch to external mirror of internal display"
+    execute "$FUNCNAME"
+    }
+
+backlight () {
+    case ${1:-} in
+        u*|i*|+)    xbacklight + 20     ;;
+        d*|-)       xbacklight - 20     ;;
+        batt)       xbacklight = 40     ;;
+        ac)         xbacklight = 100    ;;
+        *)          xbacklight = 100    ;;
+    esac
+
+}
+
+main $*
+
+# vim: ft=sh:expandtab:ts=4:shiftwidth=4

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+menu="copy mail mailbee chatbee throw"
+
+(for item in $menu; do echo $item; done) | $HOME/bin/wm/menu

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+feh --bg-fill ~/Dropbox/Wallpapers/division.jpg &
