@@ -132,3 +132,7 @@
 	pushInsteadOf = "git://gist.github.com/"
 [url "git://gist.github.com/"]
 	insteadOf = "gist:"
+[magit]
+	hideCampaign = true
+[user]
+	signingkey = 30935F90C5FF3DEF

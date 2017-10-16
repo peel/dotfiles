@@ -26,10 +26,11 @@
     chunkwm.ffm
     chunkwm.border
     chunkwm.tiling
+    # chunkwm.blur
     khd
     less
     #pythonPackages.mycli
-    ngrok
+    #ngrok
     nixUnstable
     nix-repl
     #nodejs

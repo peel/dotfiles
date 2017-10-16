@@ -31,6 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     nginx
       bibtex
       (colors :variables
               colors-enable-nyan-cat-progress-bar t
@@ -48,7 +49,8 @@ values."
       html
       javascript
       (org :variables
-            org-enable-bootstrap-support t)
+           org-enable-bootstrap-support t
+           org-projectile-file "TODO.org")
       osx
       nixos
       pdf-tools
@@ -349,6 +351,8 @@ you should place your code here."
   (golden-ratio-mode)
   ;; (global-wakatime-mode)
   (indent-guide-global-mode)
+  (spacemacs/toggle-mode-line-battery-on)
+  (spacemacs/toggle-transparency)
 
   ;; magit github helm integration
   (use-package magithub
@@ -373,6 +377,9 @@ you should place your code here."
   (setq endless/blog-base-url "https://codearsonist.com/")
   (setq endless/blog-dir (expand-file-name "~/Dropbox/Documents/notes/blog/"))
 
+  (add-to-list 'load-path "~/.spacemacs.d/scalafmt/")
+  (require 'scalafmt)
+  (setq ensime-startup-notification nil)
 
   ;; ligatures
   (load "~/.spacemacs.d/pragpro.el")
@@ -397,6 +404,11 @@ you should place your code here."
        (dot        . t)
        )))
 
+  ;; autoload todos to agenda
+  (with-eval-after-load 'org-agenda
+    (require 'org-projectile)
+    (push (org-projectile:todo-files) org-agenda-files))
+
   ;;papers
   (with-eval-after-load 'org
     (setq org-ref-notes-directory "~/Dropbox/Documents/notes/reading"
@@ -419,9 +431,10 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
    ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
+ '(magit-diff-section-arguments (quote ("--no-ext-diff")))
  '(package-selected-packages
    (quote
-    (ido-vertical-mode flx anzu goto-chg bind-map epl bind-key spacemacs-theme powerline org-category-capture org-plus-contrib org projectile diminish packed avy highlight iedit smartparens f evil undo-tree helm helm-core dash async hydra s speed-type tern purescript-mode dash-functional pdf-tools key-chord ivy tablist alert log4e gntp restclient ghub+ apiwrap ghub skewer-mode simple-httpd json-snatcher json-reformat multiple-cursors js2-mode nixos-options helm-bibtex parsebib haml-mode gitignore-mode fringe-helper git-gutter+ git-gutter gh marshal logito pcache ht pos-tip flycheck magit magit-popup git-commit with-editor yasnippet sbt-mode scala-mode ghc haskell-mode biblio biblio-core company elixir-mode define-word yaml-mode xterm-color ws-butler winum which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit sql-indent spaceline smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder restclient-helm restart-emacs rainbow-mode rainbow-identifiers rainbow-delimiters pug-mode psci psc-ide popwin persp-mode pcre2el pbcopy paradox ox-twbs osx-trash osx-dictionary orgit org-ref org-projectile org-present org-pomodoro org-download org-bullets open-junk-file ob-restclient ob-http ob-elixir noflet nix-mode neotree multi-term move-text magithub magit-gitflow magit-gh-pulls macrostep lorem-ipsum livid-mode linum-relative link-hint less-css-mode launchctl json-mode js2-refactor js-doc intero interleave insert-shebang info+ indent-guide hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-nixos-options helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-dash helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets graphviz-dot-mode gotham-theme google-translate golden-ratio gnuplot github-search github-clone github-browse-file gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gist fuzzy flycheck-pos-tip flycheck-mix flycheck-haskell flycheck-credo flx-ido fish-mode fill-column-indicator fasd fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help ensime emmet-mode elisp-slime-nav dumb-jump diff-hl deft dash-at-point company-web company-tern company-statistics company-shell company-restclient company-nixos-options company-ghci company-ghc company-cabal column-enforce-mode color-identifiers-mode coffee-mode cmm-mode clean-aindent-mode auto-yasnippet auto-highlight-symbol auto-compile alchemist aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+    (nginx-mode ido-vertical-mode flx anzu goto-chg bind-map epl bind-key spacemacs-theme powerline org-category-capture org-plus-contrib org projectile diminish packed avy highlight iedit smartparens f evil undo-tree helm helm-core dash async hydra s speed-type tern purescript-mode dash-functional pdf-tools key-chord ivy tablist alert log4e gntp restclient ghub+ apiwrap ghub skewer-mode simple-httpd json-snatcher json-reformat multiple-cursors js2-mode nixos-options helm-bibtex parsebib haml-mode gitignore-mode fringe-helper git-gutter+ git-gutter gh marshal logito pcache ht pos-tip flycheck magit magit-popup git-commit with-editor yasnippet sbt-mode scala-mode ghc haskell-mode biblio biblio-core company elixir-mode define-word yaml-mode xterm-color ws-butler winum which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit sql-indent spaceline smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder restclient-helm restart-emacs rainbow-mode rainbow-identifiers rainbow-delimiters pug-mode psci psc-ide popwin persp-mode pcre2el pbcopy paradox ox-twbs osx-trash osx-dictionary orgit org-ref org-projectile org-present org-pomodoro org-download org-bullets open-junk-file ob-restclient ob-http ob-elixir noflet nix-mode neotree multi-term move-text magithub magit-gitflow magit-gh-pulls macrostep lorem-ipsum livid-mode linum-relative link-hint less-css-mode launchctl json-mode js2-refactor js-doc intero interleave insert-shebang info+ indent-guide hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-nixos-options helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-dash helm-css-scss helm-company helm-c-yasnippet helm-ag haskell-snippets graphviz-dot-mode gotham-theme google-translate golden-ratio gnuplot github-search github-clone github-browse-file gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gist fuzzy flycheck-pos-tip flycheck-mix flycheck-haskell flycheck-credo flx-ido fish-mode fill-column-indicator fasd fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help ensime emmet-mode elisp-slime-nav dumb-jump diff-hl deft dash-at-point company-web company-tern company-statistics company-shell company-restclient company-nixos-options company-ghci company-ghc company-cabal column-enforce-mode color-identifiers-mode coffee-mode cmm-mode clean-aindent-mode auto-yasnippet auto-highlight-symbol auto-compile alchemist aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

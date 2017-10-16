@@ -19,6 +19,7 @@
   services.chunkwm.enable = true;
   services.chunkwm.package = pkgs.chunkwm.core;
   services.chunkwm.extraConfig = ''
+    chunkc set 2_desktop_mode                bsp
     chunkc tiling::rule --owner Emacs --state tile
     chunkc tiling::rule --owner Emacs.* --state tile
     chunkc tiling::rule --owner .*Emacs --state tile

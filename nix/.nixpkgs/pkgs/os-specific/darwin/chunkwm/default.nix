@@ -1,8 +1,13 @@
-{ pkgs, stdenv, fetchFromGitHub, Carbon, Cocoa, ApplicationServices }:
+{ pkgs, stdenv, fetchFromGitHub, Carbon, Cocoa, ApplicationServices, imagemagick }:
 
 let
-    repoV = "0.2.31";
-    repoSha = "1h3phbj8hw6m45p1nrmnmma3bsrhg8614an9pqdzk49k35i83a35";
+    repoName = "chunkwm";
+    repoV = "0.2.33";
+    repoSha = "1whsp8cl00facspmvrmiw7zanrk75ixh287c4xhia9h9w3dsjcv6";
+    blurRepoOwner =  "splintah";
+    blurRepoName = "blur";
+    blurRepoV = "0.1.3";
+    blurRepoSha = "0lvywxrvyk1s9f0k3j9p7jbl6mnb0vzscdnz76glnkzcvqwc97ip";
 in
 stdenv.mkDerivation rec {
 
@@ -27,7 +32,7 @@ stdenv.mkDerivation rec {
           version = repoV;
           sha256 = repoSha;
         };
-      inherit Carbon Cocoa ApplicationServices;
+    inherit Carbon Cocoa ApplicationServices;
     };
 
     tiling = pkgs.callPackage ./plugin.nix {
@@ -38,11 +43,21 @@ stdenv.mkDerivation rec {
       inherit Carbon Cocoa ApplicationServices;
     };
 
-    transparency = pkgs.callPackage ./plugin.nix {
-      cfg = { name = "transparency";
+    bar = pkgs.callPackage ./plugin.nix {
+      cfg = { name = "bar";
           version = repoV;
           sha256 = repoSha;
         };
       inherit Carbon Cocoa ApplicationServices;
     };
+
+    # blur = pkgs.callPackage ./plugin.nix {
+    #   cfg = { name = "blur";
+    #       owner = blurRepoOwner;
+    #       repo = blurRepoName;
+    #       version = blurRepoV;
+    #       sha256 = blurRepoSha;
+    #     };
+    #   inherit Carbon Cocoa ApplicationServices imagemagick;
+    # };
 }

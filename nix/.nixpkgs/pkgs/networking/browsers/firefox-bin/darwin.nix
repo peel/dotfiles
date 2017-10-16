@@ -5,12 +5,12 @@ let
 in
 stdenv.mkDerivation rec {
   name = "${lib.toLower appName}-darwin-${version}";
-  version = "55.0b6";
+  version = "57.0b7";
   dlName = name;
 
   src = fetchurl {
-    url =  "https://archive.mozilla.org/pub/firefox/releases/55.0b6/mac/en-US/Firefox%2055.0b6.dmg";
-    sha256 = "01w0ssjl00095rcbrbbv4fz1vhcbcmg1n08p74xfqpngbgda8lxa";
+    url =  "https://archive.mozilla.org/pub/firefox/releases/57.0b7/mac/en-US/Firefox%2057.0b7.dmg";
+    sha256 = "0g2n46j3xai2xxay4h3mkbjjy5rhqhh5l6jg59h61bvbzmnvxgah";
     name = "${ dlName }.dmg";
   };
 

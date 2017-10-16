@@ -19,7 +19,8 @@ with nixpkgs;
     firefox-bin = pkgs.callPackage ./pkgs/networking/browsers/firefox-bin/darwin.nix {};
     hoverfly = pkgs.callPackage ./pkgs/development/tools/hoverfly {};
     chunkwm = pkgs.callPackage ./pkgs/os-specific/darwin/chunkwm/default.nix {
-        inherit (pkgs.darwin.apple_sdk.frameworks) Carbon Cocoa ApplicationServices;
+      inherit (pkgs.darwin.apple_sdk.frameworks) Carbon Cocoa ApplicationServices;
+      imagemagick = pkgs.imagemagick;
     };
     weechat = pkgs.weechat.override {
       extraBuildInputs = [ pkgs.python27Packages.websocket_client ];

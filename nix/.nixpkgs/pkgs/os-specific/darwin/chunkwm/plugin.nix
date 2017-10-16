@@ -1,17 +1,21 @@
-{ cfg, stdenv, fetchFromGitHub, Carbon, Cocoa, ApplicationServices }:
+{ cfg, stdenv, fetchFromGitHub, Carbon, Cocoa, ApplicationServices, imagemagick ? null}:
 
+let
+  repoName = cfg.repo or "chunkwm";
+  repoOwner = cfg.owner or "koekeishiya";
+in
 stdenv.mkDerivation rec {
   name = "${cfg.name}-${cfg.version}";
   version = "${cfg.version}";
 
   src = fetchFromGitHub {
-    owner = "koekeishiya";
-    repo = "chunkwm";
+    owner = repoOwner;
+    repo = repoName;
     rev = "v${cfg.version}";
     sha256 = "${cfg.sha256}";
   };
 
-  buildInputs = [ Carbon Cocoa ApplicationServices ];
+  buildInputs = [ Carbon Cocoa ApplicationServices ] ++ [ imagemagick ];
 
   buildPhase = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -F/System/Library/Frameworks"
@@ -26,8 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A ChunkWM plugin for ${cfg.name}";
-    homepage = https://github.com/koekeishiya/chunkwm;
-    downloadPage = https://github.com/koekeishiya/chunkwm/releases;
+    homepage = "https://github.com/${repoOwner}/${repoName}";
+    downloadPage = "https://github.com/${repoOwner}/${repoName}/releases";
     platforms = platforms.darwin;
     maintainers = with maintainers; [ peel ];
     license = licenses.mit;
