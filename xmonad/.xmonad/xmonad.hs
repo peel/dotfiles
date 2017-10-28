@@ -400,6 +400,7 @@ myStatusBar         = "xmobar -x0 /home/peel/.xmonad/xmobar.conf"
 --myLauncher          = "dmenu_run"
 --myLauncher          = "rofi -matching fuzzy -show run"
 myLauncher          = "rofi -matching fuzzy -modi combi -show combi -combi-modi run,drun"
+myNetwork           = "/home/peel/bin/wm/rofi-wifi-menu/rofi-wifi-menu.sh"
 
 
 -- I'm using a custom browser launching script (see myBrowser above) that
@@ -1215,7 +1216,7 @@ myKeys conf = let
     , ("<XF86AudioLowerVolume>" , addName "Volume down"                     $ lowerVolume 10 >> return ())
     , ("<XF86AudioRaiseVolume>" , addName "Volume up"                       $ raiseVolume 10 >> return ())
     , ("<XF86AudioMute>"        , addName "Toggle volume"                   $ toggleMute    >> return ())
-    , ("M-i"                    , addName "Network (Interface) launcher"    $ spawn "nmcli_dmenu")
+    , ("M-i"                    , addName "Network (Interface) launcher"    $ spawn myNetwork)
     , ("M-/"                    , addName "On-screen keys"                  $ spawn "killall screenkey &>/dev/null || screenkey --no-systray")
     , ("M-S-/"                  , addName "On-screen keys settings"         $ spawn "screenkey --show-settings")
     , ("M1-p"                   , addName "Capture screen"                  $ spawn "screenshot" )
@@ -1500,12 +1501,12 @@ myStartupHook = do
     -- init-tilingwm sets up all major "desktop environment" like components
     -- spawnOnce "$HOME/bin/wm/init-tilingwm"
     -- spawn "/home/peel/bin/wm/init-tilingwm"
-    spawn "/home/peel/bin/wm/init-wallpaper"
+    spawn "$HOME/bin/wm/init-wallpaper"
 
     -- init-tray kills and restarts stalone tray, hence just "spawn" so it
     -- runs on restart and will suffice to reposition tray on display changes
     -- TODO: evaluate moving to a "restart tray only" option on display change
-    -- spawn     "$HOME/bin/wm/init-tray"
+    spawn     "$HOME/bin/wm/init-tray"
 
     setDefaultCursor xC_left_ptr
 

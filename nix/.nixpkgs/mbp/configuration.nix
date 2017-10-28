@@ -48,8 +48,8 @@ in
   nix.binaryCaches = [ https://cache.nixos.org ];
 
   networking.hostName = hostName;
-  networking.networkmanager.enable = lib.mkForce true;
-  networking.wireless.enable = lib.mkForce false;
+  networking.networkmanager.enable = true;
+  networking.wireless.enable = false;
   networking.firewall.enable = true;
 
   hardware = {
@@ -136,17 +136,23 @@ in
     feh
     stalonetray
     blueman
-    networkmanagerapplet
+    # networkmanagerapplet
     scrot
     xclip xsel
     acpi
     htop
     powertop
+    wirelesstools
     #lm_sensors
     rofi
     dunst
     lightum
     iw
+    autorandr
+    xfce.thunar
+    xfce.thunar-dropbox-plugin
+    xfce.thunar-archive-plugin
+    xfce.thunar_volman
     zeal
     #xorg.xbacklight
     # xlibs.xev
@@ -176,7 +182,7 @@ in
 
     urxvt
     #dropbox
-    firefox
+    firefox-beta-bin
     keybase
     keybase-gui
 
@@ -190,6 +196,7 @@ in
   programs.light.enable = true;
   services.tlp.enable = true;
   services.thermald.enable = true;
+  services.acpid.enable = true;
 
   # services.openssh.enable = true;
   # services.printing.enable = true;
@@ -304,7 +311,7 @@ in
     fadeDelta = 3;
     shadow = true;
     shadowOffsets = [ (-8) (-8) ];
-    shadowOpacity = ".5";
+    # shadowOpacity = ".5";
     fadeSteps = ["0.25" "0.25"];
     vSync = "opengl-swc";
     extraOptions = ''
@@ -349,6 +356,8 @@ in
     enable = true;
     extensionPackages = [ pkgs.mopidy-local-sqlite pkgs.mopidy-spotify pkgs.mopidy-iris ];
   };
+
+  services.emacs.enable = true;
 
   nixpkgs.config.packageOverrides = pkgs : rec {
     rofi = import ./rofi/rofi.nix { inherit pkgs; terminal = "urxvt"; };

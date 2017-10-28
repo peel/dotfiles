@@ -1,3 +1,4 @@
 #!/bin/sh
 
-feh --bg-fill ~/Dropbox/Wallpapers/division.jpg &
+curl -L -o /tmp/wallpaper.jpg https://source.unsplash.com/random/3840x2160
+feh --bg-fill /tmp/wallpaper.jpg &
