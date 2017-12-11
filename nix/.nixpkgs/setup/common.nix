@@ -2,6 +2,7 @@
 
 {
   environment.variables.EDITOR = "emacsclient -tc";
+  environment.variables.fish_key_bindings = "fish_vi_key_bindings";
   environment.etc."per-user/peel/editorconfig".text = ''
     # top-most EditorConfig file
     root = true
@@ -319,6 +320,9 @@
     #kubernetes
     kk = "kubectl config use-context";
     kc = "kubectl config current-context";
+
+    #pass
+    pass = "${pkgs.gopass}/bin/gopass";
   };
   programs.fish.enable = true;
   programs.tmux.enable = true;

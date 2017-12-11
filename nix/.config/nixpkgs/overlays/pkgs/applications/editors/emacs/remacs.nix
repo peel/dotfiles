@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Wilfred";
     repo = "remacs";
-    rev = "85a2137e4c503e6881f8d4d15a8a25a502a5ac3f";
-    sha256 = "11q9iivxav5c71zzpagi2aax4fqichm5303iz31r5kjj9fzg1h6d";
+    rev = "d09122ed6e48c62da9395b7da813f16c7ea84fd7";
+    sha256 = "0i9633y9v2ml4z2d8sx5gs655fjmzac9ywq1wspkmrphysvbv9lk";
   };
 
   enableParallelBuilding = true;

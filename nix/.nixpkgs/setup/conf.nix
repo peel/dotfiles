@@ -324,7 +324,7 @@
   programs.fish.enable = true;
   programs.fish.variables.cfg = "$HOME/.nixpkgs/darwin-configuration.nix";
   programs.fish.variables.darwin = "$HOME/.nix-defexpr/darwin";
-  programs.fish.variables.pkgs = "$HOME/.nix-defexpr/channels/nixpkgs";
+  programs.fish.variables.pkgs = "$HOME/.nix-defexpr/nixpkgs";
   programs.fish.variables.fish_key_bindings = "fish_vi_key_bindings";
   programs.tmux.enable = true;
   programs.tmux.enableSensible = true;

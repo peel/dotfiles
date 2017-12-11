@@ -8,7 +8,7 @@
     ##diff-so-fancy
     #elixir
     #elmPackages.elm
-    remacs
+    emacs
     #erlang
     fasd
     firefox-bin
@@ -19,6 +19,8 @@
     gitAndTools.hub
     graphviz
     gnumake
+    gnupg
+    gopass
     httpie
     hoverfly
     jq

@@ -2,7 +2,7 @@
 
 let
     repoName = "chunkwm";
-    repoV = "0.2.33";
+    repoV = "0.2.36";
     repoSha = "1whsp8cl00facspmvrmiw7zanrk75ixh287c4xhia9h9w3dsjcv6";
     blurRepoOwner =  "splintah";
     blurRepoName = "blur";
@@ -37,6 +37,14 @@ stdenv.mkDerivation rec {
 
     tiling = pkgs.callPackage ./plugin.nix {
       cfg = { name = "tiling";
+          version = repoV;
+          sha256 = repoSha;
+        };
+      inherit Carbon Cocoa ApplicationServices;
+    };
+
+    purify = pkgs.callPackage ./plugin.nix {
+      cfg = { name = "purify";
           version = repoV;
           sha256 = repoSha;
         };

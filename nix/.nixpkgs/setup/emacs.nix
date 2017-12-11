@@ -2,9 +2,7 @@
 
 {
   environment.systemPackages = with pkgs; [
-    remacs
+    emacs
   ];
   services.emacs.enable = true;
-  services.emacs.package = pkgs.remacs;
-  services.emacs.exec = "remacs";
 }
