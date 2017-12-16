@@ -2,7 +2,7 @@
   "Run scalafmt on the current file"
   (interactive)
   (let ((default-directory (projectile-project-root))
-        (scalafmt-cmd (format "scalafmt -i -f %s"
+        (scalafmt-cmd (format "/usr/bin/env scalafmt -i -f %s"
                               (shell-quote-argument (buffer-file-name)))))
     (message "Running %s..." scalafmt-cmd)
     (shell-command scalafmt-cmd)

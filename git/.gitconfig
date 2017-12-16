@@ -132,3 +132,14 @@
 	pushInsteadOf = "git://gist.github.com/"
 [url "git://gist.github.com/"]
 	insteadOf = "gist:"
+[magit]
+	hideCampaign = true
+[user]
+	signingkey = 30935F90C5FF3DEF
+[gpg]
+	program = /usr/local/bin/gpg
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f

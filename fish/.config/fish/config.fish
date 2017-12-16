@@ -13,13 +13,9 @@ set -g fish_key_bindings fish_vi_key_bindings
 # aliases
 each 'source $_1' (ls $fish/aliases/*)
 
-set PATH $PATH $HOME/.bin/
-
 # nix
 if test -e $HOME/.nix-profile
-  set -x PATH $PATH $HOME/.nix-profile/bin /run/current-system/sw/bin
-  set -x NIX_PATH darwin=/Users/peel/.nix-defexpr/darwin:darwin-config=/Users/peel/.nixpkgs/darwin-configuration.nix:nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixpkgs:/nix/var/nix/profiles/per-user/root/channels
-  set -x SSL_CERT_FILE $HOME/.nix-profile/etc/ssl/certs/ca-bundle.crt
+  source /etc/fish/config.fish
 end
 
 # homebrew
