@@ -29,7 +29,7 @@ green=#859900
 # full (full internet connectivity)
 # unknown
 
-std_color=$magenta
+std_color=$base2
 wifi_icon=""
 
 connectivity="$(nmcli networking connectivity)"

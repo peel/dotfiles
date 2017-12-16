@@ -396,11 +396,11 @@ myTerminal          = "urxvt"
 myAltTerminal       = "cool-retro-term"
 myBrowser           = "browser" -- chrome with WS profile dirs
 myBrowserClass      = "firefox"
-myStatusBar         = "xmobar -x0 /home/peel/.xmonad/xmobar.conf"
+myStatusBar         = "xmobar -x0 $HOME/.xmonad/xmobar.conf"
 --myLauncher          = "dmenu_run"
 --myLauncher          = "rofi -matching fuzzy -show run"
 myLauncher          = "rofi -matching fuzzy -modi combi -show combi -combi-modi run,drun"
-myNetwork           = "/home/peel/bin/wm/rofi-wifi-menu/rofi-wifi-menu.sh"
+myNetwork           = "$HOME/bin/wm/rofi-wifi-menu/rofi-wifi-menu.sh"
 
 
 -- I'm using a custom browser launching script (see myBrowser above) that
@@ -1213,9 +1213,9 @@ myKeys conf = let
     , ("M-o"                    , addName "Display (output) launcher"       $ spawn "displayctl menu")
     , ("M-<XF86Display>"        , addName "Display - force internal"        $ spawn "displayctl internal")
     , ("S-<XF86Display>"        , addName "Display - force internal"        $ spawn "displayctl internal")
-    , ("<XF86AudioLowerVolume>" , addName "Volume down"                     $ lowerVolume 10 >> return ())
-    , ("<XF86AudioRaiseVolume>" , addName "Volume up"                       $ raiseVolume 10 >> return ())
-    , ("<XF86AudioMute>"        , addName "Toggle volume"                   $ toggleMute    >> return ())
+    -- , ("<XF86AudioLowerVolume>" , addName "Volume down"                     $ lowerVolume 10 >> return ())
+    -- , ("<XF86AudioRaiseVolume>" , addName "Volume up"                       $ raiseVolume 10 >> return ())
+    -- , ("<XF86AudioMute>"        , addName "Toggle volume"                   $ toggleMute    >> return ())
     , ("M-i"                    , addName "Network (Interface) launcher"    $ spawn myNetwork)
     , ("M-/"                    , addName "On-screen keys"                  $ spawn "killall screenkey &>/dev/null || screenkey --no-systray")
     , ("M-S-/"                  , addName "On-screen keys settings"         $ spawn "screenkey --show-settings")

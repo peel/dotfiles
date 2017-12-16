@@ -99,7 +99,7 @@ in
 
   time.timeZone = "Europe/Warsaw";
 
-  environment.variables.NO_AT_BRIDGE = "1";
+  # environment.variables.NO_AT_BRIDGE = "1";
   environment.systemPackages = with pkgs; [
     gitFull
     gitAndTools.hub
@@ -114,6 +114,7 @@ in
     #erlang
     fasd
     gist
+    gopass
     graphviz
     jq
     nix-repl
@@ -182,7 +183,7 @@ in
 
     urxvt
     #dropbox
-    firefox-beta-bin
+    firefox
     keybase
     keybase-gui
 
@@ -358,6 +359,41 @@ in
   };
 
   services.emacs.enable = true;
+
+  systemd.user.services."dunst" = {
+      enable = true;
+      description = "";
+      wantedBy = [ "default.target" ];
+      serviceConfig.Restart = "always";
+      serviceConfig.RestartSec = 2;
+      serviceConfig.ExecStart = "${pkgs.dunst}/bin/dunst";
+  };
+
+  systemd.user.services."autocutsel" = {
+    enable = true;
+    description = "AutoCutSel";
+    wantedBy = [ "default.target" ];
+    serviceConfig.Type = "forking";
+    serviceConfig.Restart = "always";
+    serviceConfig.RestartSec = 2;
+    serviceConfig.ExecStartPre = "${pkgs.autocutsel}/bin/autocutsel -fork";
+    serviceConfig.ExecStart = "${pkgs.autocutsel}/bin/autocutsel -selection PRIMARY -fork";
+  };
+
+  systemd.user.services."udiskie" = {
+    enable = true;
+    description = "udiskie to automount removable media";
+    wantedBy = [ "default.target" ];
+    path = with pkgs; [
+      gnome3.defaultIconTheme
+      gnome3.gnome_themes_standard
+      pythonPackages.udiskie
+    ];
+    environment.XDG_DATA_DIRS="${pkgs.gnome3.defaultIconTheme}/share:${pkgs.gnome3.gnome_themes_standard}/share";
+    serviceConfig.Restart = "always";
+    serviceConfig.RestartSec = 2;
+    serviceConfig.ExecStart = "${pkgs.python27Packages.udiskie}/bin/udiskie -a -t -n -F ";
+  };
 
   nixpkgs.config.packageOverrides = pkgs : rec {
     rofi = import ./rofi/rofi.nix { inherit pkgs; terminal = "urxvt"; };

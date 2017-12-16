@@ -17,7 +17,7 @@ blue=#268bd2
 cyan=#2aa198
 green=#859900
 
-color=$cyan
+color=$base2
 volume="$(amixer sget Master | grep 'Front Left')"
 if [ "${volume}" = "${volume%\[off\]*}" ]
 then
