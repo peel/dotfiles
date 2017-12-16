@@ -323,6 +323,7 @@
 
     #pass
     pass = "${pkgs.gopass}/bin/gopass";
+    vim = "${pkgs.emacs}/bin/emacsclient -n";
   };
   programs.fish.enable = true;
   programs.tmux.enable = true;
