@@ -30,6 +30,24 @@ in rec {
     macportSrc = null;
   });
   emacs = (if super.stdenv.isDarwin then emacs25Macport else super.emacs);
+  inherit (super.callPackage ./pkgs/misc/uboot {})
+    buildUBoot
+    ubootTools
+    ubootA20OlinuxinoLime
+    ubootBananaPi
+    ubootBeagleboneBlack
+    ubootJetsonTK1
+    ubootOdroidXU3
+    ubootOrangePiPc
+    ubootOrangePiPlusZero2
+    ubootPcduino3Nano
+    ubootRaspberryPi
+    ubootRaspberryPi2
+    ubootRaspberryPi3_32bit
+    ubootRaspberryPi3_64bit
+    ubootUtilite
+    ubootWandboard
+    ;
   # remacs = super.callPackage ./pkgs/applications/editors/emacs/remacs.nix {
   #   rust = super.latest.rustChannels.nightly.rust;
   #   inherit (darwin.apple_sdk.frameworks)

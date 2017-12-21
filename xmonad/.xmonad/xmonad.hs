@@ -401,6 +401,7 @@ myStatusBar         = "xmobar -x0 $HOME/.xmonad/xmobar.conf"
 --myLauncher          = "rofi -matching fuzzy -show run"
 myLauncher          = "rofi -matching fuzzy -modi combi -show combi -combi-modi run,drun"
 myNetwork           = "$HOME/bin/wm/rofi-wifi-menu/rofi-wifi-menu.sh"
+myPasswordManager   = "gopass ls --flat | rofi -dmenu | xargs --no-run-if-empty gopass show -c"
 
 
 -- I'm using a custom browser launching script (see myBrowser above) that
@@ -431,8 +432,8 @@ hangoutsResource    = "crx_nckgahadagoaajjgafhacjanaoiihapd"
 isHangoutsFor s     = (className =? myBrowserClass
                       <&&> fmap (isPrefixOf hangoutsPrefix) title
                       <&&> fmap (isInfixOf s) title)
-isPersonalHangouts  = isHangoutsFor "peelschoonover"
-isWorkHangouts      = isHangoutsFor "eschoonover"
+isPersonalHangouts  = isHangoutsFor "peel"
+isWorkHangouts      = isHangoutsFor "limanowski"
 
 -- TODO: change this to a lookup for all workspaces
 trelloCommand       = "dex $HOME/.local/share/applications/Trello.desktop"
@@ -1209,8 +1210,8 @@ myKeys conf = let
     subKeys "Actions"
     [ ("M-a"                    , addName "Notify w current X selection"    $ unsafeWithSelection "notify-send")
   --, ("M-7"                    , addName "TESTING"                         $ runInTerm "-name glances" "glances" )
-    , ("M-u"                    , addName "Copy current browser URL"        $ spawn "with-url copy")
-    , ("M-o"                    , addName "Display (output) launcher"       $ spawn "displayctl menu")
+    -- , ("M-u"                    , addName "Copy current browser URL"        $ spawn "with-url copy")
+    -- , ("M-o"                    , addName "Display (output) launcher"       $ spawn "displayctl menu")
     , ("M-<XF86Display>"        , addName "Display - force internal"        $ spawn "displayctl internal")
     , ("S-<XF86Display>"        , addName "Display - force internal"        $ spawn "displayctl internal")
     -- , ("<XF86AudioLowerVolume>" , addName "Volume down"                     $ lowerVolume 10 >> return ())
@@ -1230,6 +1231,7 @@ myKeys conf = let
     -----------------------------------------------------------------------
     subKeys "Launchers"
     [ ("M-<Space>"              , addName "Launcher"                        $ spawn myLauncher)
+    , ("M-u"                    , addName "Password Manager"                $ spawn myPasswordManager)
     , ("M-<Return>"             , addName "Terminal"                        $ spawn myTerminal)
     , ("M-\\"                   , addName "Browser"                         $ spawn myBrowser)
     , ("M-c"                    , addName "NSP Chat"                        $ bindOn WS [(wsWRK, namedScratchpadAction scratchpads "hangoutsWork"),
@@ -1507,6 +1509,9 @@ myStartupHook = do
     -- runs on restart and will suffice to reposition tray on display changes
     -- TODO: evaluate moving to a "restart tray only" option on display change
     spawn     "$HOME/bin/wm/init-tray"
+
+    spawn     "xfce4-power-manager &"
+    spawn     "$HOME/.screenlayout/home.sh"
 
     setDefaultCursor xC_left_ptr
 

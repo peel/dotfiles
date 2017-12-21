@@ -321,11 +321,16 @@
     kk = "kubectl config use-context";
     kc = "kubectl config current-context";
 
-    #pass
+    # nix
+    ne = "nix-env";
+    neg = "ne -qaP | grep";
+    ns = "nix-shell";
+    nr = "sudo nixos-rebuild";
+
     pass = "${pkgs.gopass}/bin/gopass";
     vim = "${pkgs.emacs}/bin/emacsclient -n";
+    r = "${pkgs.ranger}/bin/ranger";
   };
   programs.fish.enable = true;
   programs.tmux.enable = true;
-  services.mopidy.enable = true;
 }
