@@ -11,6 +11,7 @@ in
       ./hardware-configuration.nix
       ./setup/common.nix
       ./setup/nixos.nix
+      ./setup/packages.nix
       gtk2-theme
     ];
 
@@ -97,105 +98,6 @@ in
   time.timeZone = "Europe/Warsaw";
 
   # environment.variables.NO_AT_BRIDGE = "1";
-  environment.systemPackages = with pkgs; [
-    gitFull
-    gitAndTools.hub
-    stow
-
-    autojump
-    aspell
-    curl
-    #elixir
-    #elmPackages.elm
-    emacs
-    #erlang
-    fasd
-    gist
-    gnupg
-    gopass
-    graphviz
-    jq
-    nix-repl
-    openjdk
-    ranger
-    sbt
-    awscli
-    docker
-    docker_compose
-    #transmission
-    weechat
-
-    haskellPackages.ghc
-    haskellPackages.cabal-install
-    haskellPackages.stack
-    haskellPackages.xmobar
-    haskellPackages.xmonad
-    haskellPackages.xmonad-contrib
-    haskellPackages.xmonad-extras
-    haskellPackages.yeganesh
-    cabal2nix
-
-    feh
-    stalonetray
-    blueman
-    scrot
-    xclip xsel
-    acpi
-    htop
-    powertop
-    libnotify
-    wirelesstools
-    #lm_sensors
-    rofi
-    dunst
-    lightum
-    iw
-    autorandr
-    arandr
-    xfce.thunar
-    xfce.thunar-dropbox-plugin
-    xfce.thunar-archive-plugin
-    xfce.thunar_volman
-    xfce.xfce4_power_manager
-    zeal
-    bluez
-    #xorg.xbacklight
-    # xlibs.xev
-    # xlibs.xkill
-    # xorg.xmessage
-    # xlibs.xmodmap
-    # xlibs.xset
-    # xlibs.xwininfo
-    xorg.libXrandr
-    xorg.xbacklight
-    xorg.xf86inputkeyboard
-    # xorg.xmodmap
-
-    # gtk-engine-murrine
-    # gtk_engines
-    # arc-gtk-theme
-    # # numix-gtk-theme
-    # # numix-icon-theme
-    # # numix-icon-theme-circle
-    # # hicolor_icon_theme
-    # # gnome.gnomeicontheme
-    # elementary-icon-theme
-
-    # lockScreen
-    # comptonStart
-    # comptonToggle
-
-    urxvt
-    #dropbox
-    firefox
-    spotify
-    keybase
-    keybase-gui
-
-    unclutter-xfixes
-
-  ];
-
 
   powerManagement.enable = true;
 

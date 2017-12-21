@@ -1,96 +1,86 @@
 { config, pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
-    autojump
     aspell
-    coreutils
+    autojump
+    awscli
     curl
-    ##diff-so-fancy
-    #elixir
-    #elmPackages.elm
+    docker
+    docker_compose
     emacs
-    #erlang
     fasd
-    firefox-bin
     fish
     gawk
     gist
-    git
     gitAndTools.hub
-    graphviz
+    gitFull
     gnumake
     gnupg
     gopass
-    httpie
+    graphviz
     hoverfly
+    httpie
     jq
-    chunkwm.core
-    chunkwm.ffm
-    chunkwm.border
-    chunkwm.tiling
-    # chunkwm.blur
-    khd
-    less
-    #pythonPackages.mycli
-    #ngrok
-    nixUnstable
     nix-repl
-    #nodejs
-    #nox
-    #openjdk
-    parallel
+    nixUnstable
+    openjdk
     purescript
     ranger
-    #sbt
-    #scala
-    #scalafmt
+    sbt
     silver-searcher
-    ##spotify
     stow
-    #tmux #loaded by a service
-    #transmission
-    #vagrant
-    #virtualbox
-    #vlc
-    wakatime
     weechat
-    #xquartz
+  ]
+  ++ lib.optionals stdenv.isLinux [
+    acpi
+    arandr
+    autorandr
+    blueman
+    bluez
+    cabal2nix
+    dunst
+    feh
+    firefox
+    haskellPackages.cabal-install
+    haskellPackages.ghc
+    haskellPackages.stack
+    haskellPackages.xmobar
+    haskellPackages.xmonad
+    haskellPackages.xmonad-contrib
+    haskellPackages.xmonad-extras
+    haskellPackages.yeganesh
+    htop
+    iw
+    keybase
+    keybase-gui
+    libnotify
+    lightum
+    powertop
+    rofi
+    scrot
+    spotify
+    stalonetray
+    unclutter-xfixes
+    urxvt
+    wirelesstools
+    xclip xsel
+    xfce.thunar
+    xfce.thunar-archive-plugin
+    xfce.thunar-dropbox-plugin
+    xfce.thunar_volman
+    xfce.xfce4_power_manager
+    xorg.libXrandr
+    xorg.xbacklight
+    xorg.xf86inputkeyboard
+    zeal
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    chunkwm.border
+    chunkwm.core
+    chunkwm.ffm
+    chunkwm.tiling
+    firefox-bin
+    khd
   ];
 }
 
-# GUI:
-# boom
-# send-to-kindle
-# qnapi
-# spotify
-# Airmail 3
-# Slack
-# Tweetbot
-# Irvue
-# Deckset
-# Pixelmator
-# Affinity Designer
-# rubitrack-pro
-# garmin-express
-# Parcel
-# ubersicht
-# alfred
-# flux
-# istat-menus
-# PopClip
-# iterm2
-# ravenac95/sudolikeaboss/sudolikeaboss
-# tldr
-# dropbox
-# The Unarchiver
-# iridium-extra
-# airvpn
-# dash
-# karabiner-elements
-# razer-synapse
-# awscli
-# concourse/tapfly
-# CCMenu
-# ammonite-repl
-# scalariform
-# scalastyle
