@@ -4,6 +4,7 @@ in rec {
   firefox-bin = super.callPackage ./pkgs/networking/browsers/firefox-bin/darwin.nix {};
   hoverfly = super.callPackage ./pkgs/development/tools/hoverfly {};
   gopass = super.callPackage ./pkgs/tools/security/gopass {};
+  pragmatapro = super.callPackage ./pkgs/data/fonts/pragmatapro {};
   chunkwm = super.callPackage ./pkgs/os-specific/darwin/chunkwm/default.nix {
     inherit (super.darwin.apple_sdk.frameworks) Carbon Cocoa ApplicationServices;
     imagemagick = super.imagemagick;

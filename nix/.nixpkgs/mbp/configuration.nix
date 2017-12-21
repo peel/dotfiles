@@ -1,7 +1,8 @@
-{ config, pkgs, lib, ... }:       # 
+{ config, pkgs, lib, ... }:
 
 let
   wallpaper = pkgs.copyPathToStore ./art/the-technomancer.png;
+  username = "peel";
   hostName = "fff66602";
   gtk2-theme = import ./paper-gtk2-theme.nix pkgs;
 in
@@ -25,13 +26,6 @@ in
     }
   ];
 
-#  boot.kernelPatches = [
-#    { name = "poweroff-fix"; patch = ./patches/kernel/poweroff-fix.patch; }
-#    { name = "hid-apple-keyboard"; patch = ./patches/kernel/hid-apple-keyboard.patch; }
-#  ];
-#  boot.initrd.kernelModules = [
-#    "dm_snapshot"
-#  ];
   boot.cleanTmpDir = true;
   boot.extraModprobeConfig = ''
     #options libata.force=noncq
@@ -44,7 +38,7 @@ in
   '';
 
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = [ (import /home/peel/.config/nixpkgs/overlays/peel.nix) ];
+  nixpkgs.overlays = [ (import (builtins.toPath "/home/${username}/.config/nixpkgs/overlays/${username}.nix")) ];
   nix.useSandbox = true;
   nix.binaryCaches = [ https://cache.nixos.org ];
 
@@ -304,7 +298,7 @@ in
       enable = true;
       background = wallpaper;
       autoLogin.enable = true;
-      autoLogin.user = "peel";
+      autoLogin.user = username;
     };
   };
 
@@ -317,10 +311,10 @@ in
     ALL ALL = (root) NOPASSWD: ${pkgs.systemd}/bin/shutdown
     ALL ALL = (root) NOPASSWD: ${pkgs.systemd}/bin/reboot
   '';
-  users.extraUsers.peel = {
+  users.extraUsers."${username}" = {
     isNormalUser = true;
     uid = 1000;
-    home = "/home/peel";
+    home = builtins.toPath "/home/${username}";
     extraGroups = [
       "wheel"
       "docker"
@@ -459,23 +453,5 @@ in
     urxvt = import ./urxvt/urxvt.nix { inherit pkgs; };
     dunst = import ./dunst/dunst.nix { inherit pkgs; browser = "firefox"; };
     stalonetray = import ./stalonetray/stalonetray.nix { inherit pkgs; };
-    pragmatapro =
-      pkgs.stdenv.mkDerivation rec {
-        version = "0.826";
-        name = "pragmatapro-${version}";
-        src = pkgs.requireFile rec {
-          name = "PragmataPro-${version}.zip";
-          url = "file://path/to/${name}";
-          sha256 = "05r2xkkzgdpcas244yw75g8ifsz3b6ksabsxpa02fx93bz0qf023";
-        };
-        buildInputs = [ pkgs.unzip ];
-        phases = [ "unpackPhase" "installPhase" ];
-        sourceRoot = ".";
-        installPhase = ''
-          install_path=$out/share/fonts/truetype/
-          mkdir -p $install_path
-          find 'Pragmata Pro Family' -name "*.ttf" -exec cp {} $install_path \;
-        '';
-      };
   };
 }

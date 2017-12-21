@@ -1,5 +1,7 @@
 { stdenv, lib, fetchurl, undmg }:
 
+assert stdenv.isDarwin;
+
 let
   appName = "Firefox";
 in
