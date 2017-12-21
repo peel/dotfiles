@@ -1,0 +1,3 @@
+[submodule "rofi-wifi-menu"]
+	path = bin/bin/wm/rofi-wifi-menu
+	url = https://github.com/zbaylin/rofi-wifi-menu.git

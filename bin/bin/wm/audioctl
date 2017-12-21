@@ -1,0 +1,94 @@
+#!/bin/sh
+
+# ----------------------------------------------------------------------
+# audioctl
+#
+# Control basic audio functions such as volume up/down, mute, mic mute
+# and a reset of pulseaudio (rescan) useful when restoring from sleep.
+# ----------------------------------------------------------------------
+
+set -eu
+
+# ----------------------------------------------------------------------
+# Standard Boilerplate
+# ----------------------------------------------------------------------
+# I use this standard boilerplate in multiple scripts where I might
+# need to re-run as the X user. Some items are not necessary in all
+# scripts but I'd rather keep it consistent. In general, the *ctl
+# scripts (audioctl, displayctl) require this as they may be called
+# by udev or acpi and thus by root.
+
+# script values and config file if we need it
+SCRIPTNAME=$(basename $0)
+SCRIPTPATH=$(readlink -f $0)
+SCRIPTDIR=$(dirname $SCRIPTPATH)
+SCRIPTOWNER=$(stat -c '%U' $SCRIPTPATH)
+
+# rerun as X user if running as root
+# ------------------------------------------------------------------------
+# attempt to grab xuser assuming it has been run "normally" via a
+# display manager or startx
+XUSER=$(ps -C Xorg -C X -ouser=)
+# if we are running via xlogin@ systemd service, it will be running
+# as root, so attempt to match based on the script owner
+#[ "$XUSER" = root ] && systemctl is-active xlogin@$SCRIPTOWNER && XUSER=$SCRIPTOWNER
+[ "$XUSER" = root ] && XUSER=$SCRIPTOWNER
+# if at this point our XUSER is not root, restart as the XUSER
+[ "$(id -un)" = root ] && [ "$XUSER" != root ] && exec su -c "$0 $*" "$XUSER"
+
+# grab X user id if necessary
+XUSERID=$(id -u $XUSER)
+
+# key environment variables
+export DISPLAY=":0"
+export XAUTHORITY=$HOME/.Xauthority
+export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$XUSERID/bus"
+export PULSE_RUNTIME_PATH="/run/user/${XUSERID}/pulse/"
+
+CONFIG=/home/$XUSER/.config/$SCRIPTNAME
+
+# ----------------------------------------------------------------------
+# Main
+# ----------------------------------------------------------------------
+main () {
+    case ${1:-} in
+        vol*) shift; volume $*  ;;
+        mic*) shift; mic $*     ;;
+        re*)  rescan            ;;
+    esac
+}
+
+# ----------------------------------------------------------------------
+# Functions
+# ----------------------------------------------------------------------
+# I am brute forcing the volume and mute commands across 10 possible
+# pulseaudio sinks. This is kind of a heavy handed way to deal with it
+# but it's simple and does the job.
+
+rescan () {
+    pacmd unload-module module-udev-detect && pacmd load-module module-udev-detect
+}
+
+volume () {
+    for i in $(seq 0 9)
+    do
+        case ${1:-} in
+            up)     pactl set-sink-volume $i +5%  &>/dev/null || :   ;;
+            down)   pactl set-sink-volume $i -5%  &>/dev/null || :   ;;
+            mute)   pactl set-sink-mute $i toggle &>/dev/null || :   ;;
+        esac
+    done
+}
+
+mic () {
+    for i in $(seq 0 9)
+    do
+        case ${1:-} in
+            mute)   pactl set-source-mute $i toggle &>/dev/null || :   ;;
+        esac
+    done
+}
+
+main $*
+
+# vim: ft=sh:expandtab:ts=4:shiftwidth=4

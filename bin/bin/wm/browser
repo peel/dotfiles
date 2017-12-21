@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# per workspace tag browser instances
+#
+# used so that most of my workpaces get a "default" user directory
+# with my "personal" browser profiles, but specific other workspaces
+# get browser instances of their own based on name (e.g. my "wrk:1 
+# and "wrk:2" workspaces each get the "wrk" browser instance)
+#
+# this script also initializes control ports for each browser instance
+
+BROWSER="google-chrome-beta"
+WSTAG=$(ws)
+WSPORT=$(ws port)
+
+CONFIGDIR=${XDG_CONFIG_HOME:-${HOME}/.config/browser}
+CACHEDIR=${XDG_CACHE_HOME:-${HOME}/.cache/browser}
+
+# make directories if missing, set no COW for btrfs
+[ -d "$CONFIGDIR" ] || { mkdir -p "$CONFIGDIR"; chattr +C "$CONFIGDIR"; }
+[ -d "$CACHEDIR" ] || { mkdir -p "$CACHEDIR"; chattr +C "$CACHEDIR"; }
+
+[ -z "$WSPORT" ]  && REMOTE="" || REMOTE="--remote-debugging-port=$WSPORT"
+[ -z "$WSTAG" ]   && SUFFIX="" || SUFFIX="-$WSTAG"
+[ "$WSTAG" = "incognito" ] && INCOGNITO=" --incognito " || INCOGNITO=""
+
+eval $BROWSER $INCOGNITO --user-data-dir=${CONFIGDIR}/${BROWSER}${SUFFIX} ${REMOTE:-} $* \&

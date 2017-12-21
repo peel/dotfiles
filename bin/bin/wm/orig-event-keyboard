@@ -1,0 +1,44 @@
+#!/bin/sh
+
+#set -eu
+
+# ----------------------------------------------------------------------
+# General
+# ----------------------------------------------------------------------
+
+SCRIPTNAME=$(basename $0)
+SCRIPTDIR=$(dirname $(readlink -f $0))
+USERNAME=$(echo $SCRIPTDIR | sed "s_/home/\([^/]\+\).*_\1_")
+_UID="$(id -u $USERNAME)"
+export DISPLAY=":0"
+export XAUTHORITY=/home/$USERNAME/.Xauthority
+export XKBDIR=/home/$USERNAME/.xkb
+CMD="xkbcomp -w3 -I$XKBDIR $XKBDIR/keymap/custom.xkb $DISPLAY"
+
+# ----------------------------------------------------------------------
+# Lock
+# ----------------------------------------------------------------------
+
+LOCKFILE=/tmp/${SCRIPTNAME}.lock
+[ -f $LOCKFILE ] || touch $LOCKFILE
+[ -f $LOCKFILE ] && chown ${USERNAME}: $LOCKFILE
+exec 200>$LOCKFILE
+flock -n 200 || { (>&2 logger "$SCRIPTNAME already running (locked)"); exit 1; }
+
+# ----------------------------------------------------------------------
+# reinitialize keyboard
+# ----------------------------------------------------------------------
+
+if ((EUID==0))
+then
+    export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$_UID/bus"
+    eval "su $USERNAME -c 'notify-send -u low \""$SCRIPTNAME ${*:-}"\"'"
+    eval "su $USERNAME -c '"$CMD"'"
+    eval "su $USERNAME -c 'notify-send -u low \"NEW "$SCRIPTNAME ${*:-}"\"'"
+    #rm -rf $LOCKFILE
+else
+    notify-send -u low "$SCRIPTNAME ${*:-}"
+    $CMD
+    #$HOME/bin/init-xkb
+    #rm -rf $LOCKFILE
+fi

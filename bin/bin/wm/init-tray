@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+# Terminate already running bar instances
+killall -q stalonetray
+
+# Wait until the processes have been shut down
+while pgrep -x stalonetray >/dev/null; do sleep 1; done
+
+notify-send "tray disabled $0"
+
+#stalonetray -c $HOME/.xmonad/stalonetrayrc &
+
+#stalonetray --dockapp-mode simple --window-layer bottom --window-type desktop --window-strut top &
+

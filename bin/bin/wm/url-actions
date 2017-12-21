@@ -1,0 +1,70 @@
+#!/bin/sh
+
+# quick n dirty script that uses the --chrome-debugger-port flag on launched
+# Google Chrome instances to find current URL.
+# TODO: there must be a better way with, say, dbus
+
+set -eu
+
+
+main () {
+	option="${1:-}"
+
+	currentws=$(wmctrl -d | grep '*' | rev | cut -d " " -f1 | rev | tr "[:upper:]" "[:lower:]" ) 
+	case $currentws in
+		wrk|work*) PORT=9223 ;;
+		*) PORT=9222 ;;
+	esac
+	window_id=$(xdotool getactivewindow)
+	window_name=$(xdotool getactivewindow getwindowname)
+	window_trim=" - Google Chrome"
+	TITLE="${window_name%$window_trim}"
+	window_name_converted="$(echo "$TITLE" | sed -e 's~&~\&amp;~g' -e 's~<~\&lt;~g'  -e  's~>~\&gt;~g')"
+	json="$(curl -s localhost:$PORT/json)"
+	URL="$(echo "$json" | get_url_from_title "$window_name_converted")"
+
+	[ -n "$URL" ] || { notify-send "No URL found for active window"; exit 1; }
+
+        menu="copy mail bmail bchat throw trello"
+	[ -z "${option}" ] && option="$((for item in $menu; do echo $item; done) | $HOME/bin/wm/menu)"
+
+	case ${option} in
+		copy) copy ;;
+		mail) ;;
+		bmail) ;;
+		bchat) ;;
+		throw) ;;
+	esac
+}
+
+copy () {
+	echo "$URL" | xclip -sel clipboard
+	notify-send -u low "Copied URL to clipboard"
+}
+
+get_url_from_title () {
+	title="$1"
+	while read line
+	do
+		match="${line#*: }"
+		match="${match%,}"
+		if [ "\"$title\"" == "$match" ]
+		then
+			# in correct stanza
+			while read line
+			do
+				eval set -- $line
+				if [ ${1:-} == "url:" ]
+				then
+					echo "${2%,}"
+					exit
+				elif [ ${1:-} == "webSocketDebuggerUrl:" ]
+				then
+					break
+				fi
+			done
+		fi
+	done
+}
+
+main $*

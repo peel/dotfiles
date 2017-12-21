@@ -1,0 +1,110 @@
+#!/bin/sh
+
+#-----------------------------------------------------------------------
+# SUMMARY
+#-----------------------------------------------------------------------
+: << EOF
+
+This script is essentially a heuristic for how I think about and manage work.
+
+I use workspaces as "work contexts". Some are personal, some are general
+work, some are for specific non-personal projects, some are personal but
+warrant their own context.
+
+This script will identify the current workspace name and then, based on
+the command line arguments, return either a browser-tag, a browser-port
+task-tag or task-context.
+
+Browser tags / ports mean that the browser to be launched will be an
+instance unique to this workspace.
+
+Task tags mean that my task list (taskwarrior) will be filtered using
+the given tag.
+
+Task contexts mean that a taskwarrior context will be applied.
+
+TODO: test again under i3, gnome, etc. Most testing under xmonad to date.
+for i3/gnome I'd probably want to map a numeric ws value to a list of
+ws names prior to parsing.
+
+EOF
+
+#-----------------------------------------------------------------------
+# USAGE
+#-----------------------------------------------------------------------
+: << EOF
+
+ask 'ws' for the tag (or port) for either browser or task intances:
+
+ws tag
+ws port
+ws context
+
+EOF
+
+#-----------------------------------------------------------------------
+# WORKSPACE NAMES
+#-----------------------------------------------------------------------
+
+: <<EOF
+
+MAP OF WORKSPACES
+
+NAME    BROWSER-TAG    TASK-TAG    TASK-CONTEXT
+GEN     -              -           per
+WRK     wrk            wrk         wrk
+WRK:2   wrk            wrk         wrk
+SYS     -              sys         per
+DOM     -              dom         per 
+MON     -              sys         per
+AV      -
+NUL
+TMP
+
+EOF
+
+# UNIQUE BROWSER WORKSPACES
+# list of workspaces that have a unique browser instance AND show a unique taskwarrior context
+# these also likely have their own chat pplication handled via xmonad
+
+UNIQUE='wrk ggc dm nul'
+
+# INCOGNITO WORKSPACES
+# list of workspaces that automatically show an incognito mode browser
+
+INCOGNITO='void ano tmp'
+
+# DEFAULT
+# all workspaces NOT listed in the above lists is considered default (personal)
+
+#-----------------------------------------------------------------------
+# MAIN
+#-----------------------------------------------------------------------
+
+main () {
+    # future: map ws number to name
+    #WM="$(wmctrl -m | head -n1 | cut -d " " -f2)"
+
+    # WRK, wrk, WRK2, wrk:2 WRK:mon all normalize to 'wrk'
+    WS=$(wmctrl -d | grep '*' | rev | cut -d " " -f 1 | rev | tr '[:upper:]' '[:lower:]' | cut -d: -f1 | tr -cd '[[:alpha:]]')
+    [ -n "$WS" ] || { notify-send "$0 failed to get workspace name"; exit 1; }
+
+    INCOGNITO=$(echo $INCOGNITO | tr " " "\n" | grep $WS )
+    if [ -n "$INCOGNITO" ]
+    then
+        TAG="incognito"
+	PORT=""
+    else
+        TAG=$(echo $UNIQUE $INCOGNITO | tr " " "\n" | grep $WS ) # not in unique/incognito == default
+        PORT_OFFSET=$(echo $UNIQUE | tr " " "\n" | grep -n $WS | cut -d: -f1) # int value based on position in list
+        PORT=$(( 9222 + ${PORT_OFFSET:-0} ))
+    fi
+
+    case $1 in
+        port) echo -n "$PORT" ;;
+        name) echo -n "$WS" ;;
+        *|tag|task) echo -n "$TAG" ;;
+    esac
+}
+
+main $*

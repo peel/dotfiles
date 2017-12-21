@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+
+# Terminate already running bar instances
+killall -q polybar
+
+# Wait until the processes have been shut down
+while pgrep -x polybar >/dev/null; do sleep 1; done
+
+primary=$(xrandr --query | grep -i ' connected' | grep -i 'primary' | cut -d ' ' -f1)
+
+for display in $(xrandr --query | grep -i ' connected' | cut -d ' ' -f1)
+do
+    if [ -z "$primary" ]
+    then
+	echo "No active primary display found. Using $display as primary."
+	primary=$display
+	type=primary
+    elif [ "$display" = "$primary" ]
+    then
+	type=primary
+    else
+	type=secondary
+    fi
+    echo "Starting polybar on $type display $display"
+    export MONITOR=$display && polybar $type &
+    #export MONITOR=$display && polybar primaryi3 &
+done

@@ -1,0 +1,136 @@
+#!/bin/sh
+
+# ----------------------------------------------------------------------
+# TILING WM - DESKTOP ENVRIONMENT COMPONENTS
+#
+# This script launches a variety of utilities, daemons, applications
+# configs, and scripts that together create a more or less fully
+# functional desktop environment experience for use with tiling
+# window managers (e.g. XMonad / i3 )
+#
+# Components include:
+#
+# * keyboard configuration and remapping
+# * dual use keys (tab as tab key and modifier)
+# * display configuration fingerprinting and restore
+# * lockscreen control
+# * security utils: polkit, keyring, ssh agent
+# * notifications
+# * background / wallpaper image management
+# * mouse cursor hiding
+# * GUI file manager daemon
+# * terminal daemon
+# * autorun desktop files
+# * window compositor for transparency
+# * misc (nvidia settings)
+#
+# NOTE: cf $HOME/.xprofile for other minor (and machine specific)
+# settings, including initial xrandr setup, resolution, keyboard
+#
+# ----------------------------------------------------------------------
+
+
+# ----------------------------------------------------------------------
+# lockscreen script handles my locker du jour. Right now I use
+# xscreensaver, which is automatically launched in daemon mode by the
+# lockscreen script if not already running. I can switch to i3lock in
+# that script (or others) as desired.
+
+xss-lock -- /home/ethan/bin/wm/lockscreen &
+
+
+# ----------------------------------------------------------------------
+# security related (keyring, polkit, etc.)
+
+# gnome keyring ... testing
+# (dex was starting this but I think I'll avoid doing it there)
+
+#eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+#export SSH_AUTH_SOCK
+
+/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+
+
+# ----------------------------------------------------------------------
+# NOTE: I am going to stop using dex to autostart desktop files
+# since I want to consolidate them here explicitly. Still good to use
+# 'dex -ad' as a sanity check from time to time to make sure I am not
+# missing anything that wants to be run as startup.
+# --
+# autostart desktop files listed in autostart
+# find out what this runs with 'dex -ad', which is currently:
+#
+# /usr/lib/at-spi2-core/at-spi-bus-launcher --launch-immediately
+# /usr/bin/gnome-keyring-daemon --start --components=pkcs11
+# /usr/bin/gnome-keyring-daemon --start --components=secrets
+# /usr/bin/gnome-keyring-daemon --start --components=ssh
+# gsettings-data-convert
+# nm-applet
+# start-pulseaudio-x11
+#
+#dex -a
+
+
+# ----------------------------------------------------------------------
+# spi bus launcher
+
+/usr/lib/at-spi2-core/at-spi-bus-launcher --launch-immediately &
+
+# ----------------------------------------------------------------------
+# network manager applet
+#nm-applet &
+
+
+# ----------------------------------------------------------------------
+# pulseaudio
+start-pulseaudio-x11 &
+
+
+# ----------------------------------------------------------------------
+# notifications
+
+# NOTE: disabled here since there is a dbus activated service that
+# gets started instead. Needed to also move my dunstrc to correct
+# location (.config/dunst/dunstrc)
+#dunst -config ~/.dunstrc &
+
+
+# ----------------------------------------------------------------------
+# hide mouse cursor after a few seconds
+
+unclutter --timeout 2 --fork
+
+
+# ----------------------------------------------------------------------
+# set wallpaper
+
+# doing this in xmonad so it happens at restart of the wm
+#feh --bg-fill ~/tmp/lowpoly6.jpg &
+
+
+# ----------------------------------------------------------------------
+# start compositing for window transparency
+
+compton -b --config ~/.comptonrc --xrender-sync-fence & # test as per https://github.com/chjj/compton/wiki/perf-guide
+
+
+# ----------------------------------------------------------------------
+# launch GUI filemanager in daemon mode
+
+# test against thunar
+#spacefm -d &
+
+
+# ----------------------------------------------------------------------
+# run nvidia settings to load preferences
+
+nvidia-settings --load-config-only &
+
+# ----------------------------------------------------------------------
+# configure keyboard
+
+# following systemctl start shouldn't be necessary
+systemctl --user start xcape
+sleep 1
+$HOME/bin/wm/init-keyboard
+

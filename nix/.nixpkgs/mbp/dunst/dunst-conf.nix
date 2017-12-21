@@ -72,7 +72,7 @@ with colors;
     # screen width minus the width defined in within the geometry option.
     #geometry = "300x5-30+20"
     #geometry = "0x10-0+21"
-    geometry = "300x10-25+50"
+    geometry = "500x10-25+50"
 
     # Shrink window if it's smaller than the width.  Will be ignored if
     # width is 0.
@@ -102,7 +102,7 @@ with colors;
     # 
     # If this option is set to mouse or keyboard, the monitor option
     # will be ignored.
-    follow = mouse
+    follow = keyboard
     
     # Should a notification popped up from history be sticky or timeout
     # as if it would normally do.

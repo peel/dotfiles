@@ -1,3 +1,8 @@
+prompt-history
+xmonad-x86_64-linux
+*.errors
+*.state
+*.swp
 *.log
 *.cache
 logs/
@@ -15,6 +20,33 @@ sf.fish
 z.fish
 zz.fish
 __fasd_print_completion.fish
+
+
+# Created by https://www.gitignore.io/api/haskell
+
+### Haskell ###
+dist
+dist-*
+cabal-dev
+*.o
+*.hi
+*.chi
+*.chs.h
+*.dyn_o
+*.dyn_hi
+.hpc
+.hsenv
+.cabal-sandbox/
+cabal.sandbox.config
+*.prof
+*.aux
+*.hp
+*.eventlog
+.stack-work/
+cabal.project.local
+.HTF/
+
+# End of https://www.gitignore.io/api/haskell
 
 
 # Created by https://www.gitignore.io/api/emacs,osx

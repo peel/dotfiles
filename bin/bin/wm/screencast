@@ -1,0 +1,87 @@
+#!/bin/sh
+
+# SEE: http://stackoverflow.com/questions/6766333/capture-windows-screen-with-ffmpeg
+
+set -eu
+
+SCRIPTNAME=$(basename $0)
+PIDFILE=/tmp/$SCRIPTNAME.pid
+FILETYPE=mkv
+FRAMERATE=60
+
+main () {
+	case ${1:-} in
+		stat*) status ;;
+		slop|area|select|region) GETAREA=true; toggle ;;
+		*) toggle ;;
+	esac
+}
+
+toggle () {
+	if [ -f $PIDFILE ]
+	then
+		stop
+	else
+		start
+	fi
+}
+
+status () {
+	red=#dc322f
+	if [ -f $PIDFILE ]
+	then
+		echo "<fc=$red><fn=1></fn> REC</fc>"
+	fi
+}
+
+start () {
+	FILENAME="$HOME/$SCRIPTNAME-$(date +'%Y-%m-%d-%H-%M-%S').$FILETYPE"
+	nvidia-settings --assign="0/AllowFlipping=0" &>/dev/null
+
+	getarea # sets W H X Y
+
+	ffmpeg  -f alsa -i pulse -f x11grab -s ${W}x${H} -r $FRAMERATE -i :0.0+${X},${Y} \
+		-c:v libx264rgb \
+		-crf 0 \
+		-preset:v ultrafast \
+		-c:a pcm_s16le \
+		-af aresample=async=1:first_pts=0 \
+		$FILENAME &
+
+	echo "PID=$!" > $PIDFILE
+	echo "FILENAME=$FILENAME" >> $PIDFILE
+}
+
+stop () {
+	. $PIDFILE
+	kill -s INT $PID || notify-send "failed to kill recordscreen process"
+	rm $PIDFILE
+	nvidia-settings --assign="0/AllowFlipping=1" &>/dev/null
+	notify-send "Screen recording complete\n$(basename $FILENAME)"
+	echo -n $FILENAME | xclip -sel clipboard
+}
+
+getarea () {
+	if ${GETAREA:-false}
+	then # use slop to select window or region
+		eval $(slop)
+		set -- $(echo $G | sed 's/[^0-9]/ /g')
+		W=$1
+		H=$2
+		X=$3
+		Y=$4
+	else # use full screen resolution
+		x="$(xrandr | head -n1)"
+		x="${x#*current }"
+		x="${x%%, maximum*}"
+		set -- $x
+		#current_desktop_res=$1$2$3
+		#echo $current_desktop_res
+		W=$1
+		H=$3
+		X=0
+		Y=0
+	fi
+}
+
+main ${1:-}

@@ -1,0 +1,65 @@
+#!/bin/sh
+
+set -o errexit
+set -o nounset
+
+COUNTDOWN=60
+
+SCRIPTDIR=$(dirname $(readlink -f $0))
+USERNAME=$(echo $SCRIPTDIR | sed "s_/home/\([^/]\+\).*_\1_")
+export DISPLAY=":0"
+export XAUTHORITY=/home/$USERNAME/.Xauthority
+_UID="$(id -u $USERNAME)"
+
+main () {
+	INCREMENT=5
+	while [ $COUNTDOWN -gt 0 ]
+	do
+	    show_countdown $COUNTDOWN
+	    COUNTDOWN=$((COUNTDOWN-INCREMENT))
+	    sleep $INCREMENT
+	    if averted
+	    then
+		exit
+	    fi
+	done
+	sleep 1 # let last notification clear for sure (it should already be, but sometimes lags)
+	/usr/bin/systemctl suspend
+}
+
+averted () {
+    # maybe the unit was plugged in
+    if [ $(cat /sys/class/power_supply/BAT0/status) != "Discharging" ]
+    then
+        notify "Battery no longer discharging; suspend cancelled"
+        return 0
+    # maybe the unit was plugged in, the battery was swapped out, and then unplugged again
+    elif [ $(cat /sys/class/power_supply/BAT0/energy_now) -gt $(cat /sys/class/power_supply/BAT0/alarm) ]
+    then
+        notify "Battery level no longer critical; suspend cancelled"
+        return 0
+    fi
+    return 1
+}
+
+notify () {
+    if ((EUID==0))
+    then
+        export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$_UID/bus"
+        eval "su $USERNAME -c 'notify-send \""$*"\"'"
+    else
+        notify-send "$*"
+    fi
+}
+
+show_countdown () {
+    if ((EUID==0))
+    then
+        export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$_UID/bus"
+        eval "su $USERNAME -c 'notify-send -t 3500 -u critical \"LOW BATTERY!\\nsuspending in "$1" seconds\"'"
+    else
+        notify-send -t 3500 -u critical "LOW BATTERY!\nsuspending in $1 seconds"
+    fi
+}
+
+main

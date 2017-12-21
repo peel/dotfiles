@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:       # 
 
 let
   wallpaper = pkgs.copyPathToStore ./art/the-technomancer.png;
@@ -44,12 +44,13 @@ in
   '';
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = [ (import /home/peel/.config/nixpkgs/overlays/peel.nix) ];
   nix.useSandbox = true;
   nix.binaryCaches = [ https://cache.nixos.org ];
 
   networking.hostName = hostName;
-  networking.networkmanager.enable = lib.mkForce true;
-  networking.wireless.enable = lib.mkForce false;
+  networking.networkmanager.enable = true;
+  networking.wireless.enable = false;
   networking.firewall.enable = true;
 
   hardware = {
@@ -60,6 +61,8 @@ in
     opengl.driSupport32Bit = true;
     opengl.extraPackages = with pkgs; [ vaapiIntel ];
     pulseaudio.enable = true;
+    pulseaudio.package = pkgs.pulseaudioFull;
+    pulseaudio.systemWide = false;
     pulseaudio.support32Bit = true;
     pulseaudio.daemon.config = {
       flat-volumes = "no";
@@ -99,7 +102,7 @@ in
 
   time.timeZone = "Europe/Warsaw";
 
-  environment.variables.NO_AT_BRIDGE = "1";
+  # environment.variables.NO_AT_BRIDGE = "1";
   environment.systemPackages = with pkgs; [
     gitFull
     gitAndTools.hub
@@ -114,12 +117,17 @@ in
     #erlang
     fasd
     gist
+    gnupg
+    gopass
     graphviz
     jq
     nix-repl
     openjdk
     ranger
     sbt
+    awscli
+    docker
+    docker_compose
     #transmission
     weechat
 
@@ -136,18 +144,27 @@ in
     feh
     stalonetray
     blueman
-    networkmanagerapplet
     scrot
     xclip xsel
     acpi
     htop
     powertop
+    libnotify
+    wirelesstools
     #lm_sensors
     rofi
     dunst
     lightum
     iw
+    autorandr
+    arandr
+    xfce.thunar
+    xfce.thunar-dropbox-plugin
+    xfce.thunar-archive-plugin
+    xfce.thunar_volman
+    xfce.xfce4_power_manager
     zeal
+    bluez
     #xorg.xbacklight
     # xlibs.xev
     # xlibs.xkill
@@ -155,9 +172,9 @@ in
     # xlibs.xmodmap
     # xlibs.xset
     # xlibs.xwininfo
-    # xorg.libXrandr
-    # xorg.xbacklight
-    # xorg.xf86inputkeyboard
+    xorg.libXrandr
+    xorg.xbacklight
+    xorg.xf86inputkeyboard
     # xorg.xmodmap
 
     # gtk-engine-murrine
@@ -177,6 +194,7 @@ in
     urxvt
     #dropbox
     firefox
+    spotify
     keybase
     keybase-gui
 
@@ -190,6 +208,38 @@ in
   programs.light.enable = true;
   services.tlp.enable = true;
   services.thermald.enable = true;
+  services.acpid.enable = true;
+  systemd.user.timers."lowbatt" = {
+    description = "check battery level";
+    timerConfig.OnBootSec = "1m";
+    timerConfig.OnUnitInactiveSec = "1m";
+    timerConfig.Unit = "lowbatt.service";
+    wantedBy = ["timers.target"];
+  };
+  systemd.user.services."lowbatt" = {
+    description = "battery level notifier";
+    script = ''
+      export battery_capacity=$(${pkgs.coreutils}/bin/cat /sys/class/power_supply/BAT0/capacity)
+      export battery_status=$(${pkgs.coreutils}/bin/cat /sys/class/power_supply/BAT0/status)
+
+      export notify_capacity=10
+      export shutdown_capacity=5
+
+      if [[ $battery_capacity -le $notify_capacity && $battery_status = "Discharging" ]]; then
+          ${pkgs.libnotify}/bin/notify-send --urgency=critical --hint=int:transient:1 --icon=battery_empty "Battery Low" "You should probably plug-in."
+      fi
+
+      if [[ $battery_capacity -le $shutdown_capacity && $battery_status = "Discharging" ]]; then
+          ${pkgs.libnotify}/bin/notify-send --urgency=critical --hint=int:transient:1 --icon=battery_empty "Battery Critically Low" "Computer will suspend in 60 seconds."
+          sleep 60s
+
+          battery_status=$(${pkgs.coreutils}/bin/cat /sys/class/power_supply/BAT0/status)
+          if [[ $battery_status = "Discharging" ]]; then
+              systemctl suspend
+          fi
+      fi
+    '';
+  };
 
   # services.openssh.enable = true;
   # services.printing.enable = true;
@@ -201,7 +251,25 @@ in
     enable = true;
     xkbOptions = "eurosign:e";
     dpi = 168;
-    xrandrHeads = [ "eDP1" "DP1" ];
+    xrandrHeads = [
+      {
+        output = "eDP1";
+        primary = true;
+        monitorConfig = ''
+          Option "mode" "2560x1600"
+          Option "pos" "3840x0"
+          Option "rotate" "normal"
+        '';
+      }
+      {
+        output = "HDMI2";
+        monitorConfig = ''
+          Option "mode" "3840x2160"
+          Option "pos" "0x0"
+          Option "rotate" "normal"
+        '';
+      }
+    ];
     multitouch.enable = true;
     multitouch.invertScroll = true;
     autoRepeatDelay = 200;
@@ -216,9 +284,10 @@ in
     synaptics = {
       enable = true;
       tapButtons = true;
-      fingersMap = [ 0 0 0];
+      fingersMap = [ 1 1 1 ];
       buttonsMap = [ 1 3 2 ];
       twoFingerScroll = true;
+      scrollDelta = 250;
     };
     windowManager = {
       default = "xmonad";
@@ -304,7 +373,7 @@ in
     fadeDelta = 3;
     shadow = true;
     shadowOffsets = [ (-8) (-8) ];
-    shadowOpacity = ".5";
+    # shadowOpacity = ".5";
     fadeSteps = ["0.25" "0.25"];
     vSync = "opengl-swc";
     extraOptions = ''
@@ -345,12 +414,47 @@ in
     nssmdns = true;
   };
 
-  services.mopidy = {
+
+  services.emacs.enable = true;
+  programs.browserpass.enable = true;
+
+  systemd.user.services."dunst" = {
+      enable = true;
+      description = "";
+      wantedBy = [ "default.target" ];
+      serviceConfig.Restart = "always";
+      serviceConfig.RestartSec = 2;
+      serviceConfig.ExecStart = "${pkgs.dunst}/bin/dunst";
+  };
+
+  systemd.user.services."autocutsel" = {
     enable = true;
-    extensionPackages = [ pkgs.mopidy-local-sqlite pkgs.mopidy-spotify pkgs.mopidy-iris ];
+    description = "AutoCutSel";
+    wantedBy = [ "default.target" ];
+    serviceConfig.Type = "forking";
+    serviceConfig.Restart = "always";
+    serviceConfig.RestartSec = 2;
+    serviceConfig.ExecStartPre = "${pkgs.autocutsel}/bin/autocutsel -fork";
+    serviceConfig.ExecStart = "${pkgs.autocutsel}/bin/autocutsel -selection PRIMARY -fork";
+  };
+
+  systemd.user.services."udiskie" = {
+    enable = true;
+    description = "udiskie to automount removable media";
+    wantedBy = [ "default.target" ];
+    path = with pkgs; [
+      gnome3.defaultIconTheme
+      gnome3.gnome_themes_standard
+      pythonPackages.udiskie
+    ];
+    environment.XDG_DATA_DIRS="${pkgs.gnome3.defaultIconTheme}/share:${pkgs.gnome3.gnome_themes_standard}/share";
+    serviceConfig.Restart = "always";
+    serviceConfig.RestartSec = 2;
+    serviceConfig.ExecStart = "${pkgs.python27Packages.udiskie}/bin/udiskie -a -t -n -F ";
   };
 
   nixpkgs.config.packageOverrides = pkgs : rec {
+    bluez = pkgs.bluez5;
     rofi = import ./rofi/rofi.nix { inherit pkgs; terminal = "urxvt"; };
     urxvt = import ./urxvt/urxvt.nix { inherit pkgs; };
     dunst = import ./dunst/dunst.nix { inherit pkgs; browser = "firefox"; };

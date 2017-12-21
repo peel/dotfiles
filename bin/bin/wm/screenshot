@@ -1,0 +1,13 @@
+#!/bin/sh
+
+SCRIPTNAME=$(basename $0)
+FILENAME="$HOME/$SCRIPTNAME-$(date +'%Y-%m-%d-%H-%M-%S').png"
+
+case ${1:-} in
+    select*|region|area) SEL="-s" ;;
+    *) SEL="" ;;
+esac
+
+maim --format=png $SEL "$FILENAME"
+echo -n $FILENAME | xclip -selection clipbard
+notify-send "Screen shot saved\n$FILENAME"
