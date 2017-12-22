@@ -4,7 +4,7 @@ let
   wallpaper = pkgs.copyPathToStore ./art/the-technomancer.png;
   username = "peel";
   hostName = "fff66602";
-  gtk2-theme = import ./paper-gtk2-theme.nix pkgs;
+  mkOverlay = username: overlay: builtins.toPath "/home/${username}/.config/nixpkgs/overlays/${overlay}.nix";
 in
 {
   imports = [
@@ -12,13 +12,14 @@ in
       ./setup/common.nix
       ./setup/nixos.nix
       ./setup/packages.nix
-      gtk2-theme
-    ];
+    ] ++ import (mkOverlay username "modules/module-list");
 
+  # mbp config
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # mbp config
   boot.initrd.luks.devices = [
     {
       name = "root";
@@ -27,7 +28,10 @@ in
     }
   ];
 
+  # shared config
   boot.cleanTmpDir = true;
+
+  # mbp config
   boot.extraModprobeConfig = ''
     #options libata.force=noncq
     options hid_apple iso_layout=0
@@ -38,16 +42,19 @@ in
     #options hid_apple fnmode=2
   '';
 
+  # shared config
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = [ (import (builtins.toPath "/home/${username}/.config/nixpkgs/overlays/${username}.nix")) ];
+  nixpkgs.overlays = [ (import (mkOverlay username username)) ];
   nix.useSandbox = true;
   nix.binaryCaches = [ https://cache.nixos.org ];
 
+  # shared config
   networking.hostName = hostName;
   networking.networkmanager.enable = true;
   networking.wireless.enable = false;
   networking.firewall.enable = true;
 
+  # mbp config
   hardware = {
     enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = true;
@@ -66,6 +73,7 @@ in
   };
   sound.mediaKeys.enable = true;
 
+  # mbp config
   # Enable the backlight on rMBP
   # Disable USB-based wakeup
   # see: https://wiki.archlinux.org/index.php/MacBookPro11,x
@@ -95,54 +103,29 @@ in
   #   defaultLocale = "en_US.UTF-8";
   # };
 
+  # shared config
   time.timeZone = "Europe/Warsaw";
 
   # environment.variables.NO_AT_BRIDGE = "1";
 
+  # shared config
   powerManagement.enable = true;
-
   programs.light.enable = true;
   services.tlp.enable = true;
   services.thermald.enable = true;
   services.acpid.enable = true;
-  systemd.user.timers."lowbatt" = {
-    description = "check battery level";
-    timerConfig.OnBootSec = "1m";
-    timerConfig.OnUnitInactiveSec = "1m";
-    timerConfig.Unit = "lowbatt.service";
-    wantedBy = ["timers.target"];
-  };
-  systemd.user.services."lowbatt" = {
-    description = "battery level notifier";
-    script = ''
-      export battery_capacity=$(${pkgs.coreutils}/bin/cat /sys/class/power_supply/BAT0/capacity)
-      export battery_status=$(${pkgs.coreutils}/bin/cat /sys/class/power_supply/BAT0/status)
 
-      export notify_capacity=10
-      export shutdown_capacity=5
-
-      if [[ $battery_capacity -le $notify_capacity && $battery_status = "Discharging" ]]; then
-          ${pkgs.libnotify}/bin/notify-send --urgency=critical --hint=int:transient:1 --icon=battery_empty "Battery Low" "You should probably plug-in."
-      fi
-
-      if [[ $battery_capacity -le $shutdown_capacity && $battery_status = "Discharging" ]]; then
-          ${pkgs.libnotify}/bin/notify-send --urgency=critical --hint=int:transient:1 --icon=battery_empty "Battery Critically Low" "Computer will suspend in 60 seconds."
-          sleep 60s
-
-          battery_status=$(${pkgs.coreutils}/bin/cat /sys/class/power_supply/BAT0/status)
-          if [[ $battery_status = "Discharging" ]]; then
-              systemctl suspend
-          fi
-      fi
-    '';
-  };
+  # shared config
+  services.batteryNotifier.enable = true;
 
   # services.openssh.enable = true;
   # services.printing.enable = true;
 
+  # shared config
   services.locate.enable = true;
   services.nixosManual.showManual = true;
 
+  # mbp config / shared config
   services.xserver = {
     enable = true;
     xkbOptions = "eurosign:e";
@@ -205,6 +188,7 @@ in
   };
 
 
+  # shared config
   security.sudo.enable = true;
   security.sudo.wheelNeedsPassword = true;
   security.sudo.extraConfig = ''
@@ -213,6 +197,8 @@ in
     ALL ALL = (root) NOPASSWD: ${pkgs.systemd}/bin/shutdown
     ALL ALL = (root) NOPASSWD: ${pkgs.systemd}/bin/reboot
   '';
+
+  # shared config
   users.extraUsers."${username}" = {
     isNormalUser = true;
     uid = 1000;
@@ -232,6 +218,7 @@ in
   };
 
 
+  # shared config
   fonts = {
     fontconfig.enable = true;
     fontconfig.dpi = 180;
@@ -245,14 +232,17 @@ in
     ];
   };
 
+  # shared config
   virtualisation.docker.enable = true;
 
+  # shared config
   services.keybase.enable = true;
   services.kbfs = {
     enable = true;
     mountPoint = "/keybase";
   };
 
+  # mbp config
   services.mbpfan = {
     enable = true;
     lowTemp = 61;
@@ -260,6 +250,7 @@ in
     maxTemp = 84;
   };
 
+  # shared config
   services.compton = {
     enable = true;
     # refreshRate = 144;
@@ -288,11 +279,7 @@ in
     '';
   };
 
-  services.redshift = {
-    enable = true;
-    latitude = "54.372158";
-    longitude = "18.638306";
-  };
+  # mbp config
   services.actkbd.enable = true;
   services.actkbd.bindings = [
     { keys = [ 224 ]; events = [ "key" "rep" ]; command = "${pkgs.light}/bin/light -U 4"; }
@@ -301,54 +288,27 @@ in
     { keys = [ 230 ]; events = [ "key" "rep" ]; command = "${pkgs.kbdlight}/bin/kbdlight up"; }
   ];
 
+  # shared config
   services.logind.extraConfig = ''
       HandlePowerKey=suspend
     '';
-
+  # shared config
+  services.redshift = {
+    enable = true;
+    latitude = "54.372158";
+    longitude = "18.638306";
+  };
+  programs.browserpass.enable = true;
   services.avahi = {
     enable = true;
     nssmdns = true;
   };
-
-
   services.emacs.enable = true;
-  programs.browserpass.enable = true;
+  services.dunst.enable = true;
+  services.autocutsel.enable = true;
+  services.udiskie.enable = true;
 
-  systemd.user.services."dunst" = {
-      enable = true;
-      description = "";
-      wantedBy = [ "default.target" ];
-      serviceConfig.Restart = "always";
-      serviceConfig.RestartSec = 2;
-      serviceConfig.ExecStart = "${pkgs.dunst}/bin/dunst";
-  };
-
-  systemd.user.services."autocutsel" = {
-    enable = true;
-    description = "AutoCutSel";
-    wantedBy = [ "default.target" ];
-    serviceConfig.Type = "forking";
-    serviceConfig.Restart = "always";
-    serviceConfig.RestartSec = 2;
-    serviceConfig.ExecStartPre = "${pkgs.autocutsel}/bin/autocutsel -fork";
-    serviceConfig.ExecStart = "${pkgs.autocutsel}/bin/autocutsel -selection PRIMARY -fork";
-  };
-
-  systemd.user.services."udiskie" = {
-    enable = true;
-    description = "udiskie to automount removable media";
-    wantedBy = [ "default.target" ];
-    path = with pkgs; [
-      gnome3.defaultIconTheme
-      gnome3.gnome_themes_standard
-      pythonPackages.udiskie
-    ];
-    environment.XDG_DATA_DIRS="${pkgs.gnome3.defaultIconTheme}/share:${pkgs.gnome3.gnome_themes_standard}/share";
-    serviceConfig.Restart = "always";
-    serviceConfig.RestartSec = 2;
-    serviceConfig.ExecStart = "${pkgs.python27Packages.udiskie}/bin/udiskie -a -t -n -F ";
-  };
-
+  # shared config
   nixpkgs.config.packageOverrides = pkgs : rec {
     bluez = pkgs.bluez5;
     rofi = import ./rofi/rofi.nix { inherit pkgs; terminal = "urxvt"; };

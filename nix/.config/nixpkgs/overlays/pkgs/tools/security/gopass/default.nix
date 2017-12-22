@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "gopass-${version}";
-  version = "v1.6.2";
+  version = "v1.6.6";
   rev = "${version}";
 
   goPackagePath = "github.com/justwatchcom/gopass";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "justwatchcom";
     repo = "gopass";
-    sha256 = "14miz0v2ms59agbfnq4mq9kbfhvhnw8yf15vbya7gina2cgrj22y";
+    sha256 = "0n3isjrjpn2cnlwfdkjdcz5j8n16dhyaw4zyjpmis51nl0bqd3jw";
   };
   meta = with stdenv.lib; {
     description = "The slightly more awesome standard unix password manager for teams";
