@@ -29,7 +29,6 @@
     sbt
     silver-searcher
     stow
-    weechat
   ]
   ++ lib.optionals stdenv.isLinux [
     acpi
@@ -83,4 +82,3 @@
     khd
   ];
 }
-

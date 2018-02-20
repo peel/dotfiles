@@ -51,6 +51,9 @@ in
   # shared config
   networking.hostName = hostName;
   networking.networkmanager.enable = true;
+  networking.extraHosts = ''
+    127.0.0.1  dev.finpack.pl
+  '';
   networking.wireless.enable = false;
   networking.firewall.enable = true;
 
@@ -140,14 +143,14 @@ in
           Option "rotate" "normal"
         '';
       }
-      {
-        output = "HDMI2";
-        monitorConfig = ''
-          Option "mode" "3840x2160"
-          Option "pos" "0x0"
-          Option "rotate" "normal"
-        '';
-      }
+    #   {
+    #     output = "HDMI2";
+    #     monitorConfig = ''
+    #       Option "mode" "3840x2160"
+    #       Option "pos" "0x0"
+    #       Option "rotate" "normal"
+    #     '';
+    #   }
     ];
     multitouch.enable = true;
     multitouch.invertScroll = true;
@@ -166,7 +169,14 @@ in
       fingersMap = [ 1 1 1 ];
       buttonsMap = [ 1 3 2 ];
       twoFingerScroll = true;
-      scrollDelta = 250;
+      # accelFactor = "0.001";
+      additionalOptions = ''
+        Option "VertScrollDelta" "-180" # scroll sensitivity, the bigger the negative number = less sensitive
+        Option "HorizScrollDelta" "-180"
+      #   Option "FingerLow" "40"
+      #   Option "FingerHigh" "70"
+        Option "Resolution" "270" # Pointer sensitivity, this is for a retina screen, so you'll probably need to change this for an air
+      '';
     };
     windowManager = {
       default = "xmonad";
@@ -243,13 +253,7 @@ in
   };
 
   # mbp config
-  services.mbpfan = {
-    enable = true;
-    lowTemp = 61;
-    highTemp = 65;
-    maxTemp = 84;
-  };
-
+  services.mbpfan.enable = true;
   # shared config
   services.compton = {
     enable = true;
@@ -292,13 +296,13 @@ in
   services.logind.extraConfig = ''
       HandlePowerKey=suspend
     '';
+
   # shared config
   services.redshift = {
     enable = true;
     latitude = "54.372158";
     longitude = "18.638306";
   };
-  programs.browserpass.enable = true;
   services.avahi = {
     enable = true;
     nssmdns = true;
@@ -307,6 +311,11 @@ in
   services.dunst.enable = true;
   services.autocutsel.enable = true;
   services.udiskie.enable = true;
+  services.weechat = {
+    enable = true;
+    home = "/home/${username}/.weechat";
+    portsToOpen = [ 40900 ];
+  };
 
   # shared config
   nixpkgs.config.packageOverrides = pkgs : rec {

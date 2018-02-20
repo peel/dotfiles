@@ -3,4 +3,5 @@
   ./services/hardware/udiskie.nix
   ./services/misc/autocutsel.nix
   ./services/misc/dunst.nix
+  ./services/networking/weechat.nix
 ]
