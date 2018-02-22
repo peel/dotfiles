@@ -30,6 +30,7 @@ in
 
   # shared config
   boot.cleanTmpDir = true;
+  boot.plymouth.enable = true;
 
   # mbp config
   boot.extraModprobeConfig = ''
