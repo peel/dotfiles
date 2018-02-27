@@ -56,6 +56,8 @@
     lightum
     powertop
     rofi
+    rofi-emoji
+    rofi-pass
     scrot
     spotify
     stalonetray

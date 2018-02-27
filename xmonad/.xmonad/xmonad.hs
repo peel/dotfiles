@@ -401,6 +401,7 @@ myStatusBar         = "xmobar -x0 $HOME/.xmonad/xmobar.conf"
 --myLauncher          = "rofi -matching fuzzy -show run"
 myLauncher          = "rofi -matching fuzzy -modi combi -show combi -combi-modi run,drun"
 myNetwork           = "$HOME/bin/wm/rofi-wifi-menu/rofi-wifi-menu.sh"
+myEmoji             = "rofi-emoji"
 myPasswordManager   = "gopass ls --flat | rofi -dmenu | xargs --no-run-if-empty gopass show -c"
 
 
@@ -1232,6 +1233,7 @@ myKeys conf = let
     subKeys "Launchers"
     [ ("M-<Space>"              , addName "Launcher"                        $ spawn myLauncher)
     , ("M-u"                    , addName "Password Manager"                $ spawn myPasswordManager)
+    , ("M-e"                    , addName "Emojis"                          $ spawn myEmoji)
     , ("M-<Return>"             , addName "Terminal"                        $ spawn myTerminal)
     , ("M-\\"                   , addName "Browser"                         $ spawn myBrowser)
     , ("M-c"                    , addName "NSP Chat"                        $ bindOn WS [(wsWRK, namedScratchpadAction scratchpads "hangoutsWork"),

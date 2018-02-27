@@ -3,6 +3,7 @@ let
 in rec {
   firefox-bin = super.callPackage ./pkgs/networking/browsers/firefox-bin/darwin.nix {};
   gopass = super.callPackage ./pkgs/tools/security/gopass {};
+  rofi-emoji = super.callPackage ./pkgs/misc/rofi-emoji {};
   hoverfly = super.callPackage ./pkgs/development/tools/hoverfly {};
   pragmatapro = super.callPackage ./pkgs/data/fonts/pragmatapro {};
   chunkwm = super.callPackage ./pkgs/os-specific/darwin/chunkwm/default.nix {
