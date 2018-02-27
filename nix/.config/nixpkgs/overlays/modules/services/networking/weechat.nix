@@ -4,17 +4,20 @@ with lib;
 
 let
   cfg = config.services.weechat;
-  getLuaPath = lib : dir : "${lib}/${dir}/lua/${pkgs.luaPackages.lua.luaversion}";
-  makeSearchPath = lib.concatMapStrings (path:
-    " --search " + (getLuaPath path "share") +
-    " --search " + (getLuaPath path "lib")
-  );
-  weechat = pkgs.weechat.override {
+  weechatRunCommand = weechat: withMatrix: home: (if withMatrix then ''
+      env LUA_CPATH="${pkgs.luaPackages.getLuaCPath pkgs.luaPackages.cjson}" LUA_PATH="${pkgs.luaPackages.getLuaPath pkgs.luaPackages.cjson}" ''
+    else "")
+      + ''${weechat}/bin/weechat -d "${home}"'';
+  weechat = withSlack : withMatrix: pkgs.weechat.override {
+    extraBuildInputs = [] ++ lib.optionals withMatrix [ pkgs.luaPackages.cjson ];
     configure = {availablePlugins,...}: {
-      plugins = with availablePlugins; [
-        (python.withPackages (ps: with ps; [websocket_client xmpppy]))
-        lua
-      ];
+      plugins = with availablePlugins; []
+        ++ lib.optionals withSlack [
+          (python.withPackages (ps: with ps; [websocket_client xmpppy]))
+        ]
+        ++ lib.optionals withMatrix [
+          lua
+        ];
     };
   };
 in
@@ -45,6 +48,18 @@ in
           Relay ports to open.
         '';
       };
+      withSlack = mkOption {
+        default = false;
+        description = ''
+          Whether to enable wee-slack plugin.
+        '';
+      };
+      withMatrix = mkOption {
+        default = false;
+        description = ''
+          Whether to enable weechat matrix plugin.
+        '';
+      };
     };
   };
 
@@ -58,20 +73,18 @@ in
         LANG = "en_US.utf8";
         LC_ALL = "en_US.utf8";
         TERM = "${pkgs.rxvt_unicode.terminfo}";
-        LUA_PATH = makeSearchPath [ pkgs.luaPackages.cjson ];
       };
       path = [
-        weechat
+        (weechat cfg.withSlack cfg.withMatrix)
         pkgs.tmux
         pkgs.rxvt_unicode.terminfo
-        pkgs.luaPackages.cjson
       ];
       restartIfChanged = true;
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = "yes";
       serviceConfig.KillMode = "none";
       serviceConfig.WorkingDirectory = "${cfg.home}";
-      serviceConfig.ExecStart = "${pkgs.tmux}/bin/tmux -2 -S ${cfg.session} new-session -d -s weechat '${weechat}/bin/weechat -d ${cfg.home}'";
+      serviceConfig.ExecStart = "${pkgs.tmux}/bin/tmux -2 -S ${cfg.session} new-session -d -s weechat '${(weechatRunCommand (weechat cfg.withSlack cfg.withMatrix) cfg.withMatrix cfg.home)}'";
       serviceConfig.ExecStop = "${pkgs.tmux}/bin/tmux -S ${cfg.session} kill-session -t weechat";
     };
   };

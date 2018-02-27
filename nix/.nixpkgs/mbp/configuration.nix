@@ -316,6 +316,8 @@ in
     enable = true;
     home = "/home/${username}/.weechat";
     portsToOpen = [ 40900 ];
+    withSlack = true;
+    withMatrix = true;
   };
 
   # shared config
