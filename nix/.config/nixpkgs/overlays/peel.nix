@@ -4,6 +4,7 @@ in rec {
   firefox-bin = super.callPackage ./pkgs/networking/browsers/firefox-bin/darwin.nix {};
   gopass = super.callPackage ./pkgs/tools/security/gopass {};
   rofi-emoji = super.callPackage ./pkgs/misc/rofi-emoji {};
+  rofi-wifi-menu = super.callPackage ./pkgs/misc/rofi-wifi-menu {};
   hoverfly = super.callPackage ./pkgs/development/tools/hoverfly {};
   pragmatapro = super.callPackage ./pkgs/data/fonts/pragmatapro {};
   chunkwm = super.callPackage ./pkgs/os-specific/darwin/chunkwm/default.nix {
@@ -56,9 +57,11 @@ in rec {
     ;
   # remacs = super.callPackage ./pkgs/applications/editors/emacs/remacs.nix {
   #   rust = super.latest.rustChannels.nightly.rust;
+  #   if super.isDarwin then
   #   inherit (darwin.apple_sdk.frameworks)
   #       AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
   #       ImageCaptureCore GSS ImageIO;
+  #   else
   # };
 
 }

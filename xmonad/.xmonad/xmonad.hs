@@ -400,7 +400,7 @@ myStatusBar         = "xmobar -x0 $HOME/.xmonad/xmobar.conf"
 --myLauncher          = "dmenu_run"
 --myLauncher          = "rofi -matching fuzzy -show run"
 myLauncher          = "rofi -matching fuzzy -modi combi -show combi -combi-modi run,drun"
-myNetwork           = "$HOME/bin/wm/rofi-wifi-menu/rofi-wifi-menu.sh"
+myNetwork           = "rofi-wifi-menu"
 myEmoji             = "rofi-emoji"
 myPasswordManager   = "gopass ls --flat | rofi -dmenu | xargs --no-run-if-empty gopass show -c"
 

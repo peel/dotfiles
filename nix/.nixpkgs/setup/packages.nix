@@ -58,6 +58,7 @@
     rofi
     rofi-emoji
     rofi-pass
+    rofi-wifi-menu
     scrot
     spotify
     stalonetray
