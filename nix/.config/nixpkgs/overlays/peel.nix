@@ -1,23 +1,26 @@
 self: super:
-let
-in rec {
+ rec {
   firefox-bin = super.callPackage ./pkgs/networking/browsers/firefox-bin/darwin.nix {};
+  chunkwm = super.recurseIntoAttrs (super.callPackage ./pkgs/os-specific/darwin/chunkwm {
+        inherit (super) callPackage stdenv fetchFromGitHub imagemagick;
+        inherit (super.darwin.apple_sdk.frameworks) Carbon Cocoa ApplicationServices;
+  });
   gopass = super.callPackage ./pkgs/tools/security/gopass {};
   rofi-emoji = super.callPackage ./pkgs/misc/rofi-emoji {};
   rofi-wifi-menu = super.callPackage ./pkgs/misc/rofi-wifi-menu {};
   hoverfly = super.callPackage ./pkgs/development/tools/hoverfly {};
   pragmatapro = super.callPackage ./pkgs/data/fonts/pragmatapro {};
-  chunkwm = super.callPackage ./pkgs/os-specific/darwin/chunkwm/default.nix {
-    inherit (super.darwin.apple_sdk.frameworks) Carbon Cocoa ApplicationServices;
-    imagemagick = super.imagemagick;
-  };
-  weechat = super.weechat.override {
-    extraBuildInputs = with super; [
-      python27Packages.websocket_client
-      python27Packages.xmpppy
-      lua52Packages.cjson
-    ];
-  };
+  ngrok = super.ngrok.overrideAttrs (oldAttrs: rec {
+    src = if super.stdenv.system == "x86_64-darwin" then super.fetchurl {
+      url = "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-darwin-amd64.tgz";
+      sha256 = "0cnpgd56dd2c4qb105qlvb7r2x80p49pqm79n0wm0s4vwg4kq1k1";
+    } else oldAttrs.src;
+    installPhase = if super.stdenv.isDarwin then ''
+        mkdir -p $out/bin
+        cp ngrok $out/bin
+      ''
+      else oldAttrs.installPhase;
+  });
   emacs25Macport = super.stdenv.lib.overrideDerivation super.emacs25Macport (oldattrs: {
     emacsName = "emacs-25.2-rc1";
     name = "emacs-25.2-rc1-mac-6.2";

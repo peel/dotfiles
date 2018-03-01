@@ -1,19 +1,19 @@
+{config, lib, pkgs, ...}:
+
+with (import libs/default.nix { inherit lib; });
+
 let
-    unstable = import <unstable> {};
-    nixpkgs = import <nixpkgs> {};
-in
-with nixpkgs;
-{
+    username = "peel";
+    hostName = "fff666";
+in {
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowBroken = true;
   nixpkgs.config.allowUnfreeRedistributable = true;
-  nix.package = nixpkgs.nixUnstable;
-  # nix.nixPath =
-  #   [ # Use local nixpkgs checkout instead of channels.
-  #     "darwin=$HOME/.nix-defexpr/darwin"
-  #     "darwin-config=$HOME/.nixpkgs/darwin-configuration.nix"
-  #     "nixpkgs=/nix/var/nix/profiles/per-user/peel/channels/nixpkgs"
-  #     "/nix/var/nix/profiles/per-user/peel/channels"
-  #   ];
+  nixpkgs.overlays = [ (import (mkOverlay username username)) ];
+  nix.package = pkgs.nixUnstable;
+  nix.useSandbox = true;
+
+  networking.hostName = hostName;
 
   require = [
     ./setup/common.nix

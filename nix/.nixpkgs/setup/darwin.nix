@@ -93,32 +93,73 @@
     };
   };
   services.activate-system.enable = true;
-  services.nix-daemon.enable = false;
+  services.nix-daemon.enable = true;
   services.chunkwm.enable = true;
   services.chunkwm.package = pkgs.chunkwm.core;
+  services.chunkwm.plugins.dir = "/run/current-system/sw/bin/chunkwm-plugins/";
   services.chunkwm.extraConfig = ''
+    chunkc set global_desktop_offset_top     0
+    chunkc set global_desktop_offset_bottom  0
+    chunkc set global_desktop_offset_left    0
+    chunkc set global_desktop_offset_right   0
+    chunkc set global_desktop_offset_gap     0
     chunkc set 2_desktop_mode                bsp
     chunkc tiling::rule --owner Emacs --state tile
     chunkc tiling::rule --owner Emacs.* --state tile
     chunkc tiling::rule --owner .*Emacs --state tile
   '';
-  services.khd.enable = true;
-  services.khd.khdConfig = ''
-    # restart chunkwm
-    cmd + alt + ctrl - q : killall chunkwm
+  services.skhd.enable = true;
+  services.skhd.package =  pkgs.skhd;
+  services.skhd.skhdConfig = ''
+    #  NOTE(koekeishiya): A list of all built-in modifier and literal keywords can
+    #                     be found at https://github.com/koekeishiya/skhd/issues/1
+    #
+    #                     A hotkey is written according to the following rules:
+    #
+    #                       hotkey   = <keysym> ':' <command> |
+    #                                  <keysym> '->' ':' <command>
+    #
+    #                       keysym   = <mod> '-' <key> | <key>
+    #
+    #                       mod      = 'built-in mod keyword' | <mod> '+' <mod>
+    #
+    #                       key      = <literal> | <keycode>
+    #
+    #                       literal  = 'single letter or built-in keyword'
+    #
+    #                       keycode  = 'apple keyboard kVK_<Key> values (0x3C)'
+    #
+    #                       ->       = keypress is not consumed by skhd
+    #
+    #                       command  = command is executed through '$SHELL -c' and
+    #                                  follows valid shell syntax. if the $SHELL environment
+    #                                  variable is not set, it will default to '/bin/bash'.
+    #                                  when bash is used, the ';' delimeter can be specified
+    #                                  to chain commands.
+    #
+    #                                  to allow a command to extend into multiple lines,
+    #                                  prepend '\' at the end of the previous line.
+    #
+    #                                  an EOL character signifies the end of the bind.
 
-    # reload config
-    cmd + alt + ctrl - r : khd -e "reload"
+
+    # restart chunkwm
+    #cmd + alt + ctrl - q : killall chunkwm
 
     # open terminal, blazingly fast compared to iTerm/Hyper
-    cmd + shift - return : open -na /run/current-system/Applications/Emacs.app
-    cmd - return : open -na ~/Applications/iTerm.app
+    cmd - return : open -na /Applications/iTerm.app
+
+    # close focused window
+    alt - w : chunkc tiling::window --close
 
     # focus window
     alt - h : chunkc tiling::window --focus west
     alt - j : chunkc tiling::window --focus south
     alt - k : chunkc tiling::window --focus north
     alt - l : chunkc tiling::window --focus east
+
+    cmd - j : chunkc tiling::window --focus prev
+    cmd - k : chunkc tiling::window --focus next
 
     # equalize size of windows
     shift + alt - 0 : chunkc tiling::desktop --equalize
@@ -135,14 +176,14 @@
     shift + cmd - k : chunkc tiling::window --warp north
     shift + cmd - l : chunkc tiling::window --warp east
 
-    # move floating windows / windows on a floating space
-    shift + alt - up     : chunkc tiling::window --warp-floating fullscreen
-    shift + alt - left   : chunkc tiling::window --warp-floating left
-    shift + alt - right  : chunkc tiling::window --warp-floating right
-    shift + cmd - left   : chunkc tiling::window --warp-floating top-left
-    shift + cmd - right  : chunkc tiling::window --warp-floating top-right
-    shift + ctrl - left  : chunkc tiling::window --warp-floating bottom-left
-    shift + ctrl - right : chunkc tiling::window --warp-floating bottom-right
+    # make floating window fill screen
+    shift + alt - up     : chunkc tiling::window --grid-layout 1:1:0:0:1:1
+
+    # make floating window fill left-half of screen
+    shift + alt - left   : chunkc tiling::window --grid-layout 1:2:0:0:1:1
+
+    # make floating window fill right-half of screen
+    shift + alt - right  : chunkc tiling::window --grid-layout 1:2:1:0:1:1
 
     # send window to desktop
     shift + alt - x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
@@ -154,20 +195,6 @@
     shift + alt - 4 : chunkc tiling::window --send-to-desktop 4
     shift + alt - 5 : chunkc tiling::window --send-to-desktop 5
     shift + alt - 6 : chunkc tiling::window --send-to-desktop 6
-
-    # send window to desktop and switch desktop
-    shift + cmd - x : `id=$(chunkc get _last_active_desktop); chunkc tiling::window -d $id; khd -p "cmd + alt - $id" &> /dev/null`
-    shift + cmd - z : chunkc tiling::window -d prev; khd -p "cmd + alt - z"
-    shift + cmd - c : chunkc tiling::window -d next; khd -p "cmd + alt - c"
-    shift + cmd - 1 : chunkc tiling::window -d 1; khd -p "cmd + alt - 1"
-    shift + cmd - 2 : chunkc tiling::window -d 2; khd -p "cmd + alt - 2"
-    shift + cmd - 3 : chunkc tiling::window -d 3; khd -p "cmd + alt - 3"
-    shift + cmd - 4 : chunkc tiling::window -d 4; khd -p "cmd + alt - 4"
-    shift + cmd - 5 : chunkc tiling::window -d 5; khd -p "cmd + alt - 5"
-    shift + cmd - 6 : chunkc tiling::window -d 6; khd -p "cmd + alt - 6"
-
-    # switch to last active desktop
-    cmd + alt - x   : `id=$(chunkc get _last_active_desktop); khd -p "cmd + alt - $id" &> /dev/null`
 
     # focus monitor
     ctrl + alt - z  : chunkc tiling::monitor -f prev
@@ -195,8 +222,8 @@
     shift + cmd - w : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge north
     shift + cmd - d : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east
 
-    # set insertion point
-    ctrl + alt - f : chunkc tiling::window --use-insertion-point focus
+    # set insertion point for focused container
+    ctrl + alt - f : chunkc tiling::window --use-insertion-point cancel
     ctrl + alt - h : chunkc tiling::window --use-insertion-point west
     ctrl + alt - j : chunkc tiling::window --use-insertion-point south
     ctrl + alt - k : chunkc tiling::window --use-insertion-point north
@@ -226,8 +253,13 @@
     # toggle window split type
     alt - e : chunkc tiling::window --toggle split
 
-    # float / unfloat window
-    alt - t : chunkc tiling::window --toggle float
+    # float / unfloat window and center on screen
+    alt - t : chunkc tiling::window --toggle float;\
+              chunkc tiling::window --grid-layout 4:4:1:1:2:2
+
+    # toggle sticky, float and resize to picture-in-picture size
+    alt - s : chunkc tiling::window --toggle sticky;\
+              chunkc tiling::window --grid-layout 5:5:4:0:1:1
 
     # float next window to be tiled
     shift + alt - t : chunkc set window_float_next 1
@@ -238,14 +270,5 @@
     ctrl + alt - d : chunkc tiling::desktop --layout float
 
     ctrl + alt - w : chunkc tiling::desktop --deserialize ~/.chunkwm_layouts/dev_1
-
-    # remap caps-lock to escape for this config only !!!
-    # macos sierra can also perform this remap for a given keyboard
-    - capslock : khd -p "- escape"
-
-    # key remap for norwegian layout \ { }
-    cmd - 7 : khd -p "shift + alt - 7"
-    cmd - 8 : khd -p "shift + alt - 8"
-    cmd - 9 : khd -p "shift + alt - 9"
   '';
 }

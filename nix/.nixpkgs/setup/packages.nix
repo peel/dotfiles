@@ -1,10 +1,11 @@
 { config, pkgs, ... }:
 {
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = with pkgs; ([
     aspell
     autojump
     awscli
     curl
+    coreutils
     docker
     docker_compose
     emacs
@@ -23,7 +24,7 @@
     jq
     nix-repl
     nixUnstable
-    openjdk
+    # openjdk
     purescript
     ranger
     sbt

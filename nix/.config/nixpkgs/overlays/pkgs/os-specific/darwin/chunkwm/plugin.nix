@@ -5,7 +5,7 @@ let
   repoOwner = cfg.owner or "koekeishiya";
 in
 stdenv.mkDerivation rec {
-  name = "${cfg.name}-${cfg.version}";
+  name = "chunkwm-${cfg.name}-${cfg.version}";
   version = "${cfg.version}";
 
   src = fetchFromGitHub {
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     cd src/plugins/${cfg.name} && make all
-    mkdir -p $out/lib/chunkwm/plugins
-    cp ../../../plugins/${cfg.name}.so $out/lib/chunkwm/plugins/
+    mkdir -p $out/bin/chunkwm-plugins/
+    cp ../../../plugins/${cfg.name}.so $out/bin/chunkwm-plugins/
   '';
 
   meta = with stdenv.lib; {
@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/${repoOwner}/${repoName}";
     downloadPage = "https://github.com/${repoOwner}/${repoName}/releases";
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ peel ];
     license = licenses.mit;
   };
 }

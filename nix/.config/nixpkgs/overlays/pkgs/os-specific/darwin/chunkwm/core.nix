@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/koekeishiya/chunkwm;
     downloadPage = https://github.com/koekeishiya/chunkwm/releases;
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ peel ];
     license = licenses.mit;
   };
 }
