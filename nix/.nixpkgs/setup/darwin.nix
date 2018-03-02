@@ -103,6 +103,7 @@
     chunkc set global_desktop_offset_left    0
     chunkc set global_desktop_offset_right   0
     chunkc set global_desktop_offset_gap     0
+    chunkc set window_focus_cycle            all
     chunkc set 2_desktop_mode                bsp
     chunkc tiling::rule --owner Emacs --state tile
     chunkc tiling::rule --owner Emacs.* --state tile
@@ -144,7 +145,7 @@
 
 
     # restart chunkwm
-    #cmd + alt + ctrl - q : killall chunkwm
+    cmd + alt + ctrl - q : killall chunkwm
 
     # open terminal, blazingly fast compared to iTerm/Hyper
     cmd - return : open -na /Applications/iTerm.app
