@@ -20,5 +20,5 @@ in {
     ./setup/darwin.nix
     ./setup/packages.nix
     ./setup/emacs.nix
-  ];
+  ] ++ import (mkOverlay username "darwin-modules/module-list");
 }

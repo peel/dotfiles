@@ -5,6 +5,10 @@ self: super:
         inherit (super) callPackage stdenv fetchFromGitHub imagemagick;
         inherit (super.darwin.apple_sdk.frameworks) Carbon Cocoa ApplicationServices;
   });
+  skhd = super.callPackage ./pkgs/os-specific/darwin/skhd {
+        inherit (super) stdenv fetchFromGitHub;
+        inherit (super.darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa;
+  };
   gopass = super.callPackage ./pkgs/tools/security/gopass {};
   rofi-emoji = super.callPackage ./pkgs/misc/rofi-emoji {};
   rofi-wifi-menu = super.callPackage ./pkgs/misc/rofi-wifi-menu {};

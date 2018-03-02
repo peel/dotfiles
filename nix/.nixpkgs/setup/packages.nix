@@ -83,6 +83,6 @@
     chunkwm.ffm
     chunkwm.tiling
     firefox-bin
-    khd
-  ];
+    skhd
+  ]);
 }
