@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ApplicationServices Carbon Cocoa ];
 
+  #HACKY way to get macOS' clang++ (requires apple llvm 8)
   prePatch = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -F/System/Library/Frameworks"
     substituteInPlace makefile \
       --replace clang /usr/bin/clang
   '';
 
   buildPhase = ''
-    PATH=$PATH:/System/Library/Frameworks make install
+    make install
   '';
 
   installPhase = ''
