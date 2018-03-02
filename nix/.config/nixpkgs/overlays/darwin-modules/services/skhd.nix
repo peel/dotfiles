@@ -43,11 +43,6 @@ in {
       serviceConfig.ProcessType = "Interactive";
       serviceConfig.StandardOutPath = "/tmp/skhd.out";
       serviceConfig.StandardErrorPath = "/tmp/skhd.err";
-      # serviceConfig.Sockets.Listeners =
-      #   { SockServiceName = "3021";
-      #     SockType = "dgram";
-      #     SockFamily = "IPv4";
-      #   };
     };
 
   };
