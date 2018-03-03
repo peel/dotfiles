@@ -1,42 +1,27 @@
-{stdenv, fetchFromGitHub, Carbon, Cocoa, ApplicationServices}:
+{ stdenv, fetchFromGitHub, Carbon }:
 
 stdenv.mkDerivation rec {
-  version = "0.0.6";
   name = "skhd-${version}";
+  version = "0.0.10";
 
   src = fetchFromGitHub {
     owner = "koekeishiya";
     repo = "skhd";
     rev = "v${version}";
-    sha256 = "0vp2cag693x0jdpdqch5nq2qdgj81jx00v3mv69y6r40iy2hiw3w";
+    sha256 = "0a0r8z9bvb1pzqag7nqa84xm99n0xvg27cw11qcv65snr06bqc9w";
   };
 
-  buildInputs = [ ApplicationServices Carbon Cocoa ];
+  hardeningDisable = [ "all" ];
 
-  #HACKY way to get macOS' clang++ (requires apple llvm 8)
-  prePatch = ''
-    substituteInPlace makefile \
-      --replace clang /usr/bin/clang
-  '';
+  buildInputs = [ Carbon ];
 
-  buildPhase = ''
-    make install
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ./bin/* $out/bin/
-
-    mkdir -p $out/Library/LaunchDaemons
-    cp ${./org.nixos.skhd.plist} $out/Library/LaunchDaemons/org.nixos.skhd.plist
-    substituteInPlace $out/Library/LaunchDaemons/org.nixos.skhd.plist --subst-var out
-  '';
+  makeFlags = [ "BUILD_PATH=$(out)/bin" ];
 
   meta = with stdenv.lib; {
     description = "Simple hotkey daemon for macOS";
     homepage = https://github.com/koekeishiya/skhd;
-    downloadPage = https://github.com/koekeishiya/skhd/releases;
     platforms = platforms.darwin;
+    maintainers = with maintainers; [ lnl7 ];
     license = licenses.mit;
   };
 }
