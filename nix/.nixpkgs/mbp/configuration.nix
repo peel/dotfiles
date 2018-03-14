@@ -310,6 +310,7 @@ in
   };
   services.emacs.enable = true;
   services.dunst.enable = true;
+  services.autorandr.enable = true;
   services.autocutsel.enable = true;
   services.udiskie.enable = true;
   services.weechat = {

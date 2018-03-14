@@ -3,7 +3,7 @@
 {
   environment.variables.EDITOR = "emacsclient -tc";
   environment.variables.fish_key_bindings = "fish_vi_key_bindings";
-  environment.etc."per-user/peel/editorconfig".text = ''
+  environment.etc."editorconfig".text = ''
     # top-most EditorConfig file
     root = true
 
@@ -15,7 +15,7 @@
     indent_size = 2
     charset = utf-8
   '';
-  environment.etc."per-user/peel/gitconfig".text = ''
+  environment.etc."gitconfig".text = ''
     [include]
       path = ~/.gitconfig.secret
     [color]
@@ -151,7 +151,7 @@
     [url "git://gist.github.com/"]
       insteadOf = "gist:"
   '';
-  environment.etc."per-user/peel/ctags".text = ''
+  environment.etc."ctags".text = ''
     --exclude=*.js
     --exclude=*.git*
     --links=no
@@ -185,7 +185,7 @@
     --regex-clojure=/\([ \t]*intern[ \t]+([-[:alnum:]*+!_:\/.?]+)/\1/v,intern/
     --regex-clojure=/\([ \t]*ns[ \t]+([-[:alnum:]*+!_:\/.?]+)/\1/n,namespace/
   '';
-  environment.etc."per-user/peel/vimrc".text = ''
+  environment.etc."vimrc".text = ''
     set nonumber
     set relativenumber
     colorscheme default
@@ -331,6 +331,8 @@
     vim = "${pkgs.emacs}/bin/emacsclient -n";
     r = "${pkgs.ranger}/bin/ranger";
   };
+  programs.bash.enableCompletion = true;
   programs.fish.enable = true;
+  programs.fish.vendor.completions.enable = true;
   programs.tmux.enable = true;
 }

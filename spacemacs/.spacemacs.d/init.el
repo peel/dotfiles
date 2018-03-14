@@ -41,13 +41,14 @@ This function should only modify configuration layer settings."
       dash
       deft
       emacs-lisp
+      emoji
       elixir
       fasd
       (git :variables
             git-gutter-use-fringe t)
       github
       graphviz
-      haskell
+      (haskell :variables haskell-completion-backend 'company-ghci)
       html
       javascript
       org
