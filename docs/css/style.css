@@ -25,6 +25,12 @@ h2{
 .status p{
     text-align: center;
 }
+.license h2 {
+  display: none;
+}
+.license p {
+  text-align: center;
+}
 div#content,div#postamble{
     width:90%;
     max-width:760px;
