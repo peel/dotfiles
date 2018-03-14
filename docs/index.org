@@ -45,4 +45,4 @@ See[[https://github.com/peel/dotfiles][ peel/dotfiles]] at Github [[https://trav
 :PROPERTIES:
 :HTML_CONTAINER_CLASS: license
 :END:
-Distributed in the hope to be useful under [[https://creativecommons.org/publicdomain/zero/1.0/][CC0 1.0 Universal]]
+Distributed in hope to be useful under [[https://creativecommons.org/publicdomain/zero/1.0/][CC0 1.0 Universal]]
