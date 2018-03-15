@@ -1,8 +1,7 @@
-{ pkgs, terminal }:
+{ pkgs, fonts, terminal, colors }:
 let
-  colors = import ../setup/colors.nix;
   rofi-config = import ./rofi-conf.nix {
-    inherit colors terminal;
+    inherit colors fonts terminal;
   };
   rofi-config-file = pkgs.writeTextFile {
     name = "technomancer-rofi.config";

@@ -1,8 +1,7 @@
-{ pkgs, browser }:
+{ pkgs, browser, colors, fonts }:
 let
-  colors = import ../setup/colors.nix;
   dunst-config = import ./dunst-conf.nix {
-    inherit colors browser;
+    inherit colors fonts browser;
   };
   dunst-config-file = pkgs.writeTextFile {
     name = "dunst-xresources";

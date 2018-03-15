@@ -4,6 +4,8 @@ let
   wallpaper = pkgs.copyPathToStore ./art/the-technomancer.png;
   username = "peel";
   hostName = "fff66602";
+  colors = import ./setup/colors.nix;
+  fonts = import ./setup/fonts.nix;
   mkOverlay = username: overlay: builtins.toPath "/home/${username}/.config/nixpkgs/overlays/${overlay}.nix";
 in
 {
@@ -134,16 +136,16 @@ in
     enable = true;
     xkbOptions = "eurosign:e";
     dpi = 168;
-    xrandrHeads = [
-      {
-        output = "eDP1";
-        primary = true;
-        monitorConfig = ''
-          Option "mode" "2560x1600"
-          Option "pos" "3840x0"
-          Option "rotate" "normal"
-        '';
-      }
+#    xrandrHeads = [
+#      {
+#        output = "eDP1";
+#        primary = true;
+#        monitorConfig = ''
+#          Option "mode" "2560x1600"
+#          Option "pos" "3840x0"
+#          Option "rotate" "normal"
+#        '';
+#      }
     #   {
     #     output = "HDMI2";
     #     monitorConfig = ''
@@ -152,7 +154,7 @@ in
     #       Option "rotate" "normal"
     #     '';
     #   }
-    ];
+    #];
     multitouch.enable = true;
     multitouch.invertScroll = true;
     autoRepeatDelay = 200;
@@ -190,18 +192,23 @@ in
       xterm.enable = false;
       default = "none";
     };
-    displayManager.lightdm = {
-      enable = true;
-      background = wallpaper;
-      autoLogin.enable = true;
-      autoLogin.user = username;
+    displayManager = {
+      sessionCommands = ''
+        ${pkgs.xorg.xrdb}/bin/xrdb -merge <<< "Xcursor.size: 64"
+      '';
+      lightdm = {
+        enable = true;
+        background = wallpaper;
+        autoLogin.enable = true;
+        autoLogin.user = username;
+      };
     };
   };
 
 
   # shared config
   security.sudo.enable = true;
-  security.sudo.wheelNeedsPassword = true;
+  security.sudo.wheelNeedsPassword = false;
   security.sudo.extraConfig = ''
     ALL ALL = (root) NOPASSWD: ${pkgs.iw}/bin/iw
     ALL ALL = (root) NOPASSWD: ${pkgs.light}/bin/light
@@ -226,6 +233,13 @@ in
     ];
     createHome = true;
     shell = pkgs.fish;
+  };
+  # programs.ssh = {
+  #   startAgent = true;
+  #   agentTimeout = "1d";
+  # };
+  programs.gnupg.agent = {
+    enable = true;
   };
 
 
@@ -324,10 +338,10 @@ in
   # shared config
   nixpkgs.config.packageOverrides = pkgs : rec {
     bluez = pkgs.bluez5;
-    kitty = import ./setup/kitty { inherit pkgs; };
-    rofi = import ./rofi/rofi.nix { inherit pkgs; terminal = "urxvt"; };
-    urxvt = import ./urxvt/urxvt.nix { inherit pkgs; };
-    dunst = import ./dunst/dunst.nix { inherit pkgs; browser = "firefox"; };
+    alacritty = import ./setup/alacritty { inherit pkgs colors fonts; };
+    rofi = import ./rofi/rofi.nix { inherit pkgs colors fonts; terminal = "alacritty"; };
+    urxvt = import ./urxvt/urxvt.nix { inherit pkgs colors fonts; };
+    dunst = import ./dunst/dunst.nix { inherit pkgs colors fonts; browser = "firefox"; };
     stalonetray = import ./stalonetray/stalonetray.nix { inherit pkgs; };
   };
 }

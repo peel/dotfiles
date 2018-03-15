@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 {
   environment.systemPackages = with pkgs; ([
+    alacritty
     aspell
     autojump
     awscli
@@ -43,7 +44,14 @@
     firefox
     haskellPackages.cabal-install
     haskellPackages.ghc
-    haskellPackages.stack
+    # haskellPackages.ghcWithHoogle
+    # haskellPackages.stack
+    haskellPackages.apply-refact
+    haskellPackages.hlint
+    haskellPackages.stylish-haskell
+    haskellPackages.hasktags
+    # haskellPackages.ghc-mod
+    # haskellPackages.intero
     haskellPackages.xmobar
     haskellPackages.xmonad
     haskellPackages.xmonad-contrib
@@ -64,7 +72,6 @@
     spotify
     stalonetray
     unclutter-xfixes
-    urxvt
     wirelesstools
     xclip xsel
     xfce.thunar
@@ -74,6 +81,7 @@
     xfce.xfce4_power_manager
     xorg.libXrandr
     xorg.xbacklight
+    xorg.xcursorthemes
     xorg.xf86inputkeyboard
     zeal
   ]

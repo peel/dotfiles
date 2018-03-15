@@ -1,4 +1,4 @@
-{ colors, terminal }:
+{ colors, fonts, terminal }:
 with colors;
 ''
 ! "Enabled modi" Set from: Default
@@ -10,9 +10,9 @@ rofi.lines:                          5
 ! "Number of columns" Set from: Default
 ! rofi.columns:                        1
 ! "Font to use" Set from: Default
-rofi.font: PragmataPro 24
+rofi.font: ${fonts.family.default} ${fonts.size.large}
 ! "Color scheme for normal row" Set from: Default
-rofi.color-normal: ${background}, ${foreground}, ${background}, ${background}, ${cursorColor}
+rofi.color-normal: ${background}, ${foreground}, ${background}, ${background}, ${red}
 ! "Color scheme for urgent row" Set from: Default
 ! rofi.color-urgent:                   #fdf6e3,#dc322f,#eee8d5,#dc322f,#fdf6e3
 ! "Color scheme for active row" Set from: Default
@@ -39,7 +39,7 @@ rofi.terminal: "${terminal}"
 ! "Run command to execute" Set from: Default
 ! rofi.run-command:                    {cmd}
 ! "Command to get extra run targets" Set from: Default
-! rofi.run-list-command:               
+! rofi.run-list-command:
 ! "Run command to execute that runs in shell" Set from: Default
 ! rofi.run-shell-command:              {terminal} -e {cmd}
 ! "Command executed on accep-entry-custom for window modus" Set from: Default
@@ -75,7 +75,7 @@ rofi.terminal: "${terminal}"
 ! "Padding within rows" Set from: Default
 ! rofi.line-padding:                   1
 ! "Pre-set filter" Set from: Default
-! rofi.filter:                         
+! rofi.filter:
 ! "Separator style (none, dash, solid)" Set from: Default
 rofi.separator-style: solid
 ! "Hide scroll-bar" Set from: Default
@@ -211,15 +211,15 @@ rofi.dpi:                              180
 ! "Custom Keybinding 19" Set from: Default
 ! rofi.kb-custom-19:                   Alt+parenleft
 ! "The display name of this browser" Set from: Default
-! rofi.display-ssh:                    
+! rofi.display-ssh:
 ! "The display name of this browser" Set from: Default
 ! rofi.display-run: λ
 ! "The display name of this browser" Set from: Default
-! rofi.display-drun:                   
+! rofi.display-drun:
 ! "The display name of this browser" Set from: Default
-! rofi.display-window:                 
+! rofi.display-window:
 ! "The display name of this browser" Set from: Default
-! rofi.display-windowcd:               
+! rofi.display-windowcd:
 ! "The display name of this browser" Set from: Default
-! rofi.display-combi:                  
+! rofi.display-combi:
 ''
