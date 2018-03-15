@@ -157,7 +157,7 @@ with colors;
 
 [frame]
     width = 0
-    color = "${mdark3}"
+    color = "${background}"
 
 [shortcuts]
 
@@ -189,18 +189,18 @@ with colors;
     # IMPORTANT: colors have to be defined in quotation marks.
     # Otherwise the '#' and following  would be interpreted as a comment.
     #background = "#268bd2"
-    background = "${mdark3}"
-    foreground = "${light}"
+    background = "${background}"
+    foreground = "${foreground}"
     timeout = 5
 
 [urgency_normal]
-    background = "${mdark3}"
-    foreground = "${light}"
+    background = "${background}"
+    foreground = "${foreground}"
     timeout = 8
 
 [urgency_critical]
-    background = "${dred}"
-    foreground = "${light}"
+    background = "${red}"
+    foreground = "${white}"
     timeout = 0
 
 

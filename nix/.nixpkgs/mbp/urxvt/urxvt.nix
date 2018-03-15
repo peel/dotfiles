@@ -1,6 +1,6 @@
 { pkgs }:
 let
-  colors = import ../colors.nix;
+  colors = import ../setup/colors.nix;
   urxvt-config = import ./urxvt-conf.nix {
     inherit colors;
   };

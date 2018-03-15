@@ -1,6 +1,6 @@
 { pkgs, terminal }:
 let
-  colors = import ../colors.nix;
+  colors = import ../setup/colors.nix;
   rofi-config = import ./rofi-conf.nix {
     inherit colors terminal;
   };

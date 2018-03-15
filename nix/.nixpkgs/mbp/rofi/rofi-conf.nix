@@ -12,13 +12,13 @@ rofi.lines:                          5
 ! "Font to use" Set from: Default
 rofi.font: PragmataPro 24
 ! "Color scheme for normal row" Set from: Default
-rofi.color-normal: ${dark}, ${light}, ${dark}, ${dark}, ${accent}
+rofi.color-normal: ${background}, ${foreground}, ${background}, ${background}, ${cursorColor}
 ! "Color scheme for urgent row" Set from: Default
 ! rofi.color-urgent:                   #fdf6e3,#dc322f,#eee8d5,#dc322f,#fdf6e3
 ! "Color scheme for active row" Set from: Default
 ! rofi.color-active:                   #fdf6e3,#268bd2,#eee8d5,#268bd2,#fdf6e3
 ! "Color scheme window" Set from: Default
-rofi.color-window:                   ${dark}, ${dark}, ${mlight}
+rofi.color-window:                   ${background}, ${background}, ${foreground}
 ! "Border width" Set from: Default
 rofi.bw: 20
 ! "Location on screen" Set from: Default

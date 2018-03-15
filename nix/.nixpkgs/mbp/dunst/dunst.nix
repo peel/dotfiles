@@ -1,6 +1,6 @@
 { pkgs, browser }:
 let
-  colors = import ../colors.nix;
+  colors = import ../setup/colors.nix;
   dunst-config = import ./dunst-conf.nix {
     inherit colors browser;
   };

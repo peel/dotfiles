@@ -324,6 +324,7 @@ in
   # shared config
   nixpkgs.config.packageOverrides = pkgs : rec {
     bluez = pkgs.bluez5;
+    kitty = import ./setup/kitty { inherit pkgs; };
     rofi = import ./rofi/rofi.nix { inherit pkgs; terminal = "urxvt"; };
     urxvt = import ./urxvt/urxvt.nix { inherit pkgs; };
     dunst = import ./dunst/dunst.nix { inherit pkgs; browser = "firefox"; };

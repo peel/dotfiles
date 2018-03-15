@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  environment.variables.EDITOR = "emacsclient -tc";
+  environment.variables.EDITOR = "${pkgs.emacs}/bin/emacsclient -tc";
   environment.variables.fish_key_bindings = "fish_vi_key_bindings";
   environment.etc."editorconfig".text = ''
     # top-most EditorConfig file

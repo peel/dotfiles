@@ -10,7 +10,7 @@ URxvt.fading:               0
 URxvt.loginShell:           true
 URxvt.saveLines:            5000
 URxvt.internalBorder:       7
-URxvt.borderColor:          ${mdark3}
+URxvt.borderColor:          ${background}
 URxvt.lineSpace:            0
 
 ! Fonts
@@ -35,14 +35,14 @@ URxvt.urlLauncher:          firefox
 
 ! Cursor
 URxvt.cursorBlink:          false
-URxvt.cursorColor:          ${accent}
+URxvt.cursorColor:          ${cursorColor}
 URxvt.cursorUnderline:      false
 
 ! Pointer
 URxvt.pointerBlank:         true
 
-*background: ${dark}
-*foreground: ${light}
+*background: ${background}
+*foreground: ${foreground}
 !*foreground: #657b83
 !!*fading: 40
 !!*fadeColor: #002b36
@@ -51,36 +51,36 @@ URxvt.pointerBlank:         true
 !!*pointerColorForeground: #93a1a1
 
 !! black dark/light
-*color0: ${dark}
-*color8: ${mdark}
+*color0: ${color0}
+*color8: ${color8}
 
 !! red dark/light
-*color1: ${dred}
-*color9: ${red}
+*color1: ${color1}
+*color9: ${color9}
 
 !! green dark/light
-*color2: ${dgreen}
-*color10: ${green}
+*color2: ${color2}
+*color10: ${color10}
 
 !! yellow dark/light
-*color3: ${dyellow}
-*color11: ${yellow}
+*color3: ${color3}
+*color11: ${color11}
 
 !! blue dark/light
-*color4: ${dblue}
-*color12: ${blue}
+*color4: ${color4}
+*color12: ${color12}
 
 !! magenta dark/light
-*color5: ${dmagenta}
-*color13: ${magenta}
+*color5: ${color5}
+*color13: ${color13}
 
 !! cyan dark/light
-*color6: ${dcyan}
-*color14: ${cyan}
+*color6: ${color6}
+*color14: ${color14}
 
 !! white dark/light
-*color7: ${light}
-*color15: ${mlight}
+*color7: ${color7}
+*color15: ${color15}
 
 !! bold color
 !!URxvt.colorDB: #A85C28

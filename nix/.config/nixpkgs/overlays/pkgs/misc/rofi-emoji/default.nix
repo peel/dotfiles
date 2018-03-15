@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
   name = "${baseName}-${version}";
 
   src = fetchurl {
-    sha256 = "0iglznr65s766gh2lxpf5yd7ddb6w83npqq2c0h11fp2x9p1vd73";
-    url = "https://gist.githubusercontent.com/Tadly/0741821d3694deaec1ee454a95c591fa/raw/8a4e3b9712f06737e50c73e30345b20b538fd1ef/rofi-emoji.sh";
+    sha256 = "0k8zy21j7nax3zd2sl8ac3q18hz65ixw0dy5s0wqwn11vdpmz9hn";
+    url = "https://gist.githubusercontent.com/NearHuscarl/5d366e1a3b788814bcbea62c1f66241d/raw/f9bf1d143ef7ef8d3e2cb8ce2c7c4174ba6ab6b3/rofi-emoji.sh";
   };
 
   buildInputs = [ makeWrapper xdotool ];
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
     libnotify
     libxml2
     rofi
-    xsel
     xclip
     xdotool
   ];
