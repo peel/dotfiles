@@ -1,3 +1,2 @@
 [
-  ./services/skhd.nix
 ]

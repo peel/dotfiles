@@ -1,8 +1,7 @@
-{ config, pkgs, ... }:
+{ config, pkgs, colors, ... }:
 
 let
-  colors = import ../colors.nix;
-  tmuxConfig = import ../colors.nix {inherit colors;};
+  tmuxConfig = import ./tmux.nix {inherit colors;};
 in {
   programs.tmux.tmuxConfig = tmuxConfig;
   programs.tmux.enableSensible = true;
