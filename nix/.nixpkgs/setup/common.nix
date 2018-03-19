@@ -125,8 +125,6 @@
       default = upstream
     [core]
       autocrlf = false
-      editor = vim
-      excludesfile = ~/.yadr/git/gitignore
     [advice]
       statusHints = false
     [diff]
