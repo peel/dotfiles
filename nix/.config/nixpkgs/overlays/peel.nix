@@ -1,6 +1,6 @@
 self: super:
  rec {
-  alacritty = super.callPackage ./pkgs/applications/misc/alacritty {};
+  alacritty = if super.stdenv.isDarwin then super.callPackage ./pkgs/applications/misc/alacritty {} else super.alacritty;
   chunkwm = super.recurseIntoAttrs (super.callPackage ./pkgs/os-specific/darwin/chunkwm {
         inherit (super) callPackage stdenv fetchFromGitHub imagemagick;
         inherit (super.darwin.apple_sdk.frameworks) Carbon Cocoa ApplicationServices;

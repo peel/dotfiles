@@ -86,6 +86,6 @@ in buildRustPackage rec {
     homepage = https://github.com/jwilm/alacritty;
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ mic92 ];
-    platforms = with platforms; [ linux darwin ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -261,6 +261,12 @@ in
   virtualisation.docker.enable = true;
 
   # shared config
+  services.printing = {
+    enable = true;
+    drivers = [pkgs.splix];
+  };
+
+  # shared config
   services.keybase.enable = true;
   services.kbfs = {
     enable = true;
