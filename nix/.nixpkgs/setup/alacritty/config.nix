@@ -1,4 +1,4 @@
-{ colors, fonts }:
+{ colors, fonts, tmux }:
 with colors;
 
 ''
@@ -243,10 +243,10 @@ with colors;
   # You can set shell.program to the path of your favorite shell, e.g. /bin/fish.
   # Entries in shell.args are passed unmodified as arguments to the shell.
   #
-  # shell:
-  #   program: /bin/bash
-  #   args:
-  #     - --login
+  shell:
+    program: ${tmux}/bin/tmux
+    args:
+      - -2
 
   # Key bindings
   #
