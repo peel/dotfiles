@@ -2,6 +2,121 @@
 
 let
   tmuxConfig = import ./tmux.nix {inherit colors;};
+  keycodes = {
+    A                    ="0x00";
+    S                    ="0x01";
+    D                    ="0x02";
+    F                    ="0x03";
+    H                    ="0x04";
+    G                    ="0x05";
+    Z                    ="0x06";
+    X                    ="0x07";
+    C                    ="0x08";
+    V                    ="0x09";
+    B                    ="0x0B";
+    Q                    ="0x0C";
+    W                    ="0x0D";
+    E                    ="0x0E";
+    R                    ="0x0F";
+    Y                    ="0x10";
+    T                    ="0x11";
+    k1                    ="0x12";
+    k2                    ="0x13";
+    k3                    ="0x14";
+    k4                    ="0x15";
+    k6                    ="0x16";
+    k5                    ="0x17";
+    Equal                ="0x18";
+    k9                    ="0x19";
+    k7                    ="0x1A";
+    Minus                ="0x1B";
+    k8                    ="0x1C";
+    k0                    ="0x1D";
+    RightBracket         ="0x1E";
+    O                    ="0x1F";
+    U                    ="0x20";
+    LeftBracket          ="0x21";
+    I                    ="0x22";
+    P                    ="0x23";
+    L                    ="0x25";
+    J                    ="0x26";
+    Quote                ="0x27";
+    K                    ="0x28";
+    Semicolon            ="0x29";
+    Backslash            ="0x2A";
+    Comma                ="0x2B";
+    Slash                ="0x2C";
+    N                    ="0x2D";
+    M                    ="0x2E";
+    Period               ="0x2F";
+    Grave                ="0x32";
+    KeypadDecimal        ="0x41";
+    KeypadMultiply       ="0x43";
+    KeypadPlus           ="0x45";
+    KeypadClear          ="0x47";
+    KeypadDivide         ="0x4B";
+    KeypadEnter          ="0x4C";
+    KeypadMinus          ="0x4E";
+    KeypadEquals         ="0x51";
+    Keypad0              ="0x52";
+    Keypad1              ="0x53";
+    Keypad2              ="0x54";
+    Keypad3              ="0x55";
+    Keypad4              ="0x56";
+    Keypad5              ="0x57";
+    Keypad6              ="0x58";
+    Keypad7              ="0x59";
+    Keypad8              ="0x5B";
+    Keypad9              ="0x5C";
+    Return                    ="0x24";
+    Tab                       ="0x30";
+    Space                     ="0x31";
+    Delete                    ="0x33";
+    Escape                    ="0x35";
+    Command                   ="0x37";
+    Shift                     ="0x38";
+    CapsLock                  ="0x39";
+    Option                    ="0x3A";
+    Control                   ="0x3B";
+    RightCommand              ="0x36";
+    RightShift                ="0x3C";
+    RightOption               ="0x3D";
+    RightControl              ="0x3E";
+    Function                  ="0x3F";
+    F17                       ="0x40";
+    VolumeUp                  ="0x48";
+    VolumeDown                ="0x49";
+    Mute                      ="0x4A";
+    F18                       ="0x4F";
+    F19                       ="0x50";
+    F20                       ="0x5A";
+    F5                        ="0x60";
+    F6                        ="0x61";
+    F7                        ="0x62";
+    F3                        ="0x63";
+    F8                        ="0x64";
+    F9                        ="0x65";
+    F11                       ="0x67";
+    F13                       ="0x69";
+    F16                       ="0x6A";
+    F14                       ="0x6B";
+    F10                       ="0x6D";
+    F12                       ="0x6F";
+    F15                       ="0x71";
+    Help                      ="0x72";
+    Home                      ="0x73";
+    PageUp                    ="0x74";
+    ForwardDelete             ="0x75";
+    F4                        ="0x76";
+    End                       ="0x77";
+    F2                        ="0x78";
+    PageDown                  ="0x79";
+    F1                        ="0x7A";
+    LeftArrow                 ="0x7B";
+    RightArrow                ="0x7C";
+    DownArrow                 ="0x7D";
+    UpArrow                   ="0x7E";
+};
 in {
   programs.tmux.tmuxConfig = tmuxConfig;
   programs.tmux.enableSensible = true;
@@ -30,6 +145,7 @@ in {
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
   services.chunkwm.enable = true;
+  services.chunkwm.plugins.list = [ "ffm" "tiling" ];
   services.chunkwm.package = pkgs.chunkwm.core;
   services.chunkwm.plugins.dir = "/run/current-system/sw/bin/chunkwm-plugins/";
   services.chunkwm.plugins."tiling".config = ''
@@ -47,11 +163,6 @@ in {
     chunkc set window_focus_cycle            all
     chunkc set mouse_follows_focus           1
     chunkc set window_region_locked          1
-  '';
-  services.chunkwm.extraConfig = ''
-    chunkc tiling::rule --owner Emacs --state tile
-    chunkc tiling::rule --owner Emacs.* --state tile
-    chunkc tiling::rule --owner .*Emacs --state tile
   '';
   services.skhd.enable = true;
   services.skhd.package =  pkgs.skhd;
@@ -92,10 +203,10 @@ in {
     cmd + alt + ctrl - q : killall chunkwm
 
     # open terminal, blazingly fast compared to iTerm/Hyper
-    cmd - return : open -na /Applications/iTerm.app
+    cmd - return : ${pkgs.alacritty}/bin/alacritty
 
     # close focused window
-    alt - w : chunkc tiling::window --close
+    cmd - ${keycodes.Delete} : chunkc tiling::window --close
 
     # focus window
     alt - h : chunkc tiling::window --focus west
@@ -121,29 +232,14 @@ in {
     shift + cmd - k : chunkc tiling::window --warp north
     shift + cmd - l : chunkc tiling::window --warp east
 
-    # make floating window fill screen
-    shift + alt - up     : chunkc tiling::window --grid-layout 1:1:0:0:1:1
-
-    # make floating window fill left-half of screen
-    shift + alt - left   : chunkc tiling::window --grid-layout 1:2:0:0:1:1
-
-    # make floating window fill right-half of screen
-    shift + alt - right  : chunkc tiling::window --grid-layout 1:2:1:0:1:1
-
     # send window to desktop
     shift + alt - x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
     shift + alt - z : chunkc tiling::window --send-to-desktop prev
     shift + alt - c : chunkc tiling::window --send-to-desktop next
-    shift + alt - 1 : chunkc tiling::window --send-to-desktop 1
-    shift + alt - 2 : chunkc tiling::window --send-to-desktop 2
-    shift + alt - 3 : chunkc tiling::window --send-to-desktop 3
-    shift + alt - 4 : chunkc tiling::window --send-to-desktop 4
-    shift + alt - 5 : chunkc tiling::window --send-to-desktop 5
-    shift + alt - 6 : chunkc tiling::window --send-to-desktop 6
 
     # focus monitor
-    ctrl + alt - z  : chunkc tiling::monitor -f prev
-    ctrl + alt - c  : chunkc tiling::monitor -f next
+    cmd + left  : chunkc tiling::monitor -f prev
+    cmd + right  : chunkc tiling::monitor -f next
     ctrl + alt - 1  : chunkc tiling::monitor -f 1
     ctrl + alt - 2  : chunkc tiling::monitor -f 2
     ctrl + alt - 3  : chunkc tiling::monitor -f 3

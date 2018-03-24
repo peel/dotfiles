@@ -344,7 +344,14 @@ in
   # shared config
   nixpkgs.config.packageOverrides = pkgs : rec {
     bluez = pkgs.bluez5;
-    alacritty = import ./setup/alacritty { inherit pkgs colors fonts; };
+    alacritty = import ./setup/alacritty { 
+      inherit colors fonts;
+      alacritty = pkgs.alacritty;
+      stdenv = pkgs.stdenv;
+      tmux = pkgs.tmux;
+      makeWrapper = pkgs.makeWrapper;
+      writeTextFile = pkgs.writeTextFile;
+    };
     rofi = import ./rofi/rofi.nix { inherit pkgs colors fonts; terminal = "alacritty"; };
     urxvt = import ./urxvt/urxvt.nix { inherit pkgs colors fonts; };
     dunst = import ./dunst/dunst.nix { inherit pkgs colors fonts; browser = "firefox"; };

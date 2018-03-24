@@ -1,6 +1,6 @@
 self: super:
  rec {
-  alacritty = if super.stdenv.isDarwin then super.callPackage ./pkgs/applications/misc/alacritty {} else super.alacritty;
+  alacritty = super.callPackage ./pkgs/applications/misc/alacritty {};
   chunkwm = super.recurseIntoAttrs (super.callPackage ./pkgs/os-specific/darwin/chunkwm {
         inherit (super) callPackage stdenv fetchFromGitHub imagemagick;
         inherit (super.darwin.apple_sdk.frameworks) Carbon Cocoa ApplicationServices;
@@ -45,10 +45,6 @@ self: super:
   rofi-emoji = super.callPackage ./pkgs/misc/rofi-emoji {};
   rofi-wifi-menu = super.callPackage ./pkgs/misc/rofi-wifi-menu {};
   scripts = super.callPackage ./pkgs/misc/scripts {};
-  skhd = super.callPackage ./pkgs/os-specific/darwin/skhd {
-        inherit (super) stdenv fetchFromGitHub;
-        inherit (super.darwin.apple_sdk.frameworks) Carbon;
-  };
   wee-slack = super.callPackage ./pkgs/networking/weechat/wee-slack.nix {};
   inherit (super.callPackage ./pkgs/misc/uboot {})
     buildUBoot

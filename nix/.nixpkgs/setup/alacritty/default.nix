@@ -1,19 +1,20 @@
-{ pkgs, fonts, colors }:
+{ pkgs, fonts, colors, stdenv }:
 let
   config = import ./config.nix {
-    inherit colors fonts;
+    inherit colors fonts stdenv;
   };
-  configFile = pkgs.writeTextFile {
+  execPath = if stdenv.isDarwin then "Applications/Alacritty.app/Contents/MacOS" else "bin";
+  configFile = writeTextFile {
     name = "alacritty.yml";
     text = config;
   };
 in
-pkgs.stdenv.mkDerivation {
-  name = "alacrittyWrapper";
-  buildInputs = with pkgs; [ alacritty makeWrapper ];
+stdenv.mkDerivation {
+  name = "alacrittyConf";
+  buildInputs = [ alacritty makeWrapper ];
   phases = [ "buildPhase" ];
   buildCommand = ''
     mkdir -p $out/bin
-    makeWrapper ${pkgs.alacritty}/bin/alacritty $out/bin/alacritty --add-flags "--config-file ${configFile}"
+    makeWrapper ${alacritty}/${execPath}/alacritty $out/bin/alacritty --add-flags "--config-file ${configFile}"
   '';
 }

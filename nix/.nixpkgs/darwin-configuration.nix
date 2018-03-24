@@ -7,9 +7,8 @@ let
   fonts = import ./setup/fonts.nix;
   username = "peel";
   hostName = "fff666";
-in {
+in rec {
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.allowBroken = true;
   nixpkgs.config.allowUnfreeRedistributable = true;
   nixpkgs.overlays = [ (import (mkOverlay username username)) ];
   nix.package = pkgs.nixUnstable;
@@ -25,6 +24,14 @@ in {
   ] ++ import (mkOverlay username "darwin-modules/module-list");
 
   nixpkgs.config.packageOverrides = pkgs : rec {
-    alacritty = import ./setup/alacritty { inherit pkgs colors fonts; };
+    alacrittyDrv = pkgs.callPackage (builtins.toPath "/Users/${username}/.config/nixpkgs/overlays/pkgs/applications/misc/alacritty") {};
+    alacritty = import ./setup/alacritty {
+      inherit colors fonts;
+      alacritty = alacrittyDrv;
+      stdenv = pkgs.stdenv;
+      tmux = pkgs.tmux;
+      makeWrapper = pkgs.makeWrapper;
+      writeTextFile = pkgs.writeTextFile;
+    };
   };
 }
