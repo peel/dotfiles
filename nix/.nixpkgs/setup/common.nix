@@ -328,6 +328,7 @@
     pass = "${pkgs.gopass}/bin/gopass";
     vim = "${pkgs.emacs}/bin/emacsclient -n";
     r = "${pkgs.ranger}/bin/ranger";
+    qmk = ''${pkgs.ripgrep}/bin/rg -A 4 "= LAYOUT_ortho_4x12(" --fixed-strings --replace "" --context-separator " " /home/peel/wrk/qmk_firmware/layouts/community/ortho_4x12/peel/keymap.c | column -t -s"\t" | zenity --text-info --font=PragmataPro --width 1500 --height 1500'';
   };
   programs.bash.enableCompletion = true;
   programs.fish.enable = true;
