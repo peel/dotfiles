@@ -234,10 +234,10 @@ in
     createHome = true;
     shell = pkgs.fish;
   };
-  # programs.ssh = {
-  #   startAgent = true;
-  #   agentTimeout = "1d";
-  # };
+  programs.ssh = {
+    startAgent = true;
+    agentTimeout = "1d";
+  };
   programs.gnupg.agent = {
     enable = true;
   };

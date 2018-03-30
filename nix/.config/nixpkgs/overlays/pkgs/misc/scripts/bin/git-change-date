@@ -14,7 +14,7 @@
 
 # Based on http://stackoverflow.com/questions/3042437/change-commit-author-at-one-specific-commit
 
-function change-date(){
+change-date(){
 
     force=''
     if test "x$1" = "x-f"; then

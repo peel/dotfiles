@@ -2,7 +2,6 @@
 let
   config = import ./config.nix {
     inherit colors fonts;
-    tmux = pkgs.tmux;
   };
   configFile = pkgs.writeTextFile {
     name = "alacritty.yml";

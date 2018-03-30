@@ -1,6 +1,6 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
 
-function em(){
+em() {
   if [[ "$DISPLAY" ]]; then
     frame=$(emacsclient -a '' -e "(member \"$DISPLAY\" (mapcar 'terminal-name (frames-on-display-list)))" 2>/dev/null)
     [[ "$frame" == "nil" ]] && opts='-c' # if there is no frame open create one

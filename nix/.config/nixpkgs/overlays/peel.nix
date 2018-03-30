@@ -27,6 +27,7 @@ self: super:
   firefox-bin = super.callPackage ./pkgs/networking/browsers/firefox-bin/darwin.nix {};
   gopass = super.callPackage ./pkgs/tools/security/gopass {};
   hoverfly = super.callPackage ./pkgs/development/tools/hoverfly {};
+  ix = super.callPackage ./pkgs/misc/ix {};
   mill = super.callPackage ./pkgs/development/tools/mill {};
   ngrok = super.ngrok.overrideAttrs (oldAttrs: rec {
     src = if super.stdenv.system == "x86_64-darwin" then super.fetchurl {
@@ -38,10 +39,12 @@ self: super:
         cp ngrok $out/bin
       ''
       else oldAttrs.installPhase;
+    meta.platforms = super.platforms.unix;
   });
   pragmatapro = super.callPackage ./pkgs/data/fonts/pragmatapro {};
   rofi-emoji = super.callPackage ./pkgs/misc/rofi-emoji {};
   rofi-wifi-menu = super.callPackage ./pkgs/misc/rofi-wifi-menu {};
+  scripts = super.callPackage ./pkgs/misc/scripts {};
   skhd = super.callPackage ./pkgs/os-specific/darwin/skhd {
         inherit (super) stdenv fetchFromGitHub;
         inherit (super.darwin.apple_sdk.frameworks) Carbon;

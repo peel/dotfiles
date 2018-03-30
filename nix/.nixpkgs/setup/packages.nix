@@ -3,7 +3,6 @@
   environment.systemPackages = with pkgs; ([
     alacritty
     aspell
-    autojump
     awscli
     curl
     coreutils
@@ -12,6 +11,7 @@
     emacs
     fasd
     fish
+    fzf
     gawk
     gist
     gitAndTools.hub
@@ -19,17 +19,18 @@
     gnumake
     gnupg
     gopass
+    ix
     graphviz
     hoverfly
     httpie
     jq
     nix-repl
     nixUnstable
-    # openjdk
     purescript
     ranger
+    ripgrep
     sbt
-    silver-searcher
+    scripts
     stow
   ]
   ++ lib.optionals stdenv.isLinux [

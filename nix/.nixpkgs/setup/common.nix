@@ -328,8 +328,13 @@
     pass = "${pkgs.gopass}/bin/gopass";
     vim = "${pkgs.emacs}/bin/emacsclient -n";
     r = "${pkgs.ranger}/bin/ranger";
-    qmk = ''${pkgs.ripgrep}/bin/rg -A 4 "= LAYOUT_ortho_4x12(" --fixed-strings --replace "" --context-separator " " /home/peel/wrk/qmk_firmware/layouts/community/ortho_4x12/peel/keymap.c | column -t -s"\t" | zenity --text-info --font=PragmataPro --width 1500 --height 1500'';
+    grep = "${pkgs.ripgrep}/bin/rg";
+    alacritty = "${pkgs.alacritty}/bin/alacritty -e tmux -2 new-session -A -s main";
+    qmk = ''${pkgs.scripts}/bin/qmk /home/peel/wrk/qmk_firmware/layouts/community/ortho_4x12/peel/keymap.c'';
   };
+  environment.interactiveShellInit = ''
+    eval "$(${pkgs.fasd}/bin/fasd --init auto)"
+  '';
   programs.bash.enableCompletion = true;
   programs.fish.enable = true;
   programs.fish.vendor.completions.enable = true;
