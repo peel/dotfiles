@@ -44,26 +44,12 @@ self: super:
   pragmatapro = super.callPackage ./pkgs/data/fonts/pragmatapro {};
   rofi-emoji = super.callPackage ./pkgs/misc/rofi-emoji {};
   rofi-wifi-menu = super.callPackage ./pkgs/misc/rofi-wifi-menu {};
-  scripts = super.callPackage ./pkgs/misc/scripts {};
+  scripts = super.callPackage ./pkgs/misc/scripts {
+    pkgs=self;
+    stdenv=self.stdenv;
+  };
   wee-slack = super.callPackage ./pkgs/networking/weechat/wee-slack.nix {};
-  inherit (super.callPackage ./pkgs/misc/uboot {})
-    buildUBoot
-    ubootTools
-    ubootA20OlinuxinoLime
-    ubootBananaPi
-    ubootBeagleboneBlack
-    ubootJetsonTK1
-    ubootOdroidXU3
-    ubootOrangePiPc
-    ubootOrangePiPlusZero2
-    ubootPcduino3Nano
-    ubootRaspberryPi
-    ubootRaspberryPi2
-    ubootRaspberryPi3_32bit
-    ubootRaspberryPi3_64bit
-    ubootUtilite
-    ubootWandboard
-    ;
+  zenity = super.callPackage ./pkgs/misc/zenity {};
   # remacs = super.callPackage ./pkgs/applications/editors/emacs/remacs.nix {
   #   rust = super.latest.rustChannels.nightly.rust;
   #   if super.isDarwin then

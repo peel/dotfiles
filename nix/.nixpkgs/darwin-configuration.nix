@@ -25,13 +25,10 @@ in rec {
 
   nixpkgs.config.packageOverrides = pkgs : rec {
     alacrittyDrv = pkgs.callPackage (builtins.toPath "/Users/${username}/.config/nixpkgs/overlays/pkgs/applications/misc/alacritty") {};
-    alacritty = import ./setup/alacritty {
+    alacrittyWrapper = import ./setup/alacritty {
       inherit colors fonts;
+      inherit (pkgs) stdenv makeWrapper writeTextFile;
       alacritty = alacrittyDrv;
-      stdenv = pkgs.stdenv;
-      tmux = pkgs.tmux;
-      makeWrapper = pkgs.makeWrapper;
-      writeTextFile = pkgs.writeTextFile;
     };
   };
 }

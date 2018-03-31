@@ -1,4 +1,5 @@
-{ pkgs, fonts, colors, stdenv }:
+{ stdenv, makeWrapper, writeTextFile, alacritty, fonts, colors }:
+
 let
   config = import ./config.nix {
     inherit colors fonts stdenv;
@@ -11,7 +12,8 @@ let
 in
 stdenv.mkDerivation {
   name = "alacrittyConf";
-  buildInputs = [ alacritty makeWrapper ];
+  buildInputs = [ makeWrapper ];
+  propagatedBuildInputs = [ alacritty ];
   phases = [ "buildPhase" ];
   buildCommand = ''
     mkdir -p $out/bin

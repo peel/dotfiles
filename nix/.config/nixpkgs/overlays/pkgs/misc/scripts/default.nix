@@ -7,9 +7,7 @@ stdenv.mkDerivation rec {
   baseName = "peel-scripts";
   name = "${baseName}-${version}";
 
-  buildInputs = with pkgs; [ coreutils ]
-    ++ [ ripgrep gnome3.zenity ]  # qmk
-    ++ [ curl fzf fasd ]; # z
+  buildInputs = [ pkgs.makeWrapper ];
   phases = [ "installPhase" ];
 
   installPhase = ''
@@ -17,9 +15,14 @@ stdenv.mkDerivation rec {
     cp -r ${./bin}/* $out/bin/
     for f in $out/bin/*; do
       chmod a+x $f
+      wrapProgram $f --prefix PATH : "${wrapperPath}"
     done
-    patchShebangs $out/bin
   '';
+
+  wrapperPath = with stdenv.lib; makeBinPath (with pkgs;
+       [ coreutils ]
+    ++ [ ripgrep zenity ]  # qmk
+    ++ [ curl fzf fasd ]); # z
 
   meta = with stdenv.lib; {
     description = "Some useful scripts I often use";

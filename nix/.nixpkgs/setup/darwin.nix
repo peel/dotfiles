@@ -123,10 +123,6 @@ in {
   programs.tmux.enableMouse = true;
   programs.tmux.enableVim = true;
   programs.bash.enable = true;
-  services.mopidy.package = "/usr/local";
-  services.mopidy.enable = true;
-  services.mopidy.mediakeys.package = "/usr/local";
-  services.mopidy.mediakeys.enable = true;
 
   environment.variables.HOMEBREW_CASK_OPTS = "--appdir=/Applications/cask";
   environment.variables.TERMINFO = "/usr/share/terminfo";
@@ -203,7 +199,8 @@ in {
     cmd + alt + ctrl - q : killall chunkwm
 
     # open terminal, blazingly fast compared to iTerm/Hyper
-    cmd - return : ${pkgs.alacritty}/bin/alacritty
+    cmd - return : ${pkgs.alacrittyWrapper}/bin/alacritty -e tmux -2 new-session -A -s main
+    cmd + shift - return : ${pkgs.scripts}/bin/em
 
     # close focused window
     cmd - ${keycodes.Delete} : chunkc tiling::window --close
@@ -238,15 +235,15 @@ in {
     shift + alt - c : chunkc tiling::window --send-to-desktop next
 
     # focus monitor
-    cmd + left  : chunkc tiling::monitor -f prev
-    cmd + right  : chunkc tiling::monitor -f next
+    cmd - ${keycodes.LeftArrow} : chunkc tiling::monitor -f prev
+    cmd - ${keycodes.RightArrow}   : chunkc tiling::monitor -f next
     ctrl + alt - 1  : chunkc tiling::monitor -f 1
     ctrl + alt - 2  : chunkc tiling::monitor -f 2
     ctrl + alt - 3  : chunkc tiling::monitor -f 3
 
     # send window to monitor and follow focus
-    ctrl + cmd - z  : chunkc tiling::window --send-to-monitor prev; chunkc tiling::monitor -f prev
-    ctrl + cmd - c  : chunkc tiling::window --send-to-monitor next; chunkc tiling::monitor -f next
+    ctrl + cmd - ${keycodes.LeftArrow}  : chunkc tiling::window --send-to-monitor prev; chunkc tiling::monitor -f prev
+    ctrl + cmd - ${keycodes.RightArrow}  : chunkc tiling::window --send-to-monitor next; chunkc tiling::monitor -f next
     ctrl + cmd - 1  : chunkc tiling::window --send-to-monitor 1; chunkc tiling::monitor -f 1
     ctrl + cmd - 2  : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
     ctrl + cmd - 3  : chunkc tiling::window --send-to-monitor 3; chunkc tiling::monitor -f 3
@@ -278,9 +275,6 @@ in {
 
     # mirror tree x-axis
     alt - x : chunkc tiling::desktop --mirror horizontal
-
-    # toggle desktop offset
-    alt - a : chunkc tiling::desktop --toggle offset
 
     # toggle window fullscreen
     alt - f : chunkc tiling::window --toggle fullscreen

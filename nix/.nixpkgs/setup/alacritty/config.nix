@@ -495,4 +495,4 @@ with colors;
     - { key: F10,      mods: Command, chars: "\x1b[21;3~"                  }
     - { key: F11,      mods: Command, chars: "\x1b[23;3~"                  }
     - { key: F12,      mods: Command, chars: "\x1b[24;3~"                  }
-}''
+''

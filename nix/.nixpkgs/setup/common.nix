@@ -329,7 +329,7 @@
     vim = "${pkgs.emacs}/bin/emacsclient -n";
     r = "${pkgs.ranger}/bin/ranger";
     grep = "${pkgs.ripgrep}/bin/rg";
-    alacritty = "${pkgs.alacritty}/bin/alacritty -e tmux -2 new-session -A -s main";
+    alacritty = (if pkgs.stdenv.isDarwin then "${pkgs.alacrittyWrapper}" else  "${pkgs.alacritty}") + "/bin/alacritty -e tmux -2 new-session -A -s main";
     qmk = ''${pkgs.scripts}/bin/qmk $HOME/wrk/qmk_firmware/layouts/community/ortho_4x12/peel/keymap.c'';
   };
   environment.interactiveShellInit = ''
