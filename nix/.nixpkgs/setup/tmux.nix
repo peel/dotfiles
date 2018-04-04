@@ -1,4 +1,4 @@
-{ colors }:
+{ colors, tmux-prompt }:
 with colors;
 ''
 # Bigger history
@@ -29,8 +29,8 @@ setw -g window-status-fg black
 set -g window-status-attr reverse
 set -g window-status-activity-attr bold
 
-set-option -g status-left '#[fg=black, fg=cyan, noreverse]λ '
-set-option -g status-right "#(/run/current-system/sw/bin/tmux-prompt)"
+set-option -g status-left '#[fg=black, fg=cyan, noreverse] λ '
+set-option -g status-right "#(${tmux-prompt}/bin/tmux-prompt)"
 
 #### bindings
 # screen prefix

@@ -33,7 +33,7 @@
     sbt
     scripts
     stow
-    tmux-prompt
+    wakatime
   ]
   ++ lib.optionals stdenv.isLinux [
     acpi

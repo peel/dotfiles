@@ -1,7 +1,7 @@
 { config, pkgs, colors, ... }:
 
 let
-  tmuxConfig = import ./tmux.nix {inherit colors;};
+  tmuxConfig = import ./tmux.nix {inherit colors; inherit (pkgs) tmux-prompt;};
   keycodes = {
     A                    ="0x00";
     S                    ="0x01";
