@@ -1,17 +1,22 @@
- { stdenv, fetchFromGitHub, ncurses, pkgconfig, texinfo, libxml2, gnutls, gettext, autoconf, automake, rust
+ { stdenv, fetchFromGitHub, ncurses, pkgconfig, texinfo, libxml2, gnutls, gettext, autoconf, automake
 , AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
 , ImageCaptureCore, GSS, ImageIO # These may be optional
 }:
 
+let
+  moz_overlay = import (builtins.fetchTarball https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz);
+  nixpkgs = import <nixpkgs> { overlays = [ moz_overlay ]; };
+in
+with nixpkgs;
 stdenv.mkDerivation rec {
   name = "remacs-${version}";
-  version = "26.0.50";
+  version = "26.0.60";
 
   src = fetchFromGitHub {
     owner = "Wilfred";
     repo = "remacs";
-    rev = "d09122ed6e48c62da9395b7da813f16c7ea84fd7";
-    sha256 = "0i9633y9v2ml4z2d8sx5gs655fjmzac9ywq1wspkmrphysvbv9lk";
+    rev = "a6ef5cac1c43acc4edebfc81e67ae92efa47de5d";
+    sha256 = "0q6jwzffl077n2k1kf8zc2b7dbliqz1r5xknfwswgaymiahck42k";
   };
 
   enableParallelBuilding = true;
@@ -19,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoconf automake ];
   buildInputs = [ ncurses libxml2 gnutls texinfo gettext rust ];
   propagatedBuildInputs = [
-    rust
+    nixpkgs.latest.rustChannels.nightly.rust
     AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
     ImageCaptureCore GSS ImageIO   # may be optional
   ];

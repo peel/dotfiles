@@ -54,13 +54,6 @@ self: super:
   };
   wee-slack = super.callPackage ./pkgs/networking/weechat/wee-slack.nix {};
   zenity = super.callPackage ./pkgs/misc/zenity {};
-  # remacs = super.callPackage ./pkgs/applications/editors/emacs/remacs.nix {
-  #   rust = super.latest.rustChannels.nightly.rust;
-  #   if super.isDarwin then
-  #   inherit (darwin.apple_sdk.frameworks)
-  #       AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
-  #       ImageCaptureCore GSS ImageIO;
-  #   else
-  # };
+  remacs = super.callPackage ./pkgs/applications/editors/emacs/remacs.nix {};
 
 }
