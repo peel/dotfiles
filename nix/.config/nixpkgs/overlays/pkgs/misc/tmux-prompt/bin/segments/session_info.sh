@@ -1,4 +1,4 @@
-#!/usr/local/bin/zsh
+#!/usr/bin/env bash
 
 # Prints tmux session info.
 # Assumes that [ -n "$TMUX"].
@@ -27,4 +27,3 @@ run_segment() {
 	echo -n "#[bold]${session_name}"
   return 0
 }
-

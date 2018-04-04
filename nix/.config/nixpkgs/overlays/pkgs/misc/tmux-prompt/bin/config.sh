@@ -6,7 +6,7 @@ export TMUX_POWERLINE_DIR_LIB="${TMUX_POWERLINE_DIR_HOME}/lib"
 get_pane_width() {
 	tmux_path=$(get_tmux_cwd)
 	cd "$tmux_path"
-  local pane_width="$(tmux display-message -p -t @1 '#{pane_width}')"
+  local pane_width="$(tmux display-message -p -t 1 '#{pane_width}')"
 
 	if [ -n "$(git symbolic-ref HEAD 2> /dev/null)" ]; then
     export TMUX_PANE_WIDTH=$(($pane_width-30))
@@ -17,7 +17,7 @@ get_pane_width() {
 
 # Get the current path in the segment.
 get_tmux_cwd() {
-  local env_name=$(tmux display -p "TMUXPWD_#D" | tr -d %)
+  local env_name=$(tmux display -p "TMUXPWD_#D" | tr -d '%')
   local env_val=$(tmux show-environment | grep --color=never "$env_name")
   # The version below is still quite new for tmux. Uncomment this in the future :-)
   #local env_val=$(tmux show-environment "$env_name" 2>&1)

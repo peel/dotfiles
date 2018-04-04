@@ -36,7 +36,7 @@ __parse_git_stats() {
 	tracking_branch=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))
 
 	# creates global variables $1 and $2 based on left vs. right tracking
-	set -- $(git rev-list --left-right --count $tracking_branch...HEAD)
+	set -- $(git rev-list --left-right --count HEAD $tracking_branch)
 
 	behind=$1
 	ahead=$2

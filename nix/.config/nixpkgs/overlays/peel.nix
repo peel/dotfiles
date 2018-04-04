@@ -52,6 +52,7 @@ self: super:
     pkgs=self;
     stdenv=self.stdenv;
   };
+  tmux-prompt = super.callPackage ./pkgs/misc/tmux-prompt {};
   wee-slack = super.callPackage ./pkgs/networking/weechat/wee-slack.nix {};
   zenity = super.callPackage ./pkgs/misc/zenity {};
   remacs = super.callPackage ./pkgs/applications/editors/emacs/remacs.nix {};

@@ -15,12 +15,13 @@ print_powerline() {
   # If the required PANE_WIDTH isn't met then the segment will be
   # hidden
   if [ $DEBUG_MODE -ne 1 ]; then
-      double_segment "♫" brightgreen blue "now_playing" blue brightgreen
+      # double_segment "♫" brightgreen blue "now_playing" blue brightgreen
       double_segment "" brightgreen brightred "vcs_branch" brightred brightgreen
-      segment "vcs_compare" black black 10 #this is kind of a hack need to refactor
+      # segment "vcs_compare" black black 10 #this is kind of a hack need to refactor
       double_segment "⊕" brightgreen green "vcs_staged" green brightgreen
       double_segment "+" brightgreen yellow "vcs_modified" yellow brightgreen
       double_segment "○" brightgreen white "vcs_others" white brightgreen
+      segment "online" white black 10
   else
       source "${TMUX_POWERLINE_DIR_HOME}/debug_prompt.sh"
   fi

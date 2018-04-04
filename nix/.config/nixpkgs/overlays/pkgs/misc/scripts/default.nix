@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -r ${./bin}/* $out/bin/
-    for f in $out/bin/*; do
+    for f in `find $out/bin -type f -maxdepth 1`; do
       chmod a+x $f
       wrapProgram $f --prefix PATH : "${wrapperPath}"
     done
@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "Some useful scripts I often use";
     platforms = platforms.unix;
     maintainers = with maintainers; [ peel ];
-    license = licenses.mit;
+    license = licenses.gnu;
   };
 }
