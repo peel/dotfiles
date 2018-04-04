@@ -39,9 +39,13 @@ self: super:
         cp ngrok $out/bin
       ''
       else oldAttrs.installPhase;
-    meta.platforms = super.platforms.unix;
+    # meta.platforms = super.platforms.unix;
   });
   pragmatapro = super.callPackage ./pkgs/data/fonts/pragmatapro {};
+  qarma = super.callPackage ./pkgs/misc/qarma {
+    inherit (super) stdenv fetchFromGitHub pkgconfig;
+    inherit (super.qt5) qtbase qmake qttools qtmacextras;
+  };
   rofi-emoji = super.callPackage ./pkgs/misc/rofi-emoji {};
   rofi-wifi-menu = super.callPackage ./pkgs/misc/rofi-wifi-menu {};
   scripts = super.callPackage ./pkgs/misc/scripts {

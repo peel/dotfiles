@@ -26,6 +26,7 @@
     nix-repl
     nixUnstable
     # purescript
+    qarma
     ranger
     ripgrep
     sbt

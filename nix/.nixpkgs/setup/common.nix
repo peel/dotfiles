@@ -323,9 +323,10 @@
     ne = "nix-env";
     neg = "ne -qaP | grep";
     ns = "nix-shell";
-    nr = "sudo nixos-rebuild";
+    nr = (if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild");
 
     pass = "${pkgs.gopass}/bin/gopass";
+    zenity = "${pkgs.qarma}/bin/qarma";
     vim = "${pkgs.emacs}/bin/emacsclient -n";
     r = "${pkgs.ranger}/bin/ranger";
     grep = "${pkgs.ripgrep}/bin/rg";

@@ -122,6 +122,7 @@ in {
   programs.tmux.enableSensible = true;
   programs.tmux.enableMouse = true;
   programs.tmux.enableVim = true;
+  programs.tmux.enableFzf = true;
   programs.bash.enable = true;
 
   environment.variables.HOMEBREW_CASK_OPTS = "--appdir=/Applications/cask";
@@ -160,150 +161,99 @@ in {
     chunkc set mouse_follows_focus           1
     chunkc set window_region_locked          1
   '';
+  services.chunkwm.extraConfig = ''
+    chunkc tiling::rule --owner Emacs --state tile
+    chunkc tiling::rule --owner Emacs.* --state tile
+    chunkc tiling::rule --owner .*Emacs --state tile
+    chunkc tiling::rule --owner .*Emacs --state tile
+    chunkc tiling::rule --owner \"\.qarma-wrapped\" --state native-fullscreen
+  '';
   services.skhd.enable = true;
   services.skhd.package =  pkgs.skhd;
-  services.skhd.skhdConfig = ''
-    #  NOTE(koekeishiya): A list of all built-in modifier and literal keywords can
-    #                     be found at https://github.com/koekeishiya/skhd/issues/1
-    #
-    #                     A hotkey is written according to the following rules:
-    #
-    #                       hotkey   = <keysym> ':' <command> |
-    #                                  <keysym> '->' ':' <command>
-    #
-    #                       keysym   = <mod> '-' <key> | <key>
-    #
-    #                       mod      = 'built-in mod keyword' | <mod> '+' <mod>
-    #
-    #                       key      = <literal> | <keycode>
-    #
-    #                       literal  = 'single letter or built-in keyword'
-    #
-    #                       keycode  = 'apple keyboard kVK_<Key> values (0x3C)'
-    #
-    #                       ->       = keypress is not consumed by skhd
-    #
-    #                       command  = command is executed through '$SHELL -c' and
-    #                                  follows valid shell syntax. if the $SHELL environment
-    #                                  variable is not set, it will default to '/bin/bash'.
-    #                                  when bash is used, the ';' delimeter can be specified
-    #                                  to chain commands.
-    #
-    #                                  to allow a command to extend into multiple lines,
-    #                                  prepend '\' at the end of the previous line.
-    #
-    #                                  an EOL character signifies the end of the bind.
+  services.skhd.skhdConfig = let
+    modMask = "alt";
+    myTerminal = "${pkgs.alacrittyWrapper}/bin/alacritty -e tmux -2 new-session -A -s main";
+    myEditor = "${pkgs.scripts}/bin/em";
+    cheatsheet = file: "${pkgs.qarma}/bin/qarma --text-info --font=PragmataPro --width 1500 --height 1500 --filename ${file}";
+  in ''
+    ${modMask} - q : killall chunkwm
+    cmd - q : /dev/null
 
-
-    # restart chunkwm
-    cmd + alt + ctrl - q : killall chunkwm
-
-    # open terminal, blazingly fast compared to iTerm/Hyper
-    cmd - return : ${pkgs.alacrittyWrapper}/bin/alacritty -e tmux -2 new-session -A -s main
-    cmd + shift - return : ${pkgs.scripts}/bin/em
+    # TODO extract to make sure commands exist
+    ${modMask} - return : ${myTerminal}
+    ${modMask} + shift - return : ${myEditor}
+    ${modMask} - ${keycodes.Equal} : ${pkgs.scripts}/bin/qmk $HOME/wrk/qmk_firmware/layouts/community/ortho_4x12/peel/keymap.c
+    ${modMask} - ${keycodes.Comma} : ${cheatsheet "/etc/static/skhdrc"}
 
     # close focused window
-    cmd - ${keycodes.Delete} : chunkc tiling::window --close
+    ${modMask} - ${keycodes.Delete} : chunkc tiling::window --close
 
     # focus window
-    alt - h : chunkc tiling::window --focus west
-    alt - j : chunkc tiling::window --focus south
-    alt - k : chunkc tiling::window --focus north
-    alt - l : chunkc tiling::window --focus east
+    ${modMask} - h : chunkc tiling::window --focus west
+    ${modMask} - j : chunkc tiling::window --focus south
+    ${modMask} - k : chunkc tiling::window --focus north
+    ${modMask} - l : chunkc tiling::window --focus east
 
     cmd - j : chunkc tiling::window --focus prev
     cmd - k : chunkc tiling::window --focus next
 
     # equalize size of windows
-    shift + alt - 0 : chunkc tiling::desktop --equalize
+    shift + ${modMask} - 0 : chunkc tiling::desktop --equalize
 
     # swap window
-    shift + alt - h : chunkc tiling::window --swap west
-    shift + alt - j : chunkc tiling::window --swap south
-    shift + alt - k : chunkc tiling::window --swap north
-    shift + alt - l : chunkc tiling::window --swap east
-
-    # move window
-    shift + cmd - h : chunkc tiling::window --warp west
-    shift + cmd - j : chunkc tiling::window --warp south
-    shift + cmd - k : chunkc tiling::window --warp north
-    shift + cmd - l : chunkc tiling::window --warp east
+    shift + ${modMask} - h : chunkc tiling::window --swap west
+    shift + ${modMask} - j : chunkc tiling::window --swap south
+    shift + ${modMask} - k : chunkc tiling::window --swap north
+    shift + ${modMask} - l : chunkc tiling::window --swap east
 
     # send window to desktop
-    shift + alt - x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
-    shift + alt - z : chunkc tiling::window --send-to-desktop prev
-    shift + alt - c : chunkc tiling::window --send-to-desktop next
+    cmd + ${modMask} - x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
+    cmd + ${modMask} - z : chunkc tiling::window --send-to-desktop prev
+    cmd + ${modMask} - c : chunkc tiling::window --send-to-desktop next
 
     # focus monitor
-    cmd - ${keycodes.LeftArrow} : chunkc tiling::monitor -f prev
-    cmd - ${keycodes.RightArrow}   : chunkc tiling::monitor -f next
-    ctrl + alt - 1  : chunkc tiling::monitor -f 1
-    ctrl + alt - 2  : chunkc tiling::monitor -f 2
-    ctrl + alt - 3  : chunkc tiling::monitor -f 3
+    ${modMask} - left : chunkc tiling::monitor -f prev
+    ${modMask} - right : chunkc tiling::monitor -f next
+    ${modMask} - 1  : chunkc tiling::monitor -f 1
+    ${modMask} - 2  : chunkc tiling::monitor -f 2
 
     # send window to monitor and follow focus
-    ctrl + cmd - ${keycodes.LeftArrow}  : chunkc tiling::window --send-to-monitor prev; chunkc tiling::monitor -f prev
-    ctrl + cmd - ${keycodes.RightArrow}  : chunkc tiling::window --send-to-monitor next; chunkc tiling::monitor -f next
-    ctrl + cmd - 1  : chunkc tiling::window --send-to-monitor 1; chunkc tiling::monitor -f 1
-    ctrl + cmd - 2  : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
-    ctrl + cmd - 3  : chunkc tiling::window --send-to-monitor 3; chunkc tiling::monitor -f 3
+    shift + ${modMask} - left : chunkc tiling::window --send-to-monitor prev; chunkc tiling::monitor -f prev
+    shift + ${modMask} - right : chunkc tiling::window --send-to-monitor next; chunkc tiling::monitor -f next
+    shift + ${modMask} - 1  : chunkc tiling::window --send-to-monitor 1; chunkc tiling::monitor -f 1
+    shift + ${modMask} - 2  : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
 
     # increase region size
-    shift + alt - a : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west
-    shift + alt - s : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge south
-    shift + alt - w : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge north
-    shift + alt - d : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east
-
-    # decrease region size
-    shift + cmd - a : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west
-    shift + cmd - s : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge south
-    shift + cmd - w : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge north
-    shift + cmd - d : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east
-
-    # set insertion point for focused container
-    ctrl + alt - f : chunkc tiling::window --use-insertion-point cancel
-    ctrl + alt - h : chunkc tiling::window --use-insertion-point west
-    ctrl + alt - j : chunkc tiling::window --use-insertion-point south
-    ctrl + alt - k : chunkc tiling::window --use-insertion-point north
-    ctrl + alt - l : chunkc tiling::window --use-insertion-point east
+    ${modMask} - ${keycodes.LeftBracket} : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west
+    ${modMask} - ${keycodes.RightBracket} : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east
 
     # rotate tree
-    alt - r : chunkc tiling::desktop --rotate 90
+    ${modMask} - r : chunkc tiling::desktop --rotate 90
 
     # mirror tree y-axis
-    alt - y : chunkc tiling::desktop --mirror vertical
+    ${modMask} - y : chunkc tiling::desktop --mirror vertical
 
     # mirror tree x-axis
-    alt - x : chunkc tiling::desktop --mirror horizontal
+    ${modMask} - x : chunkc tiling::desktop --mirror horizontal
 
     # toggle window fullscreen
-    alt - f : chunkc tiling::window --toggle fullscreen
+    ${modMask} - f : chunkc tiling::window --toggle fullscreen
 
     # toggle window native fullscreen
-    shift + alt - f : chunkc tiling::window --toggle native-fullscreen
+    shift + ${modMask} - f : chunkc tiling::window --toggle native-fullscreen
 
     # toggle window parent zoom
-    alt - d : chunkc tiling::window --toggle parent
+    ${modMask} - d : chunkc tiling::window --toggle parent
 
     # toggle window split type
-    alt - e : chunkc tiling::window --toggle split
+    ${modMask} - e : chunkc tiling::window --toggle split
 
     # float / unfloat window and center on screen
-    alt - t : chunkc tiling::window --toggle float;\
-              chunkc tiling::window --grid-layout 4:4:1:1:2:2
+    ${modMask} - t : chunkc tiling::window --toggle float \
+              chunkc tiling::window --grid-layout 1:1:1:1:1:1
 
     # toggle sticky, float and resize to picture-in-picture size
-    alt - s : chunkc tiling::window --toggle sticky;\
+    ${modMask} - s : chunkc tiling::window --toggle sticky;\
               chunkc tiling::window --grid-layout 5:5:4:0:1:1
-
-    # float next window to be tiled
-    shift + alt - t : chunkc set window_float_next 1
-
-    # change layout of desktop
-    ctrl + alt - a : chunkc tiling::desktop --layout bsp
-    ctrl + alt - s : chunkc tiling::desktop --layout monocle
-    ctrl + alt - d : chunkc tiling::desktop --layout float
-
-    ctrl + alt - w : chunkc tiling::desktop --deserialize ~/.chunkwm_layouts/dev_1
   '';
 }

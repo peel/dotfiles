@@ -13,6 +13,7 @@ in rec {
   nixpkgs.overlays = [ (import (mkOverlay username username)) ];
   nix.package = pkgs.nixUnstable;
   nix.useSandbox = true;
+  nix.maxJobs = 4;
 
   networking.hostName = hostName;
 
