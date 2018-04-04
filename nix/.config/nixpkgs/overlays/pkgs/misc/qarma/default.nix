@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qtbase, qmake, qttools, qtmacextras ? null, makeWrapper }:
+{ stdenv, fetchFromGitHub, pkgconfig, qtbase, qmake, qttools, qtmacextras ? null, qtx11extras ? null, makeWrapper }:
 
 let
   targetPath = isLinux: if isLinux then "bin" else "Applications";
@@ -13,7 +13,9 @@ in stdenv.mkDerivation rec {
     sha256 = "0rrw85751vicbsdgawgshqim1069lf7v2v8sx212gqvklgi5ab5z";
   };
 
-  buildInputs = [ makeWrapper pkgconfig qtbase qttools ]  ++ stdenv.lib.optional stdenv.isDarwin qtmacextras;
+  buildInputs = [ makeWrapper pkgconfig qtbase qttools ]
+    ++ stdenv.lib.optional stdenv.isLinux qtx11extras
+    ++ stdenv.lib.optional stdenv.isDarwin qtmacextras;
   nativeBuildInputs = [ qmake ];
 
   preConfigure = ''

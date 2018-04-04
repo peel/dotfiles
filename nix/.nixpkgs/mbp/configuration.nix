@@ -344,7 +344,7 @@ in
   # shared config
   nixpkgs.config.packageOverrides = pkgs : rec {
     bluez = pkgs.bluez5;
-    alacritty = import ./setup/alacritty {
+    alacrittyWrapper = import ./setup/alacritty {
       inherit colors fonts;
       inherit (pkgs) stdenv makeWrapper writeTextFile alacritty;
     };

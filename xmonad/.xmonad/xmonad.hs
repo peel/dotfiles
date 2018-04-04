@@ -392,8 +392,7 @@ projects =
 
 --myTerminal          = "terminator"
 --myTerminalClass     = "Terminator"
-myTerminal          = "urxvt"
-myAltTerminal       = "cool-retro-term"
+myTerminal          = "alacritty -e tmux -2 new-session -A -s main"
 myBrowser           = "browser" -- chrome with WS profile dirs
 myBrowserClass      = "firefox"
 myStatusBar         = "xmobar -x0 $HOME/.xmonad/xmobar.conf"
@@ -1513,7 +1512,6 @@ myStartupHook = do
     spawn     "$HOME/bin/wm/init-tray"
 
     spawn     "xfce4-power-manager &"
-    spawn     "$HOME/.screenlayout/home.sh"
 
     setDefaultCursor xC_left_ptr
 

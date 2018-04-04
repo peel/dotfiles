@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 {
   environment.systemPackages = with pkgs; ([
+    alacrittyWrapper
     aspell
     awscli
     curl
@@ -34,7 +35,6 @@
     stow
   ]
   ++ lib.optionals stdenv.isLinux [
-    alacritty
     acpi
     arandr
     autorandr
@@ -88,7 +88,6 @@
     zeal
   ]
   ++ lib.optionals stdenv.isDarwin [
-    alacrittyWrapper
     chunkwm.border
     chunkwm.core
     chunkwm.ffm
