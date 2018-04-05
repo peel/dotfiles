@@ -3,6 +3,9 @@
 {
   environment.variables.EDITOR = "${pkgs.emacs}/bin/emacsclient -tc";
   environment.variables.fish_key_bindings = "fish_vi_key_bindings";
+  environment.etc."inputrc".text = ''
+    set editing-mode vi
+  '';
   environment.etc."editorconfig".text = ''
     # top-most EditorConfig file
     root = true
@@ -187,6 +190,12 @@
     set nonumber
     set relativenumber
     colorscheme default
+  '';
+  system.activationScripts.extraUserActivation.text = ''
+    ln -sfn /etc/gitconfig $HOME/.gitconfig
+    ln -sfn /etc/inputrc $HOME/.inputrc
+    ln -sfn /etc/ctags $HOME/.ctags
+    ln -sfn /etc/vimrc $HOME/.vimrc
   '';
   environment.shellAliases = {
     e = "em";

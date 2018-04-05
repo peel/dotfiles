@@ -39,7 +39,7 @@ self: super:
         cp ngrok $out/bin
       ''
       else oldAttrs.installPhase;
-    # meta.platforms = super.platforms.unix;
+    meta.platforms = super.lib.platforms.unix;
   });
   pragmatapro = super.callPackage ./pkgs/data/fonts/pragmatapro {};
   qarma = super.callPackage ./pkgs/misc/qarma {

@@ -23,8 +23,8 @@ with colors;
     # Falls back to size specified by window manager if set to 0x0.
     # (changes require restart)
     dimensions:
-      columns: 80
-      lines: 24
+      columns: 0
+      lines: 0
 
     # Adds this many blank pixels of padding around the window
     # Units are physical pixels; this is not DPI aware.
@@ -35,7 +35,7 @@ with colors;
 
     # Window decorations
     # Setting this to false will result in window without borders and title bar.
-    decorations: true
+    decorations: false
 
   # Display tabs using this many cells (changes require restart)
   tabspaces: 8
