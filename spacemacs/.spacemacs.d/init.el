@@ -481,6 +481,9 @@ you should place your code here."
   (spacemacs/toggle-mode-line-battery-on)
   (spacemacs/toggle-transparency)
 
+  ;; better resize
+  (setq frame-resize-pixelwise t)
+
   ;; magit github helm integration
   (use-package magithub
     :defer t
