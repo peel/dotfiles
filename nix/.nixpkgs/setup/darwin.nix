@@ -207,9 +207,7 @@ in {
     shift + ${modMask} - l : chunkc tiling::window --swap east
 
     # send window to desktop
-    cmd + ${modMask} - x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
-    cmd + ${modMask} - z : chunkc tiling::window --send-to-desktop prev
-    cmd + ${modMask} - c : chunkc tiling::window --send-to-desktop next
+    ctrl + ${modMask} - x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
 
     # focus monitor
     ${modMask} - left : chunkc tiling::monitor -f prev
@@ -218,10 +216,8 @@ in {
     ${modMask} - 2  : chunkc tiling::monitor -f 2
 
     # send window to monitor and follow focus
-    shift + ${modMask} - left : chunkc tiling::window --send-to-monitor prev; chunkc tiling::monitor -f prev
-    shift + ${modMask} - right : chunkc tiling::window --send-to-monitor next; chunkc tiling::monitor -f next
-    shift + ${modMask} - 1  : chunkc tiling::window --send-to-monitor 1; chunkc tiling::monitor -f 1
-    shift + ${modMask} - 2  : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
+    ctrl - right : chunkc tiling::window --send-to-monitor 1; chunkc tiling::monitor -f 1
+    ctrl - left : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
 
     # increase region size
     ${modMask} - ${keycodes.LeftBracket} : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west
