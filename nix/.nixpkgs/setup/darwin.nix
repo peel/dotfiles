@@ -178,6 +178,7 @@ in {
   in ''
     ${modMask} - q : killall chunkwm
     cmd - q : /dev/null
+    cmd - h : /dev/null
 
     # TODO extract to make sure commands exist
     ${modMask} - return : ${myTerminal}
