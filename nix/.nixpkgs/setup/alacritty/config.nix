@@ -35,7 +35,8 @@ with colors;
 
     # Window decorations
     # Setting this to false will result in window without borders and title bar.
-    decorations: false
+    # decorations: false # breaks chunkwm :,(
+    decorations: true
 
   # Display tabs using this many cells (changes require restart)
   tabspaces: 8
@@ -181,7 +182,7 @@ with colors;
     duration: 0
 
   # Background opacity
-  background_opacity: 1.0
+  background_opacity: 0.9
 
   # Mouse bindings
   #
@@ -223,7 +224,7 @@ with colors;
   selection:
     semantic_escape_chars: ",│`|:\"' ()[]{}<>"
 
-  dynamic_title: true
+  dynamic_title: false
 
   hide_cursor_when_typing: false
 

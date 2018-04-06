@@ -162,11 +162,8 @@ in {
     chunkc set window_region_locked          1
   '';
   services.chunkwm.extraConfig = ''
-    chunkc tiling::rule --owner Emacs --state tile
-    chunkc tiling::rule --owner Emacs.* --state tile
-    chunkc tiling::rule --owner .*Emacs --state tile
-    chunkc tiling::rule --owner .*Emacs --state tile
-    chunkc tiling::rule --owner \"\.qarma-wrapped\" --state native-fullscreen
+    chunkc tiling::rule --owner Emacs --except "^$" --state tile
+    chunkc tiling::rule --owner Alacritty --state tile
   '';
   services.skhd.enable = true;
   services.skhd.package =  pkgs.skhd;
