@@ -160,6 +160,14 @@ in {
     chunkc set window_focus_cycle            all
     chunkc set mouse_follows_focus           1
     chunkc set window_region_locked          1
+
+    # chwm-sa additions
+    # https://github.com/koekeishiya/chwm-sa
+    chunkc set window_float_topmost          1
+    chunkc set window_fade_inactive          1
+    chunkc set window_fade_alpha             0.7
+    chunkc set window_fade_duration          0.1
+    chunkc set window_use_cgs_move           1
   '';
   services.chunkwm.extraConfig = ''
     chunkc tiling::rule --owner Emacs --except "^$" --state tile
@@ -199,10 +207,10 @@ in {
     shift + ${modMask} - 0 : chunkc tiling::desktop --equalize
 
     # swap window
-    shift + ${modMask} - h : chunkc tiling::window --swap west
-    shift + ${modMask} - j : chunkc tiling::window --swap south
-    shift + ${modMask} - k : chunkc tiling::window --swap north
-    shift + ${modMask} - l : chunkc tiling::window --swap east
+    ctrl - h : chunkc tiling::window --swap west
+    ctrl - j : chunkc tiling::window --swap south
+    ctrl - k : chunkc tiling::window --swap north
+    ctrl - l : chunkc tiling::window --swap east
 
     # send window to desktop
     ctrl + ${modMask} - x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
@@ -219,7 +227,7 @@ in {
 
     # increase region size
     ${modMask} - ${keycodes.LeftBracket} : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west
-    ${modMask} - ${keycodes.RightBracket} : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east
+    ${modMask} - ${keycodes.RightBracket} : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west
 
     # rotate tree
     ${modMask} - r : chunkc tiling::desktop --rotate 90
