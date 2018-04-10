@@ -1,19 +1,18 @@
 { config, pkgs, lib, ... }:
 
 let
-  wallpaper = pkgs.copyPathToStore ./art/the-technomancer.png;
   username = "peel";
   hostName = "fff66602";
-  colors = import ./setup/colors.nix;
-  fonts = import ./setup/fonts.nix;
+  colors = import ../setup/colors.nix;
+  fonts = import ../setup/fonts.nix;
   mkOverlay = username: overlay: builtins.toPath "/home/${username}/.config/nixpkgs/overlays/${overlay}.nix";
 in
 {
   imports = [
       ./hardware-configuration.nix
-      ./setup/common.nix
-      ./setup/nixos.nix
-      ./setup/packages.nix
+      ../setup/common.nix
+      ../setup/nixos.nix
+      ../setup/packages.nix
     ] ++ import (mkOverlay username "modules/module-list");
 
   # mbp config
@@ -198,7 +197,6 @@ in
       '';
       lightdm = {
         enable = true;
-        background = wallpaper;
         autoLogin.enable = true;
         autoLogin.user = username;
       };
@@ -344,13 +342,13 @@ in
   # shared config
   nixpkgs.config.packageOverrides = pkgs : rec {
     bluez = pkgs.bluez5;
-    alacrittyWrapper = import ./setup/alacritty {
+    alacrittyWrapper = import ../setup/alacritty {
       inherit colors fonts;
       inherit (pkgs) stdenv makeWrapper writeTextFile alacritty;
     };
-    rofi = import ./rofi/rofi.nix { inherit pkgs colors fonts; terminal = "alacritty"; };
-    urxvt = import ./urxvt/urxvt.nix { inherit pkgs colors fonts; };
-    dunst = import ./dunst/dunst.nix { inherit pkgs colors fonts; browser = "firefox"; };
-    stalonetray = import ./stalonetray/stalonetray.nix { inherit pkgs; };
+    rofi = import ../setup/rofi { inherit pkgs colors fonts; terminal = "alacritty"; };
+    urxvt = import ../setup/urxvt { inherit pkgs colors fonts; };
+    dunst = import ../setup/dunst { inherit pkgs colors fonts; browser = "firefox"; };
+    stalonetray = import ../setup/stalonetray { inherit pkgs; };
   };
 }

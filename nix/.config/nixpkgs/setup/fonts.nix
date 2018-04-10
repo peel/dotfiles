@@ -5,8 +5,8 @@
     emoji = "EmojiOne";
   };
   size = {
-    small = "12";
-    default = "14";
-    large = "24";
+    small = "14";
+    default = "16";
+    large = "22";
   };
 }

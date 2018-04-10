@@ -66,7 +66,7 @@ self: super:
     inherit (super) stdenv fetchFromGitHub pkgconfig;
     inherit (super.qt5) qtbase qmake qttools qtmacextras qtx11extras;
   };
-  remacs = super.callPackage ./pkgs/applications/editors/emacs/remacs.nix {};
+  # remacs = super.callPackage ./pkgs/applications/editors/emacs/remacs.nix {};
   rofi-emoji = super.callPackage ./pkgs/misc/rofi-emoji {};
   rofi-wifi-menu = super.callPackage ./pkgs/misc/rofi-wifi-menu {};
   scripts = super.callPackage ./pkgs/misc/scripts {
