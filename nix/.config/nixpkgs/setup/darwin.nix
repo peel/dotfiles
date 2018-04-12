@@ -258,5 +258,8 @@ in {
     # toggle sticky, float and resize to picture-in-picture size
     ${modMask} - s : chunkc tiling::window --toggle sticky;\
               chunkc tiling::window --grid-layout 5:5:4:0:1:1
-  '';
+
+    ctrl + ${modMask} - a : chunkc tiling::desktop --layout bsp
+    ctrl + ${modMask} - r : chunkc tiling::desktop --layout monocle
+'';
 }
