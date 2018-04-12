@@ -39,15 +39,13 @@ This function should only modify configuration layer settings."
               colors-enable-nyan-cat-progress-bar t
               colors-enable-rainbow-identifiers t)
       dash
-      deft
       emacs-lisp
-      emoji
       elixir
-      fasd
       (git :variables
             git-gutter-use-fringe t)
       github
-      graphviz
+      gtags
+      ;; graphviz
       (haskell :variables haskell-completion-backend 'company-ghci)
       html
       javascript
@@ -55,20 +53,17 @@ This function should only modify configuration layer settings."
       ;; (org :variables
       ;;      org-enable-bootstrap-support t
       ;;      org-projectile-file "~/TODO.org")
-      markdown
       nixos
-      osx
+      ;; osx
       pdf-tools
-      purescript
+      ;; purescript
       restclient
       (scala :variables
               flycheck-scalastyle-jar "/usr/local/bin/scalastyle")
-      spotify
       (shell :variables shell-default-shell 'eshell)
       shell-scripts
       sql
       syntax-checking
-      yaml
       version-control
       ;; (wakatime :variables
       ;;           wakatime-api-key "d405f27b-007d-411f-9e0f-e1e1545c9d6b"
