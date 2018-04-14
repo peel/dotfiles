@@ -1,6 +1,6 @@
 {config, lib, pkgs, ...}:
 
-with (import ../libs/default.nix { inherit lib; });
+with (import ../libs { inherit lib; });
 
 let
   colors = import ../setup/colors.nix;

@@ -170,6 +170,7 @@ in {
     chunkc set window_use_cgs_move           1
   '';
   services.chunkwm.extraConfig = ''
+    chunkc tiling::rule --owner Emacs.* --except "^$" --state tile
     chunkc tiling::rule --owner Emacs --except "^$" --state tile
     chunkc tiling::rule --owner Alacritty --state tile
     chunkc tiling::rule --owner Dash --state float

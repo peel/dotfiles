@@ -1,29 +1,11 @@
-language: generic
-os:
-  - osx
-  - linux
-
-sudo: required
-
-cache:
-  directories:
-    - /nix/store
-
-before-install:
-  - if [[ "$TRAVIS_OS_NAME" == osx ]]; brew update ; fi
-  - if [[ "$TRAVIS_OS_NAME" == osx ]];  brew tap Homebrew/bundle ; fi
-
-install:
-  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then brew uninstall git ; fi
-  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then brew uninstall tmux ; fi
-  - if [[ "$TRAVIS_OS_NAME" == linux ]]; then rm -rf ~/.nix-defexpr ; fi
-
+language: nix
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode8.3  # 10.12
+    - os: linux
 script:
-  - if [[ "$TRAVIS_OS_NAME" == linux ]]; then make nix-env ; fi
-  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then make brew ; fi
-  - if [[ "$TRAVIS_OS_NAME" == osx ]]; then make brew-minimal ; fi
-  - make link
-  - make shell
-  - make editor
-  - make osx
-  - make clean
+  - nix build
+  - ./result/bin/dotfiles install
+  - ./result/bin/dotfiles link
+  - ./result/bin/dotfiles uninstall

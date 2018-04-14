@@ -14,28 +14,22 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto+Slab:700,300,400|Source+Code+Pro:500" />
 
 * Installation
-✂️ Tailored Install:
 #+BEGIN_SRC shell
-sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`" -s tailored
+curl https://dotfiles.codearsonist.com/install.sh | sh
 #+END_SRC
-🔋 Full install:
+or with nix:
 #+BEGIN_SRC shell
-sh -c "`curl -fsSL https://dotfiles.codearsonist.com/install.sh`"
+nix build -f https://github.com/peel/dotfiles/archive/master.tar.gz
+./result/bin/dotfiles
 #+END_SRC
-* Requirements
-Depending on your flavour of installation you'll need at least (see: [[*Usage][Usage]])
-- ~make~
-- ~curl~
 * Usage
 #+BEGIN_SRC shell
-git clone git@github.com:peel/dotfiles.git && cd dotfiles && make
+dotfiles [command]
 #+END_SRC
-- ~default~ (~install~) - install everything - dotfiles, /homebrew/ and packages (incl. desktop apps on macOS)
-- ~minimal~ - install dotfiles and /homebrew/ package manager only
-- ~nix-build~ - sets up nix environment
-- ~nix~ - installs using /Nix/ package manager, on osx installs GUI apps with homebrew
-- ~clean~ - remove configured links (requires [[https://www.gnu.org/software/stow/][stow]])
-- ~link~ - link dotfiles (requires [[https://www.gnu.org/software/stow/][stow]])
+- ~default~ (~install~)
+- ~link~ - link/relink dotfiles
+- ~uninstall~ - remove configured links
+- ~unlink~ - unlink dotfiles
 * Sources
 See[[https://github.com/peel/dotfiles][ peel/dotfiles]] at Github [[https://travis-ci.org/peel/dotfiles.svg]]
 

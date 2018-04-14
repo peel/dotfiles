@@ -244,57 +244,41 @@ for the JavaScript code in this tag.
 <span class="subtitle">well-tailored dotfiles for macOS &amp; NixOS</span>
 </h1>
 
-<div id="outline-container-org90a7190" class="outline-2">
-<h2 id="org90a7190"><span class="section-number-2">1</span> Installation</h2>
+<div id="outline-container-org1c20098" class="outline-2">
+<h2 id="org1c20098"><span class="section-number-2">1</span> Installation</h2>
 <div class="outline-text-2" id="text-1">
-<p>
-✂️ Tailored Install:
-</p>
 <div class="org-src-container">
-<pre class="src src-shell">sh -c <span style="color: #2aa889;">"`curl -fsSL https://dotfiles.codearsonist.com/install.sh`"</span> -s tailored
+<pre class="src src-shell">curl https://matthewbauer.us/bootstrap.sh | sh
 </pre>
 </div>
 <p>
-🔋 Full install:
+or with nix:
 </p>
 <div class="org-src-container">
-<pre class="src src-shell">sh -c <span style="color: #2aa889;">"`curl -fsSL https://dotfiles.codearsonist.com/install.sh`"</span>
+<pre class="src src-shell">nix build -f https://github.com/peel/dotfiles/archive/master.tar.gz
+./result/bin/dotfiles
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-orgddb8f7d" class="outline-2">
-<h2 id="orgddb8f7d"><span class="section-number-2">2</span> Requirements</h2>
+<div id="outline-container-org2e68b43" class="outline-2">
+<h2 id="org2e68b43"><span class="section-number-2">2</span> Usage</h2>
 <div class="outline-text-2" id="text-2">
-<p>
-Depending on your flavour of installation you'll need at least (see: <a href="#org7fea287">Usage</a>)
-</p>
-<ul class="org-ul">
-<li><code>make</code></li>
-<li><code>curl</code></li>
-</ul>
-</div>
-</div>
-<div id="outline-container-org7fea287" class="outline-2">
-<h2 id="org7fea287"><span class="section-number-2">3</span> Usage</h2>
-<div class="outline-text-2" id="text-3">
 <div class="org-src-container">
-<pre class="src src-shell">git clone git@github.com:peel/dotfiles.git &amp;&amp; <span style="color: #d26937;">cd</span> dotfiles &amp;&amp; make
+<pre class="src src-shell">dotfiles <span style="color: #99d1ce;">[</span>command<span style="color: #99d1ce;">]</span>
 </pre>
 </div>
 <ul class="org-ul">
-<li><code>default</code> (<code>install</code>) - install everything - dotfiles, <i>homebrew</i> and packages (incl. desktop apps on macOS)</li>
-<li><code>minimal</code> - install dotfiles and <i>homebrew</i> package manager only</li>
-<li><code>nix-build</code> - sets up nix environment</li>
-<li><code>nix</code> - installs using <i>Nix</i> package manager, on osx installs GUI apps with homebrew</li>
-<li><code>clean</code> - remove configured links (requires <a href="https://www.gnu.org/software/stow/">stow</a>)</li>
-<li><code>link</code> - link dotfiles (requires <a href="https://www.gnu.org/software/stow/">stow</a>)</li>
+<li><code>default</code> (<code>install</code>)</li>
+<li><code>link</code> - link/relink dotfiles</li>
+<li><code>uninstall</code> - remove configured links</li>
+<li><code>unlink</code> - unlink dotfiles</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org831f951" class="outline-2">
-<h2 id="org831f951"><span class="section-number-2">4</span> Sources</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-org87d3116" class="outline-2">
+<h2 id="org87d3116"><span class="section-number-2">3</span> Sources</h2>
+<div class="outline-text-2" id="text-3">
 <p>
 See<a href="https://github.com/peel/dotfiles"> peel/dotfiles</a> at Github <object type="image/svg+xml" data="https://travis-ci.org/peel/dotfiles.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
@@ -307,11 +291,11 @@ Sorry, your browser does not support SVG.</object>
 </div>
 </div>
 </div>
-<div id="outline-container-org7896a55" class="outline-2 license">
-<h2 id="org7896a55"><span class="section-number-2">5</span> License</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-org16e58a7" class="outline-2 license">
+<h2 id="org16e58a7"><span class="section-number-2">4</span> License</h2>
+<div class="outline-text-2" id="text-4">
 <p>
-Distributed in the hope to be useful under <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0 Universal</a>
+Distributed in hope to be useful under <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0 Universal</a>
 </p>
 </div>
 </div>
