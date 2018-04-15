@@ -36,7 +36,7 @@ let
     ${pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
     if ! command -v darwin-rebuild >/dev/null 2>&1; then
         nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
-        ./result/bin/darwin-installer
+        yes | ./result/bin/darwin-installer
     fi
     ''}
 
