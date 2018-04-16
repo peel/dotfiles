@@ -123,8 +123,10 @@ in {
   programs.tmux.enableMouse = true;
   programs.tmux.enableVim = true;
   programs.tmux.enableFzf = true;
+  programs.tmux.iTerm2 = true; # for disabling the reattach-to-user-namespace
   programs.bash.enable = true;
 
+  environment.loginShell = "${pkgs.fish}/bin/fish";
   environment.variables.HOMEBREW_CASK_OPTS = "--appdir=/Applications/cask";
   environment.variables.TERMINFO = "/usr/share/terminfo";
 
@@ -170,7 +172,7 @@ in {
     chunkc set window_use_cgs_move           1
   '';
   services.chunkwm.extraConfig = ''
-    chunkc tiling::rule --owner Emacs.* --except "^$" --state tile
+    chunkc tiling::rule --owner "Emacs.*" --except "^$" --state tile
     chunkc tiling::rule --owner Emacs --except "^$" --state tile
     chunkc tiling::rule --owner Alacritty --state tile
     chunkc tiling::rule --owner Dash --state float
