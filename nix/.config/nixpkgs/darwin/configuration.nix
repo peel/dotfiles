@@ -3,7 +3,7 @@
 with (import ../libs { inherit lib; });
 
 let
-  colors = import ../setup/colors.nix;
+  colors = (import ../setup/colors.nix {});
   fonts = import ../setup/fonts.nix;
   username = "peel";
   hostName = "fff666";
@@ -19,7 +19,7 @@ in rec {
     [
       "darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix"
       "darwin=$HOME/.nix-defexpr/channels/darwin"
-      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixpkgs"
+      "nixpkgs=/nix/var/nix/profiles/per-user/peel/channels/nixpkgs"
       "$HOME/.nix-defexpr/channels"
     ];
   networking.hostName = hostName;

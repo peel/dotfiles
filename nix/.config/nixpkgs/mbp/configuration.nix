@@ -3,7 +3,7 @@
 let
   username = "peel";
   hostName = "fff66602";
-  colors = import ../setup/colors.nix;
+  colors = (import ../setup/colors.nix {});
   fonts = import ../setup/fonts.nix;
   mkOverlay = username: overlay: builtins.toPath "/home/${username}/.config/nixpkgs/overlays/${overlay}.nix";
 in
