@@ -12,7 +12,6 @@
     fasd
     fish
     fzf
-    gawk
     gist
     gitAndTools.hub
     gitFull
@@ -20,11 +19,10 @@
     gnupg
     gopass
     ix
-    graphviz
-    hoverfly
+    # graphviz
+    # hoverfly
     httpie
     jq
-    nix-repl
     nixUnstable
     # purescript
     qarma
