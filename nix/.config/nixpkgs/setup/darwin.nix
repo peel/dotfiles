@@ -243,12 +243,6 @@ in {
     # rotate tree
     ${modMask} - r : chunkc tiling::desktop --rotate 90
 
-    # mirror tree y-axis
-    ${modMask} - y : chunkc tiling::desktop --mirror vertical
-
-    # mirror tree x-axis
-    ${modMask} - x : chunkc tiling::desktop --mirror horizontal
-
     # toggle window fullscreen
     ${modMask} - f : chunkc tiling::window --toggle fullscreen
 
