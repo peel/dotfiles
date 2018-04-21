@@ -91,4 +91,13 @@
       dired-use-ls-dired nil
       delete-by-moving-to-trash t)
 
-(load-theme 'nord t)
+;; ui
+(use-package gotham-theme
+  :if window-system
+  :init
+  (add-to-list 'custom-theme-load-path
+               (file-name-directory (locate-library "gotham-theme")))
+  (load-theme 'gotham t))
+
+(set-face-attribute 'default nil :height 180)
+(set-frame-font "PragmataPro")

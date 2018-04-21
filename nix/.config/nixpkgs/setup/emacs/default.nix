@@ -12,21 +12,25 @@ let
   emacs = emacs26;
   emacsWithPackages = (pkgs.emacsPackagesNgGen emacs).emacsWithPackages;
 in
-  emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
+  emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
     (pkgs.runCommand "default.el" {} ''
     mkdir -p $out/share/emacs/site-lisp
-    cp ${myEmacsConfig} $out/share/emacs/site-lisp/init.el
+    cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
     '')
+
     company
-    counsel
     editorconfig
     flycheck
     ivy
     magit
-    nord-theme
     projectile
     use-package
     which-key
+    
+    # themes
+    gotham-theme
+  ]) ++ (with epkgs.melpaStablePackages; [
+    counsel
   ]) ++ (with pkgs; [
      git
   ]))
