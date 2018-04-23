@@ -16,19 +16,11 @@
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(setq inhibit-splash-screen t
-      confirm-kill-emacs 'yes-or-no-p
-      ;; epg-gpg-program "/usr/local/bin/gpg"
-      visible-bell nil)
-
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-
-(setq ring-bell-function (lambda ()
-                           (invert-face 'mode-line)
-                           (run-with-timer 0.1 nil 'invert-face 'mode-line)))
-
-;; load some packages
+;; load packages
+(use-package ace-window
+  :bind (("M-o" . ace-window)
+	 ("C-x o" . ace-window))
+  :defer t)
 
 (use-package company
   :bind ("<C-tab>" . company-complete)
@@ -44,17 +36,8 @@
          ("C-x C-f" . counsel-find-file)
          ("C-c g" . counsel-git)
          ("C-c j" . counsel-git-grep)
-         ("C-c k" . counsel-ag)
-         ("C-x l" . counsel-locate)
+         ("C-c k" . counsel-rg)
          ("M-y" . counsel-yank-pop)))
-
-(use-package editorconfig
-  :defer 1
-  :config (editorconfig-mode 1))
-
-(use-package flycheck
-  :defer 2
-  :config (global-flycheck-mode))
 
 (use-package ivy
   :defer 1
@@ -65,7 +48,27 @@
   :diminish ivy-mode
   :commands ivy-mode
   :config
-  (ivy-mode 1))
+  (ivy-mode 1)
+  (setq ivy-re-builders-alist
+      '((t . ivy--regex-fuzzy))))
+
+(use-package swiper
+  :defer t
+  :bind ("C-s" . swiper))
+
+(use-package editorconfig
+  :defer 1
+  :config (editorconfig-mode 1))
+
+(use-package flycheck
+  :defer 2
+  :config (global-flycheck-mode))
+
+(use-package highlight-symbol
+  :defer t
+  :diminish highlight-symbol-mode
+  :commands highlight-symbol
+  :bind ("s-h" . highlight-symbol))
 
 (use-package magit
   :defer
@@ -81,6 +84,15 @@
   :defer 5
   :config
   (projectile-global-mode))
+
+(use-package undo-tree
+  :defer 5
+  :diminish undo-tree-mode
+  :config
+  (global-undo-tree-mode)
+  (setq undo-tree-visualizer-diff t)
+  (setq undo-tree-visualizer-timestamps t)
+  :bind ("s-/" . undo-tree-visualize))
 
 (use-package which-key
   :defer 1
@@ -99,5 +111,27 @@
                (file-name-directory (locate-library "gotham-theme")))
   (load-theme 'gotham t))
 
-(set-face-attribute 'default nil :height 180)
-(set-frame-font "PragmataPro")
+;; font
+(when (display-graphic-p)
+  (set-face-attribute 'default nil :height 180)
+  (setq-default line-spacing 7)
+  (set-frame-font "PragmataPro"))
+
+(setq inhibit-splash-screen t
+      confirm-kill-emacs 'yes-or-no-p
+      epg-gpg-program "/run/current-system/sw/bin/gpg"
+      echo-keystrokes 0.1
+      visible-bell nil)
+
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(toggle-scroll-bar -1)
+;;(set-frame-parameter nil 'undecorated t)
+(setq frame-resize-pixelwise t)
+;; always match parens
+(show-paren-mode t)
+(setq show-paren-delay 0)
+
+(setq ring-bell-function (lambda ()
+                           (invert-face 'mode-line)
+                           (run-with-timer 0.1 nil 'invert-face 'mode-line)))
