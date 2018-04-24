@@ -24,8 +24,9 @@ in
     #aggresive-indent
     #clean-aindent-mode
     company
-    #dash-at-point
+    #dash-at-point !
     #diff-hl?
+    diminish
     #dumb-jump?
     editorconfig
     #exec-path-from-shell
@@ -33,10 +34,9 @@ in
     #fasd?
     flx # fuzzy matcher 
     flycheck
-    #ggtags
-    #ivy-gtags
+    #ggtags !!!
     #gist
-    #git-gutter
+    #git-gutter !!
     #git-gutter+
     #git-gutter-fringe
     #git-gutter-fringe+
@@ -45,12 +45,12 @@ in
     highlight-symbol
     #highlight-parentheses
     #hl-todo
-    #hydra?
+    #hydra !!!
     counsel
-    #counsel-dash
-    #counsel-descbinds
+    #counsel-dash !
+    counsel-projectile
     #all-the-icons
-    #counsel-gtags
+    #counsel-gtags !!!
     magit
     #magithub
     #pbcopy?
@@ -63,7 +63,7 @@ in
     #rainbow-identifiers
     #rainbow-mode?
     #restart-emacs
-    #smartparens
+    #smartparens !!!
     undo-tree
     use-package
     # with-editor
@@ -78,21 +78,21 @@ in
     #graphviz-dot-mode
     #haskell
     #javascript
-    #restclient
+    #restclient !
 
     #scala
-    # ensime
-    # scala-mode
-    # sbt-mode
+    # ensime 
+    # scala-mode !!!
+    # sbt-mode !!!
 
     #nix
-    # nix-mode
-    # company-nixos-options
+    # nix-mode !!
+    # company-nixos-options !
     # helm-nixos-options
-    # nix-sandbox
+    # nix-sandbox 
     # nix-buffer
 
-    #org-mode
+    #org-mode !!
     #ivy-bibtex
     #biblio/biblio-core/interleave/org-ref/parsebib
     #ob-http
