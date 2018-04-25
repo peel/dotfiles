@@ -52,21 +52,19 @@ in
     #all-the-icons
     counsel-gtags
     magit
-    #magithub
+    #magithub !!
     #pbcopy?
     #pdf-tools
     #popup?
     #popwin?
-    #powerline
     projectile
     #rainbow-delimiters
     #rainbow-identifiers
     #rainbow-mode?
     #restart-emacs
-    #smartparens !!!
+    smartparens
     undo-tree
     use-package
-    # with-editor
     which-key
     #yasnippet
 
@@ -77,7 +75,17 @@ in
     #fish-mode
     #graphviz-dot-mode
     #haskell
-    #javascript
+    #javascript !!!
+    # company-tern
+    # js-doc
+    # js2-mode
+    # js2-refactor
+    # json-mode
+    # json-snatcher
+    # (tern :toggle (spacemacs//tern-detect))
+    # web-beautify
+    # skewer-mode
+    # livid-mode
     restclient
 
     #nix

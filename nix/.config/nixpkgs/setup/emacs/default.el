@@ -162,6 +162,15 @@
 
 (use-package counsel-gtags
   :hook (nix-mode scala-mode))
+
+(use-package smartparens
+  :hook (prog-mode)
+  :diminish smartparens-mode
+  :config
+  (require 'smartparens-config)
+  (smartparens-strict-mode t))
+
+
 ;; ..................................................................... haskell
 ;; TODO
 
