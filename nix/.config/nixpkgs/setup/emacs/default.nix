@@ -18,7 +18,7 @@ in
     cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
     '')
 
-    ace-window # window switcher
+    # ace-window # window switcher
     #avy?
     #anzu?
     #aggresive-indent
@@ -34,7 +34,7 @@ in
     #fasd?
     flx # fuzzy matcher 
     flycheck
-    #ggtags !!!
+    ggtags
     #gist
     #git-gutter !!
     #git-gutter+
@@ -50,7 +50,7 @@ in
     #counsel-dash !
     counsel-projectile
     #all-the-icons
-    #counsel-gtags !!!
+    counsel-gtags
     magit
     #magithub
     #pbcopy?
@@ -78,15 +78,11 @@ in
     #graphviz-dot-mode
     #haskell
     #javascript
-    #restclient !
-
-    #scala
-    # ensime 
-    # scala-mode !!!
-    # sbt-mode !!!
+    restclient
 
     #nix
-    # nix-mode !!
+    nix-mode
+    # nix-shell
     # company-nixos-options !
     # helm-nixos-options
     # nix-sandbox 
@@ -105,7 +101,12 @@ in
     #tools
     # pass
   ]) ++ (with epkgs.melpaStablePackages; [
+     ensime
+     scala-mode
+     sbt-mode
   ]) ++ (with pkgs; [
      git
+     global
+     gnupg
      ripgrep
   ]))

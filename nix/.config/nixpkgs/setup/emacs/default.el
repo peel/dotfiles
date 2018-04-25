@@ -1,9 +1,9 @@
-;;;; init.el --- loads customisations and packages
+;;;; init.el --- Peel's Essential Emacs Lisp
 
 ;;; Commentary:
 ;;; Work in progress.  An attempt for a clean start of nix-managed config.
 
-;;; Code
+;;; Code:
 ;;; ▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
 
 (setq gc-cons-threshold 64000000)
@@ -26,9 +26,8 @@
 
 
 ;; window management ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-(use-package ace-window
-  :bind (("M-o" . ace-window)
-	 ("C-x o" . ace-window)))
+(winner-mode 1)
+;; TODO winner-mode bindings
 
 
 ;; completion ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
@@ -128,9 +127,6 @@
 
 
 ;; other ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-
-
-
 (use-package editorconfig
   :defer 1
   :diminish editorconfig-mode
@@ -155,6 +151,71 @@
 ;; TODO hydra
 
 
+;; languages ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+
+;; ..................................................................... generic
+;; gtags
+(use-package ggtags
+  :if (executable-find "global")
+  :hook (nix-mode scala-mode)
+  :diminish ggtags-mode)
+
+(use-package counsel-gtags
+  :hook (nix-mode scala-mode))
+;; ..................................................................... haskell
+;; TODO
+
+;; ......................................................................... nix
+(use-package nix-mode
+  :mode "\\.nix\\'")
+
+;; ....................................................................... dhall
+;; TODO
+
+;; ...................................................................... elixir
+;; TODO
+
+;; ...................................................................... shells
+;; TODO
+
+;; ..................................................................... clojure
+;; TODO
+
+;; ....................................................................... scala
+(use-package ensime
+  :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
+  :custom
+  (setq ensime-search-interface 'ivy
+	ensime-startup-notification nil)
+  :preface
+  (defun ensime-gen-and-restart()
+    "Regenerate `.ensime' file and restart the ensime server."
+    (interactive)
+    (progn
+      (sbt-command ";ensimeConfig;ensimeConfigProject")
+      (ensime-shutdown)
+      (ensime))))
+
+(use-package scala-mode
+  :interpreter
+  ("scala" . scala-mode))
+
+
+;; .......................................................................... js
+;; TODO
+
+
+;; .................................................................. restclient
+(use-package restclient
+  :mode (("\\.http\\'" . restclient-mode)
+	 ("\\.rest\\'" . restclient-mode)
+	 ("\\.restclient\\'" . restclient-mode)))
+
+
+;; org ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+;; TODO
+
+
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
 ;; ....................................................................... theme
@@ -174,16 +235,19 @@
 
 ;; .................................................................... unclutter
 (setq inhibit-splash-screen t
+      inhibit-startup-message t
+      initial-scratch-message nil
+      frame-resize-pixelwise t
+      pop-up-windows nil
       confirm-kill-emacs 'yes-or-no-p
       epg-gpg-program "/run/current-system/sw/bin/gpg"
       echo-keystrokes 0.1
       visible-bell nil)
-
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(toggle-scroll-bar -1)
+(menu-bar-mode 0)
+(tool-bar-mode 0)
+(scroll-bar-mode 0)
+(blink-cursor-mode 0)
 ;;(set-frame-parameter nil 'undecorated t)
-(setq frame-resize-pixelwise t)
 
 ;; ............................................................. fix awkwardness
 (fset 'yes-or-no-p 'y-or-n-p)
