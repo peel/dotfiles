@@ -37,6 +37,8 @@
   :commands (company-mode global-company-mode)
   :defer 1
   :config
+  (setq company-require-match nil
+	company-selection-wrap-around t)
   (global-company-mode))
 
 
@@ -46,7 +48,9 @@
 (use-package ivy
   :defer 1
   :bind (("C-c C-r" . ivy-resume)
-         ("C-x C-b" . ivy-switch-buffer)
+	 ([remap list-buffers] . ivy-switch-buffer)
+	 ([remap switch-to-buffer] . ivy-switch-buffer)
+	 ([remap switch-to-buffer-other-window] . ivy-switch-buffer-other-window)
          :map ivy-minibuffer-map
          ("C-j" . ivy-call))
   :diminish ivy-mode
@@ -60,12 +64,26 @@
 (use-package counsel
   :commands (counsel-descbinds)
   :bind (([remap execute-extended-command] . counsel-M-x)
-         ("C-x C-f" . counsel-find-file)
-         ("C-c g" . counsel-git)
-         ("C-c j" . counsel-git-grep)
+	 ([remap find-file] . counsel-find-file)
+	 ([remap find-library] . counsel-find-library)
+	 ([remap describe-function] . counsel-describe-function)
+	 ([remap describe-variable] . counsel-describe-variable)
+	 ([remap describe-bindings] . counsel-descbinds)
+	 ([remap describe-face]  . counsel-describe-faces)
+	 ([remap list-faces-display] . counsel-faces)
+	 ([remap imenu] . counsel-imenu)
+	 ([remap load-library] . counsel-load-library)
+	 ([remap load-theme] . counsel-load-theme)
+	 ([remap yank-pop] . counsel-yank-pop)
+	 ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
+	 ([remap pop-to-mark-command] . counsel-mark-ring)
+	 ([remap bookmark-jump] . counsel-bookmark)
+	 ("C-c g" . counsel-git)
+	 ("C-c j" . counsel-git-grep)
+	 ("M-y" . counsel-yank-pop)
+	 ("C-c i 8" . counsel-unicode-char)
          ("C-c k" . counsel-rg)
-	 ("C-c d" . counsel-descbinds)
-         ("M-y" . counsel-yank-pop)))
+	 ("C-c d" . counsel-descbinds)))
 
 ;; ...................................................... projectile integration
 (use-package counsel-projectile
@@ -76,14 +94,14 @@
 
 ;; ...................................................................... search
 (use-package swiper
-  :bind ("C-s" . swiper))
+  :bind ([remap search] . swiper))
 
 
 ;; syntax checking ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package flycheck
   :defer 2
-  :diminish flycheck-mode " ✓"
-  :config (global-flycheck-mode))
+  :hook (prog-mode)
+  :diminish flycheck-mode " ✓")
 
 
 ;; git ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
@@ -145,10 +163,14 @@
 (use-package which-key
   :defer 1
   :diminish which-key-mode
-  :config (which-key-mode))
+  :config
+  (setq which-key-idle-delay 0.5)
+  (which-key-mode))
+
 
 ;; ....................................................................... setup
 ;; TODO hydra
+;; TODO bind-key
 
 
 ;; languages ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
@@ -225,10 +247,27 @@
 ;; TODO
 
 
+;; builtins ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+
+;; .................................................................. autorevert
+(use-package autorevert
+  :ensure nil
+  :commands global-auto-revert-mode
+  :demand
+  :config (global-auto-revert-mode t))
+
+
+;; ............................................................ delete selection
+(use-package delsel
+  :ensure nil
+  :demand
+  :commands delete-selection-mode
+  :config (delete-selection-mode t))
+
+
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
 ;; ....................................................................... theme
-
 (use-package gotham-theme
   :if window-system
   :init
