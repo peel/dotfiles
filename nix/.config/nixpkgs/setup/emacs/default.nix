@@ -26,7 +26,7 @@ in
     # ace-window # window switcher
     #avy?
     #anzu?
-    #aggresive-indent
+    aggressive-indent
     #clean-aindent-mode
     company
     #dash-at-point !

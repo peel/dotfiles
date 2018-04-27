@@ -26,7 +26,8 @@
 
 
 ;; window management ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-(winner-mode 1)
+(use-package winner-mode
+  :config (winner-mode 1))
 ;; TODO winner-mode bindings
 
 
@@ -175,6 +176,10 @@
 ;; languages ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
 ;; ..................................................................... generic
+
+(use-package aggressive-indent
+  :hook (prog-mode . aggressive-indent-mode))
+
 ;; gtags
 (use-package ggtags
   :if (executable-find "global")
