@@ -8,6 +8,10 @@ let
     sha256 = "0h40k597zfl57zw1l5bdak7rv9bwkrgvypjgf47p1ag3kmpjrkdy";
     # date = 2018-03-24T13:13:51-07:00;
   }) + "/overlays/10-emacs.nix") pkgs pkgs) emacs26;
+  prettifyPragmata = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/fabrizioschiavi/pragmatapro/master/emacs_snippets/pragmatapro-prettify-symbols-v0.826.el";
+    sha256 = "1iy29y8k59dqwml0f1dadlxxhrp64q2r4k5xgm0kpmd4qw1frjgg";
+  };
   myEmacsConfig = ./default.el;
   emacs = emacs26;
   emacsWithPackages = (pkgs.emacsPackagesNgGen emacs).emacsWithPackages;
@@ -15,6 +19,7 @@ in
   emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
     (pkgs.runCommand "default.el" {} ''
     mkdir -p $out/share/emacs/site-lisp
+    cp ${prettifyPragmata} $out/share/emacs/site-lisp/pragmata.el
     cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
     '')
 
@@ -62,7 +67,6 @@ in
     #rainbow-identifiers
     #rainbow-mode?
     #restart-emacs
-    smartparens
     undo-tree
     use-package
     which-key
@@ -109,12 +113,15 @@ in
     #tools
     # pass
   ]) ++ (with epkgs.melpaStablePackages; [
-     ensime
-     scala-mode
-     sbt-mode
+    smartparens
+    # scala
+    ensime
+    scala-mode
+    sbt-mode
   ]) ++ (with pkgs; [
-     git
-     global
-     gnupg
-     ripgrep
+    git
+    global
+    gnupg
+    #pragmatapro
+    ripgrep
   ]))

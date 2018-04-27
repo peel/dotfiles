@@ -94,13 +94,12 @@
 
 ;; ...................................................................... search
 (use-package swiper
-  :bind ([remap search] . swiper))
+  :bind ("C-s" . swiper))
 
 
 ;; syntax checking ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package flycheck
-  :defer 2
-  :hook (prog-mode)
+  :hook (prog-mode . flycheck-mode)
   :diminish flycheck-mode " ✓")
 
 
@@ -179,18 +178,21 @@
 ;; gtags
 (use-package ggtags
   :if (executable-find "global")
-  :hook (nix-mode scala-mode)
-  :diminish ggtags-mode)
+  :hook ((nix-mode . ggtags-mode) (scala-mode . ggtags-mode))
+  :diminish (ggtags-mode . " "))
 
 (use-package counsel-gtags
-  :hook (nix-mode scala-mode))
+  :defer 1
+  :diminish counsel-gtags-mode
+  :hook (ggtags-mode . counsel-gtags-mode))
 
 (use-package smartparens
-  :hook (prog-mode)
+  :hook ((prog-mode . smartparens-strict-mode))
   :diminish smartparens-mode
   :config
-  (require 'smartparens-config)
-  (smartparens-strict-mode t))
+   (use-package smartparens-config
+    :ensure nil
+    :demand))
 
 
 ;; ..................................................................... haskell
@@ -228,6 +230,8 @@
       (ensime))))
 
 (use-package scala-mode
+  :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
+  :diminish (scala-mode . " ")
   :interpreter
   ("scala" . scala-mode))
 
@@ -238,6 +242,7 @@
 
 ;; .................................................................. restclient
 (use-package restclient
+  :diminish (restclient-mode . " ")
   :mode (("\\.http\\'" . restclient-mode)
 	 ("\\.rest\\'" . restclient-mode)
 	 ("\\.restclient\\'" . restclient-mode)))
@@ -248,6 +253,14 @@
 
 
 ;; builtins ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+
+;; ....................................................................... eldoc
+(use-package eldoc
+  :ensure nil
+  :diminish (eldoc-mode . " ")
+  :demand
+  :hook ((emacs-lisp-mode . eldoc-mode) (eshell-mode . eldoc-mode) (gtags-mode . eldoc-mode))
+  :config (eldoc-mode t))
 
 ;; .................................................................. autorevert
 (use-package autorevert
