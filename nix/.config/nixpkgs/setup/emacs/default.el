@@ -26,7 +26,7 @@
 
 
 ;; window management ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-(use-package winner-mode
+(use-package winner
   :config (winner-mode 1))
 ;; TODO winner-mode bindings
 
@@ -151,11 +151,13 @@
   :config (editorconfig-mode 1))
 
 ;; files ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-(setq dired-dwim-target t
-      dired-recursive-deletes t
-      dired-use-ls-dired nil
-      delete-by-moving-to-trash t)
-
+(use-package dired
+  :ensure nil
+  :config
+  (setq dired-dwim-target t
+        dired-recursive-deletes t
+        dired-use-ls-dired nil
+        delete-by-moving-to-trash t))
 
 ;; bindings ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
@@ -176,9 +178,14 @@
 ;; languages ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
 ;; ..................................................................... generic
+;; indentation
+(setq-default indent-tabs-mode nil
+	      tab-width 4
+	      fill-column 80)
 
 (use-package aggressive-indent
-  :hook (prog-mode . aggressive-indent-mode))
+  :hook (prog-mode . aggressive-indent-mode)
+  :diminish (aggressive-indent-mode . " "))
 
 ;; gtags
 (use-package ggtags
@@ -195,10 +202,14 @@
   :hook ((prog-mode . smartparens-strict-mode))
   :diminish smartparens-mode
   :config
-   (use-package smartparens-config
+  (use-package smartparens-config
     :ensure nil
     :demand))
 
+(use-package prog-mode
+  :ensure nil
+  :hook (prog-mode . prettify-symbols-mode)
+  :preface (load (locate-file "pragmata.el" load-path) 'noerror))
 
 ;; ..................................................................... haskell
 ;; TODO
@@ -259,12 +270,18 @@
 
 ;; builtins ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
+;; ...................................................................... server
+(use-package server
+  :init (server-start))
+
 ;; ....................................................................... eldoc
 (use-package eldoc
   :ensure nil
   :diminish (eldoc-mode . " ")
   :demand
-  :hook ((emacs-lisp-mode . eldoc-mode) (eshell-mode . eldoc-mode) (gtags-mode . eldoc-mode))
+  :hook ((emacs-lisp-mode . eldoc-mode)
+	 (eshell-mode . eldoc-mode)
+	 (gtags-mode . eldoc-mode))
   :config (eldoc-mode t))
 
 ;; .................................................................. autorevert
@@ -293,6 +310,17 @@
                (file-name-directory (locate-library "gotham-theme")))
   (load-theme 'gotham t))
 
+(defun dark-theme ()
+  "Load dark theme."
+  (interactive)
+  (load-theme 'gotham t))
+
+(defun light-theme ()
+  "Load light theme."
+  (interactive)
+  (load-theme 'whiteboard t))
+
+
 ;; ......................................................................... font
 (when (display-graphic-p)
   (set-face-attribute 'default nil :height 180)
@@ -300,15 +328,16 @@
   (set-frame-font "PragmataPro"))
 
 ;; .................................................................... unclutter
-(setq inhibit-splash-screen t
-      inhibit-startup-message t
-      initial-scratch-message nil
-      frame-resize-pixelwise t
-      pop-up-windows nil
-      confirm-kill-emacs 'yes-or-no-p
-      epg-gpg-program "/run/current-system/sw/bin/gpg"
-      echo-keystrokes 0.1
-      visible-bell nil)
+(setq  inhibit-startup-screen t
+       initial-scratch-message nil
+       make-backup-files nil
+       frame-resize-pixelwise t
+       pop-up-windows nil
+       column-number-mode t
+       confirm-kill-emacs 'yes-or-no-p
+       epg-gpg-program "/run/current-system/sw/bin/gpg"
+       echo-keystrokes 0.1
+       visible-bell nil)
 (menu-bar-mode 0)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
