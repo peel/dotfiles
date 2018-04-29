@@ -112,6 +112,8 @@
   :custom
   (magit-completing-read-function 'ivy-completing-read))
 
+;; TODO git-timemachine
+;; TODO gitignore-mode
 
 ;; project management ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package projectile
@@ -187,11 +189,17 @@
   :hook (prog-mode . aggressive-indent-mode)
   :diminish (aggressive-indent-mode . " "))
 
+;; rainbow
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package rainbow-identifiers
+  :hook (prog-mode . rainbow-identifiers-mode))
+
 ;; git-gutter
 (use-package diff-hl
   :hook (prog-mode . diff-hl-mode)
   :diminish diff-hl-mode)
-
 
 ;; gtags
 (use-package ggtags
@@ -232,6 +240,9 @@
 (use-package dhall-mode
   :disabled
   :mode "\\.dhall\\'")
+
+;; ...................................................................... docker
+;; TODO
 
 ;; ...................................................................... elixir
 ;; TODO
@@ -276,6 +287,8 @@
 	     ("\\.rest\\'" . restclient-mode)
 	     ("\\.restclient\\'" . restclient-mode)))
 
+;; ................................................................... terraform
+;; todo
 
 ;; org ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ;; TODO

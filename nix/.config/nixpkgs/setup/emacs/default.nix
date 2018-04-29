@@ -63,8 +63,8 @@ in
     #popup?
     #popwin?
     projectile
-    #rainbow-delimiters
-    #rainbow-identifiers
+    rainbow-delimiters
+    rainbow-identifiers
     #rainbow-mode?
     #restart-emacs
     undo-tree
