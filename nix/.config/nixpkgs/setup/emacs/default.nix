@@ -30,7 +30,7 @@ in
     #clean-aindent-mode
     company
     #dash-at-point !
-    #diff-hl?
+    diff-hl
     diminish
     #dumb-jump?
     editorconfig
@@ -75,11 +75,13 @@ in
     # themes
     gotham-theme
 
-    #languages
+    # languages
+    ## dhall
+    dhall-mode
     #fish-mode
     #graphviz-dot-mode
-    #haskell
-    #javascript !!!
+    ## haskell
+    ## javascript !!!
     # company-tern
     # js-doc
     # js2-mode
@@ -90,9 +92,10 @@ in
     # web-beautify
     # skewer-mode
     # livid-mode
+    ## http
     restclient
 
-    #nix
+    ## nix
     nix-mode
     # nix-shell
     # company-nixos-options !
@@ -100,7 +103,7 @@ in
     # nix-sandbox 
     # nix-buffer
 
-    #org-mode !!
+    ## org-mode !!
     #ivy-bibtex
     #biblio/biblio-core/interleave/org-ref/parsebib
     #ob-http
@@ -114,7 +117,7 @@ in
     # pass
   ]) ++ (with epkgs.melpaStablePackages; [
     smartparens
-    # scala
+    ## scala
     ensime
     scala-mode
     sbt-mode

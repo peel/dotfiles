@@ -187,6 +187,12 @@
   :hook (prog-mode . aggressive-indent-mode)
   :diminish (aggressive-indent-mode . " "))
 
+;; git-gutter
+(use-package diff-hl
+  :hook (prog-mode . diff-hl-mode)
+  :diminish diff-hl-mode)
+
+
 ;; gtags
 (use-package ggtags
   :if (executable-find "global")
@@ -197,6 +203,10 @@
   :defer 1
   :diminish counsel-gtags-mode
   :hook (ggtags-mode . counsel-gtags-mode))
+
+(use-package show-paren
+  :ensure nil
+  :init (show-paren-mode 1))
 
 (use-package smartparens
   :hook ((prog-mode . smartparens-strict-mode))
@@ -219,7 +229,9 @@
   :mode "\\.nix\\'")
 
 ;; ....................................................................... dhall
-;; TODO
+(use-package dhall-mode
+  :disabled
+  :mode "\\.dhall\\'")
 
 ;; ...................................................................... elixir
 ;; TODO
@@ -235,7 +247,7 @@
   :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
   :custom
   (setq ensime-search-interface 'ivy
-	ensime-startup-notification nil)
+	    ensime-startup-notification nil)
   :preface
   (defun ensime-gen-and-restart()
     "Regenerate `.ensime' file and restart the ensime server."
@@ -256,12 +268,13 @@
 ;; TODO
 
 
+
 ;; .................................................................. restclient
 (use-package restclient
   :diminish (restclient-mode . " ")
   :mode (("\\.http\\'" . restclient-mode)
-	 ("\\.rest\\'" . restclient-mode)
-	 ("\\.restclient\\'" . restclient-mode)))
+	     ("\\.rest\\'" . restclient-mode)
+	     ("\\.restclient\\'" . restclient-mode)))
 
 
 ;; org ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
@@ -272,6 +285,7 @@
 
 ;; ...................................................................... server
 (use-package server
+  :disabled
   :init (server-start))
 
 ;; ....................................................................... eldoc
@@ -346,7 +360,6 @@
 
 ;; ............................................................. fix awkwardness
 (fset 'yes-or-no-p 'y-or-n-p)
-(show-paren-mode t)
 
 (setq ring-bell-function (lambda ()
                            (invert-face 'mode-line)
