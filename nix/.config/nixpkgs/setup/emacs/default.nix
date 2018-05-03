@@ -103,6 +103,12 @@ in
     # nix-sandbox 
     # nix-buffer
 
+    ## markdown
+    markdown-mode
+
+    ## docker
+    dockerfile-mode
+    
     ## org-mode !!
     #ivy-bibtex
     #biblio/biblio-core/interleave/org-ref/parsebib

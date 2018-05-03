@@ -168,22 +168,39 @@
   :defer 1
   :diminish which-key-mode
   :config
-  (setq which-key-idle-delay 0.5)
+  (setq which-key-idle-delay 0.5
+        which-key-sort-order 'which-key-prefix-then-key-order)
+  (which-key-add-key-based-replacements
+    "C-c !" "flycheck"
+    "C-c &" "yas")
+  (which-key-add-major-mode-key-based-replacements 'scala-mode
+    "C-c C-b" "ensime/build"
+    "C-c C-c" "ensime/current"
+    "C-c C-d" "ensime/debug"
+    "C-c C-r" "ensime/refactor"
+    "C-c C-v" "ensime/misc")
   (which-key-mode))
 
 
 ;; ....................................................................... setup
-;; TODO hydra
-;; TODO bind-key
-
+;; hydra
+(use-package hydra
+  :disabled t
+  :bind (("C-; o" . org/body))
+  :config
+  (defhydra org (:color blue :columns 5)
+    "org"
+    ("i" org-clock-in "clock-in")
+    ("o" org-clock-out "clock-out")
+    ("q" nil "cancel")))
 
 ;; languages ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
 ;; ..................................................................... generic
 ;; indentation
 (setq-default indent-tabs-mode nil
-	      tab-width 4
-	      fill-column 80)
+	          tab-width 4
+	          fill-column 80)
 
 (use-package aggressive-indent
   :hook (prog-mode . aggressive-indent-mode)
@@ -242,7 +259,7 @@
   :mode "\\.dhall\\'")
 
 ;; ...................................................................... docker
-;; TODO
+(use-package dockerfile-mode)
 
 ;; ...................................................................... elixir
 ;; TODO
@@ -290,6 +307,10 @@
 ;; ................................................................... terraform
 ;; todo
 
+;; .................................................................... markdown
+(use-package markdown-mode
+  :mode (("\\.markdown\\'" . markdown-mode)
+         ("\\.md\\'" . markdown-mode)))
 ;; org ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ;; TODO
 
