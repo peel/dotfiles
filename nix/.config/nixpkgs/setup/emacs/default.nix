@@ -50,7 +50,7 @@ in
     highlight-symbol
     #highlight-parentheses
     #hl-todo
-    #hydra !!!
+    hydra
     counsel
     #counsel-dash !
     counsel-projectile
