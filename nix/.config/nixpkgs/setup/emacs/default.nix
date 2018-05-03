@@ -34,6 +34,7 @@ in
     diminish
     #dumb-jump?
     editorconfig
+    expand-region
     #exec-path-from-shell
     #eyebrowse?
     #fasd?

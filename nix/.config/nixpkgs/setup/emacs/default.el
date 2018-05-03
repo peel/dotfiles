@@ -39,7 +39,7 @@
   :defer 1
   :config
   (setq company-require-match nil
-	company-selection-wrap-around t)
+	    company-selection-wrap-around t)
   (global-company-mode))
 
 
@@ -65,26 +65,26 @@
 (use-package counsel
   :commands (counsel-descbinds)
   :bind (([remap execute-extended-command] . counsel-M-x)
-	 ([remap find-file] . counsel-find-file)
-	 ([remap find-library] . counsel-find-library)
-	 ([remap describe-function] . counsel-describe-function)
-	 ([remap describe-variable] . counsel-describe-variable)
-	 ([remap describe-bindings] . counsel-descbinds)
-	 ([remap describe-face]  . counsel-describe-faces)
-	 ([remap list-faces-display] . counsel-faces)
-	 ([remap imenu] . counsel-imenu)
-	 ([remap load-library] . counsel-load-library)
-	 ([remap load-theme] . counsel-load-theme)
-	 ([remap yank-pop] . counsel-yank-pop)
-	 ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
-	 ([remap pop-to-mark-command] . counsel-mark-ring)
-	 ([remap bookmark-jump] . counsel-bookmark)
-	 ("C-c g" . counsel-git)
-	 ("C-c j" . counsel-git-grep)
-	 ("M-y" . counsel-yank-pop)
-	 ("C-c i 8" . counsel-unicode-char)
-         ("C-c k" . counsel-rg)
-	 ("C-c d" . counsel-descbinds)))
+	     ([remap find-file] . counsel-find-file)
+	     ([remap find-library] . counsel-find-library)
+	     ([remap describe-function] . counsel-describe-function)
+	     ([remap describe-variable] . counsel-describe-variable)
+	     ([remap describe-bindings] . counsel-descbinds)
+	     ([remap describe-face]  . counsel-describe-faces)
+	     ([remap list-faces-display] . counsel-faces)
+	     ([remap imenu] . counsel-imenu)
+	     ([remap load-library] . counsel-load-library)
+	     ([remap load-theme] . counsel-load-theme)
+	     ([remap yank-pop] . counsel-yank-pop)
+	     ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
+	     ([remap pop-to-mark-command] . counsel-mark-ring)
+	     ([remap bookmark-jump] . counsel-bookmark)
+	     ("C-c g" . counsel-git)
+	     ("C-c j" . counsel-git-grep)
+	     ("M-y" . counsel-yank-pop)
+	     ("C-c i 8" . counsel-unicode-char)
+         ("C-c r" . counsel-rg)
+	     ("C-c d" . counsel-escbinds)))
 
 ;; ...................................................... projectile integration
 (use-package counsel-projectile
@@ -187,14 +187,7 @@
 ;; ....................................................................... setup
 ;; hydra
 (use-package hydra
-  :defer 1
-  :bind (("C-c o" . peel-org/body))
-  :config
-  (defhydra peel-org (:color blue :columns 5)
-    "org"
-    ("i" org-clock-in "clock-in")
-    ("o" org-clock-out "clock-out")
-    ("q" nil "cancel")))
+  :defer nil)
 
 ;; languages ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
@@ -235,7 +228,11 @@
   :ensure nil
   :init (show-paren-mode 1))
 
+(use-package expand-region
+  :bind (("C-c v" . er/expand-region)))
+
 (use-package smartparens
+  :requires hydra
   :hook (prog-mode . smartparens-strict-mode)
   :diminish smartparens-mode
   :bind (("C-c k" . peel-smartparens/body)
@@ -333,10 +330,10 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; ....................................................................... scala
 (use-package ensime
   :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
-  :init
-  (setq ensime-search-interface 'ivy
-	    ensime-startup-notification nil)
   :preface
+  (setq ensime-search-interface 'ivy
+	    ensime-startup-notification nil
+        ensime-eldoc-hints 'all)
   (defun ensime-gen-and-restart()
     "Regenerate `.ensime' file and restart the ensime server."
     (interactive)
@@ -364,14 +361,18 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 	     ("\\.rest\\'" . restclient-mode)
 	     ("\\.restclient\\'" . restclient-mode)))
 
+
 ;; ................................................................... terraform
 ;; todo
+
 
 ;; .................................................................... markdown
 (use-package markdown-mode
   :mode (("\\.markdown\\'" . markdown-mode)
          ("\\.md\\'" . markdown-mode))
   :diminish (markdown-mode . " "))
+
+
 ;; org ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ;; TODO
 
@@ -383,15 +384,17 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :disabled
   :init (server-start))
 
+
 ;; ....................................................................... eldoc
 (use-package eldoc
   :ensure nil
   :diminish (eldoc-mode . " ")
   :demand
   :hook ((emacs-lisp-mode . eldoc-mode)
-	 (eshell-mode . eldoc-mode)
-	 (gtags-mode . eldoc-mode))
+	     (eshell-mode . eldoc-mode)
+	     (gtags-mode . eldoc-mode))
   :config (eldoc-mode t))
+
 
 ;; .................................................................. autorevert
 (use-package autorevert
