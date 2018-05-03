@@ -172,6 +172,8 @@
         which-key-sort-order 'which-key-prefix-then-key-order)
   (which-key-add-key-based-replacements
     "C-c !" "flycheck"
+    "C-c p" "projectile"
+    "C-c i" "unicode"
     "C-c &" "yas")
   (which-key-add-major-mode-key-based-replacements 'scala-mode
     "C-c C-b" "ensime/build"
@@ -240,7 +242,7 @@
          :map smartparens-strict-mode-map
          ;; A fill paragraph in strict mode
          ("M-q" . sp-indent-defun))
-  :init
+  :preface
   ;; Hydra for Smartparens
   (defhydra peel-smartparens (:hint nil)
     "
@@ -331,7 +333,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; ....................................................................... scala
 (use-package ensime
   :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
-  :custom
+  :init
   (setq ensime-search-interface 'ivy
 	    ensime-startup-notification nil)
   :preface
@@ -368,7 +370,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; .................................................................... markdown
 (use-package markdown-mode
   :mode (("\\.markdown\\'" . markdown-mode)
-         ("\\.md\\'" . markdown-mode)))
+         ("\\.md\\'" . markdown-mode))
+  :diminish (markdown-mode . " "))
 ;; org ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ;; TODO
 
