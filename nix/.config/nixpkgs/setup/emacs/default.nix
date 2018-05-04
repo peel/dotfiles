@@ -24,7 +24,7 @@ in
     '')
 
     # ace-window # window switcher
-    #avy?
+    avy
     #anzu?
     aggressive-indent
     #clean-aindent-mode
@@ -68,6 +68,7 @@ in
     rainbow-identifiers
     #rainbow-mode?
     #restart-emacs
+    treemacs
     undo-tree
     use-package
     which-key

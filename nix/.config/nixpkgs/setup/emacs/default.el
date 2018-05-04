@@ -25,10 +25,25 @@
   :init (require 'diminish))
 
 
-;; window management ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+;; navigation ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+
 (use-package winner
   :config (winner-mode 1))
-;; TODO winner-mode bindings
+
+;; ..................................................................... jumping
+(use-package avy
+  :after hydra
+  :bind ("C-'" . hydra-avy/body)
+  :init
+  (require 'hydra)
+  :config
+  (defhydra hydra-avy (:color teal)
+    ("j" avy-goto-char)
+    ("k" avy-goto-word-1)
+    ("l" avy-goto-line)
+    ("s" avy-goto-char-timer)
+    ("f" counsel-find-file)
+    ("q" nil)))
 
 
 ;; completion ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
@@ -49,9 +64,9 @@
 (use-package ivy
   :defer 1
   :bind (("C-c C-r" . ivy-resume)
-	 ([remap list-buffers] . ivy-switch-buffer)
-	 ([remap switch-to-buffer] . ivy-switch-buffer)
-	 ([remap switch-to-buffer-other-window] . ivy-switch-buffer-other-window)
+	     ([remap list-buffers] . ivy-switch-buffer)
+	     ([remap switch-to-buffer] . ivy-switch-buffer)
+	     ([remap switch-to-buffer-other-window] . ivy-switch-buffer-other-window)
          :map ivy-minibuffer-map
          ("C-j" . ivy-call))
   :diminish ivy-mode
@@ -59,7 +74,7 @@
   :config
   (ivy-mode 1)
   (setq ivy-re-builders-alist
-	'((t . ivy--regex-fuzzy))))
+	    '((t . ivy--regex-fuzzy))))
 
 ;; ...................................................................... counsel
 (use-package counsel
@@ -129,6 +144,51 @@
 
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
+;; ............................................................... tree explorer
+(use-package treemacs
+  :config)
+(use-package treemacs
+  :ensure t
+  :defer t
+  :init
+  (with-eval-after-load 'winum
+    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+  :config
+  (setq treemacs-change-root-without-asking nil
+        treemacs-collapse-dirs              (if (executable-find "python") 3 0)
+        treemacs-file-event-delay           5000
+        treemacs-follow-after-init          t
+        treemacs-follow-recenter-distance   0.1
+        treemacs-goto-tag-strategy          'refetch-index
+        treemacs-indentation                2
+        treemacs-indentation-string         " "
+        treemacs-is-never-other-window      nil
+        treemacs-never-persist              nil
+        treemacs-no-png-images              nil
+        treemacs-recenter-after-file-follow nil
+        treemacs-recenter-after-tag-follow  nil
+        treemacs-show-hidden-files          t
+        treemacs-silent-filewatch           nil
+        treemacs-silent-refresh             nil
+        treemacs-sorting                    'alphabetic-desc
+        treemacs-tag-follow-cleanup         t
+        treemacs-tag-follow-delay           1.5
+        treemacs-width                      35)
+
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t)
+  (pcase (cons (not (null (executable-find "git")))
+               (not (null (executable-find "python3"))))
+    (`(t . t)
+     (treemacs-git-mode 'extended))
+    (`(t . _)
+     (treemacs-git-mode 'simple)))
+  :bind
+  (:map global-map
+        ("C-c t"      . treemacs-toggle)
+        ("M-0"        . treemacs-select-window)
+        ("C-c 1"      . treemacs-delete-other-windows)))
+
 ;; ................................................................... highlight
 (use-package highlight-symbol
   :diminish highlight-symbol-mode
@@ -187,7 +247,8 @@
 ;; ....................................................................... setup
 ;; hydra
 (use-package hydra
-  :defer nil)
+  :ensure t
+  :demand t)
 
 ;; languages ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
@@ -232,14 +293,16 @@
   :bind (("C-c v" . er/expand-region)))
 
 (use-package smartparens
-  :requires hydra
+  :after hydra
   :hook (prog-mode . smartparens-strict-mode)
   :diminish smartparens-mode
   :bind (("C-c k" . peel-smartparens/body)
          :map smartparens-strict-mode-map
          ;; A fill paragraph in strict mode
          ("M-q" . sp-indent-defun))
-  :preface
+  :init
+  (require 'hydra)
+  :config
   ;; Hydra for Smartparens
   (defhydra peel-smartparens (:hint nil)
     "
@@ -293,7 +356,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     ("<left>" sp-forward-barf-sexp)
     ("C-<left>" sp-backward-barf-sexp)
     ("C-<right>" sp-backward-slurp-sexp))
-  :config
   (use-package smartparens-config
     :ensure nil
     :demand))
