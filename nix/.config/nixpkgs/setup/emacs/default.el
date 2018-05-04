@@ -99,7 +99,7 @@
 	     ("M-y" . counsel-yank-pop)
 	     ("C-c i 8" . counsel-unicode-char)
          ("C-c r" . counsel-rg)
-	     ("C-c d" . counsel-escbinds)))
+	     ("C-c d" . counsel-descbinds)))
 
 ;; ...................................................... projectile integration
 (use-package counsel-projectile
