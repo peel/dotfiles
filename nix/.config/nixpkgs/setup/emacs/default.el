@@ -466,6 +466,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :ensure nil
   :bind (("C-c e" . eshell)
          ("C-c E" . eshell-new))
+  :config (setq eshell-banner-message "")
   :init
   (defun eshell-new()
     "Open a new instance of eshell."
