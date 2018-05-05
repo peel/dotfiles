@@ -457,6 +457,17 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 	     (gtags-mode . eldoc-mode))
   :config (eldoc-mode t))
 
+;; ...................................................................... eshell
+(use-package eshell
+  :ensure nil
+  :bind (("C-c e" . eshell)
+         ("C-c E" . eshell-new))
+  :init
+  (defun eshell-new()
+    "Open a new instance of eshell."
+    (interactive)
+    (eshell 'N)))
+
 
 ;; .................................................................. autorevert
 (use-package autorevert
