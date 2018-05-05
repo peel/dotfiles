@@ -408,7 +408,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
   :diminish (scala-mode . " ")
   :interpreter
-  ("scala" . scala-mode))
+  ("scala" . scala-mode)
+  :config
+  (setq scala-indent:align-forms t
+        scala-indent:align-parameters t
+        scala-indent:default-run-on-strategy scala-indent:operator-strategy))
 
 
 ;; .......................................................................... js
