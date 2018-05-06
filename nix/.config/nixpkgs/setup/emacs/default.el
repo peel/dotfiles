@@ -260,7 +260,18 @@
 
 (use-package aggressive-indent
   :hook (prog-mode . aggressive-indent-mode)
-  :diminish (aggressive-indent-mode . " "))
+  :diminish (aggressive-indent-mode . " ")
+  :init
+  (defun aggressive-indent-exclude (modes)
+    "Add modes to excluded"
+    (dolist (item modes)
+      (add-to-list 'aggressive-indent-excluded-modes item)))
+  (defconst ai-excludes
+    '(dockerfile-mode
+      restclient-mode
+      sbt-mode
+      scala-mode))
+  (aggressive-indent-exclude ai-excludes))
 
 ;; rainbow
 (use-package rainbow-delimiters
@@ -527,11 +538,15 @@ _k_: kill        _s_: split                   _{_: wrap with { }
        confirm-kill-emacs 'yes-or-no-p
        epg-gpg-program "/run/current-system/sw/bin/gpg"
        echo-keystrokes 0.1
+       apropos-do-all t
        visible-bell nil)
-(menu-bar-mode 0)
-(tool-bar-mode 0)
-(scroll-bar-mode 0)
-(blink-cursor-mode 0)
+(when window-system
+  (tool-bar-mode )
+  (scroll-bar-mode -1)
+  (blink-cursor-mode -1))
+
+(when (not (memq window-system '(mac ns)))
+  (menu-bar-mode -1))
 ;;(set-frame-parameter nil 'undecorated t)
 
 ;; ............................................................. fix awkwardness
