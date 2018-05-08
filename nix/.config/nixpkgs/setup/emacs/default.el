@@ -258,6 +258,7 @@
 	          tab-width 4
 	          fill-column 80)
 
+(use-package noflet)
 (use-package aggressive-indent
   :hook (prog-mode . aggressive-indent-mode)
   :diminish (aggressive-indent-mode . " ")
@@ -268,9 +269,7 @@
       (add-to-list 'aggressive-indent-excluded-modes item)))
   (defconst ai-excludes
     '(dockerfile-mode
-      restclient-mode
-      sbt-mode
-      scala-mode))
+      restclient-mode))
   (aggressive-indent-exclude ai-excludes))
 
 ;; rainbow
@@ -295,6 +294,21 @@
   :defer 1
   :diminish counsel-gtags-mode
   :hook (ggtags-mode . counsel-gtags-mode))
+
+(use-package dumb-jump
+  :after hydra
+  :bind ("s-." . dumb-jump-hydra)
+  :init (require 'hydra)
+  :config
+  (defhydra dumb-jump-hydra (:color blue :columns 3)
+    "Dumb Jump"
+    ("j" dumb-jump-go "Go")
+    ("o" dumb-jump-go-other-window "Other window")
+    ("e" dumb-jump-go-prefer-external "Go external")
+    ("x" dumb-jump-go-prefer-external-other-window "Go external other window")
+    ("i" dumb-jump-go-prompt "Prompt")
+    ("l" dumb-jump-quick-look "Quick look")
+    ("b" dumb-jump-back "Back")))
 
 (use-package show-paren
   :ensure nil
@@ -418,17 +432,36 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package scala-mode
   :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
   :diminish (scala-mode . " ")
+  :after noflet
   :interpreter
   ("scala" . scala-mode)
+  :bind ("C-c C-v f" . scalafmt/format-file)
   :config
   (setq scala-indent:align-forms t
         scala-indent:align-parameters t
-        scala-indent:default-run-on-strategy scala-indent:operator-strategy))
+        scala-indent:default-run-on-strategy scala-indent:operator-strategy)
+  :preface
+  (require 'noflet)
+  (defadvice scala-indent:indent-code-line (around retain-trailing-ws activate)
+    "Keep trailing-whitespace when indenting."
+    (noflet ((scala-lib:delete-trailing-whitespace ()))
+      ad-do-it))
+  (defun scalafmt/format-file ()
+    "Run scalafmt on the current file"
+    (interactive)
+    (let ((default-directory (projectile-project-root))
+          (scalafmt-cmd (format "/usr/bin/env scalafmt -i -f %s"
+                                (shell-quote-argument (buffer-file-name)))))
+      (message "Running %s..." scalafmt-cmd)
+      (shell-command scalafmt-cmd)
+      (revert-buffer t t t))))
 
 
 ;; .......................................................................... js
-;; TODO
-
+;;(use-package tide)
+(use-package rjsx-mode)
+(use-package prettier-js)
+(use-package web-mode)
 
 
 ;; .................................................................. restclient
@@ -541,7 +574,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
        apropos-do-all t
        visible-bell nil)
 (when window-system
-  (tool-bar-mode )
+  (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (blink-cursor-mode -1))
 

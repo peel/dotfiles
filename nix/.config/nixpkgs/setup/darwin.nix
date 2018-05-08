@@ -249,9 +249,6 @@ in {
     # toggle window native fullscreen
     shift + ${modMask} - f : chunkc tiling::window --toggle native-fullscreen
 
-    # toggle window parent zoom
-    ${modMask} - d : chunkc tiling::window --toggle parent
-
     # toggle window split type
     ${modMask} - e : chunkc tiling::window --toggle split
 

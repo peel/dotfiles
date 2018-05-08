@@ -28,6 +28,7 @@
     qarma
     ranger
     ripgrep
+    scalafmt
     sbt
     scripts
     stow

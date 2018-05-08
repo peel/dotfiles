@@ -32,7 +32,7 @@ in
     #dash-at-point !
     diff-hl
     diminish
-    #dumb-jump?
+    dumb-jump
     editorconfig
     expand-region
     #exec-path-from-shell
@@ -59,6 +59,7 @@ in
     counsel-gtags
     magit
     #magithub !!
+    noflet
     #pbcopy?
     #pdf-tools
     #popup?
@@ -108,6 +109,11 @@ in
     ## markdown
     markdown-mode
 
+    ## scala
+    ensime
+    scala-mode
+    sbt-mode
+    
     ## docker
     dockerfile-mode
     
@@ -125,10 +131,6 @@ in
     # pass
   ]) ++ (with epkgs.melpaStablePackages; [
     smartparens
-    ## scala
-    ensime
-    scala-mode
-    sbt-mode
   ]) ++ (with pkgs; [
     git
     global

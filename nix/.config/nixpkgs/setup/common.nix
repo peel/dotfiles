@@ -18,8 +18,33 @@
     indent_size = 2
     charset = utf-8
   '';
+  environment.etc."gitignore".text = ''
+    ### Tags ###
+    # Ignore tags created by etags, ctags, gtags (GNU global) and cscope
+    TAGS
+    .TAGS
+    !TAGS/
+    tags
+    .tags
+    !tags/
+    gtags.files
+    GTAGS
+    GRTAGS
+    GPATH
+    GSYMS
+    cscope.files
+    cscope.out
+    cscope.in.out
+    cscope.po.out
+
+    ### Ensime ###
+    # Ensime specific
+    .ensime
+    .ensime_cache/
+    .ensime_lucene/
+  '';
   environment.etc."gitconfig".text = ''
-    [include]
+      [include]
       path = ~/.gitconfig.secret
     [color]
       ui = true
@@ -886,6 +911,7 @@
   '';
   system.activationScripts.extraUserActivation.text = ''
     ln -sfn /etc/gitconfig $HOME/.gitconfig
+    ln -sfn /etc/gitignore $HOME/.gitignore
     ln -sfn /etc/inputrc $HOME/.inputrc
     ln -sfn /etc/ctags $HOME/.ctags
     ln -sfn /etc/vimrc $HOME/.vimrc
