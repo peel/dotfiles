@@ -103,8 +103,9 @@
 
 ;; ...................................................... projectile integration
 (use-package counsel-projectile
-  :requires (counsel projectile)
+  :after (counsel projectile)
   :commands counsel-projectile
+  :hook projectile-mode
   :config
   (counsel-projectile-mode))
 
@@ -112,12 +113,10 @@
 (use-package swiper
   :bind ("C-s" . swiper))
 
-
 ;; syntax checking ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package flycheck
   :hook (prog-mode . flycheck-mode)
   :diminish flycheck-mode " ✓")
-
 
 ;; git ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package magit
@@ -141,53 +140,7 @@
   :config
   (projectile-mode))
 
-
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-
-;; ............................................................... tree explorer
-(use-package treemacs
-  :config)
-(use-package treemacs
-  :ensure t
-  :defer t
-  :init
-  (with-eval-after-load 'winum
-    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
-  :config
-  (setq treemacs-change-root-without-asking nil
-        treemacs-collapse-dirs              (if (executable-find "python") 3 0)
-        treemacs-file-event-delay           5000
-        treemacs-follow-after-init          t
-        treemacs-follow-recenter-distance   0.1
-        treemacs-goto-tag-strategy          'refetch-index
-        treemacs-indentation                2
-        treemacs-indentation-string         " "
-        treemacs-is-never-other-window      nil
-        treemacs-never-persist              nil
-        treemacs-no-png-images              nil
-        treemacs-recenter-after-file-follow nil
-        treemacs-recenter-after-tag-follow  nil
-        treemacs-show-hidden-files          t
-        treemacs-silent-filewatch           nil
-        treemacs-silent-refresh             nil
-        treemacs-sorting                    'alphabetic-desc
-        treemacs-tag-follow-cleanup         t
-        treemacs-tag-follow-delay           1.5
-        treemacs-width                      35)
-
-  (treemacs-follow-mode t)
-  (treemacs-filewatch-mode t)
-  (pcase (cons (not (null (executable-find "git")))
-               (not (null (executable-find "python3"))))
-    (`(t . t)
-     (treemacs-git-mode 'extended))
-    (`(t . _)
-     (treemacs-git-mode 'simple)))
-  :bind
-  (:map global-map
-        ("C-c t"      . treemacs-toggle)
-        ("M-0"        . treemacs-select-window)
-        ("C-c 1"      . treemacs-delete-other-windows)))
 
 ;; ................................................................... highlight
 (use-package highlight-symbol
@@ -261,16 +214,7 @@
 (use-package noflet)
 (use-package aggressive-indent
   :hook (prog-mode . aggressive-indent-mode)
-  :diminish (aggressive-indent-mode . " ")
-  :init
-  (defun aggressive-indent-exclude (modes)
-    "Add modes to excluded"
-    (dolist (item modes)
-      (add-to-list 'aggressive-indent-excluded-modes item)))
-  (defconst ai-excludes
-    '(dockerfile-mode
-      restclient-mode))
-  (aggressive-indent-exclude ai-excludes))
+  :diminish (aggressive-indent-mode . " "))
 
 ;; rainbow
 (use-package rainbow-delimiters
@@ -297,7 +241,7 @@
 
 (use-package dumb-jump
   :after hydra
-  :bind ("s-." . dumb-jump-hydra)
+  :bind ("s-." . dumb-jump-hydra/body)
   :init (require 'hydra)
   :config
   (defhydra dumb-jump-hydra (:color blue :columns 3)
@@ -414,6 +358,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; ..................................................................... clojure
 ;; TODO
 
+;; ........................................................................ yaml
+;; TODO
+
 ;; ....................................................................... scala
 (use-package ensime
   :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
@@ -459,9 +406,17 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; .......................................................................... js
 ;;(use-package tide)
-(use-package rjsx-mode)
+(use-package rjsx-mode
+  :config
+  (flycheck-add-mode 'javascript-eslint 'rjsx-mode))
 (use-package prettier-js)
-(use-package web-mode)
+(use-package web-mode
+  :ensure smartparens
+  :ensure rainbow-delimiters
+  :ensure aggressive-indent
+  :ensure prettier-js
+  :ensure rjsx-mode
+  :mode ("\\.html?\\'" "\\.jsx?" "\\.css\\'" "\\.scss\\'"))
 
 
 ;; .................................................................. restclient
@@ -473,7 +428,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 
 ;; ................................................................... terraform
-;; todo
+(use-package terraform-mode
+  :mode ("\\.tf\\'"))
 
 
 ;; .................................................................... markdown
@@ -542,17 +498,26 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :init
   (add-to-list 'custom-theme-load-path
                (file-name-directory (locate-library "gotham-theme")))
-  (load-theme 'gotham t))
+  (add-to-list 'custom-theme-load-path
+               (file-name-directory (locate-library "apropospriate-theme")))
+  (add-to-list 'custom-theme-load-path
+               (file-name-directory (locate-library "nord-theme")))
+  (load-theme 'nord t))
 
 (defun dark-theme ()
   "Load dark theme."
   (interactive)
   (load-theme 'gotham t))
 
+(defun semi-dark-theme ()
+  "Load dark theme."
+  (interactive)
+  (load-theme 'nord t))
+
 (defun light-theme ()
   "Load light theme."
   (interactive)
-  (load-theme 'whiteboard t))
+  (load-theme 'apropospriate-light t))
 
 
 ;; ......................................................................... font
@@ -562,25 +527,31 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (set-frame-font "PragmataPro"))
 
 ;; .................................................................... unclutter
-(setq  inhibit-startup-screen t
-       initial-scratch-message nil
-       make-backup-files nil
-       frame-resize-pixelwise t
-       pop-up-windows nil
-       column-number-mode t
-       confirm-kill-emacs 'yes-or-no-p
-       epg-gpg-program "/run/current-system/sw/bin/gpg"
-       echo-keystrokes 0.1
-       apropos-do-all t
-       visible-bell nil)
-(when window-system
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-  (blink-cursor-mode -1))
+(use-package emacs
+  :defer nil
+  :bind ("C-z" . kill-whole-line)
+  :config
+  (setq  inhibit-startup-screen t
+         initial-scratch-message nil
+         make-backup-files nil
+         frame-resize-pixelwise t
+         pop-up-windows nil
+         column-number-mode t
+         confirm-kill-emacs 'yes-or-no-p
+         epg-gpg-program "/run/current-system/sw/bin/gpg"
+         echo-keystrokes 0.1
+         apropos-do-all t
+         visible-bell nil)
+  
+  (when window-system
+    (tool-bar-mode -1)
+    (scroll-bar-mode -1)
+    (blink-cursor-mode -1))
+  
+  ;;(set-frame-parameter nil 'undecorated t)
+  (when (not (memq window-system '(mac ns)))
+    (menu-bar-mode -1)))
 
-(when (not (memq window-system '(mac ns)))
-  (menu-bar-mode -1))
-;;(set-frame-parameter nil 'undecorated t)
 
 ;; ............................................................. fix awkwardness
 (fset 'yes-or-no-p 'y-or-n-p)

@@ -42,10 +42,6 @@ in
     flycheck
     ggtags
     #gist
-    #git-gutter !!
-    #git-gutter+
-    #git-gutter-fringe
-    #git-gutter-fringe+
     #git-link
     #hightlight
     highlight-symbol
@@ -77,6 +73,8 @@ in
 
     # themes
     gotham-theme
+    nord-theme
+    apropospriate-theme
 
     # languages
     ## dhall
@@ -84,7 +82,11 @@ in
     #fish-mode
     #graphviz-dot-mode
     ## haskell
-    ## javascript !!!
+    ## javascript
+    tide
+    prettier-js
+    rjsx-mode
+    web-mode
     # company-tern
     # js-doc
     # js2-mode
@@ -117,6 +119,9 @@ in
     ## docker
     dockerfile-mode
     
+    ## terraform
+    terraform-mode
+    
     ## org-mode !!
     #ivy-bibtex
     #biblio/biblio-core/interleave/org-ref/parsebib
@@ -137,4 +142,11 @@ in
     gnupg
     #pragmatapro
     ripgrep
+    
+    #js
+    # nodejs
+    # nodePacakges.prettier
+    # nodePackages.eslint
+    # nodePackages.eslint-plugin-react
+    # nodePackages.eslint-plugin-jest
   ]))
