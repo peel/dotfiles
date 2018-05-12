@@ -443,7 +443,16 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; org ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ;; TODO
-
+(use-package org
+  :ensure nil
+  :config
+  ;; jekyll 
+  (autoload 'endless/export-to-blog "jekyll-once")
+  (setq org-jekyll-use-src-plugin t)
+  (setq endless/blog-base-url "https://codearsonist.com/")
+  (setq endless/blog-dir (expand-file-name "~/wrk/blog/"))
+  ;; disabled for now: (require 'ox-jekyll-subtree)
+  )
 
 ;; builtins ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 

@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: def foo(a: A): B = { }
-# key: def
-# --
-def $1${2:($3)}${4:: $5 } = {
-  $0
-}

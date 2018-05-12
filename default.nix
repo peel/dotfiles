@@ -4,20 +4,6 @@
 }:
 
 let
-  emacs = ''
-    echo >&2
-    echo >&2 "Setting up Emacs..."
-    echo >&2
-
-    if [ ! -d $HOME/.emacs.d ]; then
-      git clone --depth=1--recursive http://github.com/syl20bnr/spacemacs $(HOME)/.emacs.d
-    fi
-
-    if [ ! -d $HOME/.spacemacs.d/ox-jekyll-subtree ]; then
-       mkdir -p $HOME/.spacemacs.d
-       git clone --depth=1 https://github.com/Malabarba/ox-jekyll-subtree.git $(HOME)/.spacemacs.d/ox-jekyll-subtree
-    fi
-  '';
   darwin = ''
     echo >&2
 		echo >&2 "Sign into Mac App Store to proceed"
@@ -46,7 +32,6 @@ let
         git clone --depth=1 ${repoUrl} ${targetDir}
     fi
 
-    ${emacs}
     ${link}
     ${pkgs.lib.optionalString pkgs.stdenv.isDarwin darwin}
   '';

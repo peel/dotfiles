@@ -12,6 +12,12 @@ let
     url = "https://raw.githubusercontent.com/fabrizioschiavi/pragmatapro/master/emacs_snippets/pragmatapro-prettify-symbols-v0.826.el";
     sha256 = "1iy29y8k59dqwml0f1dadlxxhrp64q2r4k5xgm0kpmd4qw1frjgg";
   };
+  oxJekyllSubtree = pkgs.fetchFromGitHub {
+    owner = "Malabarba";
+    repo = "ox-jekyll-subtree";
+    rev = "d1da16e60b77f09bc2183ff1151e8965b3945527";
+    sha256= "0ps4cz01y00w3913c4yxxmmlsg99wiqc6cnbpxs73h618xqfpq8b";
+  };
   myEmacsConfig = ./default.el;
   emacs = emacs26;
   emacsWithPackages = (pkgs.emacsPackagesNgGen emacs).emacsWithPackages;
@@ -20,6 +26,7 @@ in
     (pkgs.runCommand "default.el" {} ''
     mkdir -p $out/share/emacs/site-lisp
     cp ${prettifyPragmata} $out/share/emacs/site-lisp/pragmata.el
+    cp ${oxJekyllSubtree}/*.el $out/share/emacs/site-lisp/
     cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
     '')
 
