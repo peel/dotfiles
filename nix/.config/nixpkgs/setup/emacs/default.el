@@ -67,6 +67,7 @@
 	     ([remap list-buffers] . ivy-switch-buffer)
 	     ([remap switch-to-buffer] . ivy-switch-buffer)
 	     ([remap switch-to-buffer-other-window] . ivy-switch-buffer-other-window)
+         ("C-c C-f" . ivy-recentf)
          :map ivy-minibuffer-map
          ("C-j" . ivy-call))
   :diminish ivy-mode
@@ -359,7 +360,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; TODO
 
 ;; ........................................................................ yaml
-;; TODO
+(use-package yaml-mode
+  :mode ("\\.yml\\'" "\\.yaml\\'"))
 
 ;; ....................................................................... scala
 (use-package ensime

@@ -65,7 +65,7 @@ in
     rainbow-identifiers
     #rainbow-mode?
     #restart-emacs
-    treemacs
+    # treemacs
     undo-tree
     use-package
     which-key
@@ -87,16 +87,6 @@ in
     prettier-js
     rjsx-mode
     web-mode
-    # company-tern
-    # js-doc
-    # js2-mode
-    # js2-refactor
-    # json-mode
-    # json-snatcher
-    # (tern :toggle (spacemacs//tern-detect))
-    # web-beautify
-    # skewer-mode
-    # livid-mode
     ## http
     restclient
 
@@ -108,20 +98,17 @@ in
     # nix-sandbox 
     # nix-buffer
 
-    ## markdown
-    markdown-mode
-
     ## scala
     ensime
     scala-mode
     sbt-mode
     
-    ## docker
+    ## markups
     dockerfile-mode
-    
-    ## terraform
+    markdown-mode
     terraform-mode
-    
+    yaml-mode
+
     ## org-mode !!
     #ivy-bibtex
     #biblio/biblio-core/interleave/org-ref/parsebib
@@ -142,6 +129,12 @@ in
     gnupg
     #pragmatapro
     ripgrep
+
+    #scala
+    #sbt
+    #scalafmt
+    #scalafix
+    #mill
     
     #js
     # nodejs
