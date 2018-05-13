@@ -503,25 +503,25 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
-;; ....................................................................... theme
-(use-package nord-theme
+;; ...................................................................... themes
+(use-package peel-frame
   :if window-system
-  :ensure t
-  :defer 0
+  :ensure nil
+  :requires gotham-theme
+  :requires apropospriate-theme
+  :requires nord-theme
   :preface
-  (add-to-list 'custom-theme-load-path
-               (file-name-directory (locate-library "gotham-theme")))
-  (add-to-list 'custom-theme-load-path
-               (file-name-directory (locate-library "apropospriate-theme")))
-  (add-to-list 'custom-theme-load-path
-               (file-name-directory (locate-library "nord-theme")))
-
   (add-hook 'focus-in-hook #'peel/load-font)
   (add-hook 'focus-in-hook #'peel/load-theme)
   (add-hook 'focus-in-hook #'peel/load-ui)
   
+  (defvar dark-theme 'gotham)
+  (defvar semi-dark-theme 'nord)
+  (defvar light-theme 'apropospriate-light)
+  (defvar default-theme semi-dark-theme)
+  
   (defun peel/load-theme ()
-    (load-theme 'nord t)
+    (load-theme default-theme t)
     (remove-hook 'focus-in-hook #'peel/load-theme))
 
   (defun peel/load-font ()
@@ -529,8 +529,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     (defvar default-font "PragmataPro")
     (set-face-attribute 'default nil :height 180)
     (setq-default line-spacing 7)
-    (set-frame-font default-font)
-    (remove-hook 'focus-in-hook #'peel/load-font))
+    (set-frame-font default-font))
   
   (defun peel/load-ui ()
     "Remove UI bars."
@@ -545,18 +544,33 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (defun dark-theme ()
     "Load dark theme."
     (interactive)
-    (load-theme 'gotham t))
+    (load-theme dark-theme t))
 
   (defun semi-dark-theme ()
-    "Load dark theme."
+    "Load semi-dark theme."
     (interactive)
-    (load-theme 'nord t))
+    (load-theme semi-dark-theme t))
 
   (defun light-theme ()
     "Load light theme."
     (interactive)
-    (load-theme 'apropospriate-light t)))
+    (load-theme light-theme t))
+  :config
+  
+  (use-package nord-theme
+    :preface
+    (add-to-list 'custom-theme-load-path
+                 (file-name-directory (locate-library "nord-theme"))))
 
+  (use-package gotham-theme
+    :preface
+    (add-to-list 'custom-theme-load-path
+                 (file-name-directory (locate-library "gotham-theme"))))
+
+  (use-package apropospriate-theme
+    :preface
+    (add-to-list 'custom-theme-load-path
+                 (file-name-directory (locate-library "apropospriate-theme")))))
 
 ;; .................................................................... unclutter
 (use-package emacs
@@ -570,7 +584,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
          pop-up-windows nil
          column-number-mode t
          confirm-kill-emacs 'yes-or-no-p
-         epg-gpg-program "/run/current-system/sw/bin/gpg"
          echo-keystrokes 0.1
          apropos-do-all t
          visible-bell nil))
