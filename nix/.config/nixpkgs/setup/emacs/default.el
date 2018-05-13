@@ -504,44 +504,65 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
 ;; ....................................................................... theme
-(use-package gotham-theme
+(use-package nord-theme
   :if window-system
-  :init
+  :ensure t
+  :defer 0
+  :preface
   (add-to-list 'custom-theme-load-path
                (file-name-directory (locate-library "gotham-theme")))
   (add-to-list 'custom-theme-load-path
                (file-name-directory (locate-library "apropospriate-theme")))
   (add-to-list 'custom-theme-load-path
                (file-name-directory (locate-library "nord-theme")))
-  (load-theme 'nord t))
 
-(defun dark-theme ()
-  "Load dark theme."
-  (interactive)
-  (load-theme 'gotham t))
+  (add-hook 'focus-in-hook #'peel/load-font)
+  (add-hook 'focus-in-hook #'peel/load-theme)
+  (add-hook 'focus-in-hook #'peel/load-ui)
+  
+  (defun peel/load-theme ()
+    (load-theme 'nord t)
+    (remove-hook 'focus-in-hook #'peel/load-theme))
 
-(defun semi-dark-theme ()
-  "Load dark theme."
-  (interactive)
-  (load-theme 'nord t))
+  (defun peel/load-font ()
+    "Load default font."
+    (defvar default-font "PragmataPro")
+    (set-face-attribute 'default nil :height 180)
+    (setq-default line-spacing 7)
+    (set-frame-font default-font)
+    (remove-hook 'focus-in-hook #'peel/load-font))
+  
+  (defun peel/load-ui ()
+    "Remove UI bars."
+    (tool-bar-mode -1)
+    (scroll-bar-mode -1)
+    (blink-cursor-mode -1)
+    ;;(set-frame-parameter nil 'undecorated t)
+    (when (not (memq window-system '(mac ns)))
+      (menu-bar-mode -1))
+    (remove-hook 'focus-in-hook #'peel/load-ui))
+  
+  (defun dark-theme ()
+    "Load dark theme."
+    (interactive)
+    (load-theme 'gotham t))
 
-(defun light-theme ()
-  "Load light theme."
-  (interactive)
-  (load-theme 'apropospriate-light t))
+  (defun semi-dark-theme ()
+    "Load dark theme."
+    (interactive)
+    (load-theme 'nord t))
 
+  (defun light-theme ()
+    "Load light theme."
+    (interactive)
+    (load-theme 'apropospriate-light t)))
 
-;; ......................................................................... font
-(when (display-graphic-p)
-  (set-face-attribute 'default nil :height 180)
-  (setq-default line-spacing 7)
-  (set-frame-font "PragmataPro"))
 
 ;; .................................................................... unclutter
 (use-package emacs
-  :defer nil
+  :defer 0
   :bind ("C-z" . kill-whole-line)
-  :config
+  :init
   (setq  inhibit-startup-screen t
          initial-scratch-message nil
          make-backup-files nil
@@ -552,16 +573,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
          epg-gpg-program "/run/current-system/sw/bin/gpg"
          echo-keystrokes 0.1
          apropos-do-all t
-         visible-bell nil)
-  
-  (when window-system
-    (tool-bar-mode -1)
-    (scroll-bar-mode -1)
-    (blink-cursor-mode -1))
-  
-  ;;(set-frame-parameter nil 'undecorated t)
-  (when (not (memq window-system '(mac ns)))
-    (menu-bar-mode -1)))
+         visible-bell nil))
 
 
 ;; ............................................................. fix awkwardness
