@@ -24,6 +24,22 @@
 (use-package diminish
   :init (require 'diminish))
 
+;; darwin-specific
+;; Graphical applications in macOS inherit their process environment from
+;; launchd, not from a shell process which loads a profile.
+(use-package exec-path-from-shell
+  :functions (exec-path-from-shell-initialize)
+  :preface
+  (defconst exec-path-from-shell-variables
+    '("PATH"
+      "NIX_PATH"
+      "NIX_PROFILES"
+      "NIX_REMOTE"
+      "NIX_SSL_CERT_FILE"
+      "NIX_USER_PROFILE_DIR"
+      ))
+  :init
+  (exec-path-from-shell-initialize))
 
 ;; navigation ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
@@ -556,7 +572,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     (interactive)
     (load-theme light-theme t))
   :config
-  
   (use-package nord-theme
     :preface
     (add-to-list 'custom-theme-load-path
