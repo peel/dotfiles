@@ -193,7 +193,9 @@
 
 (use-package dired-sidebar
   :commands (dired-sidebar-toggle-sidebar)
-  :bind ("C-x C-n" . dired-sidebar-toggle-sidebar))
+  :bind ("C-x C-n" . dired-sidebar-toggle-sidebar)
+  :config
+  (setq dired-sidebar-subtree-line-prefix " ."))
 
 ;; bindings ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
@@ -557,6 +559,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     (scroll-bar-mode -1)
     (blink-cursor-mode -1)
     ;;(set-frame-parameter nil 'undecorated t)
+    (when (memq window-system '(mac ns))
+      (progn (add-to-list 'default-frame-alist '(ns-transparent-titlebar t))
+             (add-to-list 'default-frame-alist '(ns-appearance nil))))
     (when (not (memq window-system '(mac ns)))
       (menu-bar-mode -1))
     (remove-hook 'focus-in-hook #'peel/load-ui))
