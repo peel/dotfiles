@@ -191,6 +191,10 @@
         dired-use-ls-dired nil
         delete-by-moving-to-trash t))
 
+(use-package dired-sidebar
+  :commands (dired-sidebar-toggle-sidebar)
+  :bind ("C-x C-n" . dired-sidebar-toggle-sidebar))
+
 ;; bindings ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
 ;; ....................................................................... popup

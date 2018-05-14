@@ -75,6 +75,7 @@ in
     # treemacs
     undo-tree
     use-package
+    dired-sidebar
     exec-path-from-shell
     which-key
     #yasnippet
