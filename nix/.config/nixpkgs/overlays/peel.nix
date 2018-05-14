@@ -37,13 +37,6 @@ self: super:
           ++ super.lib.optional withBorderless patchBorderless
           ++ super.lib.optional withMulticolorFonts patchMulticolorFonts;
       });
-  emacs = (if super.stdenv.isDarwin then
-    (emacsPlus {
-        with24bitColor = true;
-        withPixelScrolling = true;
-        withBorderless = true;
-        withMulticolorFonts = true;
-    }) else super.emacs);
   firefox-bin = super.callPackage ./pkgs/networking/browsers/firefox-bin/darwin.nix {};
   gopass = super.callPackage ./pkgs/tools/security/gopass {};
   hoverfly = super.callPackage ./pkgs/development/tools/hoverfly {};
