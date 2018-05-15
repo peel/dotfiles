@@ -558,12 +558,19 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     (tool-bar-mode -1)
     (scroll-bar-mode -1)
     (blink-cursor-mode -1)
+    
     ;;(set-frame-parameter nil 'undecorated t)
+    ;; and the workaround for the above thats's broken
     (when (memq window-system '(mac ns))
-      (progn (add-to-list 'default-frame-alist '(ns-transparent-titlebar t))
-             (add-to-list 'default-frame-alist '(ns-appearance nil))))
+      (progn
+        ;; (setq frame-title-format nil)
+        ;; (setq ns-use-proxy-icon nil)
+        (add-to-list 'default-frame-alist '(ns-transparent-titlebar t))
+        (add-to-list 'default-frame-alist '(ns-appearance nil))))
+    
     (when (not (memq window-system '(mac ns)))
       (menu-bar-mode -1))
+    
     (remove-hook 'focus-in-hook #'peel/load-ui))
   
   (defun dark-theme ()
