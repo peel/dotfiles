@@ -90,8 +90,9 @@
   :commands ivy-mode
   :config
   (ivy-mode 1)
-  (setq ivy-re-builders-alist
-	    '((t . ivy--regex-fuzzy))))
+  (setq ivy-use-virtual-buffers t  ;; highlight recent
+        ivy-count-format "%d/%d "  ;; current / total
+        ivy-re-builders-alist '((t . ivy--regex-fuzzy))))
 
 ;; ...................................................................... counsel
 (use-package counsel
