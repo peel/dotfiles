@@ -1,2 +1,0 @@
-alias kk "kubectl config use-context"
-alias kc "kubectl config current-context"

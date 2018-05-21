@@ -58,13 +58,4 @@ bind r source-file ~/.tmux.conf \; display "Reloaded!"
 # quick pane cycling
 unbind ^A
 bind ^A select-pane -t :.+
-
-set -g @tpm_plugins '             \
-  tmux-plugins/tpm                \
-  tmux-plugins/tmux-resurrect     \
-  tmux-plugins/tmux-yank          \
-  tmux-plugins/tmux-copycat       \
-'
-
-run '~/.tmux/plugins/tpm/tpm'
 ''

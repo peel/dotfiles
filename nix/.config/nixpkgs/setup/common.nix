@@ -1,8 +1,9 @@
 { config, pkgs, ... }:
 
 {
+  imports = [ ./fish.nix ];
   environment.variables.EDITOR = "${pkgs.emacs}/bin/emacsclient -tc";
-  environment.variables.fish_key_bindings = "fish_vi_key_bindings";
+  environment.variables.SHELL = "${pkgs.fish}/bin/fish";
   environment.etc."inputrc".text = ''
     set editing-mode vi
   '';
@@ -1065,7 +1066,5 @@
     eval "$(${pkgs.fasd}/bin/fasd --init auto)"
   '';
   programs.bash.enableCompletion = true;
-  programs.fish.enable = true;
-  programs.fish.vendor.completions.enable = true;
   programs.tmux.enable = true;
 }
