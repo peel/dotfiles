@@ -83,7 +83,7 @@
 	     ([remap list-buffers] . ivy-switch-buffer)
 	     ([remap switch-to-buffer] . ivy-switch-buffer)
 	     ([remap switch-to-buffer-other-window] . ivy-switch-buffer-other-window)
-         ("C-c C-f" . ivy-recentf)
+         ("C-c C-f" . counsel-recentf)
          :map ivy-minibuffer-map
          ("C-j" . ivy-call))
   :diminish ivy-mode
@@ -541,7 +541,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (defvar dark-theme 'gotham)
   (defvar semi-dark-theme 'nord)
   (defvar light-theme 'apropospriate-light)
-  (defvar default-theme semi-dark-theme)
+  (defvar default-theme dark-theme)
   
   (defun peel/load-theme ()
     (load-theme default-theme t)

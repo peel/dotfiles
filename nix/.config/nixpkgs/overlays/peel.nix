@@ -5,6 +5,16 @@ self: super:
         inherit (super) callPackage stdenv fetchFromGitHub imagemagick;
         inherit (super.darwin.apple_sdk.frameworks) Carbon Cocoa ApplicationServices;
   });
+  skhd = super.skhd.overrideAttrs(oldAttrs: rec {
+    name = "skhd-${version}";
+    version = "0.2.1";
+    src = super.fetchFromGitHub {
+      owner = "koekeishiya";
+      repo = "skhd";
+      rev = "v${version}";
+      sha256 = "0scx8hn8v4achciv0jx6b3lca243ygfl15b32jjrqb6pr5c55zp7";
+    };
+  });
   emacsPlus = let
     patchMulticolorFonts = super.fetchurl {
         url = "https://gist.githubusercontent.com/aatxe/260261daf70865fbf1749095de9172c5/raw/214b50c62450be1cbee9f11cecba846dd66c7d06/patch-multicolor-font.diff";

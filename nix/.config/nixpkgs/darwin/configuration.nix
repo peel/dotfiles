@@ -3,7 +3,7 @@
 with (import ../libs { inherit lib; });
 
 let
-  colors = (import ../setup/colors.nix {});
+  colors = (import ../setup/colors.nix { theme = "dark"; });
   fonts = import ../setup/fonts.nix;
   username = "peel";
   hostName = "fff666";
