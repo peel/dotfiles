@@ -56,6 +56,7 @@ in
     #hl-todo
     hydra
     counsel
+    smex
     #counsel-dash !
     counsel-projectile
     #all-the-icons

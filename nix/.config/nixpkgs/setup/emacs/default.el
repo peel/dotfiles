@@ -90,8 +90,9 @@
   :commands ivy-mode
   :config
   (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t  ;; highlight recent
-        ivy-count-format "%d/%d "  ;; current / total
+  (setq ivy-use-virtual-buffers t    ;; highlight recent
+        ivy-count-format "%d/%d "    ;; current / total
+        ivy-initial-inputs-alist nil ;; do not preset ^ in buffer
         ivy-re-builders-alist '((t . ivy--regex-fuzzy))))
 
 ;; ...................................................................... counsel
@@ -112,6 +113,7 @@
 	     ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
 	     ([remap pop-to-mark-command] . counsel-mark-ring)
 	     ([remap bookmark-jump] . counsel-bookmark)
+         ("C-x j" . counsel-imenu)
 	     ("C-c g" . counsel-git)
 	     ("C-c j" . counsel-git-grep)
 	     ("M-y" . counsel-yank-pop)
@@ -130,6 +132,12 @@
 ;; ...................................................................... search
 (use-package swiper
   :bind ("C-s" . swiper))
+
+;; ........................................................................ smex
+(use-package smex
+  :after (ivy counsel)
+  :init
+  (setq-default smex-history-length 32))
 
 ;; syntax checking ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package flycheck
@@ -434,14 +442,22 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package rjsx-mode
   :config
   (flycheck-add-mode 'javascript-eslint 'rjsx-mode))
-(use-package prettier-js)
+
+(use-package prettier-js
+  :hook (web-mode))
+
 (use-package web-mode
   :ensure smartparens
   :ensure rainbow-delimiters
   :ensure aggressive-indent
   :ensure prettier-js
   :ensure rjsx-mode
-  :mode ("\\.html?\\'" "\\.jsx?" "\\.css\\'" "\\.scss\\'"))
+  :mode ("\\.html?\\'" "\\.jsx?" "\\.css\\'" "\\.scss\\'")
+  :config
+  (setq css-indent-offset 2
+        js-switch-indent-offset 4
+        js-indent-level 2
+        js-indent-switch-body t))
 
 
 ;; .................................................................. restclient
