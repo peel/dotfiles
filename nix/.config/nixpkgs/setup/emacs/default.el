@@ -426,11 +426,23 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     "Keep trailing-whitespace when indenting."
     (noflet ((scala-lib:delete-trailing-whitespace ()))
       ad-do-it))
+  
+  (defun scalafmt/format-region (beg end)
+    "Run scalafmt on selected region"
+    (interactive "r")
+    (call-process-region beg end
+                         "scalafmt"
+                         t t nil
+                         "--non-interactive"
+                         "--config" (expand-file-name "~/.scalafmt.conf")
+                         "--stdin"
+                         "--assume-filename" (file-name-nondirectory buffer-file-name)))
+  
   (defun scalafmt/format-file ()
     "Run scalafmt on the current file"
     (interactive)
     (let ((default-directory (projectile-project-root))
-          (scalafmt-cmd (format "/usr/bin/env scalafmt -i -f %s"
+          (scalafmt-cmd (format "/usr/bin/env scalafmt -i --config ~/.scalafmt.conf -f %s"
                                 (shell-quote-argument (buffer-file-name)))))
       (message "Running %s..." scalafmt-cmd)
       (shell-command scalafmt-cmd)
@@ -491,7 +503,37 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (setq endless/blog-base-url "https://codearsonist.com/")
   (setq endless/blog-dir (expand-file-name "~/wrk/blog/"))
   ;; disabled for now: (require 'ox-jekyll-subtree)
-  )
+  (setq papers-pdfs "~/Dropbox/Documents/notes/reading/lib/"
+        papers-notes "~/Dropbox/Documents/notes/reading/index.org"
+        papers-refs "~/Dropbox/Documents/notes/reading/index.bib"))
+
+(use-package pdf-tools
+  :magic ("%PDF" . pdf-view-mode)
+  :config
+  (pdf-tools-install))
+
+(use-package org-ref
+  :requires org-mode
+  :after org-mode
+  :hook org-mode
+  :config
+  (setq reftex-default-bibliography '(papers-refs))
+  (setq org-ref-bibliography-notes papers-notes
+        org-ref-default-bibliography '(papers-refs)
+        org-ref-pdf-directory papers-pdfs))
+
+(use-package interleave
+  :requires (org-mode pdf-tools)
+  :after org-mode
+  :magic ("%PDF" . pdf-view-mode))
+
+(use-package ivy-bibtex
+  :after (org-mode ivy)
+  :init
+  (setq bibtex-completion-bibliography papers-refs
+        bibtex-completion-library-path papers-pdfs
+        bibtex-completion-notes-path papers-notes))
+
 
 ;; builtins ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
@@ -500,6 +542,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :disabled
   :init (server-start))
 
+(use-package restart-emacs)
 
 ;; ....................................................................... eldoc
 (use-package eldoc

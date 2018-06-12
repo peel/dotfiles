@@ -64,15 +64,13 @@ in
     magit
     #magithub !!
     noflet
-    #pbcopy?
-    #pdf-tools
     #popup?
     #popwin?
     projectile
     rainbow-delimiters
     rainbow-identifiers
     #rainbow-mode?
-    #restart-emacs
+    restart-emacs
     # treemacs
     undo-tree
     use-package
@@ -120,8 +118,13 @@ in
     yaml-mode
 
     ## org-mode !!
-    #ivy-bibtex
-    #biblio/biblio-core/interleave/org-ref/parsebib
+    org-ref
+    interleave
+    ivy-bibtex
+    pdf-tools
+    biblio
+    biblio-core
+    parsebib
     #ob-http
     #ob-restclient
     #org-plus-contrib

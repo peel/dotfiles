@@ -38,6 +38,6 @@ in rec {
       inherit (pkgs) stdenv makeWrapper writeTextFile;
       alacritty = alacrittyDrv;
     };
-    emacs = import ../setup/emacs { inherit pkgs; }; 
+    emacs = (import ../setup/emacs { inherit pkgs; });
   };
 }
