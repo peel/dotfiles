@@ -456,7 +456,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (flycheck-add-mode 'javascript-eslint 'rjsx-mode))
 
 (use-package prettier-js
-  :hook (web-mode))
+  :hook (web-mode . prettier-js-mode)
+  :config
+  (setq prettier-js-args '("--print-width" "100")))
 
 (use-package web-mode
   :ensure smartparens
