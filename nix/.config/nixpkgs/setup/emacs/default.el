@@ -636,17 +636,21 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (defun dark-theme ()
     "Load dark theme."
     (interactive)
+    (mapcar #'disable-theme custom-enabled-themes)
     (load-theme dark-theme t))
 
   (defun semi-dark-theme ()
     "Load semi-dark theme."
     (interactive)
+    (mapcar #'disable-theme custom-enabled-themes)
     (load-theme semi-dark-theme t))
 
   (defun light-theme ()
     "Load light theme."
     (interactive)
+    (mapcar #'disable-theme custom-enabled-themes)
     (load-theme light-theme t))
+  
   :config
   (use-package nord-theme
     :preface

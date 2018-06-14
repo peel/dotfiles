@@ -151,7 +151,7 @@ in
     
     #js
     # nodejs
-    # nodePacakges.prettier
+    # nodePackages.prettier
     # nodePackages.eslint
     # nodePackages.eslint-plugin-react
     # nodePackages.eslint-plugin-jest
