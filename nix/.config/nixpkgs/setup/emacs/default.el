@@ -458,7 +458,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package prettier-js
   :hook (web-mode . prettier-js-mode)
   :config
-  (setq prettier-js-args '("--print-width" "100")))
+  (setq prettier-js-args '("--print-width" "90")))
 
 (use-package web-mode
   :ensure smartparens
@@ -534,7 +534,16 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :init
   (setq bibtex-completion-bibliography papers-refs
         bibtex-completion-library-path papers-pdfs
-        bibtex-completion-notes-path papers-notes))
+        bibtex-completion-notes-path papers-notes)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((shell      . t)
+     (js         . t)
+     (emacs-lisp . t)
+     (clojure    . t)
+     (scala      . t)
+     (haskell    . t)
+     (dot . t))))
 
 
 ;; builtins ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁

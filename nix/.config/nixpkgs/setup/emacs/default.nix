@@ -149,6 +149,9 @@ in
     #scalafix
     #mill
     
+    #org
+    graphviz
+    
     #js
     # nodejs
     # nodePackages.prettier
