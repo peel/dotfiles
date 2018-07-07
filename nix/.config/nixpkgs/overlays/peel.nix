@@ -7,12 +7,12 @@ self: super:
   });
   skhd = super.skhd.overrideAttrs(oldAttrs: rec {
     name = "skhd-${version}";
-    version = "0.2.1";
+    version = "0.2.2";
     src = super.fetchFromGitHub {
       owner = "koekeishiya";
       repo = "skhd";
       rev = "v${version}";
-      sha256 = "0scx8hn8v4achciv0jx6b3lca243ygfl15b32jjrqb6pr5c55zp7";
+      sha256 = "0mn6svz2mqbpwlx510r447vflfcxryykpin6h6429dlz0wjlipa8";
     };
   });
   emacsPlus = let

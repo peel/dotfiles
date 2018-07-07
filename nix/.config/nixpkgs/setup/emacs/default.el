@@ -363,7 +363,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package prog-mode
   :ensure nil
-  :hook (prog-mode . prettify-symbols-mode)
+  :hook ((prog-mode . prettify-symbols-mode)
+         (prog-mode . display-line-numbers-mode))
   :preface (load (locate-file "pragmata.el" load-path) 'noerror))
 
 ;; ..................................................................... haskell

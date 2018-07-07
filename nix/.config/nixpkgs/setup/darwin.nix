@@ -262,5 +262,10 @@ in {
 
     ctrl + ${modMask} - a : chunkc tiling::desktop --layout bsp
     ctrl + ${modMask} - r : chunkc tiling::desktop --layout monocle
-'';
+    
+    # switch space instantly 
+    ${modMask} - 1 : chunkc tiling::desktop --focus 1
+    ${modMask} - 2 : chunkc tiling::desktop --focus 2
+    ${modMask} - 3 : chunkc tiling::desktop --focus 3
+  '';
 }

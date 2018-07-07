@@ -15,13 +15,15 @@
     gist
     gitAndTools.hub
     gitFull
+    git-secret
     gnumake
     gnupg
     gopass
-    ix
     # graphviz
     # hoverfly
     httpie
+    haskellPackages.hocker
+    ix
     jq
     nixUnstable
     # purescript
@@ -32,6 +34,7 @@
     sbt
     scripts
     stow
+    vultr
     wakatime
   ]
   ++ lib.optionals stdenv.isLinux [
