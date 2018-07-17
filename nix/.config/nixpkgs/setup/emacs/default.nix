@@ -42,7 +42,8 @@ in
     dumb-jump
     editorconfig
     expand-region
-    #exec-path-from-shell
+    xterm-color
+    shell-pop
     #eyebrowse?
     #fasd?
     flx # fuzzy matcher 
@@ -52,6 +53,7 @@ in
     #git-link
     #hightlight
     highlight-symbol
+    highlight-stages
     #highlight-parentheses
     #hl-todo
     hydra

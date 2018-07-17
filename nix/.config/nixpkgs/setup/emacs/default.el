@@ -286,10 +286,6 @@
     ("l" dumb-jump-quick-look "Quick look")
     ("b" dumb-jump-back "Back")))
 
-(use-package show-paren
-  :ensure nil
-  :init (show-paren-mode 1))
-
 (use-package expand-region
   :bind (("C-c v" . er/expand-region)))
 
@@ -304,6 +300,9 @@
   :init
   (require 'hydra)
   :config
+  (setq sp-highlight-wrap-overlay t
+        sp-highlight-pair-overlay t
+        sp-highlight-wrap-tag-overlay t)
   ;; Hydra for Smartparens
   (defhydra peel-smartparens (:hint nil)
     "
@@ -554,7 +553,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :disabled
   :init (server-start))
 
-(use-package restart-emacs)
+(use-package restart-emacs
+  :bind ("C-c C-c r" . restart-emacs))
 
 ;; ....................................................................... eldoc
 (use-package eldoc
@@ -569,15 +569,34 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; ...................................................................... eshell
 (use-package eshell
   :ensure nil
-  :bind (("C-c e" . eshell)
-         ("C-c E" . eshell-new))
-  :config (setq eshell-banner-message "")
+  :after hydra
+  :bind ("C-c e" . eshell-hydra/body)
+  :config
+  (setq eshell-banner-message "")
+  (use-package shell-pop
+    :requires eshell
+    :init (setq shell-pop-window-size 45
+                shell-pop-shell-type '("eshell" "*eshell*" (lambda () (eshell)))
+                shell-pop-window-position "bottom"))
+  (use-package xterm-color
+    :hook (eshell-before-prompt-hook . (setq xterm-color-preserve-properties))
+    :config
+    (add-to-list 'eshell-preoutput-filter-functions 'xterm-color-filter)
+    (setq eshell-output-filter-functions (remove 'eshell-handle-ansi-color eshell-output-filter-functions)))
   :init
+  (require 'hydra)
+  (defalias 'emacs 'find-file)
+  (defalias 'gs 'magit-status)
   (defun eshell-new()
     "Open a new instance of eshell."
     (interactive)
-    (eshell 'N)))
-
+    (eshell 'N))
+  :config
+  (defhydra eshell-hydra (:color blue :columns 3)
+    "Eshell"
+    ("e" eshell "Open eshell")
+    ("E" eshell-new "Eshell new window")
+    ("t" shell-pop "Pop")))
 
 ;; .................................................................. autorevert
 (use-package autorevert
