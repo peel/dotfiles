@@ -133,7 +133,7 @@ in {
   system.defaults = {
     dock = {
       autohide = true;
-      orientation = "bottom";
+      orientation = "right";
       showhidden = true;
     };
     finder = {
@@ -144,7 +144,7 @@ in {
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
   launchd.user.agents.chwm-sa = {
-    command = "$HOME/wrk/chwm-sa/inject_test/bin/inject";
+    command = "${pkgs.chunkwm.core}/bin/chunkwm --load-sa";
     serviceConfig.KeepAlive = false;
     serviceConfig.ProcessType = "Background";
     serviceConfig.RunAtLoad = true;
@@ -179,8 +179,8 @@ in {
     chunkc set window_use_cgs_move           1
   '';
   services.chunkwm.extraConfig = ''
+    chunkc tiling::rule --owner "emacs.*" --except "^$" --state tile
     chunkc tiling::rule --owner "Emacs.*" --except "^$" --state tile
-    chunkc tiling::rule --owner Emacs --except "^$" --state tile
     chunkc tiling::rule --owner Alacritty --state tile
     chunkc tiling::rule --owner Dash --state float
   '';
@@ -206,7 +206,7 @@ in {
     ${modMask} - ${keycodes.Delete} : chunkc tiling::window --close
 
     # focus window
-    ${modMask} - h : chunkc tiling::window --focus west
+    ${modMask} - u : chunkc tiling::window --focus west
     ${modMask} - j : chunkc tiling::window --focus south
     ${modMask} - k : chunkc tiling::window --focus north
     ${modMask} - l : chunkc tiling::window --focus east
@@ -251,14 +251,6 @@ in {
 
     # toggle window split type
     ${modMask} - e : chunkc tiling::window --toggle split
-
-    # float / unfloat window and center on screen
-    ${modMask} - t : chunkc tiling::window --toggle float \
-              chunkc tiling::window --grid-layout 1:1:1:1:1:1
-
-    # toggle sticky, float and resize to picture-in-picture size
-    ${modMask} - s : chunkc tiling::window --toggle sticky;\
-              chunkc tiling::window --grid-layout 5:5:4:0:1:1
 
     ctrl + ${modMask} - a : chunkc tiling::desktop --layout bsp
     ctrl + ${modMask} - r : chunkc tiling::desktop --layout monocle

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "hoverfly-${version}";
-  version = "v0.15.0";
+  version = "v0.17.2";
   rev = "${version}";
 
   goPackagePath = "github.com/SpectoLabs/hoverfly";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "SpectoLabs";
     repo = "hoverfly";
-    sha256 = "1vyglqqpm7845cavs415k975vz9pbczrxxhr2nvd1a4bc62qakqj";
+    sha256 = "0flxs4msafadpy8yh63zczxc3532g9cvp9ravapkvipfcvl9mww6";
   };
   meta = with stdenv.lib; {
     description = "Lightweight service virtualization/API simulation tool for developers and testers";

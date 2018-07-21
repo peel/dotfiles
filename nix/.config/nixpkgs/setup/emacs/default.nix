@@ -36,7 +36,7 @@ in
     aggressive-indent
     #clean-aindent-mode
     company
-    #dash-at-point !
+    dash-at-point
     diff-hl
     diminish
     dumb-jump
@@ -44,6 +44,8 @@ in
     expand-region
     xterm-color
     shell-pop
+    esh-autosuggest
+    eshell-prompt-extras
     #eyebrowse?
     #fasd?
     flx # fuzzy matcher 

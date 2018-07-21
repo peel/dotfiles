@@ -366,7 +366,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
          (prog-mode . display-line-numbers-mode))
   :preface (load (locate-file "pragmata.el" load-path) 'noerror))
 
-;; ..................................................................... haskell
+(use-package dash-at-point
+  :commands dash-at-point
+  :bind ("C-c h" . dash-at-point))
+
+;; ..................................................................... Haskell
 ;; TODO
 
 ;; ......................................................................... nix
@@ -425,7 +429,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (defadvice scala-indent:indent-code-line (around retain-trailing-ws activate)
     "Keep trailing-whitespace when indenting."
     (noflet ((scala-lib:delete-trailing-whitespace ()))
-      ad-do-it))
+            ad-do-it))
   
   (defun scalafmt/format-region (beg end)
     "Run scalafmt on selected region"
@@ -469,7 +473,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :mode ("\\.html?\\'" "\\.jsx?" "\\.css\\'" "\\.scss\\'")
   :config
   (setq css-indent-offset 2
-        js-switch-indent-offset 4
+        js-switch-indent-offset 2
         js-indent-level 2
         js-indent-switch-body t))
 
@@ -573,16 +577,29 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :bind ("C-c e" . eshell-hydra/body)
   :config
   (setq eshell-banner-message "")
+  
   (use-package shell-pop
     :requires eshell
     :init (setq shell-pop-window-size 45
                 shell-pop-shell-type '("eshell" "*eshell*" (lambda () (eshell)))
                 shell-pop-window-position "bottom"))
+  
   (use-package xterm-color
     :hook (eshell-before-prompt-hook . (setq xterm-color-preserve-properties))
     :config
     (add-to-list 'eshell-preoutput-filter-functions 'xterm-color-filter)
     (setq eshell-output-filter-functions (remove 'eshell-handle-ansi-color eshell-output-filter-functions)))
+  
+  (use-package esh-autosuggest
+    :hook (eshell-mode . esh-autosuggest-mode))
+  
+  (use-package eshell-prompt-extras
+    :after eshell-visual-options
+    :config
+    (setq eshell-highlight-prompt nil
+          eshell-prompt-function 'epe-theme-lambda)
+    (autoload 'epe-theme-lambda "eshell-prompt-extras"))
+  
   :init
   (require 'hydra)
   (defalias 'emacs 'find-file)
@@ -596,7 +613,23 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     "Eshell"
     ("e" eshell "Open eshell")
     ("E" eshell-new "Eshell new window")
-    ("t" shell-pop "Pop")))
+    ("t" shell-pop "Pop"))
+  
+  (defun peel/truncate-eshell-buffers ()
+    "Truncates all eshell buffers"
+    (interactive)
+    (save-current-buffer
+      (dolist (buffer (buffer-list t))
+        (set-buffer buffer)
+        (when (eq major-mode 'eshell-mode)
+          (eshell-truncate-buffer)))))
+
+  ;; After being idle for 5 seconds, truncate all the eshell-buffers if
+  ;; needed. If this needs to be canceled, you can run `(cancel-timer
+  ;; my/eshell-truncate-timer)'
+  (setq eshell-buffer-maximum-lines 20000
+        peel/eshell-truncate-timer
+        (run-with-idle-timer 5 t #'peel/truncate-eshell-buffers)))
 
 ;; .................................................................. autorevert
 (use-package autorevert
