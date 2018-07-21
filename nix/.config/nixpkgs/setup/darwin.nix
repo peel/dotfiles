@@ -203,7 +203,7 @@ in {
     ${modMask} - ${keycodes.Delete}       : chunkc tiling::window --close
 
     # fullscreen
-    ${modMask} - ${keycodes.Quote}        : chunkc tiling::window --toggle fullscreen
+    ${modMask} - h                        : chunkc tiling::window --toggle fullscreen
 
     # equalize 
     ${modMask} - 0                        : chunkc tiling::desktop --equalize
@@ -246,8 +246,6 @@ in {
     alt - ${keycodes.Comma}              : ${cheatsheet "/etc/static/skhdrc"}
 
     # reset  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-    alt - q                              : killall chunkwm
-    ${modMask} - q                       : ${noop}
-    ${modMask} - h                       : ${noop}
+    ${modMask} - q                       : killall chunkwm
   '';
 }
