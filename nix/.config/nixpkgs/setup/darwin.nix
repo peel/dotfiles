@@ -187,77 +187,67 @@ in {
   services.skhd.enable = true;
   services.skhd.package =  pkgs.skhd;
   services.skhd.skhdConfig = let
-    modMask = "alt";
+    modMask = "cmd";
+    moveMask = "ctrl";
     myTerminal = "${pkgs.alacrittyWrapper}/bin/alacritty -e tmux -2 new-session -A -s main";
     myEditor = "${pkgs.scripts}/bin/em";
     cheatsheet = file: "${pkgs.qarma}/bin/qarma --text-info --font=PragmataPro --width 1500 --height 1500 --filename ${file}";
+    noop = "/dev/null";
   in ''
-    ${modMask} - q : killall chunkwm
-    cmd - q : /dev/null
-    cmd - h : /dev/null
+    # windows ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+    # select
+    ${modMask} - j                        : chunkc tiling::window --focus prev 
+    ${modMask} - k                        : chunkc tiling::window --focus next
 
-    # TODO extract to make sure commands exist
-    ${modMask} - return : ${myTerminal}
-    ${modMask} + shift - return : ${myEditor}
-    ${modMask} - ${keycodes.Equal} : ${pkgs.scripts}/bin/qmk $HOME/wrk/qmk_firmware/layouts/community/ortho_4x12/peel/keymap.c
-    ${modMask} - ${keycodes.Comma} : ${cheatsheet "/etc/static/skhdrc"}
+    # close
+    ${modMask} - ${keycodes.Delete}       : chunkc tiling::window --close
 
-    # close focused window
-    ${modMask} - ${keycodes.Delete} : chunkc tiling::window --close
+    # fullscreen
+    ${modMask} - ${keycodes.Quote}        : chunkc tiling::window --toggle fullscreen
 
-    # focus window
-    ${modMask} - u : chunkc tiling::window --focus west
-    ${modMask} - j : chunkc tiling::window --focus south
-    ${modMask} - k : chunkc tiling::window --focus north
-    ${modMask} - l : chunkc tiling::window --focus east
+    # equalize 
+    ${modMask} - 0                        : chunkc tiling::desktop --equalize
 
-    cmd - j : chunkc tiling::window --focus prev
-    cmd - k : chunkc tiling::window --focus next
+    # swap 
+    ${moveMask} - h                       : chunkc tiling::window --swap west
+    ${moveMask} - j                       : chunkc tiling::window --swap south
+    ${moveMask} - k                       : chunkc tiling::window --swap north
+    ${moveMask} - l                       : chunkc tiling::window --swap east
 
-    # equalize size of windows
-    shift + ${modMask} - 0 : chunkc tiling::desktop --equalize
+    # rotate
+    ${modMask} - r                        : chunkc tiling::desktop --rotate 90
 
-    # swap window
-    ctrl - h : chunkc tiling::window --swap west
-    ctrl - j : chunkc tiling::window --swap south
-    ctrl - k : chunkc tiling::window --swap north
-    ctrl - l : chunkc tiling::window --swap east
-
-    # send window to desktop
-    ctrl + ${modMask} - x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
-
-    # focus monitor
-    ${modMask} - left : chunkc tiling::monitor -f prev
-    ${modMask} - right : chunkc tiling::monitor -f next
-    ${modMask} - 1  : chunkc tiling::monitor -f 1
-    ${modMask} - 2  : chunkc tiling::monitor -f 2
-
-    # send window to monitor and follow focus
-    ctrl - right : chunkc tiling::window --send-to-monitor 1; chunkc tiling::monitor -f 1
-    ctrl - left : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
-
-    # increase region size
-    ${modMask} - ${keycodes.LeftBracket} : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west
+    # increase region
+    ${modMask} - ${keycodes.LeftBracket}  : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west
     ${modMask} - ${keycodes.RightBracket} : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west
 
-    # rotate tree
-    ${modMask} - r : chunkc tiling::desktop --rotate 90
+    # spaces ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+    # switch 
+    ${modMask} + alt - a                  : chunkc tiling::desktop --focus prev
+    ${modMask} + alt - r                  : chunkc tiling::desktop --focus next
 
-    # toggle window fullscreen
-    ${modMask} - f : chunkc tiling::window --toggle fullscreen
+    # send window 
+    ${modMask} + ${moveMask} - a          : chunkc tiling::window --send-to-desktop prev
+    ${modMask} + ${moveMask} - r          : chunkc tiling::window --send-to-desktop next
 
-    # toggle window native fullscreen
-    shift + ${modMask} - f : chunkc tiling::window --toggle native-fullscreen
+    # monitor  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+    # focus 
+    ${modMask} - left                     : chunkc tiling::monitor -f prev
+    ${modMask} - right                    : chunkc tiling::monitor -f next
 
-    # toggle window split type
-    ${modMask} - e : chunkc tiling::window --toggle split
+    # send window
+    ${moveMask} - right                   : chunkc tiling::window --send-to-monitor 1; chunkc tiling::monitor -f 1
+    ${moveMask} - left                    : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
 
-    ctrl + ${modMask} - a : chunkc tiling::desktop --layout bsp
-    ctrl + ${modMask} - r : chunkc tiling::desktop --layout monocle
-    
-    # switch space instantly 
-    ${modMask} - 1 : chunkc tiling::desktop --focus 1
-    ${modMask} - 2 : chunkc tiling::desktop --focus 2
-    ${modMask} - 3 : chunkc tiling::desktop --focus 3
+    # apps  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+    ${modMask} - return                  : ${myTerminal} 
+    ${modMask} + shift - return          : ${myEditor}
+    alt - ${keycodes.Equal}              : ${pkgs.scripts}/bin/qmk $HOME/wrk/qmk_firmware/layouts/community/ortho_4x12/peel/keymap.c
+    alt - ${keycodes.Comma}              : ${cheatsheet "/etc/static/skhdrc"}
+
+    # reset  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+    alt - q                              : killall chunkwm
+    ${modMask} - q                       : ${noop}
+    ${modMask} - h                       : ${noop}
   '';
 }
