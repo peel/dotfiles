@@ -143,6 +143,7 @@ in {
   };
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
+  services.bloop.enable = true;
   launchd.user.agents.chwm-sa = {
     command = "${pkgs.chunkwm.core}/bin/chunkwm --load-sa";
     serviceConfig.KeepAlive = false;
