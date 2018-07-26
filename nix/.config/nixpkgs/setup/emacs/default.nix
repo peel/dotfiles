@@ -1,26 +1,19 @@
 { pkgs ? import <nixpkgs> {} }:
 
 let
-  inherit (import ((pkgs.fetchFromGitHub {
-    owner = "jwiegley";
-    repo = "nix-config";
-    rev = "0a33b5bdc8be5841100e27233cf371336ab20241";
-    sha256 = "0h40k597zfl57zw1l5bdak7rv9bwkrgvypjgf47p1ag3kmpjrkdy";
-    # date = 2018-03-24T13:13:51-07:00;
-  }) + "/overlays/10-emacs.nix") pkgs pkgs) emacs26;
   prettifyPragmata = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/fabrizioschiavi/pragmatapro/master/emacs_snippets/pragmatapro-prettify-symbols-v0.826.el";
+  url = "https://raw.githubusercontent.com/fabrizioschiavi/pragmatapro/master/emacs_snippets/pragmatapro-prettify-symbols-v0.826.el";
     sha256 = "1iy29y8k59dqwml0f1dadlxxhrp64q2r4k5xgm0kpmd4qw1frjgg";
   };
   oxJekyllSubtree = pkgs.fetchFromGitHub {
     owner = "Malabarba";
     repo = "ox-jekyll-subtree";
     rev = "d1da16e60b77f09bc2183ff1151e8965b3945527";
-    sha256= "0ps4cz01y00w3913c4yxxmmlsg99wiqc6cnbpxs73h618xqfpq8b";
-  };
+    sha256 = "0ps4cz01y00w3913c4yxxmmlsg99wiqc6cnbpxs73h618xqfpq8b";
+};
+  myEmacs = pkgs.emacs;
   myEmacsConfig = ./default.el;
-  emacs = emacs26;
-  emacsWithPackages = (pkgs.emacsPackagesNgGen emacs).emacsWithPackages;
+  emacsWithPackages = (pkgs.emacsPackagesNgGen myEmacs).emacsWithPackages;
 in
   emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
     (pkgs.runCommand "default.el" {} ''
@@ -76,7 +69,7 @@ in
     #rainbow-mode?
     restart-emacs
     # treemacs
-    undo-tree
+    # undo-tree
     use-package
     dired-sidebar
     exec-path-from-shell
@@ -140,6 +133,8 @@ in
     # pass
   ]) ++ (with epkgs.melpaStablePackages; [
     smartparens
+  ]) ++ (with epkgs.elpaPackages; [
+    undo-tree
   ]) ++ (with pkgs; [
     git
     global

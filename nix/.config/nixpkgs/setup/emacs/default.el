@@ -269,22 +269,34 @@
 (use-package counsel-gtags
   :defer 1
   :diminish counsel-gtags-mode
-  :hook (ggtags-mode . counsel-gtags-mode))
-
-(use-package dumb-jump
-  :after hydra
-  :bind ("s-." . dumb-jump-hydra/body)
-  :init (require 'hydra)
+  :bind ("M-." . counsel-gtags-hydra)
+  :hook (ggtags-mode . counsel-gtags-mode)
   :config
-  (defhydra dumb-jump-hydra (:color blue :columns 3)
-    "Dumb Jump"
-    ("j" dumb-jump-go "Go")
-    ("o" dumb-jump-go-other-window "Other window")
-    ("e" dumb-jump-go-prefer-external "Go external")
-    ("x" dumb-jump-go-prefer-external-other-window "Go external other window")
-    ("i" dumb-jump-go-prompt "Prompt")
-    ("l" dumb-jump-quick-look "Quick look")
-    ("b" dumb-jump-back "Back")))
+  (defhydra counsel-gtags-hydra (:color blue :columns 3)
+    "ggtags"
+    ("." counsel-gtags-dwim "dwim")
+    ("," counsel-gtags-go-backward "back")
+    ("t" counsel-gtags-find-definition "definition")
+    ("r" counsel-gtags-find-reference "reference")
+    ("s" counsel-gtags-find-symbol "symbol")
+    ("c" counsel-gtags-create-tags "create tags")
+    ("u" counsel-gtags-update-tags "update tags")
+    ("j" counsel-gtags-go-forward "forward"))
+
+  (use-package dumb-jump
+    :after hydra
+    :bind ("s-." . dumb-jump-hydra/body)
+    :init (require 'hydra)
+    :config
+    (defhydra dumb-jump-hydra (:color blue :columns 3)
+      "Dumb Jump"
+      ("j" dumb-jump-go "Go")
+      ("o" dumb-jump-go-other-window "Other window")
+      ("e" dumb-jump-go-prefer-external "Go external")
+      ("x" dumb-jump-go-prefer-external-other-window "Go external other window")
+      ("i" dumb-jump-go-prompt "Prompt")
+      ("l" dumb-jump-quick-look "Quick look")
+      ("b" dumb-jump-back "Back")))
 
 (use-package expand-region
   :bind (("C-c v" . er/expand-region)))
@@ -400,7 +412,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; ....................................................................... scala
 (use-package ensime
-  :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
   :preface
   (setq ensime-search-interface 'ivy
 	    ensime-startup-notification nil
