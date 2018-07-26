@@ -267,10 +267,12 @@
   :diminish (ggtags-mode . " "))
 
 (use-package counsel-gtags
+  :after hydra
   :defer 1
   :diminish counsel-gtags-mode
-  :bind ("M-." . counsel-gtags-hydra)
+  :bind ("C-." . counsel-gtags-hydra/body)
   :hook (ggtags-mode . counsel-gtags-mode)
+  :init (require 'hydra)
   :config
   (defhydra counsel-gtags-hydra (:color blue :columns 3)
     "ggtags"
@@ -281,22 +283,22 @@
     ("s" counsel-gtags-find-symbol "symbol")
     ("c" counsel-gtags-create-tags "create tags")
     ("u" counsel-gtags-update-tags "update tags")
-    ("j" counsel-gtags-go-forward "forward"))
+    ("j" counsel-gtags-go-forward "forward")))
 
-  (use-package dumb-jump
-    :after hydra
-    :bind ("s-." . dumb-jump-hydra/body)
-    :init (require 'hydra)
-    :config
-    (defhydra dumb-jump-hydra (:color blue :columns 3)
-      "Dumb Jump"
-      ("j" dumb-jump-go "Go")
-      ("o" dumb-jump-go-other-window "Other window")
-      ("e" dumb-jump-go-prefer-external "Go external")
-      ("x" dumb-jump-go-prefer-external-other-window "Go external other window")
-      ("i" dumb-jump-go-prompt "Prompt")
-      ("l" dumb-jump-quick-look "Quick look")
-      ("b" dumb-jump-back "Back")))
+(use-package dumb-jump
+  :after hydra
+  :bind ("s-." . dumb-jump-hydra/body)
+  :init (require 'hydra)
+  :config
+  (defhydra dumb-jump-hydra (:color blue :columns 3)
+    "Dumb Jump"
+    ("j" dumb-jump-go "Go")
+    ("o" dumb-jump-go-other-window "Other window")
+    ("e" dumb-jump-go-prefer-external "Go external")
+    ("x" dumb-jump-go-prefer-external-other-window "Go external other window")
+    ("i" dumb-jump-go-prompt "Prompt")
+    ("l" dumb-jump-quick-look "Quick look")
+    ("b" dumb-jump-back "Back")))
 
 (use-package expand-region
   :bind (("C-c v" . er/expand-region)))
