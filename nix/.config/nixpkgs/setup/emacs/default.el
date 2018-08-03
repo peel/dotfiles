@@ -596,7 +596,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :demand
   :hook ((emacs-lisp-mode . eldoc-mode)
 	     (eshell-mode . eldoc-mode)
-	     (gtags-mode . eldoc-mode))
+	     (ggtags-mode . eldoc-mode))
   :config (eldoc-mode t))
 
 ;; ...................................................................... eshell
