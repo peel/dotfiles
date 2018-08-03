@@ -17,6 +17,7 @@
     gitAndTools.hub
     gitFull
     git-secret
+    global
     gnumake
     gnupg
     gopass

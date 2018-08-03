@@ -413,6 +413,22 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :mode ("\\.yml\\'" "\\.yaml\\'"))
 
 ;; ....................................................................... scala
+(use-package lsp-mode)
+
+(use-package company-lsp
+  :ensure t
+  :after (company lsp-mode)
+  :config
+  (push 'company-lsp company-backends))
+
+(use-package lsp-scala
+  :after (lsp-mode scala-mode)
+  :ensure nil
+  :init
+  (require 'lsp-scala)
+  ;; :hook (scala-mode-hook . #'lsp-scala-enable)
+  )
+
 (use-package ensime
   :preface
   (setq ensime-search-interface 'ivy

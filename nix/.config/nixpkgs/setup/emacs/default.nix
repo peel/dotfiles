@@ -2,7 +2,7 @@
 
 let
   prettifyPragmata = pkgs.fetchurl {
-  url = "https://raw.githubusercontent.com/fabrizioschiavi/pragmatapro/master/emacs_snippets/pragmatapro-prettify-symbols-v0.826.el";
+    url = "https://raw.githubusercontent.com/fabrizioschiavi/pragmatapro/master/emacs_snippets/pragmatapro-prettify-symbols-v0.826.el";
     sha256 = "1iy29y8k59dqwml0f1dadlxxhrp64q2r4k5xgm0kpmd4qw1frjgg";
   };
   oxJekyllSubtree = pkgs.fetchFromGitHub {
@@ -10,7 +10,14 @@ let
     repo = "ox-jekyll-subtree";
     rev = "d1da16e60b77f09bc2183ff1151e8965b3945527";
     sha256 = "0ps4cz01y00w3913c4yxxmmlsg99wiqc6cnbpxs73h618xqfpq8b";
-};
+  };
+  lspScala = pkgs.fetchFromGitHub {
+    owner = "rossabaker";
+    repo = "lsp-scala";
+    rev ="b1464fea0738853f11aeac67a4a31fb59d65348a";
+    # date = "2018-04-14T23:27:46-04:00";
+    sha256 = "191bf4nclfyvmyi1mlq9y9wzkcczvvl32lvwrjac9bfxyxjw522y";
+  };
   myEmacs = pkgs.emacs;
   myEmacsConfig = ./default.el;
   emacsWithPackages = (pkgs.emacsPackagesNgGen myEmacs).emacsWithPackages;
@@ -19,6 +26,7 @@ in
     (pkgs.runCommand "default.el" {} ''
     mkdir -p $out/share/emacs/site-lisp
     cp ${prettifyPragmata} $out/share/emacs/site-lisp/pragmata.el
+    cp ${lspScala}/*.el $out/share/emacs/site-lisp/
     cp ${oxJekyllSubtree}/*.el $out/share/emacs/site-lisp/
     cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
     '')
@@ -82,6 +90,8 @@ in
     apropospriate-theme
 
     # languages
+    lsp-mode
+    company-lsp
     ## dhall
     dhall-mode
     #fish-mode
@@ -135,26 +145,4 @@ in
     smartparens
   ]) ++ (with epkgs.elpaPackages; [
     undo-tree
-  ]) ++ (with pkgs; [
-    git
-    global
-    gnupg
-    #pragmatapro
-    ripgrep
-
-    #scala
-    #sbt
-    #scalafmt
-    #scalafix
-    #mill
-    
-    #org
-    graphviz
-    
-    #js
-    # nodejs
-    # nodePackages.prettier
-    # nodePackages.eslint
-    # nodePackages.eslint-plugin-react
-    # nodePackages.eslint-plugin-jest
   ]))
