@@ -5,15 +5,21 @@ let
   hostName = "fff66602";
   colors = (import ../setup/colors.nix {});
   fonts = import ../setup/fonts.nix;
-  mkOverlay = username: overlay: builtins.toPath "/home/${username}/.config/nixpkgs/overlays/${overlay}.nix";
+  nur = (import ~/.config/nurpkgs { inherit pkgs; });
 in
 {
   imports = [
-      ./hardware-configuration.nix
-      ../setup/common.nix
-      ../setup/nixos.nix
-      ../setup/packages.nix
-    ] ++ import (mkOverlay username "modules/module-list");
+    ./hardware-configuration.nix
+    ../setup/common.nix
+    ../setup/nixos.nix
+    ../setup/packages.nix
+  ] ++ [
+    nur.modules.battery-notifier
+    nur.modules.udiskie
+    nur.modules.autocutsel
+    nur.modules.dunst
+    nur.modules.weechat
+  ];
 
   # mbp config
   # Use the systemd-boot EFI boot loader.
@@ -46,7 +52,7 @@ in
 
   # shared config
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = [ (import (mkOverlay username username)) ];
+  nixpkgs.overlays = [ (import ~/.config/nurpkgs/overlay.nix) ];
   nix.useSandbox = true;
   nix.binaryCaches = [ https://cache.nixos.org ];
 
@@ -54,7 +60,7 @@ in
   networking.hostName = hostName;
   networking.networkmanager.enable = true;
   networking.extraHosts = ''
-    127.0.0.1  dev.finpack.pl
+  127.0.0.1  ${hostName}
   '';
   networking.wireless.enable = false;
   networking.firewall.enable = true;

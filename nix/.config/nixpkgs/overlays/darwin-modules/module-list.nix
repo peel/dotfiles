@@ -1,3 +1,0 @@
-[
-  ./services/development/bloop.nix
-  ]

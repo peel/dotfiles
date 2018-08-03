@@ -4,11 +4,12 @@
     alacrittyWrapper
     aspell
     awscli
+    cachix
     curl
     coreutils
     docker
     docker_compose
-    emacs
+    # emacs
     fasd
     fish
     fzf
@@ -22,7 +23,7 @@
     # graphviz
     # hoverfly
     httpie
-    haskellPackages.hocker
+    # haskellPackages.hocker
     ix
     jq
     nixUnstable
@@ -36,6 +37,7 @@
     stow
     vultr
     wakatime
+    # zulu
   ]
   ++ lib.optionals stdenv.isLinux [
     acpi
@@ -95,7 +97,6 @@
     chunkwm.core
     chunkwm.ffm
     chunkwm.tiling
-    firefox-bin
     skhd
   ]);
 }
