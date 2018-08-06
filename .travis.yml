@@ -4,8 +4,24 @@ matrix:
     - os: osx
       osx_image: xcode8.3  # 10.12
     - os: linux
+
 script:
   - nix build
   - ./result/bin/dotfiles install
   - ./result/bin/dotfiles link
   - ./result/bin/dotfiles uninstall
+
+after_success:
+  - git tag "${date +"%F-%T}" -m "🚀️ ship it"
+  - cd docs && emacs -Q index.org --batch --eval "(progn (org-babel-tangle)(org-html-export-to-html))" --kill
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  local-dir: docs
+  target-branch: gh-pages
+  fqdn: dotfiles.codearsonist.com
+  on:
+    branch: master
