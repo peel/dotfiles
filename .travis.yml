@@ -5,6 +5,10 @@ matrix:
       osx_image: xcode8.3  # 10.12
     - os: linux
 
+install:
+   - nix-env -iA nixpkgs.emacs
+   - mkdir -p ~/.emacs.d && curl -sSL https://raw.githubusercontent.com/hniksic/emacs-htmlize/master/htmlize.el --output ~/.emacs.d/htmlize.el
+
 script:
   - nix build
   - ./result/bin/dotfiles install
@@ -13,7 +17,7 @@ script:
 
 after_success:
   - git tag "${date +"%F-%T}" -m "🚀️ ship it"
-  - cd docs && emacs -Q index.org --batch --eval "(progn (org-babel-tangle)(org-html-export-to-html))" --kill
+  - cd docs && emacs -Q index.org --batch --eval "(progn (load \"~/.emacs.d/htmlize.el\")(org-babel-tangle)(org-html-export-to-html))" --kill
 
 deploy:
   provider: pages
