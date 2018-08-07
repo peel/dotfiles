@@ -1,13 +1,5 @@
 language: nix
 
-matrix:
-  allow_failures:
-    - os: osx
-      
-os:
-  - linux
-  - osx
-
 env:
   global:
     - CACHIX_CACHE=peel
@@ -37,7 +29,7 @@ jobs:
         - if [ -n "${CACHIX_CACHE}" ]; then cachix push "${CACHIX_CACHE}" $emacs; fi
     - stage: deploy
       script:
-        - git tag "${date +"%F-%T}" -m "🚀️ ship it"
+        - git tag "${TRAVIS_BUILD_NUMBER}" -m "🚀️ ship it"
         - cd docs && emacs -Q index.org --batch --eval "(progn (load \"~/.emacs.d/htmlize.el\")(org-babel-tangle)(org-html-export-to-html))" --kill
       deploy:
         provider: pages
