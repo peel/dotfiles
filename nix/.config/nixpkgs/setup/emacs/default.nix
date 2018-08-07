@@ -11,13 +11,6 @@ let
     rev = "d1da16e60b77f09bc2183ff1151e8965b3945527";
     sha256 = "0ps4cz01y00w3913c4yxxmmlsg99wiqc6cnbpxs73h618xqfpq8b";
   };
-  lspScala = pkgs.fetchFromGitHub {
-    owner = "rossabaker";
-    repo = "lsp-scala";
-    rev ="b1464fea0738853f11aeac67a4a31fb59d65348a";
-    # date = "2018-04-14T23:27:46-04:00";
-    sha256 = "191bf4nclfyvmyi1mlq9y9wzkcczvvl32lvwrjac9bfxyxjw522y";
-  };
   myEmacs = pkgs.emacs;
   myEmacsConfig = ./default.el;
   emacsWithPackages = (pkgs.emacsPackagesNgGen myEmacs).emacsWithPackages;
@@ -26,7 +19,6 @@ in
     (pkgs.runCommand "default.el" {} ''
     mkdir -p $out/share/emacs/site-lisp
     cp ${prettifyPragmata} $out/share/emacs/site-lisp/pragmata.el
-    cp ${lspScala}/*.el $out/share/emacs/site-lisp/
     cp ${oxJekyllSubtree}/*.el $out/share/emacs/site-lisp/
     cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
     '')
@@ -90,13 +82,15 @@ in
     apropospriate-theme
 
     # languages
-    lsp-mode
-    company-lsp
+    # lsp-mode
+    # lsp-ui
+    # company-lsp
     ## dhall
     dhall-mode
     #fish-mode
     #graphviz-dot-mode
     ## haskell
+    # lsp-haskell
     ## javascript
     tide
     prettier-js
@@ -132,6 +126,7 @@ in
     biblio
     biblio-core
     parsebib
+    nov
     #ob-http
     #ob-restclient
     #org-plus-contrib

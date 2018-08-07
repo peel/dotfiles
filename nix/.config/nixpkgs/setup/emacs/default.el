@@ -542,6 +542,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         papers-notes "~/Dropbox/Documents/notes/reading/index.org"
         papers-refs "~/Dropbox/Documents/notes/reading/index.bib"))
 
+(use-package nov
+  :magic ("%EPUB" . nov-mode))
+
 (use-package pdf-tools
   :magic ("%PDF" . pdf-view-mode)
   :config

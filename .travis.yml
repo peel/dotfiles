@@ -5,27 +5,42 @@ matrix:
       osx_image: xcode8.3  # 10.12
     - os: linux
 
+env:
+  global:
+    - CACHIX_CACHE=peel
+
 install:
+   - travis_retry nix-channel --update
+   - if [ -n "${CACHIX_CACHE}" ]; then nix-env -if https://github.com/cachix/cachix/tarball/master --substituters https://cachix.cachix.org --trusted-public-keys cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM=; fi
+   - if [ -n "${CACHIX_CACHE}" ]; then cachix use "${CACHIX_CACHE}"; fi
    - nix-env -iA nixpkgs.emacs
    - mkdir -p ~/.emacs.d && curl -sSL https://raw.githubusercontent.com/hniksic/emacs-htmlize/master/htmlize.el --output ~/.emacs.d/htmlize.el
 
-script:
-  - nix build
-  - ./result/bin/dotfiles install
-  - ./result/bin/dotfiles link
-  - ./result/bin/dotfiles uninstall
-
-after_success:
-  - git tag "${date +"%F-%T}" -m "🚀️ ship it"
-  - cd docs && emacs -Q index.org --batch --eval "(progn (load \"~/.emacs.d/htmlize.el\")(org-babel-tangle)(org-html-export-to-html))" --kill
-
-deploy:
-  provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN
-  keep-history: true
-  local-dir: docs
-  target-branch: gh-pages
-  fqdn: dotfiles.codearsonist.com
-  on:
-    branch: master
+jobs:
+  include:
+    - stage: nix
+      script:
+        - dotfiles=$(nix-build -f default.nix)
+        - ./result/bin/dotfiles install
+        - ./result/bin/dotfiles link
+        - ./result/bin/dotfiles uninstall && echo Produced $dotfiles
+      after_success:
+        - if [ -n "${CACHIX_CACHE}" ]; then cachix push "${CACHIX_CACHE}" $dotfiles; fi
+    - stage: emacs
+      script: emacs=$(nix-build ./nix/.config/nixpkgs/setup/emacs/default.nix) && echo Produced $emacs
+      after_success:
+        - if [ -n "${CACHIX_CACHE}" ]; then cachix push "${CACHIX_CACHE}" emacs; fi
+    - stage: deploy
+      script:
+        - git tag "${date +"%F-%T}" -m "🚀️ ship it"
+        - cd docs && emacs -Q index.org --batch --eval "(progn (load \"~/.emacs.d/htmlize.el\")(org-babel-tangle)(org-html-export-to-html))" --kill
+      deploy:
+        provider: pages
+        skip-cleanup: true
+        github-token: $GITHUB_TOKEN
+        keep-history: true
+        local-dir: docs
+        target-branch: gh-pages
+        fqdn: dotfiles.codearsonist.com
+        on:
+          branch: master
