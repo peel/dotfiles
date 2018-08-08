@@ -555,8 +555,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package org-ref
   :init
-  (setq reftex-default-bibliography (list papers-refs))
-  (setq org-ref-bibliography-notes papers-notes
+  ;; (setq reftex-default-bibliography (list papers-refs))
+  (setq org-ref-completion-library 'org-ref-ivy-cite
+        org-ref-bibliography-notes papers-notes
         org-ref-default-bibliography (list papers-refs)
         org-ref-pdf-directory papers-pdfs))
 
