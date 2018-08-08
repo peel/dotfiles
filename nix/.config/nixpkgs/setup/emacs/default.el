@@ -529,6 +529,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; org ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ;; TODO
+(setq papers-dir "~/Dropbox/Documents/notes/reading/"
+      papers-pdfs (concat papers-dir "lib/")
+      papers-notes (concat papers-dir "index.org")
+      papers-refs (concat papers-dir "index.bib"))
+
 (use-package org
   :ensure nil
   :config
@@ -538,9 +543,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (setq endless/blog-base-url "https://codearsonist.com/")
   (setq endless/blog-dir (expand-file-name "~/wrk/blog/"))
   ;; disabled for now: (require 'ox-jekyll-subtree)
-  (setq papers-pdfs "~/Dropbox/Documents/notes/reading/lib/"
-        papers-notes "~/Dropbox/Documents/notes/reading/index.org"
-        papers-refs "~/Dropbox/Documents/notes/reading/index.bib"))
+  )
 
 (use-package nov
   :mode ("\\.epub\\'" . nov-mode))
@@ -554,7 +557,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :requires org-mode
   :after org-mode
   :hook org-mode
-  :config
+  :init
   (setq reftex-default-bibliography '(papers-refs))
   (setq org-ref-bibliography-notes papers-notes
         org-ref-default-bibliography '(papers-refs)
@@ -563,7 +566,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package org-noter
   :after org-mode
   :hook ((pdf-view-mode . org-noter-mode)
-         (nov-mode . org-noter-mode)))
+         (nov-mode . org-noter-mode))
+  :config
+  (setq org-noter-notes-search-path '(papers-dir)))
 
 (use-package ivy-bibtex
   :after (org-mode ivy)
