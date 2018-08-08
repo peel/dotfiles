@@ -82,9 +82,9 @@ in
     apropospriate-theme
 
     # languages
-    # lsp-mode
-    # lsp-ui
-    # company-lsp
+    lsp-mode
+    lsp-ui
+    company-lsp
     ## dhall
     dhall-mode
     #fish-mode
@@ -120,7 +120,7 @@ in
 
     ## org-mode !!
     org-ref
-    interleave
+    org-noter
     ivy-bibtex
     pdf-tools
     biblio

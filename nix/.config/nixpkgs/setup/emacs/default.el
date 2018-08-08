@@ -543,7 +543,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         papers-refs "~/Dropbox/Documents/notes/reading/index.bib"))
 
 (use-package nov
-  :magic ("%EPUB" . nov-mode))
+  :mode ("\\.epub\\'" . nov-mode))
 
 (use-package pdf-tools
   :magic ("%PDF" . pdf-view-mode)
@@ -560,10 +560,10 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         org-ref-default-bibliography '(papers-refs)
         org-ref-pdf-directory papers-pdfs))
 
-(use-package interleave
-  :requires (org-mode pdf-tools)
+(use-package org-noter
   :after org-mode
-  :magic ("%PDF" . pdf-view-mode))
+  :hook ((pdf-view-mode . org-noter-mode)
+         (nov-mode . org-noter-mode)))
 
 (use-package ivy-bibtex
   :after (org-mode ivy)
@@ -777,7 +777,14 @@ _k_: kill        _s_: split                   _{_: wrap with { }
          confirm-kill-emacs 'yes-or-no-p
          echo-keystrokes 0.1
          apropos-do-all t
-         visible-bell nil))
+         visible-bell nil)
+  ;; backups
+  (setq backup-by-copying t
+        backup-directory-alist '(("." . "~/.saves/"))
+        delete-old-versions t
+        kept-new-versions 6
+        kept-old-versions 2
+        version-control t))
 
 
 ;; ............................................................. fix awkwardness
