@@ -554,13 +554,10 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (pdf-tools-install))
 
 (use-package org-ref
-  :requires org-mode
-  :after org-mode
-  :hook org-mode
   :init
-  (setq reftex-default-bibliography '(papers-refs))
+  (setq reftex-default-bibliography (list papers-refs))
   (setq org-ref-bibliography-notes papers-notes
-        org-ref-default-bibliography '(papers-refs)
+        org-ref-default-bibliography (list papers-refs)
         org-ref-pdf-directory papers-pdfs))
 
 (use-package org-noter
@@ -568,7 +565,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :hook ((pdf-view-mode . org-noter-mode)
          (nov-mode . org-noter-mode))
   :config
-  (setq org-noter-notes-search-path '(papers-dir)))
+  (setq org-noter-notes-search-path (list papers-dir)))
 
 (use-package ivy-bibtex
   :after (org-mode ivy)
