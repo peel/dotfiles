@@ -384,8 +384,26 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :commands dash-at-point
   :bind ("C-c h" . dash-at-point))
 
+;; ......................................................................... lsp
+(use-package lsp-mode)
+
+(use-package lsp-ui)
+
+(use-package company-lsp
+  :ensure t
+  :after (company lsp-mode)
+  :config
+  (push 'company-lsp company-backends))
+
+
 ;; ..................................................................... Haskell
-;; TODO
+(use-package haskell-mode
+  :init
+  (use-package shm
+    :hook haskell-mode)
+  (use-package hindent
+    :hook haskell-mode)
+  (use-package lsp-haskell))
 
 ;; ......................................................................... nix
 (use-package nix-mode
@@ -413,14 +431,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :mode ("\\.yml\\'" "\\.yaml\\'"))
 
 ;; ....................................................................... scala
-(use-package lsp-mode)
-
-(use-package company-lsp
-  :ensure t
-  :after (company lsp-mode)
-  :config
-  (push 'company-lsp company-backends))
-
 (use-package lsp-scala
   :after (lsp-mode scala-mode)
   :ensure nil
@@ -528,14 +538,14 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 
 ;; org ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-;; TODO
-(setq papers-dir "~/Dropbox/Documents/notes/reading/"
+(setq papers-dir (expand-file-name "~/Dropbox/Documents/notes/reading/")
       papers-pdfs (concat papers-dir "lib/")
       papers-notes (concat papers-dir "index.org")
       papers-refs (concat papers-dir "index.bib"))
 
 (use-package org
   :ensure nil
+  :defer nil
   :config
   ;; jekyll 
   (autoload 'endless/export-to-blog "jekyll-once")
@@ -543,7 +553,15 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (setq endless/blog-base-url "https://codearsonist.com/")
   (setq endless/blog-dir (expand-file-name "~/wrk/blog/"))
   ;; disabled for now: (require 'ox-jekyll-subtree)
-  )
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((shell      . t)
+     (js         . t)
+     (emacs-lisp . t)
+     (clojure    . t)
+     (scala      . t)
+     (haskell    . t)
+     (dot . t))))
 
 (use-package nov
   :mode ("\\.epub\\'" . nov-mode))
@@ -569,20 +587,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (setq org-noter-notes-search-path (list papers-dir)))
 
 (use-package ivy-bibtex
-  :after (org-mode ivy)
-  :init
+  :after ivy
+  :config
   (setq bibtex-completion-bibliography papers-refs
         bibtex-completion-library-path papers-pdfs
-        bibtex-completion-notes-path papers-notes)
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((shell      . t)
-     (js         . t)
-     (emacs-lisp . t)
-     (clojure    . t)
-     (scala      . t)
-     (haskell    . t)
-     (dot . t))))
+        bibtex-completion-notes-path papers-notes))
 
 
 ;; builtins ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
