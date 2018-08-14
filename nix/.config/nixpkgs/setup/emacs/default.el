@@ -46,6 +46,11 @@
 (use-package winner
   :config (winner-mode 1))
 
+(use-package windmove
+  :ensure nil
+  :config
+  (windmove-default-keybindings 'shift))
+
 ;; ..................................................................... jumping
 (use-package avy
   :after hydra
@@ -708,7 +713,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (defvar dark-theme 'gotham)
   (defvar semi-dark-theme 'nord)
   (defvar light-theme 'apropospriate-light)
-  (defvar default-theme dark-theme)
+  (defvar default-theme semi-dark-theme)
   
   (defun peel/load-theme ()
     (load-theme default-theme t)
@@ -717,8 +722,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (defun peel/load-font ()
     "Load default font."
     (defvar default-font "PragmataPro")
-    (set-face-attribute 'default nil :height 180)
-    (setq-default line-spacing 7)
+    (set-face-attribute 'default nil :height 200)
+    (setq-default line-spacing 8)
     (set-frame-font default-font))
   
   (defun peel/load-ui ()
@@ -778,7 +783,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; .................................................................... unclutter
 (use-package emacs
   :defer 0
-  :bind ("C-z" . kill-whole-line)
+  :bind (("C-z" . kill-whole-line))
   :init
   (setq  inhibit-startup-screen t
          initial-scratch-message nil
