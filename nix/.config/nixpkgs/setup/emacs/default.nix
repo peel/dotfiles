@@ -1,9 +1,12 @@
 { pkgs ? import <nixpkgs> {} }:
 
 let
-  prettifyPragmata = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/fabrizioschiavi/pragmatapro/master/emacs_snippets/pragmatapro-prettify-symbols-v0.826.el";
-    sha256 = "1iy29y8k59dqwml0f1dadlxxhrp64q2r4k5xgm0kpmd4qw1frjgg";
+  prettifyPragmata = pkgs.fetchFromGitHub {
+    owner = "DeLaGuardo";
+    repo = "pragmata-pro.el";
+    rev = "90e1ac87d10820ea345739a08e942acd05c5d6d7";
+    # date = "2017-09-28T11:17:44+02:00";
+    sha256 = "1x2agjfpbkh0ni8yp9asdfi3i3favpyz4jzxjhjp7cxndn3fcr66";
   };
   oxJekyllSubtree = pkgs.fetchFromGitHub {
     owner = "Malabarba";
@@ -42,7 +45,7 @@ in
   emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
     (pkgs.runCommand "default.el" {} ''
     mkdir -p $out/share/emacs/site-lisp
-    cp ${prettifyPragmata} $out/share/emacs/site-lisp/pragmata.el
+    cp -r ${prettifyPragmata}/* $out/share/emacs/site-lisp/
     cp ${oxJekyllSubtree}/*.el $out/share/emacs/site-lisp/
     cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
     '')
@@ -50,7 +53,6 @@ in
     # ace-window # window switcher
     avy
     #anzu?
-    aggressive-indent
     #clean-aindent-mode
     company
     dash-at-point

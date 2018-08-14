@@ -247,12 +247,6 @@
 (setq-default indent-tabs-mode nil
 	          tab-width 4
 	          fill-column 80)
-
-(use-package noflet)
-(use-package aggressive-indent
-  :hook (prog-mode . aggressive-indent-mode)
-  :diminish (aggressive-indent-mode . " "))
-
 ;; rainbow
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -381,9 +375,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package prog-mode
   :ensure nil
+  :diminish pragmata-pro-mode
   :hook ((prog-mode . prettify-symbols-mode)
-         (prog-mode . display-line-numbers-mode))
-  :preface (load (locate-file "pragmata.el" load-path) 'noerror))
+         (prog-mode . display-line-numbers-mode)
+         (prog-mode . pragmata-pro-mode))
+  :preface (load (locate-file "pragmata-pro.el" load-path) 'noerror))
 
 (use-package dash-at-point
   :commands dash-at-point
@@ -405,9 +401,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package haskell-mode
   :init
   (use-package shm
-    :hook haskell-mode)
+    :hook (haskell-mode . structured-haskell-mode))
   (use-package hindent
-    :hook haskell-mode)
+    :hook (haskell-mode . hindent-mode))
   (use-package lsp-haskell))
 
 ;; ......................................................................... nix
@@ -460,7 +456,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package scala-mode
   :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
   :diminish (scala-mode . " ")
-  :after noflet
   :interpreter
   ("scala" . scala-mode)
   :bind ("C-c C-v f" . scalafmt/format-file)
@@ -469,12 +464,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         scala-indent:align-parameters t
         scala-indent:default-run-on-strategy scala-indent:operator-strategy)
   :preface
-  (require 'noflet)
-  (defadvice scala-indent:indent-code-line (around retain-trailing-ws activate)
-    "Keep trailing-whitespace when indenting."
-    (noflet ((scala-lib:delete-trailing-whitespace ()))
-            ad-do-it))
-  
   (defun scalafmt/format-region (beg end)
     "Run scalafmt on selected region"
     (interactive "r")
@@ -511,7 +500,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package web-mode
   :ensure smartparens
   :ensure rainbow-delimiters
-  :ensure aggressive-indent
   :ensure prettier-js
   :ensure rjsx-mode
   :mode ("\\.html?\\'" "\\.jsx?" "\\.css\\'" "\\.scss\\'")
