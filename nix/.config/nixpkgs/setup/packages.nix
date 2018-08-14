@@ -1,4 +1,5 @@
 { config, pkgs, ... }:
+
 {
   environment.systemPackages = with pkgs; ([
     alacrittyWrapper
@@ -32,8 +33,6 @@
     qarma
     ranger
     ripgrep
-    scalafmt
-    sbt
     scripts
     stow
     vultr
@@ -50,16 +49,6 @@
     dunst
     feh
     firefox
-    haskellPackages.cabal-install
-    haskellPackages.ghc
-    # haskellPackages.ghcWithHoogle
-    # haskellPackages.stack
-    haskellPackages.apply-refact
-    haskellPackages.hlint
-    haskellPackages.stylish-haskell
-    haskellPackages.hasktags
-    # haskellPackages.ghc-mod
-    # haskellPackages.intero
     haskellPackages.xmobar
     haskellPackages.xmonad
     haskellPackages.xmonad-contrib
@@ -99,5 +88,5 @@
     chunkwm.ffm
     chunkwm.tiling
     skhd
-  ]);
+  ]) ++ [ haskellEnv scalaEnv ];
 }

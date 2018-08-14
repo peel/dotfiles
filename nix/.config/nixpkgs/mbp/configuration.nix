@@ -52,7 +52,10 @@ in
 
   # shared config
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = [ (import ~/.config/nurpkgs/overlay.nix) ];
+  nixpkgs.overlays = [
+    (import ~/.config/nurpkgs/overlay.nix)
+    (import ../setup/envs.nix)
+  ];
   nix.useSandbox = true;
   nix.binaryCaches = [ https://cache.nixos.org ];
 

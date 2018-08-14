@@ -12,7 +12,10 @@ in rec {
   system.stateVersion = 3;
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreeRedistributable = true;
-  nixpkgs.overlays = [ (import ~/.config/nurpkgs/overlay.nix) ];
+  nixpkgs.overlays = [
+    (import ~/.config/nurpkgs/overlay.nix)
+    (import ../setup/envs.nix)
+  ];
   nix.package = pkgs.nix;
   nix.useSandbox = true;
   nix.binaryCachePublicKeys = [ "peel.cachix.org-1:juIxrHgL76bYKcfIB/AdBUQuwkTwW5OLpPvWNuzhNrE="];
