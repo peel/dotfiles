@@ -43,9 +43,11 @@ let
     echo >&2
 
 		for f in ${targetDir}/*; do
-      echo "Relinking $f"
-      cd ${targetDir}
-      ${pkgs.stow}/bin/stow -t ~ -R $(basename $f)
+      if [ -d $f  ]; then
+        echo "Relinking $f"
+        cd ${targetDir}
+        ${pkgs.stow}/bin/stow -t ~ -R $(basename $f)
+      fi
     done
   '';
   unlink = pkgs.writeScript "unlink" ''

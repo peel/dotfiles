@@ -16,9 +16,9 @@ self: super: {
       parsec
       
       # tools
+      cabal-install
       hasktags
       hlint
-      stack
       structured-haskell-mode
       stylish-haskell
     ]);
