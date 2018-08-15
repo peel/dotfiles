@@ -22,9 +22,11 @@ nix build -f https://github.com/peel/dotfiles/archive/master.tar.gz
 #+BEGIN_SRC shell
 dotfiles [command]
 #+END_SRC
-- ~default~ (~install~)
-- ~link~ - link/relink dotfiles
-- ~uninstall~ - remove configured links
+- ~link~ - (re-)link dotfiles
+- ~switch~ (~default~) - tag, apply ~configuration.nix~, tag working
+- ~update~ - update channels and ~switch~
+- ~install~ - install prerequisites and ~link~
+- ~uninstall~ - ~unlink~ and remove configurations
 - ~unlink~ - unlink dotfiles
 * Sources
 See[[https://github.com/peel/dotfiles][ peel/dotfiles]] at Github [[https://travis-ci.org/peel/dotfiles.svg]]

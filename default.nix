@@ -73,6 +73,51 @@ let
         rm -rf ${targetDir}
     fi
   '';
+  switch = pkgs.writeScript "switch" ''
+    set -euxo pipefail
+
+    echo >&2
+    echo >&2 "Tagging working config..."
+    echo >&2
+   
+    git branch -f update HEAD
+
+    echo >&2
+    echo >&2 "Switching environment..."
+    echo >&2
+   
+    ${pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
+      darwin-rebuild switch -j 4
+      echo "Current generation: $(darwin-rebuild --list-generations | tail -1)"
+    ''}
+    ${pkgs.lib.optionalString pkgs.stdenv.isLinux ''
+      nixos-rebuild switch
+    ''}
+
+    ${link}
+
+    echo >&2
+    echo >&2 "Tagging updated..."
+    echo >&2
+
+    git branch -f working update
+    git branch -D update
+    git push
+  '';
+  update = pkgs.writeScript "update" ''
+    set -euxo pipefail
+
+    echo >&2
+    echo >&2 "Updating channels..."
+    echo >&2
+
+    nix-channel --update
+    ${pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
+      nix-channel --update darwin
+    ''}
+
+    ${switch}
+  '';
 in pkgs.stdenv.mkDerivation {
   name = "dotfiles";
   preferLocalBuild = true;
@@ -92,17 +137,23 @@ in pkgs.stdenv.mkDerivation {
         i="$1"; shift 1
         case "$i" in
            help)
-                echo "dotfiles: [help] [install] [uninstall] [link] [unlink]"
+                echo "dotfiles: [help] [install] [uninstall] [link] [unlink] [switch] [update]"
                 exit
                 ;;
             link)
                 ${link}
+                ;;
+            switch)
+                ${switch}
                 ;;
             unlink)
                 ${unlink}
                 ;;
             uninstall)
                 ${uninstall}
+                ;;
+            update)
+                ${update}
                 ;;
             *)
                 ${install}
