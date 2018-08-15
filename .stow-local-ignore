@@ -1,9 +1,12 @@
+docs/
 result/
 .gitignore
 .travis.yml
 Makefile
 Brewfile
 *.nix
+*.org
+.DS_Store
 ^/README.*
 ^/LICENSE.*
 .+~          # emacs backup files
