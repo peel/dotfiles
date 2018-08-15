@@ -1,2 +1,0 @@
-#!/usr/bin/bash
-tee >(xmobar -x0 $HOME/.xmonad/xmobarrc) | xmobar -x1 $HOME/.xmonad/xmobarrc

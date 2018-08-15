@@ -1501,16 +1501,7 @@ myMouseBindings (XConfig {XMonad.modMask = myModMask}) = M.fromList $
 
 myStartupHook = do
 
-    -- init-tilingwm sets up all major "desktop environment" like components
-    -- spawnOnce "$HOME/bin/wm/init-tilingwm"
-    -- spawn "/home/peel/bin/wm/init-tilingwm"
-    spawn "$HOME/bin/wm/init-wallpaper"
-
-    -- init-tray kills and restarts stalone tray, hence just "spawn" so it
-    -- runs on restart and will suffice to reposition tray on display changes
-    -- TODO: evaluate moving to a "restart tray only" option on display change
-    spawn     "$HOME/bin/wm/init-tray"
-
+    spawn "wallpaper"
     spawn     "xfce4-power-manager &"
 
     setDefaultCursor xC_left_ptr
