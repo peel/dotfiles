@@ -19,6 +19,7 @@ self: super: {
       cabal-install
       hasktags
       hlint
+      hindent
       structured-haskell-mode
       stylish-haskell
     ]);
