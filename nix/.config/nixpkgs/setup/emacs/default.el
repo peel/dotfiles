@@ -42,7 +42,6 @@
   (exec-path-from-shell-initialize))
 
 ;; navigation ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-
 (use-package winner
   :config (winner-mode 1))
 
@@ -50,6 +49,13 @@
   :ensure nil
   :config
   (windmove-default-keybindings 'shift))
+
+(use-package origami
+  :hook (prog-mode . origami-mode)
+  :bind (("C-c f" . origami-recursively-toggle-node)
+         ("C-c F" . origami-toggle-all-nodes))
+  :diminish " ")
+
 
 ;; ..................................................................... jumping
 (use-package avy
@@ -399,6 +405,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; ..................................................................... Haskell
 (use-package haskell-mode
+  :diminish (haskell-mode . " ")
   :init
   (use-package shm
     :hook (haskell-mode . structured-haskell-mode))
@@ -419,7 +426,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package dockerfile-mode)
 
 ;; ...................................................................... elixir
-;; TODO
+(use-package elixir-mode
+  :init
+  (use-package alchemist))
 
 ;; ...................................................................... shells
 ;; TODO
@@ -452,6 +461,13 @@ _k_: kill        _s_: split                   _{_: wrap with { }
       (sbt-command ";ensimeConfig;ensimeConfigProject")
       (ensime-shutdown)
       (ensime))))
+
+(use-package sbt-mode
+  :config
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map))
 
 (use-package scala-mode
   :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
@@ -554,7 +570,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
      (clojure    . t)
      (scala      . t)
      (haskell    . t)
-     (dot . t))))
+     (dot . t)))
+  :init
+  (use-package ob-async))
 
 (use-package nov
   :mode ("\\.epub\\'" . nov-mode))
@@ -610,6 +628,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; ...................................................................... eshell
 (use-package eshell
   :ensure nil
+  :diminish  " "
   :after hydra
   :bind ("C-c e" . eshell-hydra/body)
   :config

@@ -52,6 +52,7 @@ in
 
     # ace-window # window switcher
     avy
+    origami
     #anzu?
     #clean-aindent-mode
     company
@@ -82,11 +83,9 @@ in
     smex
     #counsel-dash !
     counsel-projectile
-    #all-the-icons
     counsel-gtags
     magit
-    #magithub !!
-    noflet
+    # magithub
     #popup?
     #popwin?
     projectile
@@ -115,6 +114,9 @@ in
     dhall-mode
     #fish-mode
     #graphviz-dot-mode
+    ## elixir
+    elixir-mode
+    alchemist
     ## haskell
     lsp-haskell
     structured-haskell-mode
@@ -146,7 +148,8 @@ in
     terraform-mode
     yaml-mode
 
-    ## org-mode !!
+    ## org-mode
+    ob-async
     org-ref
     org-noter
     ivy-bibtex
@@ -160,10 +163,6 @@ in
     #org-plus-contrib
     #org-projectile
     #orgit
-    #toc-org?
-
-    #tools
-    # pass
   ]) ++ (with epkgs.melpaStablePackages; [
     smartparens
   ]) ++ (with epkgs.elpaPackages; [
