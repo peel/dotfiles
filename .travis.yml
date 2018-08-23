@@ -37,7 +37,7 @@ script:
   - sh ${TRAVIS_BUILD_DIR}/result/bin/dotfiles install
   - sh ${TRAVIS_BUILD_DIR}/result/bin/dotfiles link
   - sh ${TRAVIS_BUILD_DIR}/result/bin/dotfiles uninstall && echo Produced $dotfiles
-  - emacs=$(nix-build ./nix/.config/nixpkgs/setup/emacs/default.nix) && echo Produced $emacs
+  - emacs=$(nix-build ./nix/.config/nixpkgs/config-wrappers/emacs/default.nix) && echo Produced $emacs
 
 after_success:
   - git tag "${TRAVIS_BUILD_NUMBER}" -m "🚀️ ship it" && git push origin "${TRAVIS_BUILD_NUMBER}"

@@ -52,8 +52,15 @@ in
 
   # shared config
   nixpkgs.config.allowUnfree = true;
+  nix.nixPath = [
+    "nixpkgs=channel:nixpkgs-unstable"
+    "nixos-config=/etc/nixos/configuration.nix"
+    "nurpkgs-peel=$HOME/.config/nurpkgs/overlay.nix"
+    "conf-wrappers=$HOME/.config/nixpkgs/config-wrappers/default.nix"
+  ];
   nixpkgs.overlays = [
-    (import ~/.config/nurpkgs/overlay.nix)
+    (import  <nurpkgs-peel>)
+    (import  <conf-wrappers> { inherit colors fonts; })
     (import ../setup/envs.nix)
   ];
   nix.useSandbox = true;
@@ -351,13 +358,5 @@ in
   # shared config
   nixpkgs.config.packageOverrides = pkgs : rec {
     bluez = pkgs.bluez5;
-    alacrittyWrapper = import ../setup/alacritty {
-      inherit colors fonts;
-      inherit (pkgs) stdenv makeWrapper writeTextFile alacritty;
-    };
-    rofi = import ../setup/rofi { inherit pkgs colors fonts; terminal = "alacritty"; };
-    urxvt = import ../setup/urxvt { inherit pkgs colors fonts; };
-    dunst = import ../setup/dunst { inherit pkgs colors fonts; browser = "firefox"; };
-    stalonetray = import ../setup/stalonetray { inherit pkgs; };
   };
 }

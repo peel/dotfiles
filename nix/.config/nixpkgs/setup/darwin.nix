@@ -190,7 +190,7 @@ in {
   services.skhd.skhdConfig = let
     modMask = "cmd";
     moveMask = "ctrl";
-    myTerminal = "${pkgs.alacrittyWrapper}/bin/alacritty -e tmux -2 new-session -A -s main";
+    myTerminal = "${pkgs.alacritty}/bin/alacritty -e tmux -2 new-session -A -s main";
     myEditor = "${pkgs.scripts}/bin/em";
     cheatsheet = file: "${pkgs.qarma}/bin/qarma --text-info --font=PragmataPro --width 1500 --height 1500 --filename ${file}";
     noop = "/dev/null";

@@ -31,4 +31,13 @@ self: super: {
       sbt
     ];
   };
+
+  beamEnv = self.buildEnv {
+    name = "beam";
+    paths = with self; [
+      elixir_1_7
+    ] ++ (with beamPackages; [
+      
+    ]);
+  };
 }

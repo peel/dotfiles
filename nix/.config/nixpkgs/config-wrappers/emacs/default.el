@@ -608,9 +608,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; builtins ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
 ;; ...................................................................... server
-(use-package server
-  :disabled
-  :init (server-start))
 
 (use-package restart-emacs
   :bind ("C-c C-c r" . restart-emacs))

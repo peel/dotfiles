@@ -2,7 +2,7 @@
 
 {
   environment.systemPackages = with pkgs; ([
-    alacrittyWrapper
+    alacritty
     aspell
     awscli
     cachix

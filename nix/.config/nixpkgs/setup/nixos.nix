@@ -6,7 +6,6 @@ let
 in {
   programs.tmux.extraTmuxConf = tmuxConfig;
   programs.tmux.shortcut = "a";
-  programs.tmux.keyMode = "vi";
   programs.tmux.newSession = true;
   programs.tmux.historyLimit = 9999;
 }
