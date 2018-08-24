@@ -210,17 +210,15 @@ in {
     ${modMask} - 0                        : chunkc tiling::desktop --equalize
 
     # swap 
-    ${moveMask} - h                       : chunkc tiling::window --swap west
-    ${moveMask} - j                       : chunkc tiling::window --swap south
-    ${moveMask} - k                       : chunkc tiling::window --swap north
-    ${moveMask} - l                       : chunkc tiling::window --swap east
+    ${moveMask} - h                       : chunkc tiling::desktop --mirror horizontal
+    ${moveMask} - v                       : chunkc tiling::desktop --mirror vertical
 
     # rotate
     ${modMask} - r                        : chunkc tiling::desktop --rotate 90
 
     # increase region
-    ${modMask} - ${keycodes.LeftBracket}  : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west
-    ${modMask} - ${keycodes.RightBracket} : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west
+    ${modMask} - ${keycodes.LeftBracket}  : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west; chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east;
+    ${modMask} - ${keycodes.RightBracket} : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west; chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east;
 
     # spaces ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
     # switch 
@@ -247,6 +245,6 @@ in {
     alt - ${keycodes.Comma}              : ${cheatsheet "/etc/static/skhdrc"}
 
     # reset  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-    ${modMask} - q                       : killall chunkwm
+    ${modMask} - q                       : killall chunkwm && launchctl restart org.nixos.skhd
   '';
 }
