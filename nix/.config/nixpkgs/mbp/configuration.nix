@@ -3,8 +3,6 @@
 let
   username = "peel";
   hostName = "fff66602";
-  colors = (import ../setup/colors.nix {});
-  fonts = import ../setup/fonts.nix;
   nur = (import ~/.config/nurpkgs { inherit pkgs; });
 in
 {
@@ -56,13 +54,15 @@ in
     "nixpkgs=channel:nixpkgs-unstable"
     "nixos-config=/etc/nixos/configuration.nix"
     "nurpkgs-peel=$HOME/.config/nurpkgs/overlay.nix"
-    "conf-wrappers=$HOME/.config/nixpkgs/config-wrappers/default.nix"
+    "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays"
   ];
-  nixpkgs.overlays = [
-    (import  <nurpkgs-peel>)
-    (import  <conf-wrappers> { inherit colors fonts; })
-    (import ../setup/envs.nix)
-  ];
+  nixpkgs.overlays = 
+    let path = ../overlays; in with builtins;
+      map (n: import (path + ("/" + n)))
+          (filter (n: match ".*\\.nix" n != null ||
+                      pathExists (path + ("/" + n + "/default.nix")))
+                  (attrNames (readDir path)))
+    ++[ (import <nurpkgs-peel>) ];
   nix.useSandbox = true;
   nix.binaryCaches = [ https://cache.nixos.org ];
 

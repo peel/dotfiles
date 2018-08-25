@@ -1,7 +1,6 @@
-{ config, pkgs, ... }:
+{ config, pkgs, colors, ... }:
 
 let
-  colors = import ./colors.nix;
   tmuxConfig = import ./tmux.nix {inherit colors; inherit (pkgs) tmux-prompt; };
 in {
   programs.tmux.extraTmuxConf = tmuxConfig;

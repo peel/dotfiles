@@ -3,19 +3,19 @@
 with lib;
 
 let
-  colors = (import ../setup/colors.nix { theme = "dark"; });
-  fonts = import ../setup/fonts.nix;
   username = "peel";
   hostName = "fff666";
 in rec {
   system.stateVersion = 3;
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreeRedistributable = true;
-  nixpkgs.overlays = [
-    (import  <nurpkgs-peel>)
-    (import  <conf-wrappers> { inherit colors fonts; })
-    (import ../setup/envs.nix)
-  ];
+  nixpkgs.overlays = 
+    let path = ../overlays; in with builtins;
+      map (n: import (path + ("/" + n)))
+          (filter (n: match ".*\\.nix" n != null ||
+                      pathExists (path + ("/" + n + "/default.nix")))
+                  (attrNames (readDir path)))
+    ++[ (import <nurpkgs-peel>) ];
   nix.package = pkgs.nix;
   nix.useSandbox = true;
   nix.binaryCachePublicKeys = [ "peel.cachix.org-1:juIxrHgL76bYKcfIB/AdBUQuwkTwW5OLpPvWNuzhNrE="];
@@ -29,8 +29,8 @@ in rec {
     "darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix"
     "darwin=$HOME/.nix-defexpr/channels/darwin"
     "nixpkgs=/nix/var/nix/profiles/per-user/peel/channels/nixpkgs"
+    "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays"
     "nurpkgs-peel=$HOME/.config/nurpkgs/overlay.nix"
-    "conf-wrappers=$HOME/.config/nixpkgs/config-wrappers/default.nix"
     "$HOME/.nix-defexpr/channels"
   ];
   
