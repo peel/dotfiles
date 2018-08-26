@@ -10,7 +10,7 @@ in rec {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreeRedistributable = true;
   nixpkgs.overlays = 
-    let path = ../overlays; in with builtins;
+    let path = <nixpkgs-overlays>; in with builtins;
       map (n: import (path + ("/" + n)))
           (filter (n: match ".*\\.nix" n != null ||
                       pathExists (path + ("/" + n + "/default.nix")))
@@ -26,7 +26,7 @@ in rec {
     connect-timeout = 5
   '';
   nix.nixPath = [
-    "darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix"
+    "darwin-config=$HOME/.config/nixpkgs/machines/darwin/configuration.nix"
     "darwin=$HOME/.nix-defexpr/channels/darwin"
     "nixpkgs=/nix/var/nix/profiles/per-user/peel/channels/nixpkgs"
     "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays"
@@ -37,9 +37,9 @@ in rec {
   networking.hostName = hostName;
 
   imports = [
-    ../setup/common.nix
-    ../setup/darwin.nix
-    ../setup/packages.nix
+    ../../setup/common.nix
+    ../../setup/darwin.nix
+    ../../setup/packages.nix
   ];
 
 }

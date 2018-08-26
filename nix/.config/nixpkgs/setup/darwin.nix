@@ -245,6 +245,6 @@ in {
     alt - ${keycodes.Comma}              : ${cheatsheet "/etc/static/skhdrc"}
 
     # reset  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-    ${modMask} - q                       : killall chunkwm && launchctl restart org.nixos.skhd
+    ${modMask} - q                       : pkill chunkwm && pkill skhd
   '';
 }

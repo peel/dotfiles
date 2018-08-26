@@ -8,9 +8,9 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    ../setup/common.nix
-    ../setup/nixos.nix
-    ../setup/packages.nix
+    ../../setup/common.nix
+    ../../setup/nixos.nix
+    ../../setup/packages.nix
   ] ++ [
     nur.modules.battery-notifier
     nur.modules.udiskie
