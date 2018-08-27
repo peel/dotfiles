@@ -726,7 +726,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (defun peel/load-font ()
     "Load default font."
     (defvar default-font "PragmataPro")
-    (set-face-attribute 'default nil :height 200)
+    (set-face-attribute 'default nil :height 210)
     (setq-default line-spacing 8)
     (set-frame-font default-font))
   
