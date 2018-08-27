@@ -31,15 +31,16 @@ in rec {
     "nixpkgs=/nix/var/nix/profiles/per-user/peel/channels/nixpkgs"
     "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays"
     "nurpkgs-peel=$HOME/.config/nurpkgs/overlay.nix"
+    "setup=$HOME/.config/nixpkgs/setup"
     "$HOME/.nix-defexpr/channels"
   ];
   
   networking.hostName = hostName;
 
   imports = [
-    ../../setup/common.nix
-    ../../setup/darwin.nix
-    ../../setup/packages.nix
+    <setup/common.nix>
+    <setup/darwin.nix>
+    <setup/packages.nix>
   ];
 
 }

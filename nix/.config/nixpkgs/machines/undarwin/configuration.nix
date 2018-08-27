@@ -8,9 +8,9 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    ../../setup/common.nix
-    ../../setup/nixos.nix
-    ../../setup/packages.nix
+    <setup/common.nix>
+    <setup/nixos.nix>
+    <setup/packages.nix>
   ] ++ [
     nur.modules.battery-notifier
     nur.modules.udiskie
@@ -55,9 +55,10 @@ in
     "nixos-config=/etc/nixos/configuration.nix"
     "nurpkgs-peel=$HOME/.config/nurpkgs/overlay.nix"
     "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays"
+    "setup=$HOME/.config/nixpkgs/setup"
   ];
   nixpkgs.overlays = 
-    let path = ../overlays; in with builtins;
+    let path = <nixpkgs-overlays> ; in with builtins;
       map (n: import (path + ("/" + n)))
           (filter (n: match ".*\\.nix" n != null ||
                       pathExists (path + ("/" + n + "/default.nix")))
