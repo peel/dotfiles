@@ -3,20 +3,19 @@
 let
   username = "peel";
   hostName = "fff66602";
-  nur = (import ~/.config/nurpkgs { inherit pkgs; });
 in
 {
-  imports = [
+  imports = let nur = (import <nurpkgs-peel/modules>); in [
     ./hardware-configuration.nix
     <setup/common.nix>
     <setup/nixos.nix>
     <setup/packages.nix>
   ] ++ [
-    nur.modules.battery-notifier
-    nur.modules.udiskie
-    nur.modules.autocutsel
-    nur.modules.dunst
-    nur.modules.weechat
+    nur.battery-notifier
+    nur.udiskie
+    nur.autocutsel
+    nur.dunst
+    nur.weechat
   ];
 
   # mbp config
@@ -53,7 +52,7 @@ in
   nix.nixPath = [
     "nixpkgs=channel:nixpkgs-unstable"
     "nixos-config=/etc/nixos/configuration.nix"
-    "nurpkgs-peel=$HOME/.config/nurpkgs/overlay.nix"
+    "nurpkgs-peel=$HOME/.config/nurpkgs"
     "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays"
     "setup=$HOME/.config/nixpkgs/setup"
   ];
@@ -63,7 +62,7 @@ in
           (filter (n: match ".*\\.nix" n != null ||
                       pathExists (path + ("/" + n + "/default.nix")))
                   (attrNames (readDir path)))
-    ++[ (import <nurpkgs-peel>) ];
+    ++[ (import <nurpkgs-peel/overlay.nix>) ];
   nix.useSandbox = true;
   nix.binaryCaches = [ https://cache.nixos.org ];
 

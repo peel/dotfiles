@@ -15,7 +15,7 @@ in rec {
           (filter (n: match ".*\\.nix" n != null ||
                       pathExists (path + ("/" + n + "/default.nix")))
                   (attrNames (readDir path)))
-    ++[ (import <nurpkgs-peel>) ];
+    ++ [ (import <nurpkgs-peel/overlay.nix>) ];
   nix.package = pkgs.nix;
   nix.useSandbox = true;
   nix.binaryCachePublicKeys = [ "peel.cachix.org-1:juIxrHgL76bYKcfIB/AdBUQuwkTwW5OLpPvWNuzhNrE="];
@@ -30,17 +30,18 @@ in rec {
     "darwin=$HOME/.nix-defexpr/channels/darwin"
     "nixpkgs=/nix/var/nix/profiles/per-user/peel/channels/nixpkgs"
     "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays"
-    "nurpkgs-peel=$HOME/.config/nurpkgs/overlay.nix"
+    "nurpkgs-peel=$HOME/.config/nurpkgs"
     "setup=$HOME/.config/nixpkgs/setup"
     "$HOME/.nix-defexpr/channels"
   ];
   
   networking.hostName = hostName;
 
-  imports = [
+  imports = let nur = (import <nurpkgs-peel/darwin-modules>); in [
     <setup/common.nix>
     <setup/darwin.nix>
     <setup/packages.nix>
+    nur.bloop
   ];
 
 }
