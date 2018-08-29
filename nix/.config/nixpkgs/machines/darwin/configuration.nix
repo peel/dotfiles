@@ -20,6 +20,7 @@ in rec {
   nix.useSandbox = true;
   nix.binaryCachePublicKeys = [ "peel.cachix.org-1:juIxrHgL76bYKcfIB/AdBUQuwkTwW5OLpPvWNuzhNrE="];
   nix.trustedBinaryCaches = [ https://peel.cachix.org ];
+  nix.trustedUsers = [ "${username}" "@admin" ];
   nix.maxJobs = 4;
   nix.extraOptions = ''
     binary-caches-parallel-connections = 3
@@ -37,11 +38,11 @@ in rec {
   
   networking.hostName = hostName;
 
-  imports = let nur = (import <nurpkgs-peel/darwin-modules>); in [
+  imports = let modules = (import <nurpkgs-peel/darwin-modules>); in [
     <setup/common.nix>
     <setup/darwin.nix>
     <setup/packages.nix>
-    nur.bloop
+    modules.bloop
   ];
 
 }

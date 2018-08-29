@@ -15,6 +15,8 @@ let
 		#mas signin $email || true
   '';
   install = pkgs.writeScript "install" ''
+    set -e
+
     echo >&2
     echo >&2 "Installing..."
     echo >&2
@@ -38,6 +40,8 @@ let
     ${pkgs.lib.optionalString pkgs.stdenv.isDarwin darwin}
   '';
   link = pkgs.writeScript "link" ''
+    set -e
+
     echo >&2
     echo >&2 "Linking..."
     echo >&2
@@ -51,6 +55,8 @@ let
     done
   '';
   unlink = pkgs.writeScript "unlink" ''
+    set -e
+
     echo >&2
     echo >&2 "Unlinking..."
     echo >&2
@@ -74,7 +80,7 @@ let
     fi
   '';
   switch = pkgs.writeScript "switch" ''
-    set -euxo pipefail
+    set -e
 
     echo >&2
     echo >&2 "Tagging working config..."
@@ -105,7 +111,7 @@ let
     git push
   '';
   update = pkgs.writeScript "update" ''
-    set -euxo pipefail
+    set -e
 
     echo >&2
     echo >&2 "Updating channels..."

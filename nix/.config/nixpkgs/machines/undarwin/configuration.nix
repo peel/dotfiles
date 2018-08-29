@@ -64,7 +64,8 @@ in
                   (attrNames (readDir path)))
     ++[ (import <nurpkgs-peel/overlay.nix>) ];
   nix.useSandbox = true;
-  nix.binaryCaches = [ https://cache.nixos.org ];
+  nix.binaryCaches = [ https://cache.nixos.org https://peel.cachix.org ];
+  nix.trustedUsers = [ "${username}" "root" ];
 
   # shared config
   networking.hostName = hostName;
