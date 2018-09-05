@@ -743,7 +743,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         ;; (setq frame-title-format nil)
         ;; (setq ns-use-proxy-icon nil)
         (add-to-list 'default-frame-alist '(ns-transparent-titlebar t))
-        (add-to-list 'default-frame-alist '(ns-appearance nil))))
+        (add-to-list 'default-frame-alist '(ns-appearance dark))))
     
     (when (not (memq window-system '(mac ns)))
       (menu-bar-mode -1))
@@ -787,26 +787,23 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; .................................................................... unclutter
 (use-package emacs
   :defer 0
-  :bind (("C-z" . kill-whole-line))
-  :init
-  (setq  inhibit-startup-screen t
-         initial-scratch-message nil
-         make-backup-files nil
-         frame-resize-pixelwise t
-         pop-up-windows nil
-         column-number-mode t
-         confirm-kill-emacs 'yes-or-no-p
-         echo-keystrokes 0.1
-         apropos-do-all t
-         visible-bell nil)
-  ;; backups
-  (setq backup-by-copying t
-        backup-directory-alist '(("." . "~/.saves/"))
-        delete-old-versions t
-        kept-new-versions 6
-        kept-old-versions 2
-        version-control t))
-
+  :bind (("C-z" . kill-whole-line)))
+(setq inhibit-startup-screen t
+      initial-scratch-message nil
+      make-backup-files nil
+      frame-resize-pixelwise t
+      pop-up-windows nil
+      column-number-mode t
+      confirm-kill-emacs 'yes-or-no-p
+      echo-keystrokes 0.1
+      apropos-do-all t
+      visible-bell nil)
+(setq backup-by-copying t
+      backup-directory-alist '(("." . "~/.saves/"))
+      delete-old-versions t
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t)
 
 ;; ............................................................. fix awkwardness
 (fset 'yes-or-no-p 'y-or-n-p)

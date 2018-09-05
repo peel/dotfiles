@@ -245,6 +245,6 @@ in {
     alt - ${keycodes.Comma}              : ${cheatsheet "/etc/static/skhdrc"}
 
     # reset  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-    ${modMask} - q                       : pkill chunkwm && pkill skhd
+    ${modMask} - q                       : pkill chunkwm; pkill skhd
   '';
 }

@@ -2,7 +2,6 @@
 
 {
   imports = [ ./fish.nix ];
-  environment.systemPackages = [ pkgs.emacs ];
   services.emacs.enable = true;
   services.emacs.package = pkgs.emacs;
   environment.variables.EDITOR = "${pkgs.emacs}/bin/emacsclient -tc";
