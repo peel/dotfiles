@@ -10,7 +10,7 @@
     coreutils
     docker
     docker_compose
-    # emacs
+    emacs
     fasd
     fish
     fzf

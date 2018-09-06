@@ -6,13 +6,9 @@
 let
   darwin = ''
     echo >&2
-		echo >&2 "Sign into Mac App Store to proceed"
+    echo >&2 "Building initial configuration..."
     echo >&2
-
-    #TODO add mas to nixpkgs
-    #TODO avoid brewfile
-		#read -p "AppStore email: " email
-		#mas signin $email || true
+    darwin-rebuild switch -j4 -I "darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix" -I "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays" -I "nurpkgs-peel=$HOME/.config/nurpkgs" -I "setup=$HOME/.config/nixpkgs/setup"
   '';
   install = pkgs.writeScript "install" ''
     set -e
@@ -25,7 +21,7 @@ let
     if ! command -v darwin-rebuild >/dev/null 2>&1; then
         mkdir -p ./nix-darwin && cd ./nix-darwin
         nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
-        yes | ./result/bin/darwin-installer
+        yes | ./result/bin/darwin-installer -j4
         cd .. && rm -rf ./nix-darwin
     fi
     ''}
@@ -46,7 +42,7 @@ let
     echo >&2 "Linking..."
     echo >&2
 
-		for f in ${targetDir}/*; do
+    for f in ${targetDir}/*; do
       if [ -d $f  ]; then
         echo "Relinking $f"
         cd ${targetDir}
@@ -61,7 +57,7 @@ let
     echo >&2 "Unlinking..."
     echo >&2
 
-		for f in ${targetDir}/*; do
+    for f in ${targetDir}/*; do
       echo "Unlinking $f"
       cd ${targetDir}
       ${pkgs.stow}/bin/stow -t ~ -D $(basename $f)
