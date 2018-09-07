@@ -17,6 +17,7 @@ self: super: {
       
       # tools
       cabal-install
+      ghcid
       hasktags
       hlint
       hindent

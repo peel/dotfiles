@@ -2,6 +2,10 @@
 
 {
   imports = [ ./fish.nix ];
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
   services.emacs.enable = true;
   services.emacs.package = pkgs.emacs;
   environment.variables.EDITOR = "${pkgs.emacs}/bin/emacsclient -tc";

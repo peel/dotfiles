@@ -17,7 +17,7 @@ in rec {
                   (attrNames (readDir path)))
     ++ [ (import <nurpkgs-peel/overlay.nix>) ];
   nix.package = pkgs.nix;
-  nix.useSandbox = true;
+  nix.useSandbox = false;
   nix.binaryCachePublicKeys = [ "peel.cachix.org-1:juIxrHgL76bYKcfIB/AdBUQuwkTwW5OLpPvWNuzhNrE="];
   nix.trustedBinaryCaches = [ https://peel.cachix.org ];
   nix.trustedUsers = [ "${username}" "@admin" ];

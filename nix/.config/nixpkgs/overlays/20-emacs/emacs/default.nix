@@ -110,19 +110,25 @@ in
     lsp-mode
     lsp-ui
     company-lsp
+
     ## dhall
     dhall-mode
     #fish-mode
     #graphviz-dot-mode
+
     ## elixir
     elixir-mode
     alchemist
+
     ## haskell
-    lsp-haskell
+    # lsp-haskell
     structured-haskell-mode
     hindent
+    dante
+    attrap
+    
     ## javascript
-    tide
+    # tide
     prettier-js
     rjsx-mode
     web-mode
@@ -135,7 +141,8 @@ in
     # company-nixos-options !
     # helm-nixos-options
     # nix-sandbox 
-    # nix-buffer
+    direnv
+    nix-buffer
 
     ## scala
     ensime

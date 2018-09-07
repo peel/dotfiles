@@ -132,14 +132,6 @@
          ("C-c r" . counsel-rg)
 	     ("C-c d" . counsel-descbinds)))
 
-;; ...................................................... projectile integration
-(use-package counsel-projectile
-  :after (counsel projectile)
-  :commands counsel-projectile
-  :hook projectile-mode
-  :config
-  (counsel-projectile-mode))
-
 ;; ...................................................................... search
 (use-package swiper
   :bind ("C-s" . swiper))
@@ -268,7 +260,7 @@
 ;; gtags
 (use-package ggtags
   :if (executable-find "global")
-  :hook ((nix-mode . ggtags-mode) (scala-mode . ggtags-mode))
+  :hook ((prog-mode . ggtags-mode))
   :diminish (ggtags-mode . " "))
 
 (use-package counsel-gtags
@@ -404,6 +396,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 
 ;; ..................................................................... Haskell
+(use-package direnv
+  :config (direnv-mode))
+
 (use-package haskell-mode
   :diminish (haskell-mode . " ")
   :init
@@ -411,11 +406,24 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     :hook (haskell-mode . structured-haskell-mode))
   (use-package hindent
     :hook (haskell-mode . hindent-mode))
-  (use-package lsp-haskell))
+  (use-package attrap
+    :bind ("C-x /" . attrap-attrap))
+  (use-package dante
+    :after (direnv nix-buffer)
+    :commands dante-mode
+    :hook ((haskell-mode . dante-mode)
+           (haskell-mode . flycheck-mode))
+    :config
+    (add-hook 'dante-mode-hook
+              '(lambda () (flycheck-add-next-checker 'haskell-dante
+                                                '(warning . haskell-hlint))))))
 
 ;; ......................................................................... nix
 (use-package nix-mode
   :mode "\\.nix\\'")
+
+(use-package nix-buffer
+  :commands nix-buffer)
 
 ;; ....................................................................... dhall
 (use-package dhall-mode
@@ -736,7 +744,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     (scroll-bar-mode -1)
     (blink-cursor-mode -1)
     
-    ;;(set-frame-parameter nil 'undecorated t)
+    ;; (setq default-frame-alist '((undecorated . t)))
     ;; and the workaround for the above thats's broken
     (when (memq window-system '(mac ns))
       (progn
