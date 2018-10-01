@@ -125,9 +125,8 @@ in {
   programs.tmux.enableFzf = true;
   programs.tmux.iTerm2 = true; # for disabling the reattach-to-user-namespace
   programs.bash.enable = true;
-
+  
   environment.loginShell = "${pkgs.fish}/bin/fish";
-  environment.variables.HOMEBREW_CASK_OPTS = "--appdir=/Applications/cask";
   environment.variables.TERMINFO = "/usr/share/terminfo";
 
   system.defaults = {
@@ -135,12 +134,43 @@ in {
       autohide = true;
       orientation = "right";
       showhidden = true;
+      mineffect = "scale";
+      launchanim = false;
+      show-process-indicators = true;
+      tilesize = 48;
+      static-only = true;
+      mru-spaces = false;
     };
     finder = {
       AppleShowAllExtensions = true;
       FXEnableExtensionChangeWarning = false;
     };
+    trackpad = {
+      Clicking = true;
+      TrackpadThreeFingerDrag = true;
+    };
+    NSGlobalDomain = {
+      AppleKeyboardUIMode = 3;
+      ApplePressAndHoldEnabled = false;
+      InitialKeyRepeat = 10;
+      KeyRepeat = 1;
+      NSAutomaticCapitalizationEnabled = false;
+      NSAutomaticDashSubstitutionEnabled = false;
+      NSAutomaticPeriodSubstitutionEnabled = false;
+      NSAutomaticQuoteSubstitutionEnabled = false;
+      NSAutomaticSpellingCorrectionEnabled = false;
+      NSNavPanelExpandedStateForSaveMode = true;
+      NSNavPanelExpandedStateForSaveMode2 = true;
+    };
   };
+  system.keyboard = {
+    enableKeyMapping = true;
+    remapCapsLockToControl = true;
+  };
+
+  networking.knownNetworkServices = ["Wi-Fi" "Bluetooth PAN" "Thunderbolt Bridge"];
+  networking.dns = ["1.1.1.1" "1.0.0.1" "2606:4700:4700::1111" "2606:4700:4700::1001"];
+  
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
   services.bloop.enable = true;

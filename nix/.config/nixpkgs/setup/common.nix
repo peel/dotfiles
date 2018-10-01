@@ -2,6 +2,7 @@
 
 {
   imports = [ ./fish.nix ];
+  time.timeZone = "Europe/Warsaw";
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;

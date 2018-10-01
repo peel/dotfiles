@@ -1,5 +1,7 @@
 { pkgs ? import <nixpkgs> {}
 , repoUrl ? "https://github.com/peel/dotfiles.git"
+, nurpkgs ? "https://github.com/peel/nur-packages.git"
+, channel ? "nixpkgs-unstable"
 , targetDir ? "$HOME/wrk/dotfiles"
 }:
 
@@ -8,7 +10,7 @@ let
     echo >&2
     echo >&2 "Building initial configuration..."
     echo >&2
-    darwin-rebuild switch -j4 -I "darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix" -I "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays" -I "nurpkgs-peel=$HOME/.config/nurpkgs" -I "setup=$HOME/.config/nixpkgs/setup"
+    darwin-rebuild switch -j4 -I "darwin-config=$HOME/.config/nixpkgs/machines/darwin/configuration.nix" -I "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays" -I "nurpkgs-peel=$HOME/.config/nurpkgs" -I "setup=$HOME/.config/nixpkgs/setup"
   '';
   install = pkgs.writeScript "install" ''
     set -e
@@ -16,6 +18,9 @@ let
     echo >&2
     echo >&2 "Installing..."
     echo >&2
+
+    nix-channel --add https://nixos.org/channels/${channel} nixpkgs
+    nix-channel --update nixpkgs
 
     ${pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
     if ! command -v darwin-rebuild >/dev/null 2>&1; then
@@ -25,6 +30,12 @@ let
         cd .. && rm -rf ./nix-darwin
     fi
     ''}
+
+    if [ ! -d $HOME/.config/nurpkgs ]; then
+        echo "setting up nurpkgs repository" >&2
+        mkdir -p ${targetDir}
+        git clone --depth=1 ${nurpkgs} $HOME/.config/nurpkgs
+    fi
 
     if [ ! -d ${targetDir} ]; then
         echo "setting up dotfiles repository" >&2
@@ -41,6 +52,8 @@ let
     echo >&2
     echo >&2 "Linking..."
     echo >&2
+
+    mkdir -p ~/.config
 
     for f in ${targetDir}/*; do
       if [ -d $f  ]; then

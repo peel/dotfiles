@@ -30,6 +30,7 @@
     jq
     nixUnstable
     # purescript
+    pinentry
     qarma
     ranger
     ripgrep
@@ -88,5 +89,8 @@
     chunkwm.ffm
     chunkwm.tiling
     skhd
+    Dash
+    Docker
+    ProtonmailBridge
   ]) ++ [ haskellEnv scalaEnv ];
 }
