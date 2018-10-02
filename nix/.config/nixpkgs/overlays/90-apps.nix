@@ -93,4 +93,17 @@ ProtonmailBridge= self.installApplication rec {
   homepage = https://protonmail.com/bridge/;
 };
 
+Spotify = self.installApplication rec {
+  name = "Spotify";
+  version = "1.0.6";
+  sourceRoot = "Spotify.app";
+  src = super.fetchurl {
+    url = "https://download.scdn.co/Spotify.dmg";
+    sha256 = "1w7v0pn46zvcr5dv4xlq7b217mjd74phmiy7wa06qma765g2lzxy";
+    # date = 2018-09-28T14:23:15-0800;
+  };
+  description = "Spotify is a digital music service that gives you access to millions of songs.";
+  homepage = https://spotify.com/;
+};
+
 }

@@ -92,5 +92,6 @@
     Dash
     Docker
     ProtonmailBridge
+    Spotify
   ]) ++ [ haskellEnv scalaEnv ];
 }
