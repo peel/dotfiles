@@ -28,6 +28,7 @@ self: super: {
   scalaEnv = self.buildEnv {
     name = "scala";
     paths = with self; [
+      bloop
       scalafmt
       sbt
     ];
@@ -41,4 +42,32 @@ self: super: {
       
     ]);
   };
+
+  awsEnv = self.buildEnv {
+    name = "aws";
+    paths = with self; [
+      awscli
+      awslogs
+    ];
+  };
+
+  nodeEnv = self.buildEnv {
+    name = "node";
+    paths = with self; [
+      nodejs
+      yarn
+      nodePackages.prettier
+    ];
+  };
+  
+  clrEnv = self.buildEnv {
+    name = "clr";
+    paths = with self; [
+      scalaEnv
+      awsEnv
+      nodeEnv
+      codeship-jet
+    ];
+  };
+  
 }

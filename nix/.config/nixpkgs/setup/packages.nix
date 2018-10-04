@@ -21,7 +21,7 @@
     global
     gnumake
     gnupg
-    gopass
+    # gopass
     # graphviz
     # hoverfly
     httpie
@@ -31,13 +31,13 @@
     nixUnstable
     # purescript
     pinentry
-    qarma
-    ranger
+    # qarma
+    # ranger
     ripgrep
     scripts
     stow
-    vultr
-    wakatime
+    # vultr
+    # wakatime
     # zulu
   ]
   ++ lib.optionals stdenv.isLinux [
@@ -91,7 +91,6 @@
     skhd
     Dash
     Docker
-    ProtonmailBridge
     Spotify
-  ]) ++ [ haskellEnv scalaEnv ];
+  ]) ++ [ haskellEnv ];
 }
