@@ -155,6 +155,12 @@
   :custom
   (magit-completing-read-function 'ivy-completing-read))
 
+(use-package git-link
+  :commands (git-link git-link-commit git-link-homepage)
+  :bind (("C-c C-g l" . git-link)
+         ("C-c C-g c" . git-link-commit)
+         ("C-c C-g h" . git-link-homepage)))
+
 ;; TODO git-timemachine
 ;; TODO gitignore-mode
 

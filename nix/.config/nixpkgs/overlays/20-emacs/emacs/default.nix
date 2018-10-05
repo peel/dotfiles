@@ -85,6 +85,7 @@ in
     counsel-projectile
     counsel-gtags
     magit
+    git-link
     # magithub
     #popup?
     #popwin?
