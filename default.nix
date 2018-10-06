@@ -34,13 +34,13 @@ let
     if [ ! -d $HOME/.config/nurpkgs ]; then
         echo "setting up nurpkgs repository" >&2
         mkdir -p ${targetDir}
-        git clone --depth=1 ${nurpkgs} $HOME/.config/nurpkgs
+        ${pkgs.git} clone --depth=1 ${nurpkgs} $HOME/.config/nurpkgs
     fi
 
     if [ ! -d ${targetDir} ]; then
         echo "setting up dotfiles repository" >&2
         mkdir -p ${targetDir}
-        git clone --depth=1 ${repoUrl} ${targetDir}
+        ${pkgs.git} clone --depth=1 ${repoUrl} ${targetDir}
     fi
 
     ${link}
@@ -95,7 +95,7 @@ let
     echo >&2 "Tagging working config..."
     echo >&2
    
-    git branch -f update HEAD
+    ${pkgs.git} branch -f update HEAD
 
     echo >&2
     echo >&2 "Switching environment..."
@@ -115,9 +115,9 @@ let
     echo >&2 "Tagging updated..."
     echo >&2
 
-    git branch -f working update
-    git branch -D update
-    git push
+    ${pkgs.git} branch -f working update
+    ${pkgs.git} branch -D update
+    ${pkgs.git} push
   '';
   update = pkgs.writeScript "update" ''
     set -e
