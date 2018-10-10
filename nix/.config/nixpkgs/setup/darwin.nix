@@ -128,6 +128,11 @@ in {
   
   environment.loginShell = "${pkgs.fish}/bin/fish";
   environment.variables.TERMINFO = "/usr/share/terminfo";
+  services.weechat = {
+    enable = true;
+    home = "$HOME/.weechat";
+    withSlack = true;
+  };
 
   system.defaults = {
     dock = {

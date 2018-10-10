@@ -17,6 +17,7 @@ self: super: {
       
       # tools
       cabal-install
+      cabal2nix
       ghcid
       hasktags
       hlint
