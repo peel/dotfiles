@@ -60,15 +60,12 @@ self: super: {
       nodePackages.prettier
     ];
   };
-  
-  clrEnv = self.buildEnv {
-    name = "clr";
-    paths = with self; [
-      scalaEnv
-      awsEnv
-      nodeEnv
-      codeship-jet
-    ];
-  };
-  
+    
+  airflowEnv = (self.python3.withPackages(ps: with ps; [
+    nose
+    mock
+    numpy
+    pandas
+    xlrd
+  ]));
 }

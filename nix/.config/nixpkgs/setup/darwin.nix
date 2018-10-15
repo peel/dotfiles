@@ -127,11 +127,33 @@ in {
   programs.bash.enable = true;
   
   environment.loginShell = "${pkgs.fish}/bin/fish";
-  environment.variables.TERMINFO = "/usr/share/terminfo";
+  environment.variables.TERMINFO = "/usr/share/terminfo"; 
+  
+  fonts = {
+    enableFontDir = true;
+    fonts = with pkgs; [
+      pragmatapro
+    ];
+  };
   services.weechat = {
     enable = true;
     home = "$HOME/.weechat";
     withSlack = true;
+    withMatrix = true;
+    extraConfig = import ./secret/weechat.nix + ''
+      /script load wee-slack.py
+      /set plugins.var.python.slack.slack_api_token ''${sec.data.slacktokens}
+      /set plugins.var.python.slack.never_away true
+      /script load matrix.lua
+      /set plugins.var.lua.matrix.user ''${sec.data.matrixuser}
+      /set plugins.var.lua.matrix.password ''${sec.data.matrixpassword}
+      /matrix connect
+      /connect -all
+      /relay add weechat 9001
+      /set relay.network.password ''${sec.data.relaypass}
+      /save
+      /python reload
+    '';
   };
 
   system.defaults = {
