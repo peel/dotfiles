@@ -842,11 +842,10 @@
     colorscheme default
   '';
   system.activationScripts.extraUserActivation.text = ''
-    ln -sfn /etc/gitconfig $HOME/.gitconfig
-    ln -sfn /etc/gitignore $HOME/.gitignore
-    ln -sfn /etc/inputrc $HOME/.inputrc
-    ln -sfn /etc/ctags $HOME/.ctags
-    ln -sfn /etc/vimrc $HOME/.vimrc
+    ln -sfn /etc/static/gitconfig $HOME/.gitconfig
+    ln -sfn /etc/static/gitignore $HOME/.gitignore
+    ln -sfn /etc/static/ctags $HOME/.ctags
+    ln -sfn /etc/static/vimrc $HOME/.vimrc
   '';
   environment.shellAliases = {
     e = "em";
@@ -967,14 +966,6 @@
     gbg = "git bisect good";
     gbb = "git bisect bad";
     gdmb = "git branch --merged | grep -v \"\*\" | xargs -n 1 git branch -d";
-    #git workflow aliases;
-    gp = "ghi-epic-push";
-    ghio = "ghi-epic-issue-open";
-    ghios = "ghi-opens";
-    ghic = "ghi-close";
-    ghe = "ghi-epic-open";
-    ghE = "ghi-epic-close";
-    gn = "ghi-nows";
     #kubernetes
     kk = "kubectl config use-context";
     kc = "kubectl config current-context";

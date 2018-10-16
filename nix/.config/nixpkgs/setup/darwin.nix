@@ -123,7 +123,6 @@ in {
   programs.tmux.enableMouse = true;
   programs.tmux.enableVim = true;
   programs.tmux.enableFzf = true;
-  programs.tmux.iTerm2 = true; # for disabling the reattach-to-user-namespace
   programs.bash.enable = true;
   
   environment.loginShell = "${pkgs.fish}/bin/fish";
