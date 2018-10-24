@@ -257,21 +257,6 @@ in
     enable = true;
   };
 
-
-  # shared config
-  fonts = {
-    fontconfig.enable = true;
-    fontconfig.dpi = 180;
-    enableFontDir = true;
-    enableGhostscriptFonts = true;
-    fonts = with pkgs; [
-      pragmatapro
-      source-code-pro
-      emojione
-      font-awesome-ttf
-    ];
-  };
-
   # shared config
   virtualisation.docker.enable = true;
 

@@ -128,12 +128,6 @@ in {
   environment.loginShell = "${pkgs.fish}/bin/fish";
   environment.variables.TERMINFO = "/usr/share/terminfo"; 
   
-  fonts = {
-    enableFontDir = true;
-    fonts = with pkgs; [
-      pragmatapro
-    ];
-  };
   services.weechat = {
     enable = true;
     home = "$HOME/.weechat";

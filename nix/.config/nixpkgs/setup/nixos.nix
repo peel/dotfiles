@@ -7,4 +7,9 @@ in {
   programs.tmux.shortcut = "a";
   programs.tmux.newSession = true;
   programs.tmux.historyLimit = 9999;
+  fonts = {
+    fontconfig.enable = true;
+    fontconfig.dpi = 180;
+  };
+
 }

@@ -2,6 +2,13 @@
 
 {
   imports = [ ./fish.nix ];
+  fonts = {
+    enableFontDir = true;
+    fonts = with pkgs; [
+      pragmatapro
+    ];
+  };
+
   time.timeZone = "Europe/Warsaw";
   programs.gnupg.agent = {
     enable = true;
