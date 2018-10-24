@@ -21,24 +21,14 @@
     global
     gnumake
     gnupg
-    # gopass
-    # graphviz
     # hoverfly
     httpie
-    # haskellPackages.hocker
     ix
     jq
     nixUnstable
-    # purescript
     pinentry
-    # qarma
-    # ranger
     ripgrep
     scripts
-    stow
-    # vultr
-    # wakatime
-    # zulu
   ]
   ++ lib.optionals stdenv.isLinux [
     acpi

@@ -52,9 +52,6 @@ set -g visual-activity on
 bind-key | split-window -h -p 50 -c "#{pane_current_path}"
 bind-key - split-window -p 50 -c "#{pane_current_path}"
 
-# force a reload of the config file
-unbind r
-bind r source-file ~/.tmux.conf \; display "Reloaded!"
 # quick pane cycling
 unbind ^A
 bind ^A select-pane -t :.+
