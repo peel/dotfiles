@@ -8,8 +8,6 @@
     cachix
     curl
     coreutils
-    docker
-    docker_compose
     emacs
     fasd
     fish
@@ -37,6 +35,8 @@
     blueman
     bluez
     cabal2nix
+    docker
+    docker_compose
     dunst
     feh
     firefox

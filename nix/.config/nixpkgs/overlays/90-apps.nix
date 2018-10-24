@@ -21,27 +21,13 @@ installApplication =
     };
   };
 
-OnePassword = self.installApplication rec {
-  name = "1Password";
-  version = "4.5.1";
-  sourceRoot = "Dash.app";
-  src = super.fetchurl {
-    url = https://kapeli.com/downloads/v4/Dash.zip;
-    sha256 = "1xbl9nzj1127qhz4r26nfxbrbx6013wxybdhbha087q0zn702fq1";
-    # date = 2018-09-28T23:36:13-0700;
-  };
- description = "Dash is an API Documentation Browser and Code Snippet Manager";
-  homepage = https://kapeli.com/dash;
-};
-
-
 Dash = self.installApplication rec {
   name = "Dash";
   version = "4.5.1";
   sourceRoot = "Dash.app";
   src = super.fetchurl {
     url = https://kapeli.com/downloads/v4/Dash.zip;
-    sha256 = "1xbl9nzj1127qhz4r26nfxbrbx6013wxybdhbha087q0zn702fq1";
+    sha256 = "0z8365shmwn26c2fcwv18drmi1i06myj1wspc563kaic7g7z9l4v";
     # date = 2018-09-28T23:36:13-0700;
   };
  description = "Dash is an API Documentation Browser and Code Snippet Manager";
@@ -80,6 +66,21 @@ Dropbox = self.installApplication rec {
   homepage = https://www.dropbox.com;
 };
 
+OnePassword = self.installApplication rec {
+  name = "1Password";
+  version = "7.2.1";
+  sourceRoot = "1Password 7.app";
+  src = super.fetchurl {
+    url = "https://c.1password.com/dist/1P/mac7/1Password-${version}.zip";
+    sha256 = "3ec43f6015f03768922982f067ee49fb776a6bbbeada6c3518480ede0ae039cb";
+    # date = 2018-09-28T11:14:33-0700;
+  };
+  description = ''
+    Go ahead. Forget your passwords. 1Password remembers them all for you. Save your passwords and log in to sites with a single click. It's that simple.
+  '';
+  homepage = https://1password.com;
+};
+
 ProtonmailBridge= self.installApplication rec {
   name = "ProtonmailBridge";
   version = "1.0.6";
@@ -99,7 +100,20 @@ Spotify = self.installApplication rec {
   sourceRoot = "Spotify.app";
   src = super.fetchurl {
     url = "https://download.scdn.co/Spotify.dmg";
-    sha256 = "1w7v0pn46zvcr5dv4xlq7b217mjd74phmiy7wa06qma765g2lzxy";
+    sha256 = "0xa11xbjkp7ai4i1k0gyda1m3rl84r47977y3p880fjciffrk7rr";
+    # date = 2018-09-28T14:23:15-0800;
+  };
+  description = "Spotify is a digital music service that gives you access to millions of songs.";
+  homepage = https://spotify.com/;
+};
+
+Tunnelblick = self.installApplication rec {
+name = "Tunnelblick";
+  version = "3.7.7,5150";
+  sourceRoot = "Tunnelblick.app";
+  src = super.fetchurl {
+    url = "https://download.scdn.co/Spotify.dmg";
+    sha256 = "afab743ca603810b5724e7d25848b67fc5dee6fc66f496b297916a4d185a8b53";
     # date = 2018-09-28T14:23:15-0800;
   };
   description = "Spotify is a digital music service that gives you access to millions of songs.";
