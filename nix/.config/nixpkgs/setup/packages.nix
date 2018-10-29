@@ -8,6 +8,7 @@
     cachix
     curl
     coreutils
+    direnv
     emacs
     fasd
     fish

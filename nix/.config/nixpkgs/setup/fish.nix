@@ -107,7 +107,8 @@ in {
     vendor.completions.enable = true;
     promptInit = ''
       source /etc/fish/functions/fish_prompt.fish
-    '';
+      eval (direnv hook fish)
+      '';
   };
 
 }

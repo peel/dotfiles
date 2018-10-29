@@ -18,6 +18,9 @@
   services.emacs.package = pkgs.emacs;
   environment.variables.EDITOR = "${pkgs.emacs}/bin/emacsclient -tc";
   environment.variables.SHELL = "${pkgs.fish}/bin/fish";
+  environment.etc."direnv".text = ''
+    use_nix
+  '';
   environment.etc."editorconfig".text = ''
     # top-most EditorConfig file
     root = true
