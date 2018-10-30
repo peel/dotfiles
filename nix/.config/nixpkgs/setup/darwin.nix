@@ -1,7 +1,6 @@
 { config, pkgs, colors, ... }:
 
 let
-  tmuxConfig = import ./tmux.nix {inherit colors; inherit (pkgs) tmux-prompt;};
   keycodes = {
     A              ="0x00";
     S              ="0x01";
@@ -118,14 +117,7 @@ let
     UpArrow        ="0x7E";
 };
 in {
-  programs.tmux.tmuxConfig = tmuxConfig;
-  programs.tmux.enableSensible = true;
-  programs.tmux.enableMouse = true;
-  programs.tmux.enableVim = true;
-  programs.tmux.enableFzf = true;
-  programs.bash.enable = true;
-  
-  environment.loginShell = "${pkgs.fish}/bin/fish";
+  environment.loginShell = "${pkgs.bash}/bin/bash";
   environment.variables.TERMINFO = "/usr/share/terminfo"; 
   
   services.weechat = {

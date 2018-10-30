@@ -2,7 +2,6 @@
 
 {
   environment.systemPackages = with pkgs; ([
-    alacritty
     aspell
     awscli
     cachix
@@ -11,7 +10,6 @@
     direnv
     emacs
     fasd
-    fish
     fzf
     gist
     gitAndTools.hub
@@ -21,7 +19,6 @@
     gnumake
     gnupg
     # hoverfly
-    httpie
     ix
     jq
     nixUnstable

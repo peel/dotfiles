@@ -247,7 +247,7 @@ in
       "video"
     ];
     createHome = true;
-    shell = pkgs.fish;
+    shell = pkgs.bash;
   };
   programs.ssh = {
     startAgent = true;

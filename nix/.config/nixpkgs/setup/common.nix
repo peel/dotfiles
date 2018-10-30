@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
 {
+  time.timeZone = "Europe/Warsaw";
+  
   fonts = {
     enableFontDir = true;
     fonts = with pkgs; [
@@ -8,18 +10,23 @@
     ];
   };
 
-  time.timeZone = "Europe/Warsaw";
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
   };
-  services.emacs.enable = true;
-  services.emacs.package = pkgs.emacs;
+  
+  services.emacs = {
+    enable = true;
+    package = pkgs.emacs;
+  };
+
   environment.variables.EDITOR = "${pkgs.emacs}/bin/emacsclient -tc";
   environment.variables.ALTERNATE_EDITOR = "${pkgs.emacs}/bin/emacs";
+  
   environment.etc."direnv".text = ''
     use_nix
   '';
+  
   environment.etc."editorconfig".text = ''
     # top-most EditorConfig file
     root = true
@@ -32,6 +39,7 @@
     indent_size = 2
     charset = utf-8
   '';
+  
   environment.etc."gitignore".text = ''
     ### Tags ###
     # Ignore tags created by etags, ctags, gtags (GNU global) and cscope
@@ -57,6 +65,7 @@
     .ensime_cache/
     .ensime_lucene/
   '';
+  
   environment.etc."gitconfig".text = ''
     [include]
       path = ~/.gitconfig.secret
@@ -114,16 +123,35 @@
     [url "git://gist.github.com/"]
       insteadOf = "gist:"
   '';
+  
   environment.etc."vimrc".text = ''
     set nonumber
     set relativenumber
     colorscheme default
   '';
+  
   system.activationScripts.extraUserActivation.text = ''
     ln -sfn /etc/static/gitconfig $HOME/.gitconfig
     ln -sfn /etc/static/gitignore $HOME/.gitignore
     ln -sfn /etc/static/vimrc $HOME/.vimrc
   '';
+
+  programs.bash = {
+    enable = true;
+    enableCompletion = true;
+    interactiveShellInit = ''
+      shopt -s checkwinsize # track terminal window resize
+      shopt -s extglob      # extended globbing capabilities
+      shopt -s cdspell      # fix minor typos when cd'ing
+      shopt -s cmdhist      # preserve new lines in history
+      shopt -s autocd       # type 'dir' instead 'cd dir'
+      shopt -s dirspell     # correct typos when tab-completing names
+      shopt -s globstar     # enable **
+
+      PS1='\W$(__git_ps1 " - %s") λ '
+      eval "$(direnv hook bash)"
+    '';
+  };
   environment.shellAliases = {
     cx = "chmod +x";
     c = "clear";
@@ -141,11 +169,6 @@
     d = "docker";
     # navigation
     o = "open";
-    ":q" = "exit";
-    ".." = "cd ..";
-    "..." = "cd ../..";
-    "...." = "cd ../../..";
-    "....." = "cd ../../../..";
     # browsing;
     less = "less -R";
     tailf = "tail -f";
@@ -174,22 +197,7 @@
     vim = "${pkgs.emacs}/bin/emacsclient -nw";
     r = "${pkgs.ranger}/bin/ranger";
     grep = "${pkgs.ripgrep}/bin/rg";
-    alacritty = "${pkgs.alacritty}/bin/alacritty -e ${pkgs.tmux}/bin/tmux -2 new-session -A -s main";
     qmk = ''${pkgs.scripts}/bin/qmk $HOME/wrk/qmk_firmware/layouts/community/ortho_4x12/peel/keymap.c'';
   };
-  programs.bash.interactiveShellInit = ''
-    shopt -s checkwinsize # track terminal window resize
-    shopt -s extglob      # extended globbing capabilities
-    shopt -s cdspell      # fix minor typos when cd'ing
-    shopt -s cmdhist      # preserve new lines in history
-    shopt -s autocd       # type 'dir' instead 'cd dir'
-    shopt -s dirspell     # correct typos when tab-completing names
-    shopt -s globstar     # enable **
-
-    PS1='\W$(__git_ps1 " - %s") λ '
-    eval "$(direnv hook bash)"
-  '';
-  programs.fish.enable = false;
-  programs.bash.enableCompletion = true;
-  programs.tmux.enable = true;
+  
 }
