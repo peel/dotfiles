@@ -264,12 +264,12 @@ in {
 
     # spaces ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
     # switch 
-    ${modMask} + alt - a                  : chunkc tiling::desktop --focus prev
-    ${modMask} + alt - r                  : chunkc tiling::desktop --focus next
+    ${modMask} + alt - ${keycodes.A}          : chunkc tiling::desktop --focus prev
+    ${modMask} + alt - ${keycodes.S}          : chunkc tiling::desktop --focus next
 
     # send window 
-    ${modMask} + ${moveMask} - a          : chunkc tiling::window --send-to-desktop prev
-    ${modMask} + ${moveMask} - r          : chunkc tiling::window --send-to-desktop next
+    ${modMask} + ${moveMask} - ${keycodes.A}  : chunkc tiling::window --send-to-desktop prev
+    ${modMask} + ${moveMask} - ${keycodes.S}  : chunkc tiling::window --send-to-desktop next
 
     # monitor  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
     # focus 
