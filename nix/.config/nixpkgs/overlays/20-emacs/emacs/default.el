@@ -424,7 +424,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package nix-buffer
   :commands nix-buffer)
 
-(use-package direnv)
+(use-package direnv
+  :config (direnv-mode))
 
 ;; ....................................................................... dhall
 (use-package dhall-mode
@@ -639,15 +640,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :bind ("C-c e" . eshell-hydra/body)
   :config
   (setq eshell-banner-message "")
-
-  (use-package vterm
-    :ensure nil
-    :diminish  " "
-    :defer 1
-    :init
-    (require 'vterm)
-    (setq vterm-keymap-exceptions '("C-x" "M-x")))
-
+  (require 'vterm)
   
   (use-package shell-pop
     :requires eshell

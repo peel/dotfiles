@@ -1,7 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./fish.nix ];
   fonts = {
     enableFontDir = true;
     fonts = with pkgs; [
@@ -18,7 +17,6 @@
   services.emacs.package = pkgs.emacs;
   environment.variables.EDITOR = "${pkgs.emacs}/bin/emacsclient -tc";
   environment.variables.ALTERNATE_EDITOR = "${pkgs.emacs}/bin/emacs";
-  environment.variables.SHELL = "${pkgs.fish}/bin/fish";
   environment.etc."direnv".text = ''
     use_nix
   '';
@@ -179,9 +177,19 @@
     alacritty = "${pkgs.alacritty}/bin/alacritty -e ${pkgs.tmux}/bin/tmux -2 new-session -A -s main";
     qmk = ''${pkgs.scripts}/bin/qmk $HOME/wrk/qmk_firmware/layouts/community/ortho_4x12/peel/keymap.c'';
   };
-  # environment.interactiveShellInit = ''
-  #   eval "$(${pkgs.fasd}/bin/fasd --init auto)"
-  # '';
-  # programs.bash.enableCompletion = true;
+  programs.bash.interactiveShellInit = ''
+    shopt -s checkwinsize # track terminal window resize
+    shopt -s extglob      # extended globbing capabilities
+    shopt -s cdspell      # fix minor typos when cd'ing
+    shopt -s cmdhist      # preserve new lines in history
+    shopt -s autocd       # type 'dir' instead 'cd dir'
+    shopt -s dirspell     # correct typos when tab-completing names
+    shopt -s globstar     # enable **
+
+    PS1='\W$(__git_ps1 " - %s") λ '
+    eval "$(direnv hook bash)"
+  '';
+  programs.fish.enable = false;
+  programs.bash.enableCompletion = true;
   programs.tmux.enable = true;
 }
