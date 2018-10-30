@@ -28,8 +28,9 @@
 ;; Graphical applications in macOS inherit their process environment from
 ;; launchd, not from a shell process which loads a profile.
 (use-package exec-path-from-shell
-  :functions (exec-path-from-shell-initialize)
-  :preface
+  :defer nil
+  :if (memq window-system '(mac ns))
+  :config
   (defconst exec-path-from-shell-variables
     '("PATH"
       "NIX_PATH"
@@ -38,8 +39,7 @@
       "NIX_SSL_CERT_FILE"
       "NIX_USER_PROFILE_DIR"
       ))
-  :init
-  (exec-path-from-shell-initialize))
+  :init (exec-path-from-shell-initialize))
 
 ;; navigation ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package winner
@@ -641,6 +641,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :config
   (setq eshell-banner-message "")
   (require 'vterm)
+  (setq vterm-keymap-exceptions '("C-x" "C-u" "C-g" "C-h" "M-x" "M-o" "C-v" "M-v" "s-v" "s-c"))
   
   (use-package shell-pop
     :requires eshell
