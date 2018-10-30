@@ -17,6 +17,7 @@
   services.emacs.enable = true;
   services.emacs.package = pkgs.emacs;
   environment.variables.EDITOR = "${pkgs.emacs}/bin/emacsclient -tc";
+  environment.variables.ALTERNATE_EDITOR = "${pkgs.emacs}/bin/emacs";
   environment.variables.SHELL = "${pkgs.fish}/bin/fish";
   environment.etc."direnv".text = ''
     use_nix

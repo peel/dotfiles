@@ -639,6 +639,15 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :bind ("C-c e" . eshell-hydra/body)
   :config
   (setq eshell-banner-message "")
+
+  (use-package vterm
+    :ensure nil
+    :diminish  " "
+    :defer 1
+    :init
+    (require 'vterm)
+    (setq vterm-keymap-exceptions '("C-x" "M-x")))
+
   
   (use-package shell-pop
     :requires eshell
@@ -670,12 +679,20 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     "Open a new instance of eshell."
     (interactive)
     (eshell 'N))
+  (defun vterm-pop()
+    "Open existing vterm if exists."
+    (interactive)
+    (if (get-buffer "vterm")
+        (switch-to-buffer "vterm")
+      (vterm)))
   :config
   (defhydra eshell-hydra (:color blue :columns 3)
     "Eshell"
     ("e" eshell "Open eshell")
     ("E" eshell-new "Eshell new window")
-    ("t" shell-pop "Pop"))
+    ("t" shell-pop "Pop")
+    ("s" vterm-pop "Open vterm")
+    ("S" vterm "Vterm new window"))
   
   (defun peel/truncate-eshell-buffers ()
     "Truncates all eshell buffers"
@@ -796,12 +813,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; .................................................................... unclutter
 (use-package emacs
   :defer 0
-  :bind (("C-z" . kill-whole-line))
-  :config
-  ;; init vterm
-  (setq vterm-keymap-exceptions
-      '("C-x" "M-x"))
-  (require 'vterm))
+  :bind (("C-z" . kill-whole-line)))
 
 (setq inhibit-startup-screen t
       initial-scratch-message nil
@@ -813,6 +825,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
       echo-keystrokes 0.1
       apropos-do-all t
       visible-bell nil)
+
 (setq backup-by-copying t
       backup-directory-alist '(("." . "~/.saves/"))
       delete-old-versions t

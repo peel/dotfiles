@@ -240,8 +240,8 @@ in {
   services.skhd.skhdConfig = let
     modMask = "cmd";
     moveMask = "ctrl";
-    myTerminal = "${pkgs.alacritty}/bin/alacritty -e tmux -2 new-session -A -s main";
-    myEditor = "${pkgs.scripts}/bin/em";
+    myTerminal = "emacsclient -nc --eval '(if (get-buffer \"vterm\") (switch-to-buffer \"vterm\") (vterm))'";
+    myEditor = "emacsclient -nc";
     cheatsheet = file: "${pkgs.qarma}/bin/qarma --text-info --font=PragmataPro --width 1500 --height 1500 --filename ${file}";
     noop = "/dev/null";
   in ''
