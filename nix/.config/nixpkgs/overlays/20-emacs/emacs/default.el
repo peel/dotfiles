@@ -451,27 +451,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :mode ("\\.yml\\'" "\\.yaml\\'"))
 
 ;; ....................................................................... scala
-(use-package lsp-scala
-  :after (lsp-mode scala-mode)
-  :ensure nil
-  :init
-  (require 'lsp-scala)
-  ;; :hook (scala-mode-hook . #'lsp-scala-enable)
-  )
-
-(use-package ensime
-  :preface
-  (setq ensime-search-interface 'ivy
-	    ensime-startup-notification nil
-        ensime-eldoc-hints 'all)
-  (defun ensime-gen-and-restart()
-    "Regenerate `.ensime' file and restart the ensime server."
-    (interactive)
-    (progn
-      (sbt-command ";ensimeConfig;ensimeConfigProject")
-      (ensime-shutdown)
-      (ensime))))
-
 (use-package sbt-mode
   :config
   (substitute-key-definition

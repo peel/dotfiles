@@ -158,7 +158,6 @@ in
     nix-buffer
 
     ## scala
-    ensime
     scala-mode
     sbt-mode
     
