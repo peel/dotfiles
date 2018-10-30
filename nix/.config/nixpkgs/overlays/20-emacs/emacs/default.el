@@ -50,13 +50,6 @@
   :config
   (windmove-default-keybindings 'shift))
 
-(use-package origami
-  :hook (prog-mode . origami-mode)
-  :bind (("C-c f" . origami-recursively-toggle-node)
-         ("C-c F" . origami-toggle-all-nodes))
-  :diminish " ")
-
-
 ;; ..................................................................... jumping
 (use-package avy
   :after hydra
@@ -431,6 +424,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package nix-buffer
   :commands nix-buffer)
 
+(use-package direnv)
+
 ;; ....................................................................... dhall
 (use-package dhall-mode
   :disabled
@@ -801,7 +796,13 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; .................................................................... unclutter
 (use-package emacs
   :defer 0
-  :bind (("C-z" . kill-whole-line)))
+  :bind (("C-z" . kill-whole-line))
+  :config
+  ;; init vterm
+  (setq vterm-keymap-exceptions
+      '("C-x" "M-x"))
+  (require 'vterm))
+
 (setq inhibit-startup-screen t
       initial-scratch-message nil
       make-backup-files nil

@@ -38,9 +38,22 @@ let
       platforms = pkgs.haskellPackages.structured-haskell-mode.meta.platforms;
     };
   };
+  overrides = self: super: rec {
+  emacs-libvterm = super.emacs-libvterm.overrideAttrs(attrs: rec {
+      version = "unstable-2018-10-25";
+      name = "emacs-libvterm-${version}";
+      src = pkgs.fetchFromGitHub {
+        owner = "akermu";
+        repo = "emacs-libvterm";
+        rev = "9738bb97f5a269b1a68a9e785236eb2b36a37562";
+        #"date": "2018-10-25T22:45:10+02:00",
+        sha256 = "1rmsn9isd990838hva48z8yf6bwqs3gn3594n0p4skf8k4ll6ki0";
+      };
+    });
+  };
   myEmacs = pkgs.emacs;
   myEmacsConfig = ./default.el;
-  emacsWithPackages = (pkgs.emacsPackagesNgGen myEmacs).emacsWithPackages;
+  emacsWithPackages = ((pkgs.emacsPackagesNgGen myEmacs).overrideScope' overrides).emacsWithPackages;
 in
   emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
     (pkgs.runCommand "default.el" {} ''
@@ -52,7 +65,6 @@ in
 
     # ace-window # window switcher
     avy
-    origami
     #anzu?
     #clean-aindent-mode
     company
@@ -175,4 +187,6 @@ in
     smartparens
   ]) ++ (with epkgs.elpaPackages; [
     undo-tree
+  ]) ++ (with epkgs; [
+    emacs-libvterm
   ]))
