@@ -10,15 +10,11 @@
     fasd
     fzf
     gist
-    gitAndTools.hub
     gitFull
     git-secret
     global
     gnumake
     gnupg
-    # hoverfly
-    ix
-    jq
     nixUnstable
     pinentry
     ripgrep
