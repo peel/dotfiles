@@ -2,8 +2,6 @@
 
 {
   environment.systemPackages = with pkgs; ([
-    aspell
-    awscli
     cachix
     curl
     coreutils

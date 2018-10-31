@@ -23,12 +23,7 @@
   environment.variables.EDITOR = "${pkgs.emacs}/bin/emacsclient -tc";
   environment.variables.ALTERNATE_EDITOR = "${pkgs.emacs}/bin/emacs";
   
-  environment.etc."direnv".text = ''
-    use_nix
-  '';
-  
   environment.etc."editorconfig".text = ''
-    # top-most EditorConfig file
     root = true
 
     [*]
@@ -123,17 +118,10 @@
     [url "git://gist.github.com/"]
       insteadOf = "gist:"
   '';
-  
-  environment.etc."vimrc".text = ''
-    set nonumber
-    set relativenumber
-    colorscheme default
-  '';
-  
+   
   system.activationScripts.extraUserActivation.text = ''
     ln -sfn /etc/static/gitconfig $HOME/.gitconfig
     ln -sfn /etc/static/gitignore $HOME/.gitignore
-    ln -sfn /etc/static/vimrc $HOME/.vimrc
   '';
 
   programs.bash = {

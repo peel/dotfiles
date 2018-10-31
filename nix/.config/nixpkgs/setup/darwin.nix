@@ -224,7 +224,6 @@ in {
   services.chunkwm.extraConfig = ''
     chunkc tiling::rule --owner "emacs.*" --except "^$" --state tile
     chunkc tiling::rule --owner "Emacs.*" --except "^$" --state tile
-    chunkc tiling::rule --owner Alacritty --state tile
     chunkc tiling::rule --owner Dash --state float
   '';
   services.skhd.enable = true;
