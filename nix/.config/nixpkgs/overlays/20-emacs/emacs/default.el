@@ -247,12 +247,6 @@
     "C-c p" "projectile"
     "C-c i" "unicode"
     "C-c &" "yas")
-  (which-key-add-major-mode-key-based-replacements 'scala-mode
-    "C-c C-b" "ensime/build"
-    "C-c C-c" "ensime/current"
-    "C-c C-d" "ensime/debug"
-    "C-c C-r" "ensime/refactor"
-    "C-c C-v" "ensime/misc")
   (which-key-mode))
 
 
@@ -267,7 +261,7 @@
 ;; ..................................................................... generic
 ;; indentation
 (setq-default indent-tabs-mode nil
-	          tab-width 4
+	          tab-width 2
 	          fill-column 80)
 ;; rainbow
 (use-package rainbow-delimiters
@@ -534,7 +528,10 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :ensure rjsx-mode
   :mode ("\\.html?\\'" "\\.jsx?" "\\.css\\'" "\\.scss\\'")
   :config
-  (setq css-indent-offset 2
+  (setq web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2
+        css-indent-offset 2
         js-switch-indent-offset 2
         js-indent-level 2
         js-indent-switch-body t))
