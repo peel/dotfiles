@@ -75,22 +75,6 @@
             (set-window-buffer-start-and-point w1 b2 s2 p2)
             (set-window-buffer-start-and-point w2 b1 s1 p1))))))))
 
-;; ..................................................................... jumping
-(use-package avy
-  :after hydra
-  :bind ("C-'" . hydra-avy/body)
-  :init
-  (require 'hydra)
-  :config
-  (defhydra hydra-avy (:color teal)
-    ("j" avy-goto-char)
-    ("k" avy-goto-word-1)
-    ("l" avy-goto-line)
-    ("s" avy-goto-char-timer)
-    ("f" counsel-find-file)
-    ("q" nil)))
-
-
 ;; completion ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package company
   :bind ("<C-tab>" . company-complete)
@@ -401,17 +385,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :commands dash-at-point
   :bind ("C-c h" . dash-at-point))
 
-;; ......................................................................... lsp
-(use-package lsp-mode)
-
-(use-package lsp-ui)
-
-(use-package company-lsp
-  :ensure t
-  :after (company lsp-mode)
-  :config
-  (push 'company-lsp company-backends))
-
 
 ;; ..................................................................... Haskell
 (use-package direnv
@@ -618,11 +591,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; builtins ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
-;; ...................................................................... server
-
-(use-package restart-emacs
-  :bind ("C-c C-c r" . restart-emacs))
-
 ;; ....................................................................... eldoc
 (use-package eldoc
   :ensure nil
@@ -636,7 +604,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; ...................................................................... eshell
 (use-package eshell
   :ensure nil
-  :diminish  " "
   :after hydra
   :bind ("C-c e" . eshell-hydra/body)
   :config

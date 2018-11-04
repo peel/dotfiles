@@ -64,7 +64,7 @@ in
     '')
 
     # ace-window # window switcher
-    avy
+    # avy
     #anzu?
     #clean-aindent-mode
     company
@@ -105,7 +105,7 @@ in
     rainbow-delimiters
     rainbow-identifiers
     #rainbow-mode?
-    restart-emacs
+    # restart-emacs
     # treemacs
     # undo-tree
     use-package
@@ -120,13 +120,12 @@ in
     apropospriate-theme
 
     # languages
-    lsp-mode
-    lsp-ui
-    company-lsp
+    # lsp-mode
+    # lsp-ui
+    # company-lsp
 
     ## dhall
     dhall-mode
-    #fish-mode
     #graphviz-dot-mode
 
     ## elixir
