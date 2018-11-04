@@ -84,7 +84,7 @@ in
     flycheck
     ggtags
     #gist
-    #git-link
+    git-link
     #hightlight
     highlight-symbol
     highlight-stages
@@ -96,9 +96,12 @@ in
     #counsel-dash !
     counsel-projectile
     counsel-gtags
+    
+    # git
     magit
     git-link
     # magithub
+    
     #popup?
     #popwin?
     projectile

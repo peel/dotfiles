@@ -155,7 +155,9 @@
   :bind (("C-x g" . magit-status)
          ("C-x G" . magit-dispatch-popup))
   :custom
-  (magit-completing-read-function 'ivy-completing-read))
+  (magit-completing-read-function 'ivy-completing-read)
+  :config
+  (use-package gitignore-mode))
 
 (use-package git-link
   :commands (git-link git-link-commit git-link-homepage)
@@ -164,7 +166,6 @@
          ("C-c C-g h" . git-link-homepage)))
 
 ;; TODO git-timemachine
-;; TODO gitignore-mode
 
 ;; project management ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package projectile
