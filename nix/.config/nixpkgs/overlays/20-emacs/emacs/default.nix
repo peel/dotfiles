@@ -100,6 +100,7 @@ in
     # git
     magit
     git-link
+    gitignore-mode
     # magithub
     
     #popup?
@@ -158,6 +159,7 @@ in
     # nix-sandbox 
     direnv
     nix-buffer
+    nix-sandbox
 
     ## scala
     scala-mode

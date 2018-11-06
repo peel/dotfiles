@@ -28,7 +28,7 @@
 ;; Graphical applications in macOS inherit their process environment from
 ;; launchd, not from a shell process which loads a profile.
 (use-package exec-path-from-shell
-  :defer nil
+  :defer 0
   :if (memq window-system '(mac ns))
   :config
   (defconst exec-path-from-shell-variables
@@ -39,7 +39,7 @@
       "NIX_SSL_CERT_FILE"
       "NIX_USER_PROFILE_DIR"
       ))
-  :init (exec-path-from-shell-initialize))
+  (exec-path-from-shell-initialize))
 
 ;; navigation ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package winner
@@ -88,8 +88,6 @@
 
 
 ;; ivy ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-
-;; ........................................................................ core
 (use-package ivy
   :defer 1
   :bind (("C-c C-r" . ivy-resume)
@@ -106,43 +104,37 @@
   (setq ivy-use-virtual-buffers t    ;; highlight recent
         ivy-count-format "%d/%d "    ;; current / total
         ivy-initial-inputs-alist nil ;; do not preset ^ in buffer
-        ivy-re-builders-alist '((t . ivy--regex-fuzzy))))
-
-;; ...................................................................... counsel
-(use-package counsel
-  :commands (counsel-descbinds)
-  :bind (([remap execute-extended-command] . counsel-M-x)
-	     ([remap find-file] . counsel-find-file)
-	     ([remap find-library] . counsel-find-library)
-	     ([remap describe-function] . counsel-describe-function)
-	     ([remap describe-variable] . counsel-describe-variable)
-	     ([remap describe-bindings] . counsel-descbinds)
-	     ([remap describe-face]  . counsel-describe-faces)
-	     ([remap list-faces-display] . counsel-faces)
-	     ([remap imenu] . counsel-imenu)
-	     ([remap load-library] . counsel-load-library)
-	     ([remap load-theme] . counsel-load-theme)
-	     ([remap yank-pop] . counsel-yank-pop)
-	     ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
-	     ([remap pop-to-mark-command] . counsel-mark-ring)
-	     ([remap bookmark-jump] . counsel-bookmark)
-         ("C-x j" . counsel-imenu)
-	     ("C-c g" . counsel-git)
-	     ("C-c j" . counsel-git-grep)
-	     ("M-y" . counsel-yank-pop)
-	     ("C-c i 8" . counsel-unicode-char)
-         ("C-c r" . counsel-rg)
-	     ("C-c d" . counsel-descbinds)))
-
-;; ...................................................................... search
-(use-package swiper
-  :bind ("C-s" . swiper))
-
-;; ........................................................................ smex
-(use-package smex
-  :after (ivy counsel)
-  :init
-  (setq-default smex-history-length 32))
+        ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+  (use-package swiper
+    :bind ("C-s" . swiper))
+  (use-package smex
+    :after (ivy counsel)
+    :init
+    (setq-default smex-history-length 32)))
+  (use-package counsel
+    :commands (counsel-descbinds)
+    :bind (([remap execute-extended-command] . counsel-M-x)
+  	       ([remap find-file] . counsel-find-file)
+	       ([remap find-library] . counsel-find-library)
+	       ([remap describe-function] . counsel-describe-function)
+	       ([remap describe-variable] . counsel-describe-variable)
+	       ([remap describe-bindings] . counsel-descbinds)
+	       ([remap describe-face]  . counsel-describe-faces)
+	       ([remap list-faces-display] . counsel-faces)
+	       ([remap imenu] . counsel-imenu)
+	       ([remap load-library] . counsel-load-library)
+	       ([remap load-theme] . counsel-load-theme)
+	       ([remap yank-pop] . counsel-yank-pop)
+	       ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
+	       ([remap pop-to-mark-command] . counsel-mark-ring)
+	       ([remap bookmark-jump] . counsel-bookmark)
+           ("C-x j" . counsel-imenu)
+	       ("C-c g" . counsel-git)
+	       ("C-c j" . counsel-git-grep)
+	       ("M-y" . counsel-yank-pop)
+	       ("C-c i 8" . counsel-unicode-char)
+           ("C-c r" . counsel-rg)
+	       ("C-c d" . counsel-descbinds)))
 
 ;; syntax checking ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package flycheck
@@ -416,6 +408,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package nix-buffer
   :commands nix-buffer)
+
+(use-package nix-sandbox)
 
 (use-package direnv
   :config (direnv-mode))
