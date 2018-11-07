@@ -371,7 +371,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :diminish pragmata-pro-mode
   :hook ((prog-mode . prettify-symbols-mode)
          (prog-mode . display-line-numbers-mode)
-         (prog-mode . pragmata-pro-mode))
+         (prog-mode . pragmata-pro-mode)
+         (prog-mode . direnv-mode))
   :preface (load (locate-file "pragmata-pro.el" load-path) 'noerror))
 
 (use-package dash-at-point
@@ -381,6 +382,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; ..................................................................... Haskell
 (use-package direnv
+  :commands direnv-mode
   :config (direnv-mode))
 
 (use-package haskell-mode
@@ -398,6 +400,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     :hook ((haskell-mode . dante-mode)
            (haskell-mode . flycheck-mode))
     :config
+    (setq haskell-process-wrapper-function
+        (lambda (args) (apply 'nix-shell-command (nix-current-sandbox) args)))
     (add-hook 'dante-mode-hook
               '(lambda () (flycheck-add-next-checker 'haskell-dante
                                                 '(warning . haskell-hlint))))))
@@ -438,20 +442,25 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :mode ("\\.yml\\'" "\\.yaml\\'"))
 
 ;; ....................................................................... scala
-(use-package sbt-mode
-  :config
-  (substitute-key-definition
-   'minibuffer-complete-word
-   'self-insert-command
-   minibuffer-local-completion-map))
-
 (use-package scala-mode
   :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
   :diminish (scala-mode . " ")
-  :interpreter
-  ("scala" . scala-mode)
+  :interpreter ("scala" . scala-mode)
   :bind ("C-c C-v f" . scalafmt/format-file)
   :config
+  (use-package sbt-mode
+      :commands sbt-start sbt-command
+      :config
+      (substitute-key-definition
+       'minibuffer-complete-word
+       'self-insert-command
+       minibuffer-local-completion-map)
+      :init
+      (defun peel/sbt-start ()
+        "Execute sbt from nix-sandbox"
+        (interactive)
+        (setq sbt:program-name (nix-executable-find (nix-current-sandbox) "sbt"))
+        (sbt-start)))
   (setq scala-indent:align-forms t
         scala-indent:align-parameters t
         scala-indent:default-run-on-strategy scala-indent:operator-strategy)
@@ -479,7 +488,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 
 ;; .......................................................................... js
-;;(use-package tide)
+
 (use-package rjsx-mode
   :config
   (flycheck-add-mode 'javascript-eslint 'rjsx-mode))
