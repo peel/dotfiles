@@ -217,7 +217,7 @@
   :defer 1
   :diminish which-key-mode
   :config
-  (setq which-key-idle-delay 0.5
+  (setq which-key-idle-delay 0
         which-key-sort-order 'which-key-prefix-then-key-order)
   (which-key-add-key-based-replacements
     "C-c !" "flycheck"
