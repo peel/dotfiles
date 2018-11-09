@@ -79,7 +79,6 @@ in
     esh-autosuggest
     eshell-prompt-extras
     #eyebrowse?
-    #fasd?
     flx # fuzzy matcher 
     flycheck
     ggtags
@@ -103,15 +102,9 @@ in
     gitignore-mode
     # magithub
     
-    #popup?
-    #popwin?
     projectile
     rainbow-delimiters
     rainbow-identifiers
-    #rainbow-mode?
-    # restart-emacs
-    # treemacs
-    # undo-tree
     use-package
     dired-sidebar
     exec-path-from-shell
@@ -137,7 +130,7 @@ in
     alchemist
 
     ## haskell
-    # lsp-haskell
+    haskell-mode
     structured-haskell-mode
     hindent
     dante
@@ -148,15 +141,12 @@ in
     prettier-js
     rjsx-mode
     web-mode
+    
     ## http
     restclient
 
     ## nix
     nix-mode
-    # nix-shell
-    # company-nixos-options !
-    # helm-nixos-options
-    # nix-sandbox 
     direnv
     nix-buffer
     nix-sandbox

@@ -381,10 +381,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 
 ;; ..................................................................... Haskell
-(use-package direnv
-  :commands direnv-mode
-  :config (direnv-mode))
-
 (use-package haskell-mode
   :diminish (haskell-mode . " ")
   :init
@@ -416,6 +412,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package nix-sandbox)
 
 (use-package direnv
+  :commands direnv-mode
   :config (direnv-mode))
 
 ;; ....................................................................... dhall
