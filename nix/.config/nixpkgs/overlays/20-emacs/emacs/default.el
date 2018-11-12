@@ -139,7 +139,12 @@
 ;; syntax checking ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package flycheck
   :hook (prog-mode . flycheck-mode)
-  :diminish flycheck-mode " ✓")
+  :diminish flycheck-mode " ✓"
+  :config
+  (setq flycheck-command-wrapper-function
+        (lambda (command) (apply 'nix-shell-command (nix-current-sandbox) command))
+      flycheck-executable-find
+        (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd))))
 
 ;; git ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package magit
@@ -250,7 +255,9 @@
 ;; git-gutter
 (use-package diff-hl
   :hook (prog-mode . diff-hl-mode)
-  :diminish diff-hl-mode)
+  :diminish diff-hl-mode
+  :bind (("M-n" . diff-hl-next-hunk)
+         ("M-p" . diff-hl-previous-hunk)))
 
 ;; gtags
 (use-package ggtags
@@ -485,22 +492,16 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 
 ;; .......................................................................... js
-
 (use-package rjsx-mode
+  :mode ("\\.js?")
   :config
-  (flycheck-add-mode 'javascript-eslint 'rjsx-mode))
-
-(use-package prettier-js
-  :hook (web-mode . prettier-js-mode)
-  :config
-  (setq prettier-js-args '("--print-width" "90")))
+  (setq js-basic-offset 2
+        js-switch-indent-offset 2
+        js-indent-level 2
+        js-indent-switch-body t))
 
 (use-package web-mode
-  :ensure smartparens
-  :ensure rainbow-delimiters
-  :ensure prettier-js
-  :ensure rjsx-mode
-  :mode ("\\.html?\\'" "\\.jsx?" "\\.css\\'" "\\.scss\\'")
+  :mode ("\\.html?\\'" "\\.css\\'" "\\.scss\\'")
   :config
   (setq web-mode-markup-indent-offset 2
         web-mode-css-indent-offset 2
@@ -509,6 +510,10 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         js-switch-indent-offset 2
         js-indent-level 2
         js-indent-switch-body t))
+
+(use-package prettier-js
+  :hook ((web-mode . prettier-js-mode)
+         (rjsx-mode . prettier-js-mode)))
 
 
 ;; .................................................................. restclient
@@ -553,7 +558,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
      (js         . t)
      (emacs-lisp . t)
      (clojure    . t)
-     (scala      . t)
      (haskell    . t)
      (dot . t)))
   :init
@@ -612,12 +616,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (require 'vterm)
   (setq vterm-keymap-exceptions '("C-x" "C-u" "C-g" "C-h" "M-x" "M-o" "C-v" "M-v" "s-v" "s-c"))
   
-  (use-package shell-pop
-    :requires eshell
-    :init (setq shell-pop-window-size 45
-                shell-pop-shell-type '("eshell" "*eshell*" (lambda () (eshell)))
-                shell-pop-window-position "bottom"))
-  
   (use-package xterm-color
     :hook (eshell-before-prompt-hook . (setq xterm-color-preserve-properties))
     :config
@@ -642,20 +640,21 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     "Open a new instance of eshell."
     (interactive)
     (eshell 'N))
-  (defun vterm-pop()
-    "Open existing vterm if exists."
+  (defun shell-pop (buffer-name command)
+    "Open an instance of COMMAND or switch to its BUFFER-NAME"
     (interactive)
-    (if (get-buffer "vterm")
-        (switch-to-buffer "vterm")
-      (vterm)))
+    (if (get-buffer buffer-name)
+        (switch-to-buffer buffer-name)
+      (command)))
   :config
   (defhydra eshell-hydra (:color blue :columns 3)
-    "Eshell"
+    "Shells"
+    ("a" (shell-pop "ansi-term" 'ansi-term) "Open ansi-term")
+    ("A" ansi-term "Ansi-term new window")
     ("e" eshell "Open eshell")
     ("E" eshell-new "Eshell new window")
-    ("t" shell-pop "Pop")
-    ("s" vterm-pop "Open vterm")
-    ("S" vterm "Vterm new window"))
+    ("v" (shell-pop "vterm" 'vterm) "Open vterm")
+    ("V" vterm "Vterm new window"))
   
   (defun peel/truncate-eshell-buffers ()
     "Truncates all eshell buffers"

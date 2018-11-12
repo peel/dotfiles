@@ -40,14 +40,14 @@ let
   };
   overrides = self: super: rec {
   emacs-libvterm = super.emacs-libvterm.overrideAttrs(attrs: rec {
-      version = "unstable-2018-10-25";
+      version = "unstable-2018-11-12";
       name = "emacs-libvterm-${version}";
       src = pkgs.fetchFromGitHub {
         owner = "akermu";
         repo = "emacs-libvterm";
-        rev = "9738bb97f5a269b1a68a9e785236eb2b36a37562";
-        #"date": "2018-10-25T22:45:10+02:00",
-        sha256 = "1rmsn9isd990838hva48z8yf6bwqs3gn3594n0p4skf8k4ll6ki0";
+        rev = "63e361dd8b8ef40296ae3983b44a02485baba59c";
+        # "date": "2018-11-11T23:14:23+01:00",      
+        sha256 = "1b8vfl43yh9gwi1ddwqlqs8qd6v0g5dy9s2dzlrfalr7bgkibzan";
       };
     });
   };
@@ -75,7 +75,6 @@ in
     editorconfig
     expand-region
     xterm-color
-    shell-pop
     esh-autosuggest
     eshell-prompt-extras
     #eyebrowse?

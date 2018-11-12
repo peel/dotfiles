@@ -2,7 +2,6 @@
 
 {
   environment.systemPackages = with pkgs; ([
-    cachix
     curl
     coreutils
     direnv
@@ -15,7 +14,6 @@
     global
     gnumake
     gnupg
-    nixUnstable
     pinentry
     ripgrep
     scripts
@@ -74,5 +72,5 @@
     Dash
     Docker
     Spotify
-  ]) ++ [ haskellEnv ];
+  ]);
 }
