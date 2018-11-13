@@ -72,10 +72,8 @@ in
     diff-hl
     diminish
     dumb-jump
-    editorconfig
     expand-region
     xterm-color
-    esh-autosuggest
     eshell-prompt-extras
     #eyebrowse?
     flx # fuzzy matcher 

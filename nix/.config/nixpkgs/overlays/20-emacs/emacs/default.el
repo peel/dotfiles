@@ -194,12 +194,6 @@
   :bind ("s-/" . undo-tree-visualize))
 
 
-;; other ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-(use-package editorconfig
-  :defer 1
-  :diminish editorconfig-mode
-  :config (editorconfig-mode 1))
-
 ;; files ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package dired
   :ensure nil
@@ -621,9 +615,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     :config
     (add-to-list 'eshell-preoutput-filter-functions 'xterm-color-filter)
     (setq eshell-output-filter-functions (remove 'eshell-handle-ansi-color eshell-output-filter-functions)))
-  
-  (use-package esh-autosuggest
-    :hook (eshell-mode . esh-autosuggest-mode))
   
   (use-package eshell-prompt-extras
     :after eshell-visual-options

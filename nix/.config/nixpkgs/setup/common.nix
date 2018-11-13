@@ -23,18 +23,6 @@
   environment.variables.EDITOR = "${pkgs.emacs}/bin/emacsclient -tc";
   environment.variables.ALTERNATE_EDITOR = "${pkgs.emacs}/bin/emacs";
   
-  environment.etc."editorconfig".text = ''
-    root = true
-
-    [*]
-    end_of_line = lf
-    insert_final_newline = true
-    trim_trailing_whitespace = true
-    indent_style = space
-    indent_size = 2
-    charset = utf-8
-  '';
-  
   environment.etc."gitignore".text = ''
     ### Tags ###
     # Ignore tags created by etags, ctags, gtags (GNU global) and cscope
@@ -132,12 +120,13 @@
       shopt -s extglob      # extended globbing capabilities
       shopt -s cdspell      # fix minor typos when cd'ing
       shopt -s cmdhist      # preserve new lines in history
-      shopt -s autocd       # type 'dir' instead 'cd dir'
-      shopt -s dirspell     # correct typos when tab-completing names
-      shopt -s globstar     # enable **
+      if [[ $BASH_VERSION == 4* ]] ; then
+        shopt -s autocd       # type 'dir' instead 'cd dir'
+        shopt -s dirspell     # correct typos when tab-completing names
+        shopt -s globstar     # enable **
+      fi
 
       PS1='\W$(__git_ps1 " - %s") λ '
-      eval "$(direnv hook bash)"
     '';
   };
   environment.shellAliases = {
@@ -152,40 +141,25 @@
     pbc = "pbcopy";
     pbp = "pbpaste";
 
-    #docker
     dc = "docker-compose";
     d = "docker";
-    # navigation
     o = "open";
-    # browsing;
     less = "less -R";
     tailf = "tail -f";
     ls = "ls -Gh";
     ll = "ls -al";
-    # disk;
     df = "df -h";
     du = "du -h -d 2";
-    # git
-    git = "hub";
     gs = "git status";
     gci = "git ci";
     gco = "git co";
     gl = "git log --pretty --graph";
-    # kubernetes
     kk = "kubectl config use-context";
     kc = "kubectl config current-context";
-    # nix
-    ne = "nix-env";
-    neg = "ne -qaP | grep";
-    ns = "nix-shell";
     nr = (if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild");
-    # apps
     dotfiles = "sh $HOME/wrk/dotfiles/result/bin/dotfiles";
-    zenity = "${pkgs.qarma}/bin/qarma";
     vim = "${pkgs.emacs}/bin/emacsclient -nw";
-    r = "${pkgs.ranger}/bin/ranger";
     grep = "${pkgs.ripgrep}/bin/rg";
-    qmk = ''${pkgs.scripts}/bin/qmk $HOME/wrk/qmk_firmware/layouts/community/ortho_4x12/peel/keymap.c'';
   };
   
 }
