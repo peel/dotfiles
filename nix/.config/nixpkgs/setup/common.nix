@@ -20,8 +20,8 @@
     package = pkgs.emacs;
   };
 
-  environment.variables.EDITOR = "${pkgs.emacs}/bin/emacsclient -tc";
-  environment.variables.ALTERNATE_EDITOR = "${pkgs.emacs}/bin/emacs";
+  environment.variables.EDITOR = "emacsclient -tc";
+  environment.variables.ALTERNATE_EDITOR = "emacs";
   
   environment.etc."gitignore".text = ''
     ### Tags ###
@@ -41,12 +41,6 @@
     cscope.out
     cscope.in.out
     cscope.po.out
-
-    ### Ensime ###
-    # Ensime specific
-    .ensime
-    .ensime_cache/
-    .ensime_lucene/
   '';
   
   environment.etc."gitconfig".text = ''
@@ -112,6 +106,7 @@
     ln -sfn /etc/static/gitignore $HOME/.gitignore
   '';
 
+  environment.shells = [ pkgs.bashInteractive ];
   programs.bash = {
     enable = true;
     enableCompletion = true;
@@ -125,22 +120,13 @@
         shopt -s dirspell     # correct typos when tab-completing names
         shopt -s globstar     # enable **
       fi
-
       PS1='\W$(__git_ps1 " - %s") λ '
     '';
   };
   environment.shellAliases = {
-    cx = "chmod +x";
-    c = "clear";
-    cls = "clear;ls";
-
-    psa = "ps aux";
-    pasg = "psa | grep";
     k9 = "kill -9";
-
     pbc = "pbcopy";
     pbp = "pbpaste";
-
     dc = "docker-compose";
     d = "docker";
     o = "open";

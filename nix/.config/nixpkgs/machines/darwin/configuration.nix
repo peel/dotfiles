@@ -43,7 +43,6 @@ in rec {
     <setup/darwin.nix>
     <setup/packages.nix>
     modules.bloop
-    modules.weechat
   ];
 
 }

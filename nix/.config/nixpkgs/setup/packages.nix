@@ -8,11 +8,8 @@
     emacs
     fasd
     fzf
-    gist
-    gitFull
-    git-secret
+    git
     global
-    gnumake
     gnupg
     pinentry
     ripgrep
@@ -71,6 +68,6 @@
     skhd
     Dash
     Docker
-    Spotify
+    #Spotify
   ]);
 }
