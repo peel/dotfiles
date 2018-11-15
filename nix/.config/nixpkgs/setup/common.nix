@@ -107,6 +107,7 @@
   '';
 
   environment.shells = [ pkgs.bashInteractive ];
+  environment.variables.SHELL = "/run/current-system/sw/bin/bash";
   programs.bash = {
     enable = true;
     enableCompletion = true;

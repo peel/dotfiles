@@ -2,7 +2,6 @@
 
 {
   environment.systemPackages = with pkgs; ([
-    curl
     coreutils
     direnv
     emacs

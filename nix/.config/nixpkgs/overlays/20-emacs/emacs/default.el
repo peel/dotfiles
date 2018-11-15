@@ -28,11 +28,12 @@
 ;; Graphical applications in macOS inherit their process environment from
 ;; launchd, not from a shell process which loads a profile.
 (use-package exec-path-from-shell
-  :defer 0
+  :defer nil
   :if (memq window-system '(mac ns))
   :config
   (defconst exec-path-from-shell-variables
     '("PATH"
+      "SHELL"
       "NIX_PATH"
       "NIX_PROFILES"
       "NIX_REMOTE"
