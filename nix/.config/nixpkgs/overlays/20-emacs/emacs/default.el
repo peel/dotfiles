@@ -374,7 +374,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :hook ((prog-mode . prettify-symbols-mode)
          (prog-mode . display-line-numbers-mode)
          (prog-mode . pragmata-pro-mode)
-         (prog-mode . direnv-mode))
+         (prog-mode . hs-minor-mode)
+         (prog-mode . direnv-mod))
   :preface (load (locate-file "pragmata-pro.el" load-path) 'noerror))
 
 (use-package dash-at-point
@@ -767,7 +768,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; .................................................................... unclutter
 (use-package emacs
   :defer 0
-  :bind (("C-z" . kill-whole-line)))
+  :bind (("C-z" . kill-whole-line)
+         ("M-<tab>" . hs-toggle-hiding)))
 
 (setq inhibit-startup-screen t
       initial-scratch-message nil
