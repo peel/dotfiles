@@ -609,6 +609,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :bind ("C-c e" . eshell-hydra/body)
   :config
   (setq eshell-banner-message "")
+  (setq eshell-prompt-function
+        (lambda nil
+          (format "%s:%s λ "
+           (eshell/basename (eshell/pwd))
+           (magit-get-current-branch))))
   (require 'vterm)
   (setq vterm-keymap-exceptions '("C-x" "C-u" "C-g" "C-h" "M-x" "M-o" "C-v" "M-v" "s-v" "s-c"))
   
@@ -617,13 +622,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     :config
     (add-to-list 'eshell-preoutput-filter-functions 'xterm-color-filter)
     (setq eshell-output-filter-functions (remove 'eshell-handle-ansi-color eshell-output-filter-functions)))
-  
-  (use-package eshell-prompt-extras
-    :after eshell-visual-options
-    :config
-    (setq eshell-highlight-prompt nil
-          eshell-prompt-function 'epe-theme-lambda)
-    (autoload 'epe-theme-lambda "eshell-prompt-extras"))
   
   :init
   (require 'hydra)

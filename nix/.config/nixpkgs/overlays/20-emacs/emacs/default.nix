@@ -74,13 +74,10 @@ in
     dumb-jump
     expand-region
     xterm-color
-    eshell-prompt-extras
     #eyebrowse?
     flx # fuzzy matcher 
     flycheck
     ggtags
-    #gist
-    git-link
     #hightlight
     highlight-symbol
     highlight-stages
