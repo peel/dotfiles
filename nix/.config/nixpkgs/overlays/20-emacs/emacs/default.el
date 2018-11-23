@@ -592,16 +592,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; builtins ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
-;; ....................................................................... eldoc
-(use-package eldoc
-  :ensure nil
-  :diminish (eldoc-mode . " ")
-  :demand
-  :hook ((emacs-lisp-mode . eldoc-mode)
-	     (eshell-mode . eldoc-mode)
-	     (ggtags-mode . eldoc-mode))
-  :config (eldoc-mode t))
-
 ;; ...................................................................... eshell
 (use-package eshell
   :ensure nil
