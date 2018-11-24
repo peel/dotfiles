@@ -15,8 +15,8 @@
 
 * Installation
 #+BEGIN_SRC shell
-nix build -f https://github.com/peel/dotfiles/archive/master.tar.gz
-./result/bin/dotfiles
+nix-env -f https://github.com/peel/dotfiles/archive/master.tar.gz -i
+dotfiles install
 #+END_SRC
 * Usage
 #+BEGIN_SRC shell
