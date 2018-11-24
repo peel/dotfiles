@@ -604,8 +604,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
           (format "%s:%s λ "
            (eshell/basename (eshell/pwd))
            (magit-get-current-branch))))
-  (require 'vterm)
-  (setq vterm-keymap-exceptions '("C-x" "C-u" "C-g" "C-h" "M-x" "M-o" "C-v" "M-v" "s-v" "s-c"))
   
   (use-package xterm-color
     :hook (eshell-before-prompt-hook . (setq xterm-color-preserve-properties))
@@ -634,8 +632,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     ("A" ansi-term "Ansi-term new window")
     ("e" eshell "Open eshell")
     ("E" eshell-new "Eshell new window")
-    ("v" (shell-pop "vterm" 'vterm) "Open vterm")
-    ("V" vterm "Vterm new window"))
+    ("v" (shell-pop "vterm" 'vterm) "Open vterm"))
   
   (defun peel/truncate-eshell-buffers ()
     "Truncates all eshell buffers"

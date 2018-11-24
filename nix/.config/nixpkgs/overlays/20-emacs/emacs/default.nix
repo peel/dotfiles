@@ -38,22 +38,9 @@ let
       platforms = pkgs.haskellPackages.structured-haskell-mode.meta.platforms;
     };
   };
-  overrides = self: super: rec {
-  emacs-libvterm = super.emacs-libvterm.overrideAttrs(attrs: rec {
-      version = "unstable-2018-11-12";
-      name = "emacs-libvterm-${version}";
-      src = pkgs.fetchFromGitHub {
-        owner = "akermu";
-        repo = "emacs-libvterm";
-        rev = "63e361dd8b8ef40296ae3983b44a02485baba59c";
-        # "date": "2018-11-11T23:14:23+01:00",      
-        sha256 = "1b8vfl43yh9gwi1ddwqlqs8qd6v0g5dy9s2dzlrfalr7bgkibzan";
-      };
-    });
-  };
   myEmacs = pkgs.emacs;
   myEmacsConfig = ./default.el;
-  emacsWithPackages = ((pkgs.emacsPackagesNgGen myEmacs).overrideScope' overrides).emacsWithPackages;
+  emacsWithPackages = (pkgs.emacsPackagesNgGen myEmacs).emacsWithPackages;
 in
   emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
     (pkgs.runCommand "default.el" {} ''
@@ -174,6 +161,4 @@ in
     smartparens
   ]) ++ (with epkgs.elpaPackages; [
     undo-tree
-  ]) ++ (with epkgs; [
-    emacs-libvterm
   ]))

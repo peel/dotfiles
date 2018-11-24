@@ -1,5 +1,5 @@
-self: super:
+self: pkgs:
 
 {
-  emacs = import ./emacs { pkgs = super; };
+  emacs = import ./emacs { inherit pkgs; };
 }
