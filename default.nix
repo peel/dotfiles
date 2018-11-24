@@ -22,7 +22,7 @@ let
     nix-channel --add https://nixos.org/channels/${channel} nixpkgs
     nix-channel --update nixpkgs
 
-    ${pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
+    ${pkgs.lib.optionalString pkgs.stdenvNoCC.isDarwin ''
     if ! command -v darwin-rebuild >/dev/null 2>&1; then
         mkdir -p ./nix-darwin && cd ./nix-darwin
         nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
@@ -34,17 +34,17 @@ let
     if [ ! -d $HOME/.config/nurpkgs ]; then
         echo "setting up nurpkgs repository" >&2
         mkdir -p ${targetDir}
-        ${pkgs.git} clone --depth=1 ${nurpkgs} $HOME/.config/nurpkgs
+        ${pkgs.git}/bin/git clone --depth=1 ${nurpkgs} $HOME/.config/nurpkgs
     fi
 
     if [ ! -d ${targetDir} ]; then
         echo "setting up dotfiles repository" >&2
         mkdir -p ${targetDir}
-        ${pkgs.git} clone --depth=1 ${repoUrl} ${targetDir}
+        ${pkgs.git}/bin/git clone --depth=1 ${repoUrl} ${targetDir}
     fi
 
     ${link}
-    ${pkgs.lib.optionalString pkgs.stdenv.isDarwin darwin}
+    ${pkgs.lib.optionalString pkgs.stdenvNoCC.isDarwin darwin}
   '';
   link = pkgs.writeScript "link" ''
     set -e
@@ -95,17 +95,17 @@ let
     echo >&2 "Tagging working config..."
     echo >&2
    
-    ${pkgs.git} branch -f update HEAD
+    ${pkgs.git}/bin/git branch -f update HEAD
 
     echo >&2
     echo >&2 "Switching environment..."
     echo >&2
    
-    ${pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
+    ${pkgs.lib.optionalString pkgs.stdenvNoCC.isDarwin ''
       darwin-rebuild switch -j 4
       echo "Current generation: $(darwin-rebuild --list-generations | tail -1)"
     ''}
-    ${pkgs.lib.optionalString pkgs.stdenv.isLinux ''
+    ${pkgs.lib.optionalString pkgs.stdenvNoCC.isLinux ''
       nixos-rebuild switch
     ''}
 
@@ -115,9 +115,9 @@ let
     echo >&2 "Tagging updated..."
     echo >&2
 
-    ${pkgs.git} branch -f working update
-    ${pkgs.git} branch -D update
-    ${pkgs.git} push
+    ${pkgs.git}/bin/git branch -f working update
+    ${pkgs.git}/bin/git branch -D update
+    ${pkgs.git}/bin/git push
   '';
   update = pkgs.writeScript "update" ''
     set -e
@@ -127,16 +127,18 @@ let
     echo >&2
 
     nix-channel --update
-    ${pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
+    ${pkgs.lib.optionalString pkgs.stdenvNoCC.isDarwin ''
       nix-channel --update darwin
     ''}
 
     ${switch}
   '';
-in pkgs.stdenv.mkDerivation {
+in pkgs.stdenvNoCC.mkDerivation {
   name = "dotfiles";
   preferLocalBuild = true;
-
+  propagatedBuildInputs = [ pkgs.git pkgs.stow ];
+  propagatedUserEnvPkgs = [ pkgs.git pkgs.stow ];
+  
   unpackPhase = ":";
 
   installPhase = ''
@@ -178,7 +180,7 @@ in pkgs.stdenv.mkDerivation {
     exit
   '';
 
-  passthru.check = pkgs.stdenv.mkDerivation {
+  passthru.check = pkgs.stdenvNoCC.mkDerivation {
      name = "run-dotfiles-test";
      shellHook = ''
         set -e
