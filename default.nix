@@ -10,6 +10,7 @@ let
     echo >&2
     echo >&2 "Building initial configuration..."
     echo >&2
+    source /etc/static/bashrc
     darwin-rebuild switch -j4 -I "darwin-config=$HOME/.config/nixpkgs/machines/darwin/configuration.nix" -I "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays" -I "nurpkgs-peel=$HOME/.config/nurpkgs" -I "setup=$HOME/.config/nixpkgs/setup"
   '';
   install = pkgs.writeScript "install" ''
@@ -34,13 +35,13 @@ let
     if [ ! -d $HOME/.config/nurpkgs ]; then
         echo "setting up nurpkgs repository" >&2
         mkdir -p ${targetDir}
-        ${pkgs.git}/bin/git clone --depth=1 ${nurpkgs} $HOME/.config/nurpkgs
+        git clone --depth=1 ${nurpkgs} $HOME/.config/nurpkgs
     fi
 
     if [ ! -d ${targetDir} ]; then
         echo "setting up dotfiles repository" >&2
         mkdir -p ${targetDir}
-        ${pkgs.git}/bin/git clone --depth=1 ${repoUrl} ${targetDir}
+        git clone --depth=1 ${repoUrl} ${targetDir}
     fi
 
     ${link}
@@ -59,7 +60,7 @@ let
       if [ -d $f  ]; then
         echo "Relinking $f"
         cd ${targetDir}
-        ${pkgs.stow}/bin/stow -t ~ -R $(basename $f)
+        stow -t ~ -R $(basename $f)
       fi
     done
   '';
@@ -73,7 +74,7 @@ let
     for f in ${targetDir}/*; do
       echo "Unlinking $f"
       cd ${targetDir}
-      ${pkgs.stow}/bin/stow -t ~ -D $(basename $f)
+      stow -t ~ -D $(basename $f)
     done
   '';
   uninstall = pkgs.writeScript "uninstall" ''
@@ -95,7 +96,7 @@ let
     echo >&2 "Tagging working config..."
     echo >&2
    
-    ${pkgs.git}/bin/git branch -f update HEAD
+    git branch -f update HEAD
 
     echo >&2
     echo >&2 "Switching environment..."
@@ -115,9 +116,9 @@ let
     echo >&2 "Tagging updated..."
     echo >&2
 
-    ${pkgs.git}/bin/git branch -f working update
-    ${pkgs.git}/bin/git branch -D update
-    ${pkgs.git}/bin/git push
+    git branch -f working update
+    git branch -D update
+    git push
   '';
   update = pkgs.writeScript "update" ''
     set -e

@@ -25,6 +25,7 @@ before_install:
    - echo "substituters = https://cache.nixos.org/ https://peel.cachix.org https://cachix.cachix.org file://$HOME/nix.store" | sudo tee -a /etc/nix/nix.conf > /dev/null
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo launchctl stop org.nixos.nix-daemon; fi 
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo launchctl start org.nixos.nix-daemon && sleep 5; fi
+   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo ln -s private/var/run /run; fi
   
 install:
    - if [ -n "${CACHIX_CACHE}" ]; then nix-env -if https://github.com/cachix/cachix/tarball/master --substituters https://cachix.cachix.org --trusted-public-keys cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM=; fi
@@ -33,11 +34,12 @@ install:
    - mkdir -p ~/.emacs.d && curl -sSL https://raw.githubusercontent.com/hniksic/emacs-htmlize/master/htmlize.el --output ~/.emacs.d/htmlize.el
 
 script:
-  - dotfiles=$(nix-build default.nix)
-  - sh ${TRAVIS_BUILD_DIR}/result/bin/dotfiles install
-  - sh ${TRAVIS_BUILD_DIR}/result/bin/dotfiles link
-  - sh ${TRAVIS_BUILD_DIR}/result/bin/dotfiles uninstall && echo Produced $dotfiles
-  - emacs=$(nix-build ./nix/.config/nixpkgs/overlays/20-emacs/emacs/default.nix) && echo Produced $emacs
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then nix-channel --add https://github.com/LnL7/nix-darwin/archive/master.tar.gz darwin && nix-channel --update; fi
+  - nix-env -f default.nix -i
+  - dotfiles install
+  - dotfiles link
+  - dotfiles uninstall
+  - emacs=$(nix-build -j4 ./nix/.config/nixpkgs/overlays/20-emacs/emacs/default.nix) && echo Produced $emacs
 
 after_success:
   - git tag "${TRAVIS_BUILD_NUMBER}" -m "🚀️ ship it" && git push origin "${TRAVIS_BUILD_NUMBER}"

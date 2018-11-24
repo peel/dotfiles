@@ -15,8 +15,7 @@
 
 * Installation
 #+BEGIN_SRC shell
-nix-env -f https://github.com/peel/dotfiles/archive/master.tar.gz -i
-dotfiles install
+nix-env -f https://github.com/peel/dotfiles/archive/master.tar.gz -i && dotfiles
 #+END_SRC
 * Usage
 #+BEGIN_SRC shell

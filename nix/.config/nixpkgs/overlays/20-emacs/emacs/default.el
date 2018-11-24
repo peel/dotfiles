@@ -28,7 +28,7 @@
 ;; Graphical applications in macOS inherit their process environment from
 ;; launchd, not from a shell process which loads a profile.
 (use-package exec-path-from-shell
-  :defer nil
+  :defer 0
   :if (memq window-system '(mac ns))
   :config
   (defconst exec-path-from-shell-variables
@@ -371,11 +371,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package prog-mode
   :ensure nil
   :diminish pragmata-pro-mode
+  :after (direnv-mode)
   :hook ((prog-mode . prettify-symbols-mode)
          (prog-mode . display-line-numbers-mode)
          (prog-mode . pragmata-pro-mode)
-         (prog-mode . hs-minor-mode)
-         (prog-mode . direnv-mod))
+         (prog-mode . hs-minor-mode))
   :preface (load (locate-file "pragmata-pro.el" load-path) 'noerror))
 
 (use-package dash-at-point
@@ -386,6 +386,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; ..................................................................... Haskell
 (use-package haskell-mode
   :diminish (haskell-mode . " ")
+  :hook (haskell-mode . subword-mode)
   :init
   (use-package shm
     :hook (haskell-mode . structured-haskell-mode))
@@ -412,7 +413,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package nix-buffer
   :commands nix-buffer)
 
-(use-package nix-sandbox)
+(use-package nix-sandbox
+  :defer )
 
 (use-package direnv
   :commands direnv-mode
@@ -445,6 +447,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package scala-mode
   :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
   :diminish (scala-mode . " ")
+  :hook (scala-mode . subword-mode)
   :interpreter ("scala" . scala-mode)
   :bind ("C-c C-v f" . scalafmt/format-file)
   :config
@@ -490,6 +493,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; .......................................................................... js
 (use-package rjsx-mode
   :mode ("\\.js?")
+  :hook (rjsx-mode . subword-mode)
   :config
   (setq js-basic-offset 2
         js-switch-indent-offset 2
