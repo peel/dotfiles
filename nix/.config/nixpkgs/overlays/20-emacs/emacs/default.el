@@ -603,11 +603,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :bind ("C-c e" . eshell-hydra/body)
   :config
   (setq eshell-banner-message "")
-  (setq eshell-prompt-function
-        (lambda nil
-          (format "%s:%s λ "
-           (eshell/basename (eshell/pwd))
-           (magit-get-current-branch))))
+  (setq eshell-prompt-regexp "^[^λ]+ λ "
+        eshell-prompt-function (lambda nil
+                                 (format "%s:%s λ "
+                                         (eshell/basename (eshell/pwd))
+                                         (magit-get-current-branch))))
   
   (use-package xterm-color
     :hook (eshell-before-prompt-hook . (setq xterm-color-preserve-properties))
