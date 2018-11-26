@@ -144,7 +144,6 @@
     kk = "kubectl config use-context";
     kc = "kubectl config current-context";
     nr = (if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild");
-    dotfiles = "sh $HOME/wrk/dotfiles/result/bin/dotfiles";
     vim = "${pkgs.emacs}/bin/emacsclient -nw";
     grep = "${pkgs.ripgrep}/bin/rg";
   };
