@@ -28,7 +28,7 @@
 ;; Graphical applications in macOS inherit their process environment from
 ;; launchd, not from a shell process which loads a profile.
 (use-package exec-path-from-shell
-  :defer 0
+  :defer nil
   :if (memq window-system '(mac ns))
   :config
   (defconst exec-path-from-shell-variables
@@ -375,7 +375,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :hook ((prog-mode . prettify-symbols-mode)
          (prog-mode . display-line-numbers-mode)
          (prog-mode . pragmata-pro-mode)
-         (prog-mode . hs-minor-mode))
+         (prog-mode . hs-minor-mode)
+         (prog-mode . direnv-mode))
   :preface (load (locate-file "pragmata-pro.el" load-path) 'noerror))
 
 (use-package dash-at-point
@@ -414,7 +415,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :commands nix-buffer)
 
 (use-package nix-sandbox
-  :defer )
+  :defer 2)
 
 (use-package direnv
   :commands direnv-mode
@@ -599,7 +600,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; ...................................................................... eshell
 (use-package eshell
   :ensure nil
-  :after hydra
+  :after hydra magit
   :bind ("C-c e" . eshell-hydra/body)
   :config
   (setq eshell-banner-message "")

@@ -117,6 +117,9 @@ let
     UpArrow        ="0x7E";
 };
 in {
+  nix.extraOptions = ''
+      builders = @/etc/nix/machines
+  '';
   system.defaults = {
     dock = {
       autohide = true;
