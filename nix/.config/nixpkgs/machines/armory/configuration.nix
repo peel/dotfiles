@@ -11,6 +11,8 @@ in rec {
   boot.loader.generic-extlinux-compatible.enable = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelParams = ["cma=32M"];
+  hardware.enableRedistributableFirmware = true;
+  hardware.firmware = [ raspberryPiWirelessFirmware ];
 
   powerManagement.enable = true;
 
@@ -53,6 +55,8 @@ in rec {
       publish.domain = true;
     };
     xserver.enable = false;
+    nixosManual.enable = false;
   };
 
+  imports = [ ./private.nix  ];
 }
