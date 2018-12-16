@@ -4,15 +4,16 @@ with lib;
 
 let
   username = "peel";
-  hostName = "a.fff666";
+  hostName = "m1";
 in rec {
   # arm-specific
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelParams = ["cma=32M"];
-  hardware.enableRedistributableFirmware = true;
-  hardware.firmware = [ raspberryPiWirelessFirmware ];
+  nixpkgs.config.allowUnfree = true;
+  hardware.enableAllFirmware = true;
+  hardware.firmware = [ pkgs.raspberrypiWirelessFirmware ];
 
   powerManagement.enable = true;
 
