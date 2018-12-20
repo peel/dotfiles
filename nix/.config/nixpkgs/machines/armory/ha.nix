@@ -8,8 +8,19 @@ let
   hass = nixpkgs.home-assistant.overrideAttrs(oldAttrs: rec {
       doInstallCheck = false;
     });
+  domain = builtins.readFile (./secrets/domain);
 in {
   networking.firewall.enable = false;
+  services.ddclient = {
+    enable = true;
+    protocol = "duckdns";
+    domains = [ "${domain}" ];
+    password = builtins.readFile (./secrets/ddclient.password);
+  };
+  security.acme.certs."${domain}.duckdns.org" = {
+    email = "peel+${domain}@codearsonist.com";
+    webroot = "/var/www/challenges";
+  };
   services.home-assistant = {
     enable = true;
     openFirewall = true;
