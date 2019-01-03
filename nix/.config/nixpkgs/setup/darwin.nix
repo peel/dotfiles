@@ -161,7 +161,12 @@ in {
 
   networking.knownNetworkServices = ["Wi-Fi" "Bluetooth PAN" "Thunderbolt Bridge"];
   networking.dns = ["1.1.1.1" "1.0.0.1" "2606:4700:4700::1111" "2606:4700:4700::1001"];
-  
+
+  system.activationScripts.extraUserActivation.text = ''
+    ln -sfn /etc/static/gitconfig $HOME/.gitconfig
+    ln -sfn /etc/static/gitignore $HOME/.gitignore
+  '';
+
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
   services.bloop.enable = true;

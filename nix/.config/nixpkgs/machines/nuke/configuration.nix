@@ -6,12 +6,35 @@ let
   username = "peel";
   hostName = "nuke";
 in {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = let nur = (import <nurpkgs-peel/modules>); in [
+    ./hardware-configuration.nix
+    <setup/common.nix>
+    <setup/nixos.nix>
+  ] ++ [
+    nur.udiskie
+  ];
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowBroken = true;
+  nix.nixPath = [
+    "nixpkgs=channel:nixpkgs-18.09"
+    "nixos-config=/etc/nixos/configuration.nix"
+    "nurpkgs-peel=$HOME/.config/nurpkgs"
+    "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays"
+    "setup=$HOME/.config/nixpkgs/setup"
+  ];
+  nixpkgs.overlays = 
+    let path = <nixpkgs-overlays> ; in with builtins;
+      map (n: import (path + ("/" + n)))
+          (filter (n: match ".*\\.nix" n != null ||
+                      pathExists (path + ("/" + n + "/default.nix")))
+                  (attrNames (readDir path)))
+    ++[ (import <nurpkgs-peel/overlay.nix>) ];
+  nix.useSandbox = true;
+  nix.binaryCaches = [ https://cache.nixos.org https://peel.cachix.org ];
+  nix.trustedUsers = [ "${username}" "root" ];
+    
+  # hardware ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   hardware.enableAllFirmware = true;
   boot.kernelModules = [ "iwlwifi" ]; 
   boot.loader = {
@@ -29,15 +52,22 @@ in {
    device = "/dev/disk/by-uuid/47543190-aed6-44d1-bc69-ef1f65df0bbd";
    keyFile = "/keyfile.bin";
   };
+  sound.enable = true;
+  hardware.pulseaudio.enable = true;
 
-  nix.gc.automatic = true;
-  nix.gc.options = "--delete-older-than 30d";
+  # os ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+  system.stateVersion = "18.09";
+  nix.gc = {
+    automatic = true;
+    options = "--delete-older-than 30d";
+  };
 
   networking = {
     hostId = "675e1435";
     hostName = hostName;
     wireless.enable = false;
     networkmanager.enable = true;
+    firewall.enable = false;
   };
 
   i18n = {
@@ -77,8 +107,22 @@ in {
     nixosManual.enable = false;
   };
 
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
-
-  system.stateVersion = "18.09";
+  # containers ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+  # enable access to external network from containers
+  networking.nat.enable = true;
+  networking.nat.internalInterfaces = ["ve-+"];
+  networking.nat.externalInterface = "eth0";
+  networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
+  
+  containers = {
+    hass = {
+      config = import <setup/ha.nix>;
+      autoStart = true;
+    };
+    # plex = {
+    #   config = import <setup/plex.nix>;
+    #   autoStart = true;
+    # };
+  };
+  
 }

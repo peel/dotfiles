@@ -100,11 +100,6 @@
     [url "git://gist.github.com/"]
       insteadOf = "gist:"
   '';
-   
-  system.activationScripts.extraUserActivation.text = ''
-    ln -sfn /etc/static/gitconfig $HOME/.gitconfig
-    ln -sfn /etc/static/gitignore $HOME/.gitignore
-  '';
 
   environment.shells = [ pkgs.bashInteractive ];
   environment.variables.SHELL = "/run/current-system/sw/bin/bash";
