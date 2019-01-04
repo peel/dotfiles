@@ -8,9 +8,16 @@ let
   hass = nixpkgs.home-assistant.overrideAttrs(oldAttrs: rec {
       doInstallCheck = false;
     });
+  hassCfg = pkgs.callPackage (pkgs.fetchFromGitHub {
+    owner = "peel";
+    repo = "hassio";
+    sha256 = "10wr9jvpg4w45ac3k7k109milxr4l6fjzxll1xzcdcv9djrwd2rd";
+    rev = "0.0.1";
+  }) { pkgs = nixpkgs; };
   domain = builtins.readFile (./secret/domain);
 in {
   networking.firewall.enable = false;
+  environment.systemPackages = [ hassCfg ];
   services.ddclient = {
     enable = true;
     protocol = "duckdns";
@@ -20,6 +27,21 @@ in {
   security.acme.certs."${domain}.duckdns.org" = {
     email = "peel+${domain}@codearsonist.com";
     webroot = "/var/www/challenges";
+  };
+  systemd.services.hassCfg = {
+    after = [ "network.target" ];
+    before = [ "home-assistant.target" ];
+    wants = [ "home-assistant.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.Type = "oneshot";
+    serviceConfig.User = "hass";
+    serviceConfig.Group = "hass";
+    script = ''
+      mkdir -p /var/lib/hass
+      ls ${hassCfg}/var/lib/hass
+      cp -r ${hassCfg}/var/lib/hass/* /var/lib/hass/
+      chmod -R a+x+w /var/lib/hass
+    '';
   };
   services.home-assistant = {
     enable = true;
