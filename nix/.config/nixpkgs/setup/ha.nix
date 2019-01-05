@@ -11,8 +11,8 @@ let
   hassCfg = pkgs.callPackage (pkgs.fetchFromGitHub {
     owner = "peel";
     repo = "hassio";
-    sha256 = "10wr9jvpg4w45ac3k7k109milxr4l6fjzxll1xzcdcv9djrwd2rd";
-    rev = "0.0.1";
+    sha256 = "13knldz56cw1mandsrq47p1p5xm2yzqpm5qbjbxy47d9av9nx2m6";
+    rev = "0.0.2";
   }) { pkgs = nixpkgs; };
   domain = builtins.readFile (./secret/domain);
 in {
@@ -49,7 +49,7 @@ in {
     autoExtraComponents = false;
     package = hass.override {
       skipPip = true;
-      packageOverrides = self: super: {
+      packageOverrides = self: super: rec {
             websockets = super.websockets.overrideAttrs(o: {
               version = "6.0";
               src = super.fetchPypi {
@@ -128,6 +128,26 @@ in {
               propagatedBuildInputs = with super; [ ];
               doCheck = false;
             };
+            cffi-utils = super.buildPythonPackage rec {
+              pname = "cffi_utils";
+              version = "0.79";
+              src = super.fetchPypi {
+                inherit pname version;
+                sha256 = "0b1a0y75xjln9smrc9rljhdwcq9r6pzg45wsgkq8l59vw62np65h";
+              };
+              propagatedBuildInputs = with self; [ cffi ];
+              doCheck = false;
+            };
+            py25519 = super.buildPythonPackage rec {
+              pname = "py25519";
+              version = "0.13.28";
+              src = super.fetchPypi {
+                inherit pname version;
+                sha256 = "0marrs2p0lcv8r5gzf41skq12q7rw1hwccykwdcn7in7pbc9gaz6";
+              };
+              propagatedBuildInputs =  [ self.cffi-utils ];
+              doCheck = false;
+            };
       };
       extraPackages = ps:
         let
@@ -183,6 +203,16 @@ in {
                 sha256 = "0wbwmbnvb4r2sjkxl556xbv9f38bz5vf56n8l5zzb7db0dqd77ns";
               };
               propagatedBuildInputs = with ps; [ cryptography ed25519 zeroconf ];
+              doCheck = false;
+            };
+            homekit = ps.buildPythonPackage rec {
+              pname = "homekit";
+              version = "0.10";
+              src = ps.fetchPypi {
+                inherit pname version;
+                sha256 = "0nlw0fnyw5z8xwwanzhpih8f3ix48zj2g6ac22l7zgn348lbbm5s";
+              };
+              propagatedBuildInputs = with ps; [ zeroconf gmpy2 py25519 hkdf ed25519 ]  ++ (with pkgs; [ gmp mpfr libmpc libffi ]);
               doCheck = false;
             };
             pyharmony = ps.buildPythonPackage rec {
@@ -257,6 +287,7 @@ in {
           gTTS-token
           aiohue
           miio
+          homekit
           pyhap
           pyharmony
           pylgtv
@@ -290,7 +321,7 @@ in {
         "group"
         "hassio"
         "history"
-        # "homekit"
+        "homekit"
         "http"
         "ios"
         "light"

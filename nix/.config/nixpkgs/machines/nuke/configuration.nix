@@ -17,7 +17,7 @@ in {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = true;
   nix.nixPath = [
-    "nixpkgs=channel:nixpkgs-18.09"
+    "nixpkgs=channel:nixos-18.09"
     "nixos-config=/etc/nixos/configuration.nix"
     "nurpkgs-peel=$HOME/.config/nurpkgs"
     "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays"
