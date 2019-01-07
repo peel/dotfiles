@@ -8,8 +8,8 @@ let
   hassCfg = pkgs.callPackage (pkgs.fetchFromGitHub {
     owner = "peel";
     repo = "hassio";
-    sha256 = "13knldz56cw1mandsrq47p1p5xm2yzqpm5qbjbxy47d9av9nx2m6";
-    rev = "0.0.2";
+    sha256 = "14xkjigbfyh1khlyn608j41gkkf5fc7qpj1ip1hllk2kcz5h6yz8";
+    rev = "0.0.3";
   }) { pkgs = nixpkgs; };
   domain = builtins.readFile (./secret/domain);
   orgdomain = builtins.readFile (./secret/org.domain);
