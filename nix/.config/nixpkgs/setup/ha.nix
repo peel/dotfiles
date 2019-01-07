@@ -21,8 +21,10 @@ in {
     domains = [ "${domain}" ];
     password = builtins.readFile (./secret/ddclient.password);
   };
+  services.fail2ban.enable = true;
   services.nginx = {
     enable = true;
+    recommendedProxySettings = true;
     virtualHosts."${domain}.duckdns.org" = {
       enableACME = true;
       forceSSL = true;
@@ -76,3 +78,4 @@ in {
     };
   };
 }
+  
