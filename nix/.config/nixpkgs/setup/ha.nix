@@ -13,7 +13,7 @@ let
   }) { pkgs = nixpkgs; };
   domain = builtins.readFile (./secret/domain);
   orgdomain = builtins.readFile (./secret/org.domain);
-  version = "latest";
+  version = "0.84.6";
 in {
   services.ddclient = {
     enable = true;
