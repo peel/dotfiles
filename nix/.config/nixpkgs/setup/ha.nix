@@ -43,6 +43,7 @@ in {
     };
   };
   systemd.services.hassCfg = {
+    enable = true;
     after = [ "network.target" ];
     before = [ "home-assistant.target" ];
     wants = [ "home-assistant.target" ];
@@ -56,6 +57,7 @@ in {
   };
   
   systemd.services.home-assistant = {
+    enable = true;
     after =  [ "hassCfg.target" "network.target" "docker.service" ];
     wants = [ "hassCfg.target" "network.target" "docker.service" ];
     wantedBy = [ "multi-user.target" ];
