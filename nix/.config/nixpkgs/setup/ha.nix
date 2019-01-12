@@ -11,37 +11,8 @@ let
     sha256 = "14xkjigbfyh1khlyn608j41gkkf5fc7qpj1ip1hllk2kcz5h6yz8";
     rev = "0.0.3";
   }) { pkgs = nixpkgs; };
-  domain = builtins.readFile (./secret/domain);
-  orgdomain = builtins.readFile (./secret/org.domain);
   version = "0.84.6";
 in {
-  services.ddclient = {
-    enable = true;
-    protocol = "duckdns";
-    domains = [ "${domain}" ];
-    password = builtins.readFile (./secret/ddclient.password);
-  };
-  services.fail2ban.enable = true;
-  services.nginx = {
-    enable = true;
-    recommendedProxySettings = true;
-    virtualHosts."${domain}.duckdns.org" = {
-      enableACME = true;
-      forceSSL = true;
-      locations."/" = {
-        proxyPass = "http://localhost:8123";
-        proxyWebsockets = true;
-      };
-    };
-    virtualHosts."ha.${orgdomain}" = {
-      enableACME = true;
-      forceSSL = true;
-      locations."/" = {
-        proxyPass = "http://localhost:8123";
-        proxyWebsockets = true;
-      };
-    };
-  };
   systemd.services.hassCfg = {
     enable = true;
     after = [ "network.target" ];

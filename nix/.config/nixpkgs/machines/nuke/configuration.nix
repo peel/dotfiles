@@ -5,11 +5,14 @@ with lib;
 let
   username = "peel";
   hostName = "nuke";
+  domain = builtins.readFile (<setup/secret/domain>);
+  orgdomain = builtins.readFile (<setup/secret/org.domain>);
 in {
   imports = let nur = (import <nurpkgs-peel/modules>); in [
     ./hardware-configuration.nix
     <setup/common.nix>
     <setup/nixos.nix>
+    <setup/ha.nix>
   ] ++ [
     nur.udiskie
   ];
@@ -109,6 +112,39 @@ in {
   };
 
 
+  # general routes  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+  services.ddclient = {
+    enable = true;
+    protocol = "duckdns";
+    domains = [ "${domain}" ];
+    password = builtins.readFile (<setup/secret/ddclient.password>);
+  };
+  services.fail2ban.enable = true;
+  services.nginx = {
+    enable = true;
+    recommendedProxySettings = true;
+    
+    # syno
+    virtualHosts."drive.${orgdomain}" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "https://datavism.local:5001";
+        proxyWebsockets = true;
+      };
+    };
+
+    # hass
+    virtualHosts."ha.${orgdomain}" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://localhost:8123";
+        proxyWebsockets = true;
+      };
+    };
+  };
+  
   # containers ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   virtualisation.docker = {
     enable = true;
@@ -124,14 +160,15 @@ in {
   networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
   
   containers = {
-    hass = {
-      config = import <setup/ha.nix>;
-      autoStart = true;
-    };
+    # hass = {
+    #   config = import <setup/ha.nix>;
+    #   autoStart = true;
+    # };
     # plex = {
     #   config = import <setup/plex.nix>;
     #   autoStart = true;
     # };
+    # vault = {};
   };
   
 }
