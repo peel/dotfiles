@@ -112,6 +112,23 @@ in {
   };
 
 
+  # monitoring  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+  users.extraUsers.datadog.extraGroups = [ "docker" "systemd-journal" ];
+  services.datadog-agent = {
+    enable = true;
+    extraConfig = { logs_enabled = true; };
+    checks = {
+      journald = {
+        logs = [ { type = "journald"; include_units = [ "docker.service" "nginx.service" ]; } ];
+      };
+      nginx = {
+        init_config = null;
+        instances = [ { nginx_status_url = "http://localhost:80/nginx_status"; } ];
+      };
+    };
+    apiKeyFile = <setup/secret/datadog.key>;
+  };
+
   # general routes  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   services.ddclient = {
     enable = true;
@@ -123,6 +140,7 @@ in {
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;
+    statusPage = true;
     
     # syno
     virtualHosts."drive.${orgdomain}" = {
