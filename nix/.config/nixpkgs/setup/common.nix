@@ -120,7 +120,6 @@
         [ -z "$IN_NIX_SHELL" ] || echo " - ''${name:+$name}"
       }
       PS1='\W$(__git_ps1 " - %s")$(__prompt_nix) λ '
-      eval "$(direnv hook bash)"
     '';
   };
   environment.shellAliases = {
@@ -128,7 +127,6 @@
     pbc = "pbcopy";
     pbp = "pbpaste";
     dc = "docker-compose";
-    d = "docker";
     o = "open";
     less = "less -R";
     tailf = "tail -f";
@@ -142,9 +140,12 @@
     gl = "git log --pretty --graph";
     kk = "kubectl config use-context";
     kc = "kubectl config current-context";
-    nr = (if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild");
     vim = "${pkgs.emacs}/bin/emacsclient -nw";
     grep = "${pkgs.ripgrep}/bin/rg";
+    n = "nix";
+    nr = (if pkgs.stdenv.isDarwin then "darwin-rebuild" else "sudo nixos-rebuild");
+    ns = "nix-shell";
+    d = "eval \"$(direnv hook bash)\"";
   };
   
 }
