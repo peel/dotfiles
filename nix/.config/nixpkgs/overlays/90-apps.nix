@@ -27,7 +27,7 @@ Dash = self.installApplication rec {
   sourceRoot = "Dash.app";
   src = super.fetchurl {
     url = https://kapeli.com/downloads/v4/Dash.zip;
-    sha256 = "0z8365shmwn26c2fcwv18drmi1i06myj1wspc563kaic7g7z9l4v";
+    sha256 = "1f74jga5cv3j99qz94gjkm4v5wcnbcwimzawdrvg5v3svsnkmv44";
     # date = 2018-09-28T23:36:13-0700;
   };
  description = "Dash is an API Documentation Browser and Code Snippet Manager";
@@ -40,7 +40,7 @@ Docker = self.installApplication rec {
   sourceRoot = "Docker.app";
   src = super.fetchurl {
     url = https://download.docker.com/mac/stable/Docker.dmg;
-    sha256 = "19a7n36nkw20rrklr8qlp76l5xhn037avqfnk81rilghik1yla9l";
+    sha256 = "0km0q18hia8asj7rgg3fsck74fzd6xqbhv3qhfqphdwwvbc0fqx0";
     # date = 2018-09-28T11:14:33-0700;
   };
   description = ''

@@ -10,7 +10,6 @@
     git
     global
     gnupg
-    pinentry
     ripgrep
     scripts
   ]
@@ -37,6 +36,7 @@
     keybase-gui
     libnotify
     lightum
+    pinentry
     powertop
     rofi
     rofi-emoji
@@ -67,6 +67,7 @@
     skhd
     Dash
     Docker
+    pinentry_mac
     #Spotify
   ]);
 }

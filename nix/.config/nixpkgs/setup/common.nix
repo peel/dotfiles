@@ -116,7 +116,11 @@
         shopt -s dirspell     # correct typos when tab-completing names
         shopt -s globstar     # enable **
       fi
-      PS1='\W$(__git_ps1 " - %s") λ '
+      __prompt_nix() {
+        [ -z "$IN_NIX_SHELL" ] || echo " - ''${name:+$name}"
+      }
+      PS1='\W$(__git_ps1 " - %s")$(__prompt_nix) λ '
+      eval "$(direnv hook bash)"
     '';
   };
   environment.shellAliases = {
