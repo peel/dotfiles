@@ -137,6 +137,16 @@ in {
     password = builtins.readFile (<setup/secret/ddclient.password>);
   };
   services.fail2ban.enable = true;
+  services.dnsmasq =
+    let nuke = builtins.readFile (<setup/secret/nuke.ip>);
+    in {
+      enable = true;
+      servers = [ "1.1.1.1" "1.0.0.1" ];
+      extraConfig = ''
+        address=/.${orgdomain}/${nuke}
+      '';
+  };
+
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;
@@ -147,7 +157,7 @@ in {
       enableACME = true;
       forceSSL = true;
       locations."/" = {
-        proxyPass = "https://datavism.local:5001";
+        proxyPass = "http://datavism.local:5000";
         proxyWebsockets = true;
       };
     };
