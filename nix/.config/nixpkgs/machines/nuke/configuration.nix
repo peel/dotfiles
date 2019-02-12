@@ -97,7 +97,6 @@ in {
   services = {
     openssh = {
       enable = true;
-      permitRootLogin = "yes";
     };
     avahi = {
       enable = true;
