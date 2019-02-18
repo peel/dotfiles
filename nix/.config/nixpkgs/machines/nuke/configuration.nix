@@ -3,6 +3,15 @@
 with lib;
 
 let
+  sources =  with pkgs.lib; with builtins; let
+    ps = readDir <setup/pinned>;
+    pin = file: let 
+      json = f: fromJSON (readFile f);
+      fetch = {owner, repo, rev, sha256, ...}: fetchTarball {
+        inherit sha256;
+        url = "https://github.com/${owner}/${repo}/tarball/${rev}";
+      }; in fetch (json file);
+      in mapAttrs' (name: _: nameValuePair (removeSuffix ".json" name) (pin "${toString <setup/pinned>}/${name}")) ps;
   username = "peel";
   hostName = "nuke";
   domain = builtins.readFile (<setup/secret/domain>);
@@ -20,7 +29,7 @@ in {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = true;
   nix.nixPath = [
-    "nixpkgs=channel:nixos-18.09"
+    "nixpkgs=${sources.nixpkgs}"
     "nixos-config=/etc/nixos/configuration.nix"
     "nurpkgs-peel=$HOME/.config/nurpkgs"
     "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays"
@@ -116,6 +125,10 @@ in {
   services.datadog-agent = {
     enable = true;
     extraConfig = { logs_enabled = true; };
+    logLevel = "DEBUG";
+    extraIntegrations = {
+      snmp = (ps: with ps; [ pyasn1 pysnmp pycryptodomex pysmi ply ]);
+    };
     checks = {
       journald = {
         logs = [ { type = "journald"; include_units = [ "docker.service" "nginx.service" ]; } ];
@@ -124,17 +137,29 @@ in {
         init_config = null;
         instances = [ { nginx_status_url = "http://localhost:80/nginx_status"; } ];
       };
+      snmp = {
+        init_config = [ { mibs_folder = "/etc/datadog-agent/mibs"; } ];
+        instances = [
+          { ip_address = "192.168.1.9";
+            snmp_version = 3;
+            port = 161;
+            user = builtins.readFile <setup/secret/datavism.user>;
+            authKey = builtins.readFile <setup/secret/datavism.auth.key>;
+            privKey = builtins.readFile <setup/secret/datavism.priv.key>;
+            authProtocol = builtins.readFile <setup/secret/datavism.auth.protocol>;
+            privProtocol = builtins.readFile <setup/secret/datavism.priv.protocol>;
+            metrics = [
+              { MIB = "UDP-MIB"; symbol = "udpInDatagrams"; }
+              { MIB = "TCP-MIB"; symbol = "tcpActiveOpens"; }
+          ];
+          }
+        ];
+      };
     };
     apiKeyFile = <setup/secret/datadog.key>;
   };
 
   # general routes  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-  services.ddclient = {
-    enable = true;
-    protocol = "duckdns";
-    domains = [ "${domain}" ];
-    password = builtins.readFile (<setup/secret/ddclient.password>);
-  };
   services.fail2ban.enable = true;
   services.dnsmasq =
     let nuke = builtins.readFile (<setup/secret/nuke.ip>);
