@@ -22,7 +22,7 @@ in {
   nixpkgs.config.allowBroken = true;
   nix.nixPath = [
     "nixpkgs=${sources.nixpkgs}"
-    "nixos-config=/etc/nixos/configuration.nix"
+    "nixos-config=$HOME/.config/nixpkgs/machines/${hostName}/configuration.nix"
     "nurpkgs-peel=$HOME/.config/nurpkgs"
     "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays"
     "setup=$HOME/.config/nixpkgs/setup"
