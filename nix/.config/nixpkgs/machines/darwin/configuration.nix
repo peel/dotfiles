@@ -3,6 +3,7 @@
 with lib;
 
 let
+  sources = import <setup/pinned> { inherit (pkgs) lib; };
   username = "peel";
   hostName = "fff666";
 in rec {
@@ -29,8 +30,8 @@ in rec {
   environment.darwinConfig = "$HOME/.config/nixpkgs/machines/darwin/configuration.nix";
   nix.nixPath = [
     "darwin-config=$HOME/.config/nixpkgs/machines/darwin/configuration.nix"
-    "darwin=$HOME/.nix-defexpr/channels/darwin"
-    "nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs"
+    "darwin=${sources."nix-darwin"}"
+    "nixpkgs=${sources.nixpkgs}"
     "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays"
     "nurpkgs-peel=$HOME/.config/nurpkgs"
     "setup=$HOME/.config/nixpkgs/setup"
