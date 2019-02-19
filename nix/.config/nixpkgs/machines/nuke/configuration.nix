@@ -3,15 +3,7 @@
 with lib;
 
 let
-  sources =  with pkgs.lib; with builtins; let
-    ps = readDir <setup/pinned>;
-    pin = file: let 
-      json = f: fromJSON (readFile f);
-      fetch = {owner, repo, rev, sha256, ...}: fetchTarball {
-        inherit sha256;
-        url = "https://github.com/${owner}/${repo}/tarball/${rev}";
-      }; in fetch (json file);
-      in mapAttrs' (name: _: nameValuePair (removeSuffix ".json" name) (pin "${toString <setup/pinned>}/${name}")) ps;
+  sources = import <setup/pinned> { inherit (pkgs) lib; };
   username = "peel";
   hostName = "nuke";
   domain = builtins.readFile (<setup/secret/domain>);
