@@ -65,6 +65,7 @@
     chunkwm.ffm
     chunkwm.tiling
     skhd
+    Alfred
     Dash
     Docker
     pinentry_mac

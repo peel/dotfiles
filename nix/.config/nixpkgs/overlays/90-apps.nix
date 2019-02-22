@@ -21,6 +21,19 @@ installApplication =
     };
   };
 
+Alfred = self.installApplication rec {
+  name = "Alfred";
+  version = "3.8_959";
+  sourceRoot = "Alfred 3.app";
+  src = super.fetchurl {
+  url = https://cachefly.alfredapp.com/Alfred_3.8_959.dmg;
+    sha256 = "1md43m33fxd5c4gz4va1j7b62amhp7zzh1za7sjj4g4iccq5zl8x";
+    # date = 2018-09-28T23:36:13-0700;
+  };
+  description = "Alfred is an award-winning app for macOS which boosts your efficiency with hotkeys, keywords, text expansion and more. Search your Mac and the web, and be more productive with custom actions to control your Mac.";
+  homepage = https://alfredapp.com;
+};
+
 Dash = self.installApplication rec {
   name = "Dash";
   version = "4.5.1";
@@ -30,17 +43,18 @@ Dash = self.installApplication rec {
     sha256 = "1f74jga5cv3j99qz94gjkm4v5wcnbcwimzawdrvg5v3svsnkmv44";
     # date = 2018-09-28T23:36:13-0700;
   };
- description = "Dash is an API Documentation Browser and Code Snippet Manager";
+  description = "Dash is an API Documentation Browser and Code Snippet Manager";
   homepage = https://kapeli.com/dash;
 };
 
 Docker = self.installApplication rec {
   name = "Docker";
-  version = "18.06.1-ce-mac73";
+  version = "2.0.0.3";
+  versionId = "31259";
   sourceRoot = "Docker.app";
   src = super.fetchurl {
-    url = https://download.docker.com/mac/stable/Docker.dmg;
-    sha256 = "0km0q18hia8asj7rgg3fsck74fzd6xqbhv3qhfqphdwwvbc0fqx0";
+    url = "https://download.docker.com/mac/stable/${versionId}/Docker.dmg";
+    sha256 = "09gwqdppnzw7hhlmgxakczxql4jfknk4ayc5z09g4kr8agqn4m55";
     # date = 2018-09-28T11:14:33-0700;
   };
   description = ''
