@@ -14,6 +14,7 @@ in {
     <setup/common.nix>
     <setup/nixos.nix>
     <setup/ha.nix>
+    <setup/homebridge.nix>
   ] ++ [
     nur.udiskie
   ];
