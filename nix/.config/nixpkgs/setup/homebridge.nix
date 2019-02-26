@@ -43,7 +43,10 @@ let
         name = "eveatmo platform";
         ttl = 540;
         auth = secret.netatmo;
-        }
+      }
+      {
+        platform = "Yeelight-Platform";
+      }        
     ];
   });
   packages = pkgs.writeText "package.json" (builtins.toJSON {
@@ -53,6 +56,7 @@ let
       # homebridge-harmony = "0.1.5";
       homebridge-xiaomi-roborock-vacuum = "0.4.1";
       homebridge-webos-tv = "1.5.4";
+      homebridge-yeelight-platform = "1.2.4";
       homebridge-zigbee = "1.3.0";
     };
   });
