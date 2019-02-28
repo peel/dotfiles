@@ -3,11 +3,11 @@
 with lib;
 
 let
-  sources = import <setup/pinned> { inherit (pkgs) lib; };
+  sources = import <dotfiles/setup/pinned> { inherit (pkgs) lib; };
   username = "peel";
   hostName = "nuke";
-  domain = builtins.readFile (<setup/secret/domain>);
-  orgdomain = builtins.readFile (<setup/secret/org.domain>);
+  domain = builtins.readFile (<dotfiles/setup/secret/domain>);
+  orgdomain = builtins.readFile (<dotfiles/setup/secret/org.domain>);
 in {
   imports = let nur = (import <nurpkgs-peel/modules>); in [
     ./hardware-configuration.nix
@@ -23,13 +23,12 @@ in {
   nixpkgs.config.allowBroken = true;
   nix.nixPath = [
     "nixpkgs=${sources.nixpkgs}"
-    "nixos-config=$HOME/.config/nixpkgs/machines/${hostName}/configuration.nix"
+    "nixos-config=$HOME/.config/nixpkgs/machines${hostName}/configuration.nix"
     "nurpkgs-peel=$HOME/.config/nurpkgs"
-    "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays"
-    "setup=$HOME/.config/nixpkgs/setup"
+    "dotfiles=$HOME/.config/nixpkgs"
   ];
   nixpkgs.overlays = 
-    let path = <nixpkgs-overlays> ; in with builtins;
+    let path = <dotfiles/overlays> ; in with builtins;
       map (n: import (path + ("/" + n)))
           (filter (n: match ".*\\.nix" n != null ||
                       pathExists (path + ("/" + n + "/default.nix")))
@@ -136,11 +135,11 @@ in {
           { ip_address = "192.168.1.9";
             snmp_version = 3;
             port = 161;
-            user = builtins.readFile <setup/secret/datavism.user>;
-            authKey = builtins.readFile <setup/secret/datavism.auth.key>;
-            privKey = builtins.readFile <setup/secret/datavism.priv.key>;
-            authProtocol = builtins.readFile <setup/secret/datavism.auth.protocol>;
-            privProtocol = builtins.readFile <setup/secret/datavism.priv.protocol>;
+            user = builtins.readFile <dotfiles/setup/secret/datavism.user>;
+            authKey = builtins.readFile <dotfiles/setup/secret/datavism.auth.key>;
+            privKey = builtins.readFile <dotfiles/setup/secret/datavism.priv.key>;
+            authProtocol = builtins.readFile <dotfiles/setup/secret/datavism.auth.protocol>;
+            privProtocol = builtins.readFile <dotfiles/setup/secret/datavism.priv.protocol>;
             metrics = [
               { MIB = "UDP-MIB"; symbol = "udpInDatagrams"; }
               { MIB = "TCP-MIB"; symbol = "tcpActiveOpens"; }
@@ -149,13 +148,13 @@ in {
         ];
       };
     };
-    apiKeyFile = <setup/secret/datadog.key>;
+    apiKeyFile = <dotfiles/setup/secret/datadog.key>;
   };
 
   # general routes  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   services.fail2ban.enable = true;
   services.dnsmasq =
-    let nuke = builtins.readFile (<setup/secret/nuke.ip>);
+    let nuke = builtins.readFile (<dotfiles/setup/secret/nuke.ip>);
     in {
       enable = true;
       servers = [ "1.1.1.1" "1.0.0.1" ];
