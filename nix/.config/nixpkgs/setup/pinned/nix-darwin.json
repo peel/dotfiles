@@ -1,7 +1,7 @@
 {
-  "owner": "LnL7",
-  "repo": "nix-darwin",
-  "branch": "master",
-  "rev": "e812130e5decd51e9fad04941364b1445747a1ac",
-  "sha256": "0siskh9irpkkny8zbphwclx8i4zzmgg4v9r81h9mqmgp90m0i0q4"
+  "url": "https://github.com/LnL7/nix-darwin",
+  "rev": "feaf3718dbe2ab2558f56b900e0b808e60a60814",
+  "date": "2019-02-24T22:52:29+01:00",
+  "sha256": "1mg89ks6dr99b3h6pzq1sjmzsmaan13sfss1b4ysdpl1mj9ghp9w",
+  "fetchSubmodules": false
 }

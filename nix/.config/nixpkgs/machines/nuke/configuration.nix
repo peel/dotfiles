@@ -3,7 +3,7 @@
 with lib;
 
 let
-  sources = import <dotfiles/setup/pinned> { inherit (pkgs) lib; };
+  sources = import <dotfiles/setup/pinned> { inherit (pkgs) fetchgit lib; };
   username = "peel";
   hostName = "nuke";
   domain = builtins.readFile (<dotfiles/setup/secret/domain>);
