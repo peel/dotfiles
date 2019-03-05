@@ -18,9 +18,6 @@
 (eval-when-compile
   (require 'use-package))
 
-(setq-default use-package-always-defer t
-              use-package-always-ensure t)
-
 (use-package diminish
   :init (require 'diminish))
 
@@ -44,6 +41,7 @@
 
 ;; navigation ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package winner
+  :defer nil
   :config (winner-mode 1))
 
 (use-package windmove
@@ -158,10 +156,14 @@
   (use-package gitignore-mode))
 
 (use-package git-link
+  :after magit
   :commands (git-link git-link-commit git-link-homepage)
   :bind (("C-c C-g l" . git-link)
          ("C-c C-g c" . git-link-commit)
          ("C-c C-g h" . git-link-homepage)))
+(use-package forge
+  :after magit)
+  
 
 ;; TODO git-timemachine
 
@@ -183,16 +185,6 @@
   :diminish highlight-symbol-mode
   :commands highlight-symbol
   :bind ("s-h" . highlight-symbol))
-
-;; ................................................................. visual undo
-(use-package undo-tree
-  :defer 5
-  :diminish undo-tree-mode
-  :config
-  (global-undo-tree-mode)
-  (setq undo-tree-visualizer-diff t)
-  (setq undo-tree-visualizer-timestamps t)
-  :bind ("s-/" . undo-tree-visualize))
 
 
 ;; files ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁

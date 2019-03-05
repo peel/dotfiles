@@ -79,9 +79,10 @@ in
     
     # git
     magit
+    forge
+    # transient
     git-link
     gitignore-mode
-    # magithub
     
     projectile
     rainbow-delimiters
@@ -159,6 +160,4 @@ in
     #orgit
   ]) ++ (with epkgs.melpaStablePackages; [
     smartparens
-  ]) ++ (with epkgs.elpaPackages; [
-    undo-tree
   ]))

@@ -10,4 +10,4 @@ let
   pins = let
     files = readDir pinfiles;
     in filterAttrs (n: _: hasSuffix ".json" n) files;
-in mapAttrs' (name: _: nameValuePair (removeSuffix ".json" name) (pin "${toString <setup/pinned>}/${name}")) pins
+in mapAttrs' (name: _: nameValuePair (removeSuffix ".json" name) (pin "${toString <dotfiles/setup/pinned>}/${name}")) pins
