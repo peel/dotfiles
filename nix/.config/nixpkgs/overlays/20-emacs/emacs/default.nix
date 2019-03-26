@@ -66,7 +66,6 @@ in
     flycheck
     ggtags
     #hightlight
-    highlight-symbol
     highlight-stages
     #highlight-parentheses
     #hl-todo

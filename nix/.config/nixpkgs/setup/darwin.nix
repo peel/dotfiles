@@ -214,7 +214,7 @@ in {
   services.skhd.package =  pkgs.skhd;
   services.skhd.skhdConfig = let
     modMask = "cmd";
-    moveMask = "ctrl";
+    moveMask = "ctrl + cmd";
     myTerminal = "emacsclient -a '' -nc --eval '(eshell)'";
     myEditor = "emacsclient -a '' -nc";
     noop = "/dev/null";

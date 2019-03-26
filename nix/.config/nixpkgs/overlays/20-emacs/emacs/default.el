@@ -21,11 +21,7 @@
 (use-package diminish
   :init (require 'diminish))
 
-;; darwin-specific
-;; Graphical applications in macOS inherit their process environment from
-;; launchd, not from a shell process which loads a profile.
 (use-package exec-path-from-shell
-  :defer nil
   :if (memq window-system '(mac ns))
   :config
   (defconst exec-path-from-shell-variables
@@ -179,13 +175,6 @@
   (projectile-mode))
 
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-
-;; ................................................................... highlight
-(use-package highlight-symbol
-  :diminish highlight-symbol-mode
-  :commands highlight-symbol
-  :bind ("s-h" . highlight-symbol))
-
 
 ;; files ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package dired
@@ -427,9 +416,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (use-package alchemist))
 
 ;; ...................................................................... shells
-;; TODO
-
-;; ..................................................................... clojure
 ;; TODO
 
 ;; ........................................................................ yaml

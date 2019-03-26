@@ -5,7 +5,6 @@
     coreutils
     direnv
     emacs
-    fasd
     fzf
     git
     global
