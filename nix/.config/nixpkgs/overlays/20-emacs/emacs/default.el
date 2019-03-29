@@ -23,6 +23,7 @@
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
+  :demand t
   :config
   (defconst exec-path-from-shell-variables
     '("PATH"
@@ -37,12 +38,10 @@
 
 ;; navigation ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package winner
-  :defer nil
   :config (winner-mode 1))
 
 (use-package windmove
   :ensure nil
-  :defer nil
   :bind (("C-|" . split-window-right)
          ("C--" . split-window-below)
          ("C-x w r" . peel/rotate-windows))
@@ -415,9 +414,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :init
   (use-package alchemist))
 
-;; ...................................................................... shells
-;; TODO
-
 ;; ........................................................................ yaml
 (use-package yaml-mode
   :mode ("\\.yml\\'" "\\.yaml\\'"))
@@ -575,6 +571,10 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; builtins ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
+(use-package vterm
+  :ensure nil
+  :config
+  (require 'vterm))
 ;; ...................................................................... eshell
 (use-package eshell
   :ensure nil
@@ -596,7 +596,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   
   :init
   (require 'hydra)
-  (defalias 'emacs 'find-file)
+  (setq vterm-keymap-exceptions '("C-x" "C-u" "C-g" "C-h" "M-x" "M-o" "C-v" "M-v" "s-v" "s-c"))  (defalias 'emacs 'find-file)
   (defalias 'gs 'magit-status)
   (defun eshell-new()
     "Open a new instance of eshell."
@@ -721,7 +721,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (use-package nord-theme
     :preface
     (add-to-list 'custom-theme-load-path
-                 (file-name-directory (locate-library "nord-theme"))))
+                 (file-name-directory (locate-library "nord-theme")))
+    :init
+    ;; term colors
+    (setq ansi-color-names-vector
+          [unspecified "#bf616a" "#a3be8c" "#ebcb8b" "#81a1c1" "#b48ead" "#8fbcbb" "#d8dee9"]))
 
   (use-package gotham-theme
     :preface
