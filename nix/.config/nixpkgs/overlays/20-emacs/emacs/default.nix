@@ -46,28 +46,10 @@ let
      sha256 = "0l9ixbj516vl41v78fi302ws655xawl7s94gmx1kb3fmfgamqisy";
    };
   });
-  overrides = self: super: rec {
-  emacs-libvterm = (super.emacs-libvterm.override{ inherit libvterm-neovim;}).overrideAttrs(attrs: rec {
-      version = "unstable-2018-03-28";
-      name = "emacs-libvterm-${version}";
-      src = pkgs.fetchFromGitHub {
-        owner = "akermu";
-        repo = "emacs-libvterm";
-        rev = "e31edc727b8b87557a5864230dae8550796c0ef5";
-        # "date": "2018-03-28T23:14:23+01:00",      
-        sha256 = "01djlpyircvdrg2zflwf5jiwgkafbjyavvi2xrkhri2abiwa90n1";
-      };
-      cmakeFlags = attrs.cmakeFlags ++ ["-DUSE_SYSTEM_LIBVTERM=true" "-DLIBVTERM_INCLUDE_DIR=${libvterm-neovim}"];
-      installPhase = ''
-    install -d $out/share/emacs/site-lisp
-    install ../*.el $out/share/emacs/site-lisp
-    install ../*.so $out/share/emacs/site-lisp
-      '';
-      });
-  };
+  overrides = self: super: rec {  };
   myEmacs = pkgs.emacs;
   myEmacsConfig = ./default.el;
-  emacsWithPackages = ((pkgs.emacsPackagesNgGen myEmacs).overrideScope' overrides).emacsWithPackages;
+  emacsWithPackages = (pkgs.emacsPackagesNgGen myEmacs).emacsWithPackages;
 in
   emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
     (pkgs.runCommand "default.el" {} ''
@@ -91,7 +73,6 @@ in
     #eyebrowse?
     flx # fuzzy matcher 
     flycheck
-    ggtags
     #hightlight
     highlight-stages
     #highlight-parentheses
@@ -101,12 +82,10 @@ in
     smex
     #counsel-dash !
     counsel-projectile
-    counsel-gtags
     
     # git
     magit
     forge
-    # transient
     git-link
     gitignore-mode
     
@@ -125,9 +104,9 @@ in
     apropospriate-theme
 
     # languages
-    # lsp-mode
-    # lsp-ui
-    # company-lsp
+    lsp-mode
+    lsp-ui
+    company-lsp
 
     ## dhall
     dhall-mode
@@ -145,7 +124,6 @@ in
     attrap
     
     ## javascript
-    # tide
     prettier-js
     rjsx-mode
     web-mode
@@ -162,6 +140,7 @@ in
     ## scala
     scala-mode
     sbt-mode
+    lsp-scala
     
     ## markups
     dockerfile-mode
@@ -187,5 +166,5 @@ in
   ]) ++ (with epkgs.melpaStablePackages; [
     smartparens
   ]) ++ (with epkgs; [
-  emacs-libvterm
+    emacs-libvterm
   ]))

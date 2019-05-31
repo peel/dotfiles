@@ -72,11 +72,7 @@ self: super: {
     ];
   };
     
-  airflowEnv = (self.python3.withPackages(ps: with ps; [
-    nose
-    mock
-    numpy
-    pandas
-    xlrd
+  pythonEnv = (self.python36.withPackages(ps: with ps; [
+    virtualenvwrapper
   ]));
 }

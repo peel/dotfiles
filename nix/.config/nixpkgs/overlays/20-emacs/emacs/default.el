@@ -22,7 +22,7 @@
   :init (require 'diminish))
 
 (use-package exec-path-from-shell
-  :if (memq window-system '(mac ns))
+  :if (eq system-type 'darwin)
   :demand t
   :config
   (defconst exec-path-from-shell-variables
@@ -33,7 +33,9 @@
       "NIX_REMOTE"
       "NIX_SSL_CERT_FILE"
       "NIX_USER_PROFILE_DIR"
+      "JAVA_HOME"
       ))
+  :init
   (exec-path-from-shell-initialize))
 
 ;; navigation ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
@@ -234,31 +236,6 @@
   :bind (("M-n" . diff-hl-next-hunk)
          ("M-p" . diff-hl-previous-hunk)))
 
-;; gtags
-(use-package ggtags
-  :if (executable-find "global")
-  :hook ((prog-mode . ggtags-mode))
-  :diminish (ggtags-mode . " "))
-
-(use-package counsel-gtags
-  :after hydra
-  :defer 1
-  :diminish counsel-gtags-mode
-  :bind ("C-." . counsel-gtags-hydra/body)
-  :hook (ggtags-mode . counsel-gtags-mode)
-  :init (require 'hydra)
-  :config
-  (defhydra counsel-gtags-hydra (:color blue :columns 3)
-    "ggtags"
-    ("." counsel-gtags-dwim "dwim")
-    ("," counsel-gtags-go-backward "back")
-    ("t" counsel-gtags-find-definition "definition")
-    ("r" counsel-gtags-find-reference "reference")
-    ("s" counsel-gtags-find-symbol "symbol")
-    ("c" counsel-gtags-create-tags "create tags")
-    ("u" counsel-gtags-update-tags "update tags")
-    ("j" counsel-gtags-go-forward "forward")))
-
 (use-package dumb-jump
   :after hydra
   :bind ("s-." . dumb-jump-hydra/body)
@@ -363,6 +340,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :commands dash-at-point
   :bind ("C-c h" . dash-at-point))
 
+(use-package lsp-mode
+  :init (setq lsp-prefer-flymake nil))
+(use-package lsp-ui)
+(use-package company-lsp)
+
 
 ;; ..................................................................... Haskell
 (use-package haskell-mode
@@ -426,19 +408,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :interpreter ("scala" . scala-mode)
   :bind ("C-c C-v f" . scalafmt/format-file)
   :config
-  (use-package sbt-mode
-      :commands sbt-start sbt-command
-      :config
-      (substitute-key-definition
-       'minibuffer-complete-word
-       'self-insert-command
-       minibuffer-local-completion-map)
-      :init
-      (defun peel/sbt-start ()
-        "Execute sbt from nix-sandbox"
-        (interactive)
-        (setq sbt:program-name (nix-executable-find (nix-current-sandbox) "sbt"))
-        (sbt-start)))
   (setq scala-indent:align-forms t
         scala-indent:align-parameters t
         scala-indent:default-run-on-strategy scala-indent:operator-strategy)
@@ -453,7 +422,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
                          "--config" (expand-file-name "~/.scalafmt.conf")
                          "--stdin"
                          "--assume-filename" (file-name-nondirectory buffer-file-name)))
-  
   (defun scalafmt/format-file ()
     "Run scalafmt on the current file"
     (interactive)
@@ -464,6 +432,25 @@ _k_: kill        _s_: split                   _{_: wrap with { }
       (shell-command scalafmt-cmd)
       (revert-buffer t t t))))
 
+  (use-package sbt-mode
+      :commands sbt-start sbt-command
+      :config
+      (substitute-key-definition
+       'minibuffer-complete-word
+       'self-insert-command
+       minibuffer-local-completion-map)
+      :init
+      (defun peel/sbt-start ()
+        "Execute sbt from nix-sandbox"
+        (interactive)
+        (setq sbt:program-name (nix-executable-find (nix-current-sandbox) "sbt"))
+        (sbt-start)))
+
+(use-package lsp-scala
+  :after scala-mode
+  :demand t
+  ;; Optional - enable lsp-scala automatically in scala files
+  :hook (scala-mode . lsp))
 
 ;; .......................................................................... js
 (use-package rjsx-mode
@@ -574,7 +561,10 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package vterm
   :ensure nil
   :config
-  (require 'vterm))
+  (require 'vterm)
+  (setq ansi-color-names-vector
+        [unspecified "#bf616a" "#a3be8c" "#ebcb8b" "#81a1c1" "#b48ead" "#8fbcbb" "#d8dee9"]))
+
 ;; ...................................................................... eshell
 (use-package eshell
   :ensure nil
