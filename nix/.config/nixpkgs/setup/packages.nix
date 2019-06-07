@@ -68,6 +68,7 @@
     Dash
     Docker
     pinentry_mac
-    #Spotify
+    metals
+    #yabai
   ]);
 }

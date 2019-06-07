@@ -341,7 +341,15 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :bind ("C-c h" . dash-at-point))
 
 (use-package lsp-mode
-  :init (setq lsp-prefer-flymake nil))
+  :bind ("C-c l" . lsp-hydra/body)
+  :init
+  (setq lsp-prefer-flymake nil)
+  (require 'hydra)
+  (defhydra lsp-hydra ()
+    ("r" lsp-find-references "references")
+    ("d" lsp-find-definition "definition")
+    ("e" lsp-describe-thing-at-point "describe")))
+
 (use-package lsp-ui)
 (use-package company-lsp)
 
