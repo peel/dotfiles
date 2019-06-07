@@ -345,10 +345,29 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :init
   (setq lsp-prefer-flymake nil)
   (require 'hydra)
-  (defhydra lsp-hydra ()
-    ("r" lsp-find-references "references")
-    ("d" lsp-find-definition "definition")
-    ("e" lsp-describe-thing-at-point "describe")))
+  (defhydra lsp-hydra (:exit t :hint nil)
+  "
+ Buffer^^               Server^^                   Symbol
+-------------------------------------------------------------------------------------
+ [_f_] format           [_M-r_] restart            [_d_] declaration  [_i_] implementation  [_o_] documentation
+ [_m_] imenu            [_S_]   shutdown           [_D_] definition   [_t_] type            [_r_] rename
+ [_x_] execute action   [_M-s_] describe session   [_R_] references   [_s_] signature"
+  ("d" lsp-find-declaration)
+  ("D" lsp-ui-peek-find-definitions)
+  ("R" lsp-ui-peek-find-references)
+  ("i" lsp-ui-peek-find-implementation)
+  ("t" lsp-find-type-definition)
+  ("s" lsp-signature-help)
+  ("o" lsp-describe-thing-at-point)
+  ("r" lsp-rename)
+
+  ("f" lsp-format-buffer)
+  ("m" lsp-ui-imenu)
+  ("x" lsp-execute-code-action)
+
+  ("M-s" lsp-describe-session)
+  ("M-r" lsp-restart-workspace)
+  ("S" lsp-shutdown-workspace)))
 
 (use-package lsp-ui)
 (use-package company-lsp)
@@ -538,8 +557,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package pdf-tools
   :magic ("%PDF" . pdf-view-mode)
+  :hook (pdf-view-mode . pdf-view-midnight-minor-mode)
   :config
-  (pdf-tools-install))
+  (pdf-tools-install)
+  (setq pdf-view-midnight-colors
+          `(,(face-foreground 'default) . ,(face-background 'default))))
 
 (use-package org-ref
   :init
@@ -674,7 +696,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     "Load default font."
     (defvar default-font "PragmataPro")
     (set-face-attribute 'default nil :height 210)
-    (setq-default line-spacing 8)
+    (setq-default line-spacing 9)
     (set-frame-font default-font))
   
   (defun peel/load-ui ()
@@ -696,24 +718,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
       (menu-bar-mode -1))
     
     (remove-hook 'focus-in-hook #'peel/load-ui))
-  
-  (defun dark-theme ()
-    "Load dark theme."
-    (interactive)
-    (mapcar #'disable-theme custom-enabled-themes)
-    (load-theme dark-theme t))
-
-  (defun semi-dark-theme ()
-    "Load semi-dark theme."
-    (interactive)
-    (mapcar #'disable-theme custom-enabled-themes)
-    (load-theme semi-dark-theme t))
-
-  (defun light-theme ()
-    "Load light theme."
-    (interactive)
-    (mapcar #'disable-theme custom-enabled-themes)
-    (load-theme light-theme t))
   
   :config
   (use-package nord-theme
