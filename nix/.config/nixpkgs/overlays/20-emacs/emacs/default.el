@@ -556,12 +556,12 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :mode ("\\.epub\\'" . nov-mode))
 
 (use-package pdf-tools
-  :magic ("%PDF" . pdf-view-mode)
   :hook (pdf-view-mode . pdf-view-midnight-minor-mode)
-  :config
+  :init
+  (require 'pdf-occur)
   (pdf-tools-install)
   (setq pdf-view-midnight-colors
-          `(,(face-foreground 'default) . ,(face-background 'default))))
+        `(,(face-foreground 'default) . ,(face-background 'default))))
 
 (use-package org-ref
   :init
