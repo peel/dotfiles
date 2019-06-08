@@ -215,7 +215,7 @@ in {
   services.skhd.skhdConfig = let
     modMask = "cmd";
     moveMask = "ctrl + cmd";
-    myTerminal = "emacsclient -a '' -nc --eval '(eshell)'";
+    myTerminal = "emacsclient -a '' -nc --eval '(peel/vterm)'";
     myEditor = "emacsclient -a '' -nc";
     noop = "/dev/null";
   in ''

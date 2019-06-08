@@ -593,7 +593,13 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :config
   (require 'vterm)
   (setq ansi-color-names-vector
-        [unspecified "#bf616a" "#a3be8c" "#ebcb8b" "#81a1c1" "#b48ead" "#8fbcbb" "#d8dee9"]))
+        [unspecified "#bf616a" "#a3be8c" "#ebcb8b" "#81a1c1" "#b48ead" "#8fbcbb" "#d8dee9"])
+  (defun peel/vterm ()
+    (interactive)
+    (setq vterm-buffer (get-buffer "vterm"))
+    (if vterm-buffer
+        (switch-to-buffer vterm-buffer)
+      (vterm))))
 
 ;; ...................................................................... eshell
 (use-package eshell
