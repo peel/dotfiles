@@ -22,10 +22,9 @@
   :init (require 'diminish))
 
 (use-package exec-path-from-shell
-  :if (eq system-type 'darwin)
-  :demand t
+  :ensure t
   :config
-  (defconst exec-path-from-shell-variables
+  (setq exec-path-from-shell-variables
     '("PATH"
       "SHELL"
       "NIX_PATH"
@@ -35,7 +34,6 @@
       "NIX_USER_PROFILE_DIR"
       "JAVA_HOME"
       ))
-  :init
   (exec-path-from-shell-initialize))
 
 ;; navigation ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
@@ -49,7 +47,6 @@
          ("C-x w r" . peel/rotate-windows))
   :config
   (windmove-default-keybindings 'meta)
-  :init
   (defun peel/rotate-windows (arg)
   "Rotate your windows; use the prefix argument to rotate the other direction"
   (interactive "P")
@@ -134,13 +131,15 @@
 
 ;; syntax checking ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package flycheck
+  :after nix-sandbox
   :hook (prog-mode . flycheck-mode)
   :diminish flycheck-mode " ✓"
-  :config
-  (setq flycheck-command-wrapper-function
-        (lambda (command) (apply 'nix-shell-command (nix-current-sandbox) command))
-      flycheck-executable-find
-        (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd))))
+  ;; :config
+  ;; (setq flycheck-command-wrapper-function
+  ;;       (lambda (command) (apply 'nix-shell-command (nix-current-sandbox) command))
+  ;;     flycheck-executable-find
+  ;;     (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd)))
+  )
 
 ;; git ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package magit
@@ -374,18 +373,29 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 
 ;; ..................................................................... Haskell
+
 (use-package haskell-mode
-  :diminish (haskell-mode . " ")
+  :mode ("\\.hs\\'")
+  :preface
+  (load "haskell-mode-autoloads" t t)
+  :mode (("\\.hs\\(c\\|-boot\\)?\\'" . haskell-mode)
+         ("\\.lhs\\'" . literate-haskell-mode)
+         ("\\.cabal\\'" . haskell-cabal-mode))
   :hook (haskell-mode . subword-mode)
-  :init
-  (use-package shm
+  :functions xref-push-marker-stack
+  :commands (haskell-session-maybe
+             haskell-mode-find-def
+             haskell-ident-at-point
+             haskell-mode-handle-generic-loc))
+(use-package haskell-interactive-mode)
+(use-package shm
     :hook (haskell-mode . structured-haskell-mode))
-  (use-package hindent
-    :hook (haskell-mode . hindent-mode))
-  (use-package attrap
+(use-package hindent
+    :hook (haskell-mode . hindent-mode)
+    :config (setq hindent-reformat-buffer-on-save t))
+(use-package attrap
     :bind ("C-x /" . attrap-attrap))
-  (use-package dante
-    :after (direnv nix-buffer)
+(use-package dante
     :commands dante-mode
     :hook ((haskell-mode . dante-mode)
            (haskell-mode . flycheck-mode))
@@ -394,7 +404,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         (lambda (args) (apply 'nix-shell-command (nix-current-sandbox) args)))
     (add-hook 'dante-mode-hook
               '(lambda () (flycheck-add-next-checker 'haskell-dante
-                                                '(warning . haskell-hlint))))))
+                                                '(warning . haskell-hlint)))))
 
 ;; ......................................................................... nix
 (use-package nix-mode
@@ -420,7 +430,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; ...................................................................... elixir
 (use-package elixir-mode
-  :init
+  :config
   (use-package alchemist))
 
 ;; ........................................................................ yaml
@@ -466,7 +476,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
        'minibuffer-complete-word
        'self-insert-command
        minibuffer-local-completion-map)
-      :init
       (defun peel/sbt-start ()
         "Execute sbt from nix-sandbox"
         (interactive)
@@ -548,23 +557,23 @@ _k_: kill        _s_: split                   _{_: wrap with { }
      (emacs-lisp . t)
      (clojure    . t)
      (haskell    . t)
-     (dot . t)))
-  :init
-  (use-package ob-async))
+     (dot . t))))
+
+(use-package ob-async)
 
 (use-package nov
   :mode ("\\.epub\\'" . nov-mode))
 
 (use-package pdf-tools
   :hook (pdf-view-mode . pdf-view-midnight-minor-mode)
-  :init
+  :config
   (require 'pdf-occur)
   (pdf-tools-install)
   (setq pdf-view-midnight-colors
         `(,(face-foreground 'default) . ,(face-background 'default))))
 
 (use-package org-ref
-  :init
+  :config
   ;; (setq reftex-default-bibliography (list papers-refs))
   (setq org-ref-completion-library 'org-ref-ivy-cite
         org-ref-bibliography-notes papers-notes
@@ -572,11 +581,15 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         org-ref-pdf-directory papers-pdfs))
 
 (use-package org-noter
-  :after org-mode
-  :hook ((pdf-view-mode . org-noter-mode)
-         (nov-mode . org-noter-mode))
+  :commands org-noter
   :config
-  (setq org-noter-notes-search-path (list papers-dir)))
+  (setq org-noter-default-notes-file-names '("index-org")
+	  org-noter-notes-search-path (list papers-dir)
+	  org-noter-auto-save-last-location t
+	  org-noter-doc-split-fraction '(0.8 . 0.8)
+	  org-noter-always-create-frame nil
+	  org-noter-insert-note-no-questions t
+	  org-noter-notes-window-location 'vertical-split))
 
 (use-package ivy-bibtex
   :after ivy
@@ -600,64 +613,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     (if vterm-buffer
         (switch-to-buffer vterm-buffer)
       (vterm))))
-
-;; ...................................................................... eshell
-(use-package eshell
-  :ensure nil
-  :after hydra magit
-  :bind ("C-c e" . eshell-hydra/body)
-  :config
-  (setq eshell-banner-message "")
-  (setq eshell-prompt-regexp "^[^λ]+ λ "
-        eshell-prompt-function (lambda nil
-                                 (format "%s:%s λ "
-                                         (eshell/basename (eshell/pwd))
-                                         (magit-get-current-branch))))
-  
-  (use-package xterm-color
-    :hook (eshell-before-prompt-hook . (setq xterm-color-preserve-properties))
-    :config
-    (add-to-list 'eshell-preoutput-filter-functions 'xterm-color-filter)
-    (setq eshell-output-filter-functions (remove 'eshell-handle-ansi-color eshell-output-filter-functions)))
-  
-  :init
-  (require 'hydra)
-  (setq vterm-keymap-exceptions '("C-x" "C-u" "C-g" "C-h" "M-x" "M-o" "C-v" "M-v" "s-v" "s-c"))  (defalias 'emacs 'find-file)
-  (defalias 'gs 'magit-status)
-  (defun eshell-new()
-    "Open a new instance of eshell."
-    (interactive)
-    (eshell 'N))
-  (defun shell-pop (buffer-name command)
-    "Open an instance of COMMAND or switch to its BUFFER-NAME"
-    (interactive)
-    (if (get-buffer buffer-name)
-        (switch-to-buffer buffer-name)
-      (command)))
-  :config
-  (defhydra eshell-hydra (:color blue :columns 3)
-    "Shells"
-    ("a" (shell-pop "ansi-term" 'ansi-term) "Open ansi-term")
-    ("A" ansi-term "Ansi-term new window")
-    ("e" eshell "Open eshell")
-    ("E" eshell-new "Eshell new window")
-    ("v" (shell-pop "vterm" 'vterm) "Open vterm"))
-  
-  (defun peel/truncate-eshell-buffers ()
-    "Truncates all eshell buffers"
-    (interactive)
-    (save-current-buffer
-      (dolist (buffer (buffer-list t))
-        (set-buffer buffer)
-        (when (eq major-mode 'eshell-mode)
-          (eshell-truncate-buffer)))))
-
-  ;; After being idle for 5 seconds, truncate all the eshell-buffers if
-  ;; needed. If this needs to be canceled, you can run `(cancel-timer
-  ;; my/eshell-truncate-timer)'
-  (setq eshell-buffer-maximum-lines 20000
-        peel/eshell-truncate-timer
-        (run-with-idle-timer 5 t #'peel/truncate-eshell-buffers)))
 
 ;; .................................................................. autorevert
 (use-package autorevert
@@ -730,7 +685,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     :preface
     (add-to-list 'custom-theme-load-path
                  (file-name-directory (locate-library "nord-theme")))
-    :init
+    :config
     ;; term colors
     (setq ansi-color-names-vector
           [unspecified "#bf616a" "#a3be8c" "#ebcb8b" "#81a1c1" "#b48ead" "#8fbcbb" "#d8dee9"]))
@@ -748,10 +703,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; .................................................................... unclutter
 (use-package emacs
   :defer 0
-  :bind (("C-z" . kill-whole-line)
-         ("M-<tab>" . hs-toggle-hiding)))
-
-(setq inhibit-startup-screen t
+  :init
+  (setq inhibit-startup-screen t
       initial-scratch-message nil
       make-backup-files nil
       frame-resize-pixelwise t
@@ -761,13 +714,17 @@ _k_: kill        _s_: split                   _{_: wrap with { }
       echo-keystrokes 0.1
       apropos-do-all t
       visible-bell nil)
+  :bind (("C-z" . kill-whole-line)
+         ("M-<tab>" . hs-toggle-hiding)))
 
 (setq backup-by-copying t
-      backup-directory-alist '(("." . "~/.saves/"))
+      backup-directory-alist '((".*" . "~/.emacs.d/saves/"))
       delete-old-versions t
       kept-new-versions 6
       kept-old-versions 2
       version-control t)
+
+(setq create-lockfiles nil)
 
 ;; ............................................................. fix awkwardness
 (fset 'yes-or-no-p 'y-or-n-p)

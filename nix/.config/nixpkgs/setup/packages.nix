@@ -11,6 +11,7 @@
     gnupg
     ripgrep
     scripts
+    haskellEnv
   ]
   ++ lib.optionals stdenv.isLinux [
     acpi
