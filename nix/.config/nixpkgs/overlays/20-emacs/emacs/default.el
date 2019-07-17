@@ -335,15 +335,12 @@ _k_: kill        _s_: split                   _{_: wrap with { }
          (prog-mode . direnv-mode))
   :preface (load (locate-file "pragmata-pro.el" load-path) 'noerror))
 
-(use-package dash-at-point
-  :commands dash-at-point
-  :bind ("C-c h" . dash-at-point))
-
 (use-package lsp-mode
   :bind ("C-c l" . lsp-hydra/body)
-  :init
-  (setq lsp-prefer-flymake nil)
-  (require 'hydra)
+  :hook (scala-mode . lsp)
+  :after hydra
+  :config
+  (setq lsp-eldoc-render-all t)
   (defhydra lsp-hydra (:exit t :hint nil)
   "
  Buffer^^               Server^^                   Symbol
@@ -368,7 +365,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   ("M-r" lsp-restart-workspace)
   ("S" lsp-shutdown-workspace)))
 
-(use-package lsp-ui)
 (use-package company-lsp)
 
 
@@ -440,53 +436,25 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; ....................................................................... scala
 (use-package scala-mode
   :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
-  :diminish (scala-mode . " ")
   :hook (scala-mode . subword-mode)
   :interpreter ("scala" . scala-mode)
-  :bind ("C-c C-v f" . scalafmt/format-file)
   :config
   (setq scala-indent:align-forms t
         scala-indent:align-parameters t
-        scala-indent:default-run-on-strategy scala-indent:operator-strategy)
-  :preface
-  (defun scalafmt/format-region (beg end)
-    "Run scalafmt on selected region"
-    (interactive "r")
-    (call-process-region beg end
-                         "scalafmt"
-                         t t nil
-                         "--non-interactive"
-                         "--config" (expand-file-name "~/.scalafmt.conf")
-                         "--stdin"
-                         "--assume-filename" (file-name-nondirectory buffer-file-name)))
-  (defun scalafmt/format-file ()
-    "Run scalafmt on the current file"
+        scala-indent:default-run-on-strategy scala-indent:operator-strategy))
+
+(use-package sbt-mode
+  :commands sbt-start sbt-command
+  :config
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map)
+  (defun peel/sbt-start ()
+    "Execute sbt from nix-sandbox"
     (interactive)
-    (let ((default-directory (projectile-project-root))
-          (scalafmt-cmd (format "/usr/bin/env scalafmt -i --config ~/.scalafmt.conf -f %s"
-                                (shell-quote-argument (buffer-file-name)))))
-      (message "Running %s..." scalafmt-cmd)
-      (shell-command scalafmt-cmd)
-      (revert-buffer t t t))))
-
-  (use-package sbt-mode
-      :commands sbt-start sbt-command
-      :config
-      (substitute-key-definition
-       'minibuffer-complete-word
-       'self-insert-command
-       minibuffer-local-completion-map)
-      (defun peel/sbt-start ()
-        "Execute sbt from nix-sandbox"
-        (interactive)
-        (setq sbt:program-name (nix-executable-find (nix-current-sandbox) "sbt"))
-        (sbt-start)))
-
-(use-package lsp-scala
-  :after scala-mode
-  :demand t
-  ;; Optional - enable lsp-scala automatically in scala files
-  :hook (scala-mode . lsp))
+    (setq sbt:program-name (nix-executable-find (nix-current-sandbox) "sbt"))
+    (sbt-start)))
 
 ;; .......................................................................... js
 (use-package rjsx-mode

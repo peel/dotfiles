@@ -22,10 +22,19 @@ let
      sha256 = "0l9ixbj516vl41v78fi302ws655xawl7s94gmx1kb3fmfgamqisy";
    };
   });
-  overrides = self: super: rec {  };
+  overrides = self: super: rec {
+    lsp-mode = super.lsp-mode.overrideAttrs(old: { # unstable has a buggy version
+      src = pkgs.fetchFromGitHub {
+        owner = "emacs-lsp";
+        repo = "lsp-mode";
+        rev = "8897f888b711907fa7acb3f897d315d4d9e6761d";
+        sha256 = "0bfggqc0kh5sk0f5z2ji2ibmkacw7ndyn8x7gpx7zkrl6iar4zpk";
+      };
+    });
+  };
   myEmacs = pkgs.emacs;
   myEmacsConfig = ./default.el;
-  emacsWithPackages = (pkgs.emacsPackagesNgGen myEmacs).emacsWithPackages;
+  emacsWithPackages = ((pkgs.emacsPackagesNgGen myEmacs).overrideScope' overrides).emacsWithPackages;
 in
   emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
     (pkgs.runCommand "default.el" {} ''
@@ -40,13 +49,11 @@ in
     #anzu?
     #clean-aindent-mode
     company
-    dash-at-point
     diff-hl
     diminish
     dumb-jump
     expand-region
     xterm-color
-    #eyebrowse?
     flx
     flycheck
     #hightlight
@@ -56,7 +63,6 @@ in
     hydra
     counsel
     smex
-    #counsel-dash !
     counsel-projectile
     
     # git
@@ -80,9 +86,8 @@ in
     apropospriate-theme
 
     # languages
-    lsp-mode
-    lsp-ui
-    company-lsp
+    # lsp-mode
+    # company-lsp
 
     ## dhall
     dhall-mode
@@ -115,7 +120,6 @@ in
     ## scala
     scala-mode
     sbt-mode
-    lsp-scala
     
     ## markups
     dockerfile-mode
@@ -143,4 +147,7 @@ in
   ]) ++ (with epkgs; [
     emacs-libvterm
     structured-haskell-mode
+    lsp-mode
+    company-lsp
+    lsp-ui
   ]))

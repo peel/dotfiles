@@ -1,7 +1,7 @@
 {
   "url": "https://github.com/LnL7/nix-darwin.git",
-  "rev": "8d557721a9511d8e6b26c140363ab44d2c98f76b",
-  "date": "2019-05-28T19:43:22+02:00",
-  "sha256": "0gv4b3yfi4k01gyy6djjmln44q7hg3iqm4lalm9b7kgzmgnpx4fp",
+  "rev": "2fce9974b6ad197682189d4978d77d122cb0ca3f",
+  "date": "2019-07-02T19:11:24+02:00",
+  "sha256": "1bjb0y5j2zy887mq66j50fspi4npvr6his5bbb1c3dfiaqwkfjpb",
   "fetchSubmodules": false
 }
