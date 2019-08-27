@@ -78,8 +78,11 @@ in
     dired-sidebar
     exec-path-from-shell
     which-key
-    #yasnippet
-
+    writeroom-mode
+    yasnippet
+    yasnippet-snippets
+    dash-at-point
+    
     # themes
     gotham-theme
     nord-theme

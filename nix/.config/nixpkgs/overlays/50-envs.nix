@@ -6,16 +6,6 @@ self: super: {
       };
    }).ghcWithHoogle(
     haskellPackages: with haskellPackages; [
-      # libraries
-      aeson
-      attoparsec
-      conduit
-      hashable
-      mtl
-      microlens
-      parsec
-      
-      # tools
       cabal-install
       cabal2nix
       ghcid

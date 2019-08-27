@@ -5,13 +5,12 @@
     coreutils
     direnv
     emacs
-    fzf
     git
-    global
     gnupg
     ripgrep
     scripts
     haskellEnv
+    tmux
   ]
   ++ lib.optionals stdenv.isLinux [
     acpi

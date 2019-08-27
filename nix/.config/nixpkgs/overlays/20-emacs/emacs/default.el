@@ -79,6 +79,10 @@
 	    company-selection-wrap-around t)
   (global-company-mode))
 
+(use-package dash-at-point
+  :commands (dash-at-point dash-at-point-with-docset)
+  :bind (("C-c h" . dash-at-point)
+         ("C-c H" . dash-at-point-with-docset)))
 
 ;; ivy ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package ivy
@@ -365,6 +369,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   ("M-r" lsp-restart-workspace)
   ("S" lsp-shutdown-workspace)))
 
+(use-package lsp-ui)
 (use-package company-lsp)
 
 
@@ -518,6 +523,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (setq endless/blog-base-url "https://codearsonist.com/")
   (setq endless/blog-dir (expand-file-name "~/wrk/blog/"))
   ;; disabled for now: (require 'ox-jekyll-subtree)
+  (setq org-agenda-files '("~/Dropbox/Documents/notes/"))
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((shell      . t)
@@ -575,6 +581,10 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (require 'vterm)
   (setq ansi-color-names-vector
         [unspecified "#bf616a" "#a3be8c" "#ebcb8b" "#81a1c1" "#b48ead" "#8fbcbb" "#d8dee9"])
+  (add-to-list 'vterm-keymap-exceptions "C-b")
+  (add-hook 'vterm-mode-hook 'peel/no-spacing)
+  (defun peel/no-spacing ()
+    (setq line-spacing 0))
   (defun peel/vterm ()
     (interactive)
     (setq vterm-buffer (get-buffer "vterm"))
@@ -681,7 +691,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
       confirm-kill-emacs 'yes-or-no-p
       echo-keystrokes 0.1
       apropos-do-all t
-      visible-bell nil)
+      visible-bell nil
+      hl-line-mode t)
   :bind (("C-z" . kill-whole-line)
          ("M-<tab>" . hs-toggle-hiding)))
 
