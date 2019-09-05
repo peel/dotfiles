@@ -330,14 +330,13 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package prog-mode
   :ensure nil
-  :diminish pragmata-pro-mode
   :after (direnv-mode)
   :hook ((prog-mode . prettify-symbols-mode)
          (prog-mode . display-line-numbers-mode)
-         (prog-mode . pragmata-pro-mode)
+         (prog-mode . pragmatapro-lig-global-mode)
          (prog-mode . hs-minor-mode)
          (prog-mode . direnv-mode))
-  :preface (load (locate-file "pragmata-pro.el" load-path) 'noerror))
+  :preface (load (locate-file "pragmatapro-lig.el" load-path) 'noerror))
 
 (use-package lsp-mode
   :bind ("C-c l" . lsp-hydra/body)
@@ -405,7 +404,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         (lambda (args) (apply 'nix-shell-command (nix-current-sandbox) args)))
     (add-hook 'dante-mode-hook
               '(lambda () (flycheck-add-next-checker 'haskell-dante
-                                                '(warning . haskell-hlint)))))
+                                                     '(warning . haskell-hlint)))))
+(use-package lsp-haskell)
 
 ;; ......................................................................... nix
 (use-package nix-mode
@@ -446,7 +446,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :config
   (setq scala-indent:align-forms t
         scala-indent:align-parameters t
-        scala-indent:default-run-on-strategy scala-indent:operator-strategy))
+        scala-indent:default-run-on-strategy scala-indent:operator-strategy)
+  (setq projectile-globally-ignored-directories (append '(".metals" ".bloop"))))
 
 (use-package sbt-mode
   :commands sbt-start sbt-command
@@ -611,7 +612,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
 ;; ...................................................................... themes
-(use-package peel-frame
+(use-package emacs
   :if window-system
   :ensure nil
   :requires gotham-theme
@@ -625,7 +626,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (defvar dark-theme 'gotham)
   (defvar semi-dark-theme 'nord)
   (defvar light-theme 'apropospriate-light)
-  (defvar default-theme semi-dark-theme)
+  (defvar default-theme dark-theme)
   
   (defun peel/load-theme ()
     (load-theme default-theme t)
@@ -704,6 +705,14 @@ _k_: kill        _s_: split                   _{_: wrap with { }
       version-control t)
 
 (setq create-lockfiles nil)
+
+(use-package writeroom-mode
+  :config
+  (setq writeroom-fullscreen-effect "maximized"
+        writeroom-width 126
+        writeroom-bottom-divider-width 0
+        writeroom-major-modes '(prog-mode))
+  (global-writeroom-mode))
 
 ;; ............................................................. fix awkwardness
 (fset 'yes-or-no-p 'y-or-n-p)
