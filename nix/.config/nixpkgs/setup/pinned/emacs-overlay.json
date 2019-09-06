@@ -1,0 +1,7 @@
+{
+  "url": "https://github.com/nix-community/emacs-overlay.git",
+  "rev": "f5d1199323aea38b1b0dea650dcbe23f12ab5466",
+  "date": "2019-08-31T12:33:18+00:00",
+  "sha256": "1i50cw2kgfsdrlip6s7l6f8klxhskqhmk0dh7winbwdrcvcdzwfl",
+  "fetchSubmodules": false
+}

@@ -112,4 +112,4 @@
     RightArrow     ="0x7C";
     DownArrow      ="0x7D";
     UpArrow        ="0x7E";
-};
+}

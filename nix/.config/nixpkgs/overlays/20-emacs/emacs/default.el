@@ -23,7 +23,7 @@
 
 (use-package exec-path-from-shell
   :ensure t
-  :config
+  :init
   (setq exec-path-from-shell-variables
     '("PATH"
       "SHELL"
@@ -515,12 +515,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :ensure nil
   :defer nil
   :config
-  ;; jekyll 
-  (autoload 'endless/export-to-blog "jekyll-once")
-  (setq org-jekyll-use-src-plugin t)
-  (setq endless/blog-base-url "https://codearsonist.com/")
-  (setq endless/blog-dir (expand-file-name "~/wrk/blog/"))
-  ;; disabled for now: (require 'ox-jekyll-subtree)
   (setq org-agenda-files '("~/Dropbox/Documents/notes/"))
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -606,35 +600,57 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :config (delete-selection-mode t))
 
 
+;; communication ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+
+;; .......................................................................... im
+(use-package weechat
+  :commands (weechat-connect weechat-disconnect)
+  :config
+  (setq ;weechat-auto-monitor-buffers t
+        ;weechat-auto-monitor-new-buffers t
+        weechat-auto-close-buffers t
+        ;weechat-auto-recenter nil
+        weechat-auto-reconnect-retries 99999
+        weechat-notification-mode t
+        weechat-complete-order-nickname nil
+        weechat-buffer-kill-buffers-on-disconnect t
+        weechat-relay-ping-idle-seconds 10
+        weechat-initial-lines 256)
+  (require 'weechat-notifications)
+  (require 'weechat-image)
+  (require 'weechat-tracking)
+  (add-hook 'kill-emacs-hook (lambda () (when weechat--connected (weechat-disconnect)))))
+
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
 ;; ...................................................................... themes
 (use-package emacs
-  :if window-system
   :ensure nil
-  :requires gotham-theme
-  :requires apropospriate-theme
-  :requires nord-theme
-  :preface
-  (add-hook 'focus-in-hook #'peel/load-font)
-  (add-hook 'focus-in-hook #'peel/load-theme)
-  (add-hook 'focus-in-hook #'peel/load-ui)
-  
+  :config
   (defvar dark-theme 'gotham)
   (defvar semi-dark-theme 'nord)
   (defvar light-theme 'apropospriate-light)
   (defvar default-theme dark-theme)
+
+  (defun peel/load-glitter (frame)
+    (select-frame frame)
+    (peel/load-theme)
+    (peel/load-font)
+    (peel/load-ui))
+  
+  (if (daemonp)
+      (add-hook 'after-make-frame-functions #'peel/load-glitter)
+    (peel/load-glitter))
   
   (defun peel/load-theme ()
-    (load-theme default-theme t)
-    (remove-hook 'focus-in-hook #'peel/load-theme))
+    (load-theme default-theme t))
 
   (defun peel/load-font ()
     "Load default font."
-    (defvar default-font "PragmataPro")
+    (add-to-list 'initial-frame-alist '(font . "PragmataPro"))
+    (add-to-list 'default-frame-alist '(font . "PragmataPro"))
     (set-face-attribute 'default nil :height 210)
-    (setq-default line-spacing 9)
-    (set-frame-font default-font))
+    (setq-default line-spacing 9))
   
   (defun peel/load-ui ()
     "Remove UI bars."
@@ -652,12 +668,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         (add-to-list 'default-frame-alist '(ns-appearance dark))))
     
     (when (not (memq window-system '(mac ns)))
-      (menu-bar-mode -1))
-    
-    (remove-hook 'focus-in-hook #'peel/load-ui))
-  
-  :config
-  (use-package nord-theme
+      (menu-bar-mode -1))))
+
+(use-package nord-theme
     :preface
     (add-to-list 'custom-theme-load-path
                  (file-name-directory (locate-library "nord-theme")))
@@ -666,15 +679,16 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     (setq ansi-color-names-vector
           [unspecified "#bf616a" "#a3be8c" "#ebcb8b" "#81a1c1" "#b48ead" "#8fbcbb" "#d8dee9"]))
 
-  (use-package gotham-theme
+(use-package gotham-theme
     :preface
     (add-to-list 'custom-theme-load-path
                  (file-name-directory (locate-library "gotham-theme"))))
 
-  (use-package apropospriate-theme
+(use-package apropospriate-theme
     :preface
     (add-to-list 'custom-theme-load-path
-                 (file-name-directory (locate-library "apropospriate-theme")))))
+                 (file-name-directory (locate-library "apropospriate-theme"))))
+
 
 ;; .................................................................... unclutter
 (use-package emacs
