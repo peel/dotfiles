@@ -330,10 +330,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package prog-mode
   :ensure nil
+  :diminish pragmatapro-lig-mode
   :after (direnv-mode)
   :hook ((prog-mode . prettify-symbols-mode)
          (prog-mode . display-line-numbers-mode)
-         (prog-mode . pragmatapro-lig-global-mode)
+         (prog-mode . pragmatapro-lig-mode)
          (prog-mode . hs-minor-mode)
          (prog-mode . direnv-mode))
   :preface (load (locate-file "pragmatapro-lig.el" load-path) 'noerror))
@@ -463,14 +464,14 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     (sbt-start)))
 
 ;; .......................................................................... js
-(use-package rjsx-mode
-  :mode ("\\.js?")
-  :hook (rjsx-mode . subword-mode)
+(use-package js2-mode
+  :ensure t
   :config
-  (setq js-basic-offset 2
-        js-switch-indent-offset 2
-        js-indent-level 2
-        js-indent-switch-body t))
+  (add-hook 'js-mode-hook 'js2-minor-mode))
+
+(use-package prettier-js
+  :hook ((web-mode . prettier-js-mode)
+         (js-mode . prettier-js-mode)))
 
 (use-package web-mode
   :mode ("\\.html?\\'" "\\.css\\'" "\\.scss\\'")
@@ -482,10 +483,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         js-switch-indent-offset 2
         js-indent-level 2
         js-indent-switch-body t))
-
-(use-package prettier-js
-  :hook ((web-mode . prettier-js-mode)
-         (rjsx-mode . prettier-js-mode)))
 
 
 ;; .................................................................. restclient
