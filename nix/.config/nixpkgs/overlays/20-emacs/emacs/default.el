@@ -337,7 +337,13 @@ _k_: kill        _s_: split                   _{_: wrap with { }
          (prog-mode . pragmatapro-lig-mode)
          (prog-mode . hs-minor-mode)
          (prog-mode . direnv-mode))
-  :preface (load (locate-file "pragmatapro-lig.el" load-path) 'noerror))
+  :config
+  (load (locate-file "pragmatapro-lig.el" load-path) 'noerror)
+  ;; disable showing compilation *buffer*
+  (add-to-list
+   'display-buffer-alist
+   '("\\*compilation\\*"
+     (display-buffer-no-window))))
 
 (use-package lsp-mode
   :bind ("C-c l" . lsp-hydra/body)
@@ -689,6 +695,14 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     (add-to-list 'custom-theme-load-path
                  (file-name-directory (locate-library "apropospriate-theme"))))
 
+(use-package writeroom-mode
+  :config
+  (setq writeroom-fullscreen-effect "maximized"
+        writeroom-width 126
+        writeroom-bottom-divider-width 0
+        writeroom-major-modes '(prog-mode))
+  (global-writeroom-mode))
+
 
 ;; .................................................................... unclutter
 (use-package emacs
@@ -716,14 +730,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
       version-control t)
 
 (setq create-lockfiles nil)
-
-(use-package writeroom-mode
-  :config
-  (setq writeroom-fullscreen-effect "maximized"
-        writeroom-width 126
-        writeroom-bottom-divider-width 0
-        writeroom-major-modes '(prog-mode))
-  (global-writeroom-mode))
 
 ;; ............................................................. fix awkwardness
 (fset 'yes-or-no-p 'y-or-n-p)
