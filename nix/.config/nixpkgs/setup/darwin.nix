@@ -1,7 +1,6 @@
 { config, pkgs, colors, ... }:
 
 let
-  tmuxConfig = import ./tmux.nix {inherit colors; inherit (pkgs) tmux-prompt; };
   keycodes = import ./keycodes.nix;
 in {
   nix.extraOptions = ''
@@ -56,6 +55,7 @@ in {
 
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
+
   services.yabai.enable = true;
   services.yabai.package = pkgs.yabai;
   services.yabai.config = ''

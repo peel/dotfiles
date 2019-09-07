@@ -5,5 +5,4 @@
     fontconfig.enable = true;
     fontconfig.dpi = 180;
   };
-
 }

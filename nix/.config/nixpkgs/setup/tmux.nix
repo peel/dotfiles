@@ -1,5 +1,3 @@
-{ colors }:
-with colors;
 ''
 set-option -g status-position top
 

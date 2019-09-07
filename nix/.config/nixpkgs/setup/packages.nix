@@ -10,7 +10,6 @@
     ripgrep
     scripts
     haskellEnv
-    tmux
   ]
   ++ lib.optionals stdenv.isLinux [
     acpi

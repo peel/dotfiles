@@ -96,6 +96,16 @@
       insteadOf = "gist:"
   '';
 
+  programs.tmux = let
+    tmuxConfig = import ./tmux.nix;
+  in {
+    enable = true;
+  } // (if pkgs.stdenvNoCC.isLinux then {
+    extraTmuxConfig = tmuxConfig;
+  } else {
+    tmuxConfig = tmuxConfig;
+  });
+  
   environment.shells = [ pkgs.bashInteractive ];
   environment.variables.SHELL = "/run/current-system/sw/bin/bash";
   programs.bash = {
