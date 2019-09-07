@@ -115,12 +115,12 @@ in {
 
     # spaces ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
     # switch 
-    ${modMask} + alt - ${keycodes.A}          : ${prevOrLast "space"}
-    ${modMask} + alt - ${keycodes.S}          : ${nextOrFirst "space"}
+    ${modMask} + alt - j                      : ${prevOrLast "space"}
+    ${modMask} + alt - k                      : ${nextOrFirst "space"}
 
     # send window 
-    ${modMask} + ${moveMask} - ${keycodes.A}  : ${prefix} window --space prev
-    ${modMask} + ${moveMask} - ${keycodes.S}  : ${prefix} window --space next
+    ${modMask} + ${moveMask} - j              : ${prefix} window --space prev
+    ${modMask} + ${moveMask} - k              : ${prefix} window --space next
 
     # display  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
     # focus 
