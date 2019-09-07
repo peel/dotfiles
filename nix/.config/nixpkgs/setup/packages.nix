@@ -6,6 +6,7 @@
     direnv
     emacs
     git
+    gitAndTools.git-crypt
     gnupg
     ripgrep
     scripts

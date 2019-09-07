@@ -148,7 +148,7 @@ in {
         ];
       };
     };
-    apiKeyFile = <dotfiles/setup/secret/datadog.key>;
+    apiKeyFile = <dotfiles/setup/secret/datadog.private.key>;
   };
 
   # general routes  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁

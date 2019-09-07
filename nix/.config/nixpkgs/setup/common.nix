@@ -27,7 +27,7 @@
     home = "$HOME/.config/weechat";
     withSlack = false;
     withMatrix = false;
-    extraConfig = import ./secret/weechat.nix + ''
+    extraConfig = import ./secret/weechat.private.nix + ''
 	     /connect -all
 	     /relay add weechat 9001
 	     /set relay.network.password \''${sec.data.relaypass}
