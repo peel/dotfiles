@@ -59,16 +59,12 @@
     zeal
   ]
   ++ lib.optionals stdenv.isDarwin [
-    chunkwm.border
-    chunkwm.core
-    chunkwm.ffm
-    chunkwm.tiling
     skhd
     Alfred
     Dash
     Docker
     pinentry_mac
     metals
-    #yabai
+    yabai
   ]);
 }

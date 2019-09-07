@@ -36,10 +36,12 @@ in rec {
   networking.hostName = hostName;
 
   imports = let modules = (import <nurpkgs-peel/darwin-modules>); in [
+    modules.bloop
+    modules.yabai
+    modules.weechat
     <dotfiles/setup/common.nix>
     <dotfiles/setup/darwin.nix>
     <dotfiles/setup/packages.nix>
-    modules.bloop
   ];
 
 }

@@ -57,46 +57,31 @@ in {
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
   services.bloop.enable = true;
-  launchd.user.agents.chwm-sa = {
-    command = "${pkgs.chunkwm.core}/bin/chunkwm --load-sa";
-    serviceConfig.KeepAlive = false;
-    serviceConfig.ProcessType = "Background";
-    serviceConfig.RunAtLoad = true;
-  };
-  services.chunkwm.enable = true;
-  services.chunkwm.plugins.list = [ "ffm" "tiling" ];
-  services.chunkwm.package = pkgs.chunkwm.core;
-  services.chunkwm.plugins.dir = "/run/current-system/sw/bin/chunkwm-plugins/";
-  services.chunkwm.plugins."tiling".config = ''
-    chunkc set desktop_padding_step_size     0
-    chunkc set desktop_gap_step_size         0
-    chunkc set global_desktop_offset_top     0
-    chunkc set global_desktop_offset_bottom  0
-    chunkc set global_desktop_offset_left    0
-    chunkc set global_desktop_offset_right   0
-    chunkc set global_desktop_offset_gap     0
-    chunkc set bsp_spawn_left                1
-    chunkc set bsp_optimal_ratio             1.618
-    chunkc set bsp_split_mode                optimal
-    chunkc set bsp_split_ratio               0.66
-    chunkc set window_focus_cycle            all
-    chunkc set mouse_follows_focus           1
-    chunkc set window_region_locked          1
+  services.yabai.enable = true;
+  services.yabai.package = pkgs.yabai;
+  services.yabai.config = ''
+        yabai -m config mouse_follows_focus          off
+        yabai -m config focus_follows_mouse          off
+        yabai -m config window_placement             second_child
+        yabai -m config window_topmost               off
+        yabai -m config window_opacity               off
+        yabai -m config window_opacity_duration      0.0
+        yabai -m config window_shadow                on
+        yabai -m config window_border                off
+        yabai -m config active_window_opacity        1.0
+        yabai -m config normal_window_opacity        0.70
+        yabai -m config split_ratio                  0.62
+        yabai -m config auto_balance                 off
 
-    # chwm-sa additions
-    # https://github.com/koekeishiya/chwm-sa
-    # warn: triggered via an impure service org.nixos.chwm-sa
-    chunkc set window_float_topmost          1
-    chunkc set window_fade_inactive          1
-    chunkc set window_fade_alpha             0.7
-    chunkc set window_fade_duration          0.1
-    chunkc set window_use_cgs_move           1
-  '';
-  services.chunkwm.extraConfig = ''
-    chunkc tiling::rule --owner "emacs.*" --except "^$" --state tile
-    chunkc tiling::rule --owner "Emacs.*" --except "^$" --state tile
-    chunkc tiling::rule --owner Dash --state float
-  '';
+        yabai -m config layout                       bsp
+        yabai -m config top_padding                  0
+        yabai -m config bottom_padding               0
+        yabai -m config left_padding                 0
+        yabai -m config right_padding                0
+        yabai -m config window_gap                   0
+
+        yabai -m rule --add app="emacs" role="^AXTextField$" subrole="^AXStandardWindow$" manage="on"
+ '';
   services.skhd.enable = true;
   services.skhd.package =  pkgs.skhd;
   services.skhd.skhdConfig = let
@@ -105,56 +90,52 @@ in {
     myTerminal = "emacsclient -a '' -nc --eval '(peel/vterm)'";
     myEditor = "emacsclient -a '' -nc";
     noop = "/dev/null";
+    prefix = "yabai -m";
+    fstOrSnd = {fst, snd}: domain: "${prefix} ${domain} --focus ${fst} || ${prefix} ${domain} --focus ${snd}";
+    nextOrFirst = fstOrSnd { fst = "next"; snd = "first";};
+    prevOrLast = fstOrSnd { fst = "prev"; snd = "last";};
   in ''
     # windows ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
     # select
-    ${modMask} - j                        : chunkc tiling::window --focus prev 
-    ${modMask} - k                        : chunkc tiling::window --focus next
+    ${modMask} - j                            : ${prevOrLast "window"}
+    ${modMask} - k                            : ${nextOrFirst "window"}
 
     # close
-    ${modMask} - ${keycodes.Delete}       : chunkc tiling::window --close
+    ${modMask} - ${keycodes.Delete}           : ${prefix} window --close
 
     # fullscreen
-    ${modMask} - h                        : chunkc tiling::window --toggle fullscreen
-
-    # equalize 
-    ${modMask} - 0                        : chunkc tiling::desktop --equalize
-
-    # swap 
-    ${moveMask} - h                       : chunkc tiling::desktop --mirror horizontal
-    ${moveMask} - v                       : chunkc tiling::desktop --mirror vertical
+    ${modMask} - h                            : ${prefix} window --toggle zoom-fullscreen
 
     # rotate
-    ${modMask} - r                        : chunkc tiling::desktop --rotate 90
+    ${modMask} - r                            : ${prefix} space --rotate 180
 
     # increase region
-    ${modMask} - ${keycodes.LeftBracket}  : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west; chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east;
-    ${modMask} - ${keycodes.RightBracket} : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west; chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east;
+    ${modMask} - ${keycodes.LeftBracket}      : ${prefix} window --resize left:-20:0
+    ${modMask} - ${keycodes.RightBracket}     : ${prefix} window --resize right:-20:0
 
     # spaces ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
     # switch 
-    ${modMask} + alt - ${keycodes.A}          : chunkc tiling::desktop --focus prev
-    ${modMask} + alt - ${keycodes.S}          : chunkc tiling::desktop --focus next
+    ${modMask} + alt - ${keycodes.A}          : ${prevOrLast "space"}
+    ${modMask} + alt - ${keycodes.S}          : ${nextOrFirst "space"}
 
     # send window 
-    ${modMask} + ${moveMask} - ${keycodes.A}  : chunkc tiling::window --send-to-desktop prev
-    ${modMask} + ${moveMask} - ${keycodes.S}  : chunkc tiling::window --send-to-desktop next
+    ${modMask} + ${moveMask} - ${keycodes.A}  : ${prefix} window --space prev
+    ${modMask} + ${moveMask} - ${keycodes.S}  : ${prefix} window --space next
 
-    # monitor  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+    # display  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
     # focus 
-    ${modMask} - left                     : chunkc tiling::monitor -f prev
-    ${modMask} - right                    : chunkc tiling::monitor -f next
+    ${modMask} - left                         : ${prevOrLast "display"}
+    ${modMask} - right                        : ${nextOrFirst "display"}
 
     # send window
-    ${moveMask} - right                   : chunkc tiling::window --send-to-monitor 1; chunkc tiling::monitor -f 1
-    ${moveMask} - left                    : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2
+    ${moveMask} - right                       : ${prefix} window --display prev
+    ${moveMask} - left                        : ${prefix} window --display next
 
     # apps  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-    ${modMask} - return                  : ${myTerminal} 
-    ${modMask} + shift - return          : ${myEditor}
-    alt - ${keycodes.Equal}              : ${pkgs.scripts}/bin/qmk $HOME/wrk/qmk_firmware/layouts/community/ortho_4x12/peel/keymap.c
+    ${modMask} - return                       : ${myTerminal} 
+    ${modMask} + shift - return               : ${myEditor}
 
     # reset  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-    ${modMask} - q                       : pkill chunkwm; pkill skhd
+    ${modMask} - q                            : pkill yabai; pkill skhd
   '';
 }

@@ -20,6 +20,19 @@
     package = pkgs.emacs;
   };
 
+  services.weechat = {
+    enable = true;
+    home = "$HOME/.config/weechat";
+    withSlack = false;
+    withMatrix = false;
+    extraConfig = import ./secret/weechat.nix + ''
+	     /connect -all
+	     /relay add weechat 9001
+	     /set relay.network.password \''${sec.data.relaypass}
+	     /save
+    '';
+  };
+
   environment.variables.EDITOR = "emacsclient -tc";
   environment.variables.ALTERNATE_EDITOR = "emacs";
   

@@ -1,3 +1,12 @@
+nix/.config/weechat/
+nix/.config/nurpkgs/
+nix/.config/direnv/
+nix/.config/configstore/
+nix/.config/htop/
+result
+secrets
+secret
+
 prompt-history
 xmonad-x86_64-linux
 *.errors

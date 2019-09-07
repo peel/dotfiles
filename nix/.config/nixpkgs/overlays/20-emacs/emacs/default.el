@@ -662,8 +662,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     ;; and the workaround for the above thats's broken
     (when (memq window-system '(mac ns))
       (progn
-        ;; (setq frame-title-format nil)
-        ;; (setq ns-use-proxy-icon nil)
+        (setq frame-title-format nil)
+        (setq ns-use-proxy-icon nil)
         (add-to-list 'default-frame-alist '(ns-transparent-titlebar t))
         (add-to-list 'default-frame-alist '(ns-appearance dark))))
     
