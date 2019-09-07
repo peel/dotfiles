@@ -56,7 +56,6 @@ in {
 
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
-  services.bloop.enable = true;
   services.yabai.enable = true;
   services.yabai.package = pkgs.yabai;
   services.yabai.config = ''

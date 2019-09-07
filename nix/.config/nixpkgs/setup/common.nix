@@ -20,6 +20,8 @@
     package = pkgs.emacs;
   };
 
+  services.bloop.enable = true;
+  
   services.weechat = {
     enable = true;
     home = "$HOME/.config/weechat";
