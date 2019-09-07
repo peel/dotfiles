@@ -38,26 +38,6 @@
   environment.variables.EDITOR = "emacsclient -tc";
   environment.variables.ALTERNATE_EDITOR = "emacs";
   
-  environment.etc."gitignore".text = ''
-    ### Tags ###
-    # Ignore tags created by etags, ctags, gtags (GNU global) and cscope
-    TAGS
-    .TAGS
-    !TAGS/
-    tags
-    .tags
-    !tags/
-    gtags.files
-    GTAGS
-    GRTAGS
-    GPATH
-    GSYMS
-    cscope.files
-    cscope.out
-    cscope.in.out
-    cscope.po.out
-  '';
-  
   environment.etc."gitconfig".text = ''
     [include]
       path = ~/.gitconfig.secret
