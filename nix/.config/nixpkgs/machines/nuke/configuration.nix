@@ -19,7 +19,6 @@ in {
     nur.udiskie
   ];
 
-  nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = true;
   nix.nixPath = [
     "nixpkgs=${sources.nixpkgs}"
@@ -34,9 +33,6 @@ in {
                       pathExists (path + ("/" + n + "/default.nix")))
                   (attrNames (readDir path)))
     ++[ (import <nurpkgs-peel/overlay.nix>) ];
-  nix.useSandbox = true;
-  nix.binaryCaches = [ https://cache.nixos.org https://peel.cachix.org ];
-  nix.trustedUsers = [ "${username}" "root" ];
     
   # hardware ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   hardware.enableAllFirmware = true;

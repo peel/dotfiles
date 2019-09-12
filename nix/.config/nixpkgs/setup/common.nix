@@ -2,7 +2,15 @@
 
 {
   time.timeZone = "Europe/Warsaw";
-  
+
+  nix.useSandbox = true;
+  nix.sandboxPaths = [] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ "/System/Library/Frameworks" "/System/Library/PrivateFrameworks" "/usr/lib" "/private/tmp" "/private/var/tmp" "/usr/bin/env" ];
+  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfreeRedistributable = true;
+  nix.binaryCachePublicKeys = [ "peel.cachix.org-1:juIxrHgL76bYKcfIB/AdBUQuwkTwW5OLpPvWNuzhNrE="];
+  nix.trustedBinaryCaches = [ https://peel.cachix.org ];
+  nix.trustedUsers = [ "@admin" "root" ];
+
   fonts = {
     enableFontDir = true;
     fonts = with pkgs; [
@@ -10,6 +18,8 @@
     ];
   };
 
+  programs.nix-index.enable = true;
+  
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
