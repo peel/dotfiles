@@ -63,12 +63,12 @@ in {
     yabai -m config focus_follows_mouse          off
     yabai -m config window_placement             second_child
     yabai -m config window_topmost               off
-    yabai -m config window_opacity               off
+    yabai -m config window_opacity               on
     yabai -m config window_opacity_duration      0.0
     yabai -m config window_shadow                on
     yabai -m config window_border                off
     yabai -m config active_window_opacity        1.0
-    yabai -m config normal_window_opacity        0.70
+    yabai -m config normal_window_opacity        0.9
     yabai -m config split_ratio                  0.62
     yabai -m config auto_balance                 off
 
