@@ -89,15 +89,15 @@ in {
     myTerminal = "emacsclient -a '' -nc --eval '(peel/vterm)'";
     myEditor = "emacsclient -a '' -nc";
     noop = "/dev/null";
-    prefix = "yabai -m";
+    prefix = "${pkgs.yabai}/bin/yabai -m";
     fstOrSnd = {fst, snd}: domain: "${prefix} ${domain} --focus ${fst} || ${prefix} ${domain} --focus ${snd}";
     nextOrFirst = fstOrSnd { fst = "next"; snd = "first";};
     prevOrLast = fstOrSnd { fst = "prev"; snd = "last";};
   in ''
     # windows ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
     # select
-    ${modMask} - j                            : ${prevOrLast "window"}
-    ${modMask} - k                            : ${nextOrFirst "window"}
+    ${modMask} - j                            : ${prefix} window --focus next || ${prefix} window --focus "$((${prefix} query --spaces --display next || ${prefix} query --spaces --display first) |${pkgs.jq}/bin/jq -re '.[] | select(.visible == 1)."first-window"')" || ${prefix} display --focus next || ${prefix} display --focus first
+    ${modMask} - k                            : ${prefix} window --focus prev || ${prefix} window --focus "$((yabai -m query --spaces --display prev || ${prefix} query --spaces --display last) | ${pkgs.jq}/bin/jq -re '.[] | select(.visible == 1)."last-window"')" || ${prefix} display --focus prev || ${prefix} display --focus last
 
     # close
     ${modMask} - ${keycodes.Delete}           : ${prefix} window --close
@@ -111,7 +111,7 @@ in {
     # increase region
     ${modMask} - ${keycodes.LeftBracket}      : ${prefix} window --resize left:-20:0
     ${modMask} - ${keycodes.RightBracket}     : ${prefix} window --resize right:-20:0
-
+    
     # spaces ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
     # switch 
     ${modMask} + alt - j                      : ${prevOrLast "space"}
