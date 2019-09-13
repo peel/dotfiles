@@ -55,6 +55,20 @@ in {
 
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
+  programs.nix-index.enable = true;
+
+  services.weechat = {
+    enable = true;
+    home = "$HOME/.config/weechat";
+    withSlack = false;
+    withMatrix = false;
+    extraConfig = import ./secret/weechat.private.nix + ''
+	     /connect -all
+	     /relay add weechat 9001
+	     /set relay.network.password \''${sec.data.relaypass}
+	     /save
+    '';
+  };
 
   services.yabai.enable = true;
   services.yabai.package = pkgs.yabai;

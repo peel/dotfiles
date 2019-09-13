@@ -4,6 +4,7 @@ nix/.config/direnv/
 nix/.config/configstore/
 nix/.config/htop/
 result
+.vagrant
 
 prompt-history
 xmonad-x86_64-linux

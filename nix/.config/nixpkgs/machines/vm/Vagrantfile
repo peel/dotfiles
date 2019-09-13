@@ -1,12 +1,29 @@
 Vagrant.configure("2") do |config|
-  config.vm.box = "crappygraphix/nixos-19.03-x86_64"
+  config.vm.box = "crappygraphix/nixos-19.03-x86_64"  
   config.vm.box_version = "1.0.0"
-  config.vm.network 'private_network', ip: "192.169.1.1"
-  config.vm.network 'forwarded_port', guest: 8888, port: 8888
-  config.vm.synced_folder "./share", "/vagrant", folder_options
+  config.vm.network 'private_network', ip: "192.169.1.10"
+  config.vm.network 'forwarded_port', guest: 8888, host: 8888
+  config.vm.synced_folder "../../", "/dotfiles"
+  # TODO should be fetched within configuration.nix
+  config.vm.synced_folder "../../../nurpkgs", "/nurpkgs"
+  config.vm.synced_folder "./share", "/vagrant"
 
+  config.vm.provider "virtualbox" do |vb|
+    vb.cpus = 4
+    vb.memory = (1024*5).to_i
+  end
+
+  # needed for initial update of channel for emacs-overlay
+  # later pinned nixpkgs will be used
+  # TODO should be fetched within configuration.nix
+  config.vm.provision :shell, inline: <<-SHELL
+    nix-channel --add https://nixos.org/channels/nixos-unstable nixos
+    nix-channel --update nixos
+    SHELL
+  
   config.vm.provision :nixos,
     run: 'always',
     path: 'configuration.nix',
-   verbose: true
+    verbose: true
+  
 end

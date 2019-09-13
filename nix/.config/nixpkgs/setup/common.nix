@@ -13,13 +13,11 @@
 
   fonts = {
     enableFontDir = true;
-    fonts = with pkgs; [
-      pragmatapro
+    fonts = [] ++ pkgs.lib.optionals (pkgs ? pragmatapro) [
+      pkgs.pragmatapro
     ];
   };
 
-  programs.nix-index.enable = true;
-  
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
@@ -30,21 +28,8 @@
     package = pkgs.emacs;
   };
 
-  services.bloop.enable = true;
+  services.bloop.install = true;
   
-  services.weechat = {
-    enable = true;
-    home = "$HOME/.config/weechat";
-    withSlack = false;
-    withMatrix = false;
-    extraConfig = import ./secret/weechat.private.nix + ''
-	     /connect -all
-	     /relay add weechat 9001
-	     /set relay.network.password \''${sec.data.relaypass}
-	     /save
-    '';
-  };
-
   environment.variables.EDITOR = "emacsclient -tc";
   environment.variables.ALTERNATE_EDITOR = "emacs";
   
@@ -111,7 +96,7 @@
   in {
     enable = true;
   } // (if pkgs.stdenvNoCC.isLinux then {
-    extraTmuxConfig = tmuxConfig;
+    extraTmuxConf = tmuxConfig;
   } else {
     tmuxConfig = tmuxConfig;
   });

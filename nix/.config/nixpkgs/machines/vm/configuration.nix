@@ -1,39 +1,41 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, withGui ? false, ... }:
 
 with lib;
 
 let
-  sources = import <dotfiles/setup/pinned> { inherit (pkgs) fetchgit lib; };
+  sources = import /dotfiles/setup/pinned { inherit (pkgs) fetchgit lib; };
   username = "peel";
   hostName = "vm";
 in {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = true;
   nixpkgs.overlays = 
-    let path = <dotfiles/overlays> ; in with builtins;
+    let path = /dotfiles/overlays ; in with builtins;
       map (n: import (path + ("/" + n)))
           (filter (n: match ".*\\.nix" n != null ||
                       pathExists (path + ("/" + n + "/default.nix")))
-                  (attrNames (readDir path)))
-    ++[ (import <nurpkgs-peel/overlay.nix>) ];
+            (attrNames (readDir path)))
+      ++ [ (import /nurpkgs/overlay.nix) ];
   nix.useSandbox = true;
   nix.binaryCaches = [ https://cache.nixos.org https://peel.cachix.org ];
   nix.trustedUsers = [ "${username}" "root" ];
   nix.nixPath = [
     "nixpkgs=${sources.nixpkgs}"
-    "nixos-config=$HOME/.config/nixpkgs/machines${hostName}/configuration.nix"
-    "nurpkgs-peel=$HOME/.config/nurpkgs"
-    "dotfiles=$HOME/.config/nixpkgs"
+    # "nixos-config=/dotfiles/machines/${hostName}/configuration.nix"
+    "nurpkgs-peel=/nurpkgs"
+    "dotfiles=/dotfiles"
   ];
   
-  imports = let nur = (import <nurpkgs-peel/modules>); in [
-    <setup/common.nix>
-    <setup/nixos.nix>
+  imports = [
+    ./vagrant.nix
+    /dotfiles/setup/common.nix
+    /dotfiles/setup/nixos.nix
+    /dotfiles/setup/packages.nix
   ];
 
 
   # os ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-  system.stateVersion = "19.03";
+  system.stateVersion = "18.03";
   nix.gc = {
     automatic = true;
     options = "--delete-older-than 30d";
@@ -44,8 +46,6 @@ in {
     consoleKeyMap = "us";
     defaultLocale = "en_US.UTF-8";
   };
-
-  environment.systemPackages = with pkgs; [ emacs docker ];
 
   users.extraUsers = {
     "${username}"= {

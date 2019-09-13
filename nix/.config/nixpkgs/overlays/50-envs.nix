@@ -22,6 +22,7 @@ self: super: {
       bloop
       scalafmt
       sbt
+      ammonite
     ];
   };
 
