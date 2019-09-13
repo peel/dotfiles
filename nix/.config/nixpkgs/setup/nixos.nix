@@ -1,4 +1,4 @@
-{ config, pkgs, colors, ... }:
+{ config, pkgs, ... }:
 
 {
   fonts = {

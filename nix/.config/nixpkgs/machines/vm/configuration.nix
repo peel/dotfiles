@@ -1,4 +1,4 @@
-{ config, lib, pkgs, withGui ? false, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -6,6 +6,7 @@ let
   sources = import /dotfiles/setup/pinned { inherit (pkgs) fetchgit lib; };
   username = "peel";
   hostName = "vm";
+  headless = true;
 in {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = true;

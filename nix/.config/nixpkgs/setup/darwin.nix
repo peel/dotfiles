@@ -1,4 +1,4 @@
-{ config, pkgs, colors, ... }:
+{ config, pkgs, ... }:
 
 let
   keycodes = import ./keycodes.nix;

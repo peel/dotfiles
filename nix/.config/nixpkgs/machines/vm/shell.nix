@@ -1,8 +1,23 @@
 {pkgs ? import <nixpkgs> {} }:
 
-pkgs.mkShell {
+# emergency vm  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+# when everything else fails
+# vagrant 
+
+let
+  hande-hoch = ''
+    echo "UPDATING NIXBOX"
+    vagrant plugin install &&\
+    vagrant-nixos-plugin &&\
+    vagrant up &&\ 
+    vagrant package --vagrantfile Vagrantfile --output nixbox
+  '';
+  kaput = "vagrant destroy && vagrant box remove --all --force";
+in pkgs.mkShell {
   buildInputs = with pkgs; [ vagrant ];
   shellHook = ''
-    vagrant plugin install vagrant-nixos-plugin || true
+    alias hande-hoch=${hande-hoch}
+    alias kaput=${kaput}
   '';
+  
 }

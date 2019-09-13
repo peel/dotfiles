@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, headless, ... }:
 
 {
   environment.systemPackages = with pkgs; ([
@@ -8,19 +8,23 @@
     git
     gitAndTools.git-crypt
     gnupg
+    metals
     ripgrep
     scripts
     haskellEnv
   ]
   ++ lib.optionals stdenv.isLinux [
+    docker            
+    docker_compose
+    htop
+    pinentry
+  ]
+  ++ lib.optionals (stdenv.isLinux && headless == false) [
     acpi
     arandr
     autorandr
     blueman
     bluez
-    cabal2nix
-    docker
-    docker_compose
     dunst
     feh
     firefox
@@ -29,20 +33,17 @@
     haskellPackages.xmonad-contrib
     haskellPackages.xmonad-extras
     haskellPackages.yeganesh
-    htop
     iw
     keybase
     keybase-gui
     libnotify
     lightum
-    pinentry
     powertop
     rofi
     rofi-emoji
     rofi-pass
     rofi-wifi-menu
     scrot
-    spotify
     stalonetray
     unclutter-xfixes
     wirelesstools
@@ -64,7 +65,6 @@
     Dash
     Docker
     pinentry_mac
-    metals
     yabai
   ]);
 }
