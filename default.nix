@@ -1,4 +1,5 @@
 { pkgs ? import <nixpkgs> {}
+, machine ? "fff666"
 , repoUrl ? "https://github.com/peel/dotfiles.git"
 , nurpkgs ? "https://github.com/peel/nur-packages.git"
 , channel ? "nixpkgs-unstable"
@@ -19,9 +20,6 @@ let
     echo >&2
     echo >&2 "Installing..."
     echo >&2
-
-    nix-channel --add https://nixos.org/channels/${channel} nixpkgs
-    nix-channel --update nixpkgs
 
     ${pkgs.lib.optionalString pkgs.stdenvNoCC.isDarwin ''
     if ! command -v darwin-rebuild >/dev/null 2>&1; then
@@ -109,8 +107,6 @@ let
     ${pkgs.lib.optionalString pkgs.stdenvNoCC.isLinux ''
       nixos-rebuild switch
     ''}
-
-    ${link}
 
     echo >&2
     echo >&2 "Tagging updated..."
