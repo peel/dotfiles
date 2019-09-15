@@ -343,15 +343,14 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     :demand))
 
 (use-package prog-mode
+  :defer 3
   :ensure nil
   :diminish pragmatapro-lig-mode
-  :after (direnv-mode)
   :hook ((prog-mode . prettify-symbols-mode)
-         (prog-mode . display-line-numbers-mode)
          (prog-mode . pragmatapro-lig-mode)
          (prog-mode . hs-minor-mode)
          (prog-mode . direnv-mode))
-  :config
+  :init
   (load (locate-file "pragmatapro-lig.el" load-path) 'noerror)
   ;; disable showing compilation *buffer*
   (add-to-list
