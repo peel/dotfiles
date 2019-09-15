@@ -34,5 +34,11 @@
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
   programs.nix-index.enable = true;
- 
+
+
+  system.activationScripts.text = ''
+    ln -sfn /etc/static/gitconfig $HOME/.gitconfig
+    ln -sfn /etc/static/gitignore $HOME/.gitignore
+  '';
+
 }

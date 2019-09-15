@@ -12,7 +12,6 @@ in {
   imports = let nur = (import <nurpkgs-peel/modules>); in [
     ./hardware-configuration.nix
     <dotfiles/setup/nixos>
-    <dotfiles/setup/common/ha.nix>
     <dotfiles/setup/common/homebridge.nix>
   ] ++ [
     nur.udiskie
@@ -23,7 +22,7 @@ in {
   nixpkgs.config.allowBroken = true;
   nix.nixPath = [
     "nixpkgs=${sources.nixpkgs}"
-    "nixos-config=$HOME/.config/nixpkgs/machines${hostName}/configuration.nix"
+    "nixos-config=$HOME/.config/nixpkgs/machines/${hostName}/configuration.nix"
     "nurpkgs-peel=${sources.nurpkgs}"
     "dotfiles=$HOME/.config/nixpkgs"
   ];
@@ -58,7 +57,7 @@ in {
   hardware.bluetooth.enable = true;
 
   # os ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-  system.stateVersion = "18.09";
+  system.stateVersion = "18.03";
   nix.gc = {
     automatic = true;
     options = "--delete-older-than 30d";

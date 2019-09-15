@@ -2,7 +2,7 @@
 
 let
   image = "oznu/homebridge";
-  secret = import <setup/secret/homebridge>;
+  secret = import <dotfiles/setup/secret/homebridge>;
   config = pkgs.writeText "config.json" (builtins.toJSON {
     bridge = secret.bridge;
     accessories = [

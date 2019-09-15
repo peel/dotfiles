@@ -73,9 +73,4 @@ in {
   
   environment.etc."gitconfig".text = gitConfig;
 
-  system.activationScripts.extraUserActivation.text = ''
-    ln -sfn /etc/static/gitconfig $HOME/.gitconfig
-    ln -sfn /etc/static/gitignore $HOME/.gitignore
-  '';
-
 }
