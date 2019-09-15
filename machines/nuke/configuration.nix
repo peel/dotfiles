@@ -11,13 +11,15 @@ let
 in {
   imports = let nur = (import <nurpkgs-peel/modules>); in [
     ./hardware-configuration.nix
-    <setup/nixos>
-    <setup/ha.nix>
-    <setup/homebridge.nix>
+    <dotfiles/setup/nixos>
+    <dotfiles/setup/common/ha.nix>
+    <dotfiles/setup/common/homebridge.nix>
   ] ++ [
     nur.udiskie
   ];
 
+  peel.gui.enable = false;
+  
   nixpkgs.config.allowBroken = true;
   nix.nixPath = [
     "nixpkgs=${sources.nixpkgs}"

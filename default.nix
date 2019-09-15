@@ -3,7 +3,7 @@
 , repoUrl ? "https://github.com/peel/dotfiles.git"
 , nurpkgs ? "https://github.com/peel/nur-packages.git"
 , channel ? "nixpkgs-unstable"
-, targetDir ? "$HOME/wrk/dotfiles"
+, targetDir ? "$HOME/wrk"
 }:
 
 let
@@ -12,7 +12,7 @@ let
     echo >&2 "Building initial configuration..."
     echo >&2
     source /etc/static/bashrc
-    darwin-rebuild switch -j4 -I "darwin-config=$HOME/.config/nixpkgs/machines/darwin/configuration.nix" -I "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays" -I "nurpkgs-peel=$HOME/.config/nurpkgs" -I "setup=$HOME/.config/nixpkgs/setup"
+    darwin-rebuild switch -I "darwin-config=$HOME/.config/nixpkgs/machines/darwin/configuration.nix" -I "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays" -I "nurpkgs-peel=$HOME/.config/nurpkgs" -I "setup=$HOME/.config/nixpkgs/setup"
   '';
   install = pkgs.writeScript "install" ''
     set -e
@@ -22,27 +22,27 @@ let
     echo >&2
 
     ${pkgs.lib.optionalString pkgs.stdenvNoCC.isDarwin ''
-    if ! command -v darwin-rebuild >/dev/null 2>&1; then
+    if [ ! command -v darwin-rebuild >/dev/null 2>&1 ]; then
         mkdir -p ./nix-darwin && cd ./nix-darwin
         nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
-        yes | ./result/bin/darwin-installer -j4
+        yes | ./result/bin/darwin-installer
         cd .. && rm -rf ./nix-darwin
     fi
     ''}
 
-    if [ ! -d $HOME/.config/nurpkgs ]; then
-        echo "setting up nurpkgs repository" >&2
+    if [ ! -d ${targetDir}/nurpkgs ]; then
+        echo "Setting up nurpkgs repository" >&2
         mkdir -p ${targetDir}
-        git clone --depth=1 ${nurpkgs} $HOME/.config/nurpkgs
+        git clone ${nurpkgs} ${targetDir}/nurpkgs
     fi
 
-    if [ ! -d ${targetDir} ]; then
-        echo "setting up dotfiles repository" >&2
-        mkdir -p ${targetDir}
-        git clone --depth=1 ${repoUrl} ${targetDir}
+    if [ ! -d ${targetDir}/dotfiles ]; then
+        echo "Setting up dotfiles repository" >&2
+        mkdir -p ${targetDir}/dotfiles
+        git clone ${repoUrl} ${targetDir}/dotfiles
     fi
 
-    ${link}
+    ${link} "$@"
     ${pkgs.lib.optionalString pkgs.stdenvNoCC.isDarwin darwin}
   '';
   link = pkgs.writeScript "link" ''
@@ -52,15 +52,15 @@ let
     echo >&2 "Linking..."
     echo >&2
 
-    mkdir -p ~/.config
+    echo "$@"
 
-    for f in ${targetDir}/*; do
-      if [ -d $f  ]; then
-        echo "Relinking $f"
-        cd ${targetDir}
-        stow -t ~ -R $(basename $f)
-      fi
-    done
+    mkdir -p ~/.config
+    ln -fs ${targetDir}/nurpkgs ~/.config/nurpkgs
+    ln -fs ${targetDir}/dotfiles ~/.config/nixpkgs
+    ${pkgs.lib.optionalString pkgs.stdenvNoCC.isLinux ''
+    mv /etc/nixos /etc/nixos.bak || true
+    ln -fs ${targetDir}/dotfiles/machines/$1 /etc/nixos
+    ''}
   '';
   unlink = pkgs.writeScript "unlink" ''
     set -e
@@ -68,12 +68,9 @@ let
     echo >&2
     echo >&2 "Unlinking..."
     echo >&2
-
-    for f in ${targetDir}/*; do
-      echo "Unlinking $f"
-      cd ${targetDir}
-      stow -t ~ -D $(basename $f)
-    done
+    rm ~/.config/nixpkgs
+    rm /etc/nixos
+    mv /etc/nixos.bak /etc/nixos
   '';
   uninstall = pkgs.writeScript "uninstall" ''
     ${unlink}
@@ -82,13 +79,12 @@ let
     echo >&2 "Cleaning up..."
     echo >&2
 
-    if [ -d ${targetDir} ]; then
-        echo "removing dotfiles repository" >&2
-        rm -rf ${targetDir}
-    fi
+    rm -rf ~/.config/nurpkgs
   '';
   switch = pkgs.writeScript "switch" ''
     set -e
+
+    cd ${targetDir}/dotfiles
 
     echo >&2
     echo >&2 "Tagging working config..."
@@ -116,25 +112,11 @@ let
     git branch -D update
     git push
   '';
-  update = pkgs.writeScript "update" ''
-    set -e
-
-    echo >&2
-    echo >&2 "Updating channels..."
-    echo >&2
-
-    nix-channel --update
-    ${pkgs.lib.optionalString pkgs.stdenvNoCC.isDarwin ''
-      nix-channel --update darwin
-    ''}
-
-    ${switch}
-  '';
 in pkgs.stdenvNoCC.mkDerivation {
   name = "dotfiles";
   preferLocalBuild = true;
-  propagatedBuildInputs = [ pkgs.git pkgs.stow ];
-  propagatedUserEnvPkgs = [ pkgs.git pkgs.stow ];
+  propagatedBuildInputs = [ pkgs.git ];
+  propagatedUserEnvPkgs = [ pkgs.git ];
   
   unpackPhase = ":";
 
@@ -148,29 +130,31 @@ in pkgs.stdenvNoCC.mkDerivation {
     set -e
 
     while [ "$#" -gt 0 ]; do
-        i="$1"; shift 1
+        i="$1"; shift
         case "$i" in
-           help)
-                echo "dotfiles: [help] [install] [uninstall] [link] [unlink] [switch] [update]"
+            install)
+                ${install} "$@"
                 exit
                 ;;
             link)
-                ${link}
+                ${link} "$@"
+                exit
                 ;;
             switch)
                 ${switch}
+                exit
                 ;;
             unlink)
                 ${unlink}
+                exit
                 ;;
             uninstall)
                 ${uninstall}
+                exit
                 ;;
-            update)
-                ${update}
-                ;;
-            *)
-                ${install}
+           *)
+                echo "dotfiles: [help] [install machine-name] [uninstall] [link machine-name] [unlink] [switch]"
+                exit
                 ;;
         esac
     done
