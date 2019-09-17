@@ -39,11 +39,12 @@ script:
   - dotfiles install
   - dotfiles link
   - dotfiles uninstall
-  - emacs=$(nix-build -j4 ./nix/.config/nixpkgs/overlays/20-emacs/emacs/default.nix) && echo Produced $emacs
+  - emacs=$(nix-build ./overlays/20-emacs/emacs/default.nix) && echo Produced $emacs
 
 after_success:
   - git tag "${TRAVIS_BUILD_NUMBER}" -m "🚀️ ship it" && git push origin "${TRAVIS_BUILD_NUMBER}"
   - cd docs && emacs -Q index.org --batch --eval "(progn (load \"~/.emacs.d/htmlize.el\")(org-babel-tangle)(org-html-export-to-html))" --kill
+  - travis_retry if [ -n "${CACHIX_CACHE}" ]; then cachix push "${CACHIX_CACHE}" $emacs; fi
   
 deploy:
   provider: pages

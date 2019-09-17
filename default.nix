@@ -11,8 +11,7 @@ let
     echo >&2
     echo >&2 "Building initial configuration..."
     echo >&2
-    source /etc/static/bashrc
-    darwin-rebuild switch -I "darwin-config=$HOME/.config/nixpkgs/machines/darwin/configuration.nix" -I "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays" -I "nurpkgs-peel=$HOME/.config/nurpkgs" -I "setup=$HOME/.config/nixpkgs/setup"
+    /run/current-system/sw/bin/darwin-rebuild switch -I "darwin-config=$HOME/.config/nixpkgs/machines/darwin/configuration.nix" -I "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays" -I "nurpkgs-peel=$HOME/.config/nurpkgs" -I "setup=$HOME/.config/nixpkgs/setup"
   '';
   install = pkgs.writeScript "install" ''
     set -e
@@ -23,6 +22,7 @@ let
 
     ${pkgs.lib.optionalString pkgs.stdenvNoCC.isDarwin ''
     if [ ! command -v darwin-rebuild >/dev/null 2>&1 ]; then
+        echo >&2 "Installing nix-darwin..."
         mkdir -p ./nix-darwin && cd ./nix-darwin
         nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
         yes | ./result/bin/darwin-installer
@@ -58,8 +58,8 @@ let
     ln -fs ${targetDir}/nurpkgs ~/.config/nurpkgs
     ln -fs ${targetDir}/dotfiles ~/.config/nixpkgs
     ${pkgs.lib.optionalString pkgs.stdenvNoCC.isLinux ''
-    mv /etc/nixos /etc/nixos.bak || true
-    ln -fs ${targetDir}/dotfiles/machines/$1 /etc/nixos
+    if test -e /etc/nixos/; then sudo mv /etc/nixos /etc/nixos.bak; fi
+    sudo ln -fs ${targetDir}/dotfiles/machines/$1 /etc/nixos
     ''}
   '';
   unlink = pkgs.writeScript "unlink" ''
@@ -68,9 +68,9 @@ let
     echo >&2
     echo >&2 "Unlinking..."
     echo >&2
-    rm ~/.config/nixpkgs
-    rm /etc/nixos
-    mv /etc/nixos.bak /etc/nixos
+    if test -e ~/.config/nixpkgs; then rm -rf ~/.config/nixpkgs; fi
+    if test -e /etc/nixos; then sudo rm /etc/nixos; fi
+    if test -e /etc/nixos.bak; then sudo mv /etc/nixos.bak /etc/nixos; fi
   '';
   uninstall = pkgs.writeScript "uninstall" ''
     ${unlink}
@@ -79,7 +79,7 @@ let
     echo >&2 "Cleaning up..."
     echo >&2
 
-    rm -rf ~/.config/nurpkgs
+    if test -e ~/.config/nurpkgs; then rm -rf ~/.config/nurpkgs; fi
   '';
   switch = pkgs.writeScript "switch" ''
     set -e

@@ -22,3 +22,4 @@ See[[https://github.com/peel/dotfiles][ peel/dotfiles]] at Github [[https://trav
 #+ATTR_HTML: :alt codearsonist.com image :title codearsonist.com
 [[https://codearsonist.com/assets/img/bloglogo.png]]
 * License
+Distributed in hope to be helpful under [[https://creativecommons.org/publicdomain/zero/1.0/legalcode][=Creative Commonts CC0 1.0=]] license.
