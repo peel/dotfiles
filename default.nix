@@ -11,7 +11,14 @@ let
     echo >&2
     echo >&2 "Building initial configuration..."
     echo >&2
-    /run/current-system/sw/bin/darwin-rebuild switch -I "darwin-config=$HOME/.config/nixpkgs/machines/darwin/configuration.nix" -I "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays" -I "nurpkgs-peel=$HOME/.config/nurpkgs" -I "setup=$HOME/.config/nixpkgs/setup"
+    #FIXME #OMG
+    if test -n $TRAVIS_OS_NAME; then sudo launchctl kickstart system/org.nixos.nix-daemon; fi
+    if test -e /etc/static/bashrc; then . /etc/static/bashrc; fi
+    /run/current-system/sw/bin/darwin-rebuild switch \
+        -I "darwin-config=$HOME/.config/nixpkgs/machines/darwin/configuration.nix" \
+        -I "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays" \
+        -I "nurpkgs-peel=$HOME/.config/nurpkgs" \
+        -I "dotfiles=$HOME/.config/nixpkgs"
   '';
   install = pkgs.writeScript "install" ''
     set -e
@@ -21,7 +28,8 @@ let
     echo >&2
 
     ${pkgs.lib.optionalString pkgs.stdenvNoCC.isDarwin ''
-    if [ ! command -v darwin-rebuild >/dev/null 2>&1 ]; then
+    echo "Setting up/tm nix-darwin..."
+    if (! command -v darwin-rebuild); then
         echo >&2 "Installing nix-darwin..."
         mkdir -p ./nix-darwin && cd ./nix-darwin
         nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer

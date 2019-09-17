@@ -5,7 +5,7 @@ let
 in {
   cachix = (import (builtins.fetchTarball "https://cachix.org/api/v1/install") { }).cachix;
   ghcide = import sources.ghcide-nix {};
-  haskell-nix = import sources.haskell-nix { }; 
+  haskell-nix = import sources.haskell-nix { inherit pkgs; }; 
 }
 
 
