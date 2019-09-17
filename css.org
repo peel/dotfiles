@@ -1,3 +1,5 @@
+#+NAME: site-specific-css
+#+BEGIN_SRC css :tangle style.css
 img{
     width: 60px;
     height: 60px;
@@ -46,3 +48,4 @@ pre.src{
 #org-div-home-and-up{
     display:none;
 }
+#+END_SRC

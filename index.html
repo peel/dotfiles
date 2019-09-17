@@ -3,12 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-09-14 Sat 20:18 -->
+<!-- 2019-09-17 Tue 11:03 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>dotfiles.codearsonist.com</title>
 <meta name="generator" content="Org mode" />
-<meta name="author" content="Piotr Limanowski" />
+<meta name="author" content="Travis CI User" />
 <meta name="description" content="a personal page for Piotr Limanowski - a full-time señor '(#scala #elixir #haskell) code arsonist &amp; el modo evil brujito. Part-time #hoverboard'er lifting heavy shit 🏴 Time considered monotonic."
  />
 <meta name="keywords" content="code arsonist, codearsonist, limanowski, piotr limanowski, scala, elixir, erlang, haskell" />
@@ -240,23 +240,70 @@ for the JavaScript code in this tag.
  |
  <a accesskey="H" href="https://dotfiles.codearsonist.com"> HOME </a>
 </div><div id="content">
-<h1 class="title">dotfiles.codearsonist.com
-<br />
-<span class="subtitle">well-tailored dotfiles for macOS &amp; NixOS</span>
-</h1>
+<div class="org-src-container">
+<pre class="src src-css" id="org7b83cd9"><span style="font-weight: bold;">img</span>{
+    <span style="font-weight: bold;">width</span>: 60px;
+    <span style="font-weight: bold;">height</span>: 60px;
+    <span style="font-weight: bold;">margin</span>: 60px 0 0 -70px;
+    <span style="font-weight: bold;">border-radius</span>: 60px;
+}
+<span style="font-weight: bold;">.subtitle</span>{
+    <span style="font-weight: bold;">float</span>: left;
+    <span style="font-weight: bold;">margin</span>: 0 29%;
+}
+<span style="font-weight: bold;">h1.title</span>{
+    <span style="font-weight: bold;">margin</span>: 60px 0;
+    <span style="font-weight: bold;">font</span>: 500 42px <span style="font-style: italic;">'Roboto Slab'</span>,Serif;
+}
+<span style="font-weight: bold;">h2</span>{
+    <span style="font-weight: bold;">border-bottom</span>: 3px solid <span style="color: #000000; background-color: #eee;">#eee</span>;
+    <span style="font-weight: bold;">padding</span>:  0 5px 0;
+}
+<span style="font-weight: bold;">.outline-2 </span>{
+    <span style="font-weight: bold;">padding</span>: 10px 0 0 0;
+}
+<span style="font-weight: bold;">.outline-2 p </span>{
+    <span style="font-weight: bold;">margin</span>: 0;
+}
+<span style="font-weight: bold;">.status p</span>{
+    <span style="font-weight: bold;">text-align</span>: center;
+}
+<span style="font-weight: bold;">.license h2 </span>{
+  <span style="font-weight: bold;">display</span>: none;
+}
+<span style="font-weight: bold;">.license p </span>{
+  <span style="font-weight: bold;">text-align</span>: center;
+}
+<span style="font-weight: bold;">div#content,div#postamble</span>{
+    <span style="font-weight: bold;">width</span>:90%;
+    <span style="font-weight: bold;">max-width</span>:760px;
+    <span style="font-weight: bold;">margin</span>: 0 auto;
+}
+<span style="font-weight: bold;">object.org-svg</span>{
+    <span style="font-weight: bold;">width</span>: auto;
+}
+<span style="font-weight: bold;">pre.src</span>{
+    <span style="font-weight: bold;">text-align</span>: center;
+    <span style="font-weight: bold;">background-color</span>: <span style="color: #000000; background-color: #fff;">#fff</span>;
+}
+<span style="font-weight: bold;">#org-div-home-and-up</span>{
+    <span style="font-weight: bold;">display</span>:none;
+}
+</pre>
+</div>
 
-<div id="outline-container-org3c404af" class="outline-2">
-<h2 id="org3c404af"><span class="section-number-2">1</span> Installation</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orgc0f11e8" class="outline-2">
+<h2 id="orgc0f11e8">Installation</h2>
+<div class="outline-text-2" id="text-orgc0f11e8">
 <div class="org-src-container">
 <pre class="src src-shell">nix-env -f https://github.com/peel/dotfiles/archive/master.tar.gz -i &amp;&amp; dotfiles
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org3b446fc" class="outline-2">
-<h2 id="org3b446fc"><span class="section-number-2">2</span> Usage</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-org873d1fe" class="outline-2">
+<h2 id="org873d1fe">Usage</h2>
+<div class="outline-text-2" id="text-org873d1fe">
 <div class="org-src-container">
 <pre class="src src-shell">dotfiles [command]
 </pre>
@@ -264,16 +311,15 @@ for the JavaScript code in this tag.
 <ul class="org-ul">
 <li><code>link</code> - (re-)link dotfiles</li>
 <li><code>switch</code> (<code>default</code>) - tag, apply <code>configuration.nix</code>, tag working</li>
-<li><code>update</code> - update channels and <code>switch</code></li>
 <li><code>install</code> - install prerequisites and <code>link</code></li>
 <li><code>uninstall</code> - <code>unlink</code> and remove configurations</li>
 <li><code>unlink</code> - unlink dotfiles</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgba07caf" class="outline-2">
-<h2 id="orgba07caf"><span class="section-number-2">3</span> Sources</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-org2d4f82e" class="outline-2">
+<h2 id="org2d4f82e">Sources</h2>
+<div class="outline-text-2" id="text-org2d4f82e">
 <p>
 See<a href="https://github.com/peel/dotfiles"> peel/dotfiles</a> at Github <object type="image/svg+xml" data="https://travis-ci.org/peel/dotfiles.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
@@ -286,19 +332,14 @@ Sorry, your browser does not support SVG.</object>
 </div>
 </div>
 </div>
-<div id="outline-container-org4e5abc3" class="outline-2 license">
-<h2 id="org4e5abc3"><span class="section-number-2">4</span> License</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-org0c90f58" class="outline-2">
+<h2 id="org0c90f58">License</h2>
+<div class="outline-text-2" id="text-org0c90f58">
 <p>
-Distributed in hope to be useful under <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0 Universal</a>
+Distributed in hope to be helpful under <a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode"><code>Creative Commonts CC0 1.0</code></a> license.
 </p>
 </div>
 </div>
-</div>
-<div id="postamble" class="status">
-<p class="author">Author: Piotr Limanowski</p>
-<p class="date">Created: 2019-09-14 Sat 20:18</p>
-<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
 </html>
