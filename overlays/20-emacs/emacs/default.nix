@@ -24,16 +24,17 @@ pkgs.emacsWithPackagesFromUsePackage {
     mkdir -p $out/share/emacs/site-lisp
     cp -r ${prettifyPragmata}/* $out/share/emacs/site-lisp/
     '');
+   weechat = epkgs.melpaPackages.weechat.overrideAttrs(old: {
+     patches = [ ./patches/weechat-el.patch ];
+   });
  };
  extraEmacsPackages = epkgs: with epkgs; [
     # avy
-    #clean-aindent-mode
     company
     diff-hl
     diminish
     dumb-jump
     expand-region
-    xterm-color
     flx
     flycheck
     #hightlight

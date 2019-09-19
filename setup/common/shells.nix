@@ -16,16 +16,22 @@
         shopt -s dirspell     # correct typos when tab-completing names
         shopt -s globstar     # enable **
       fi
-      PS1='\W$(__git_ps1 " - %s") λ '
+      __prompt_nix() {
+        [ -z "$IN_NIX_SHELL" ] || echo " - ''${name:+$name}"
+      }
+      PS1='\W$(__git_ps1 " - %s")$(__prompt_nix) λ '
     '';
   };
 
   environment.shellAliases = {
-    k9 = "sudo kill -9";
+    k9 = "kill -9";
     dc = "docker-compose";
     less = "less -R";
+    tailf = "tail -f";
     ls = "ls -Gh";
     ll = "ls -al";
+    df = "df -h";
+    du = "du -h -d 2";
     grep = "${pkgs.ripgrep}/bin/rg";
     n = "nix";
     ns = "nix-shell";

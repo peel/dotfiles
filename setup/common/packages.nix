@@ -37,5 +37,6 @@ in {
     htop
     ripgrep
     scripts
+    pinentry
   ];
 }

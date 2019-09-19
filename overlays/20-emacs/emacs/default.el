@@ -117,7 +117,8 @@
         ivy-initial-inputs-alist nil ;; do not preset ^ in buffer
         ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
   (use-package swiper
-    :bind ("C-s" . swiper))
+    :bind (("C-s" . swiper)
+           ("C-r" . swiper-backward)))
   (use-package smex
     :after (ivy counsel)
     :init
@@ -634,10 +635,13 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         weechat-complete-order-nickname nil
         weechat-buffer-kill-buffers-on-disconnect t
         weechat-relay-ping-idle-seconds 10
-        weechat-initial-lines 256)
+        weechat-initial-lines 256
+        weechat-completing-read-function 'ivy-completing-read)
   (require 'weechat-notifications)
   (require 'weechat-image)
   (require 'weechat-tracking)
+  (require 'gnutls)
+  (add-to-list 'gnutls-trustfiles (expand-file-name "~/.config/weechat/ssl/relay.cert"))
   (add-hook 'kill-emacs-hook (lambda () (when weechat--connected (weechat-disconnect)))))
 
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
