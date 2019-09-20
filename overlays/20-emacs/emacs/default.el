@@ -554,9 +554,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :hook (pdf-view-mode . pdf-view-midnight-minor-mode)
   :config
   (require 'pdf-occur)
-  (pdf-tools-install)
-  (setq pdf-view-midnight-colors
-        `(,(face-foreground 'default) . ,(face-background 'default))))
+  (pdf-tools-install))
 
 (use-package org-ref
   :config
