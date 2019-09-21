@@ -545,8 +545,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
      (haskell    . t)
      (dot . t))))
 
-(use-package ob-async)
-
 (use-package nov
   :mode ("\\.epub\\'" . nov-mode))
 

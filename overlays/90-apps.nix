@@ -135,17 +135,4 @@ Spotify = self.installApplication rec {
   homepage = https://spotify.com/;
 };
 
-Tunnelblick = self.installApplication rec {
-name = "Tunnelblick";
-  version = "3.7.7,5150";
-  sourceRoot = "Tunnelblick.app";
-  src = super.fetchurl {
-    url = "https://download.scdn.co/Spotify.dmg";
-    sha256 = "afab743ca603810b5724e7d25848b67fc5dee6fc66f496b297916a4d185a8b53";
-    # date = 2018-09-28T14:23:15-0800;
-  };
-  description = "Spotify is a digital music service that gives you access to millions of songs.";
-  homepage = https://spotify.com/;
-};
-
 }
