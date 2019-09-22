@@ -1,7 +1,7 @@
 {
-  "url": "git@github.com:peel/nur-packages.git",
-  "rev": "1aa7a527ca0f556b718179b051a641631495a65f",
-  "date": "2019-09-19T16:43:36+02:00",
-  "sha256": "1jrfwbvfmfsv6bpw8q7d1blqh2r5g6cbkaqqrr06cq27bnh4gmqa",
+  "url": "https://github.com/peel/nur-packages",
+  "rev": "faadea3570e73ab2e21a4760e9851c6b196b7a83",
+  "date": "2019-09-22T23:03:05+02:00",
+  "sha256": "0r5vglvqxqcpy8p1bfgg0md7agf0f4brn4hvshdqibnnyd30lh0l",
   "fetchSubmodules": false
 }
