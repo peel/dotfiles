@@ -24,6 +24,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :nixos,
     run: 'always',
     path: 'configuration.nix',
-    verbose: true
+    verbose: true,
+    NIX_PATH: '$NIX_PATH:dotfiles=/dotfiles'
   
 end

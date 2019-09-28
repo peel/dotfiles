@@ -28,7 +28,7 @@ in {
   
   imports = [
     ./vagrant.nix
-    /dotfiles/setup/nixos.nix
+    /dotfiles/setup/nixos
   ];
 
 
