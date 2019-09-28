@@ -33,10 +33,8 @@ in {
   environment.systemPackages = with pkgs; [
     # cachix
     coreutils
-    gnupg
     htop
     ripgrep
     scripts
-    pinentry
   ];
 }

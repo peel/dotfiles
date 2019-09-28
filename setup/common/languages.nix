@@ -3,9 +3,9 @@
 {
   services.bloop.install = true;
   environment.systemPackages = with pkgs; [
-    metals
-    haskellEnv
+    # metals
+    # haskellEnv
     # ghcide.ghcide-ghc865;
-    haskell-nix.nix-tools
+    # haskell-nix.nix-tools
   ];
 }

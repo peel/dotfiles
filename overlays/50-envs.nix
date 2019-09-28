@@ -19,6 +19,7 @@ self: super: {
     name = "scala";
     paths = with self; [
       bloop
+      metals
       scalafmt
       sbt
       ammonite

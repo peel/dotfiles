@@ -1,4 +1,5 @@
 #+TITLE: dotfiles.codearsonist.com
+#+SUBTITLE: well-tailored NixOS & nix-darwin
 #+SETUPFILE: html.conf.org
 
 * Installation

@@ -2,8 +2,17 @@
 
 let
   gitConfig = ''
-    [include]
-      path = ~/.gitconfig.private
+    [user]
+      email = piotr@codearsonist.com
+      name = Piotr Limanowski
+    [github]
+      user = peel
+    [ghi]
+      token = !security find-internet-password -a peel -s github.com -l 'ghi token' -w
+    [use]
+      signingkey = piotr@codearsonist.com
+    [commit]
+      gpgsign = true
     [color]
       ui = true
     [color "branch"]
@@ -19,9 +28,6 @@ let
       pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
     [mergetool]
       prompt = false
-    [mergetool "mvimdiff"]
-      cmd="mvim -c 'Gdiff' $MERGED"     # use fugitive.vim for 3-way merge
-      keepbackup=false
     [merge]
       summary = true
       verbosity = 1

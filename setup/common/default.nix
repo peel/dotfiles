@@ -6,6 +6,7 @@
     ./emacs.nix
     ./fonts.nix
     ./git.nix
+    ./gnupg.nix
     ./languages.nix
     ./packages.nix    
     ./shells.nix
@@ -13,10 +14,4 @@
   ];
 
   time.timeZone = "Europe/Warsaw";
-  
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
-
 }
