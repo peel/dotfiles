@@ -44,6 +44,12 @@ pre.src{
     background-color: #fff;
 }
 #org-div-home-and-up{
-    display:none;
+    display: none;
+}
+#postamble p{
+  font-size: 80%;
+  padding: 0;
+  margin: 0;
+  line-height: 150%;
 }
 #+END_SRC
