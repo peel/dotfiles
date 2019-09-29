@@ -44,9 +44,12 @@
   :ensure nil
   :bind (("C-|" . split-window-right)
          ("C--" . split-window-below)
-         ("C-x w r" . peel/rotate-windows))
-  :config
+         ("C-\\" . peel/rotate-windows))
+  :init
   (windmove-default-keybindings 'meta)
+  :config
+  (setq windmove-wrap-around t)
+
   (defun peel/rotate-windows (arg)
   "Rotate your windows; use the prefix argument to rotate the other direction"
   (interactive "P")
@@ -164,7 +167,7 @@
 (use-package magit
   :if (executable-find "git")
   :bind (("C-x g" . magit-status)
-         ("C-x G" . magit-dispatch-popup))
+         ("C-x G" . magit-dispatch))
   :custom
   (magit-completing-read-function 'ivy-completing-read)
   :config
@@ -179,8 +182,6 @@
 (use-package forge
   :after magit)
   
-
-;; TODO git-timemachine
 
 ;; project management ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package projectile
@@ -682,7 +683,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     (when (memq window-system '(mac ns))
       (progn
         (setq frame-title-format nil)
-        (setq ns-use-proxy-icon nil)
+        (setq ns-use-proxy-icon t)
         (add-to-list 'default-frame-alist '(ns-transparent-titlebar t))
         (add-to-list 'default-frame-alist '(ns-appearance dark))))
     

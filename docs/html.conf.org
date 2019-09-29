@@ -1,4 +1,3 @@
-#+OPTIONS: toc:nil num:nil title:nil todo:nil creator:nil tags:nil html-postamble:nil HTML_DOCTYPE:html5
 #+CREATOR: Piotr Limanowski
 #+KEYWORDS: code arsonist, codearsonist, limanowski, piotr limanowski, scala, elixir, erlang, haskell
 #+DESCRIPTION: a personal page for Piotr Limanowski - a full-time señor '(#scala #elixir #haskell) code arsonist & el modo evil brujito. Part-time #hoverboard'er lifting heavy shit 🏴 Time considered monotonic.

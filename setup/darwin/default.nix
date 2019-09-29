@@ -21,7 +21,6 @@
     pbc = "pbcopy";
     pbp = "pbpaste";
     o = "open";
-    nr = "darwin-rebuild";
   };
   
   nix.extraOptions = ''

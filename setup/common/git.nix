@@ -51,18 +51,6 @@ let
       # instead of a/b/c/d as prefixes for patches
       mnemonicprefix = true
       algorithm = patience
-    [url "git@github.com:"]
-      insteadOf = "gh:"
-      pushInsteadOf = "github:"
-      pushInsteadOf = "git://github.com/"
-    [url "git://github.com/"]
-      insteadOf = "github:"
-    [url "git@gist.github.com:"]
-      insteadOf = "gst:"
-      pushInsteadOf = "gist:"
-      pushInsteadOf = "git://gist.github.com/"
-    [url "git://gist.github.com/"]
-      insteadOf = "gist:"
   '';
 in {
   environment.systemPackages = with pkgs; [

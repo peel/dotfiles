@@ -77,20 +77,4 @@ Docker = self.installApplication rec {
   '';
   homepage = https://store.docker.com/editions/community/docker-ce-desktop-mac;
 };
-
-OnePassword = self.installApplication rec {
-  name = "1Password";
-  version = "7.2.1";
-  sourceRoot = "1Password 7.app";
-  src = super.fetchurl {
-    url = "https://c.1password.com/dist/1P/mac7/1Password-${version}.zip";
-    sha256 = "3ec43f6015f03768922982f067ee49fb776a6bbbeada6c3518480ede0ae039cb";
-    # date = 2018-09-28T11:14:33-0700;
-  };
-  description = ''
-    Go ahead. Forget your passwords. 1Password remembers them all for you. Save your passwords and log in to sites with a single click. It's that simple.
-  '';
-  homepage = https://1password.com;
-};
-
 }
