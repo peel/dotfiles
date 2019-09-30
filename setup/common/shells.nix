@@ -35,6 +35,7 @@
     grep = "${pkgs.ripgrep}/bin/rg";
     n = "nix";
     ns = "nix-shell";
+    rebuild = if pkgs.stdenvNoCC.isLinux then "nixos-rebuild" else "darwin-rebuild";
   };
   
 }

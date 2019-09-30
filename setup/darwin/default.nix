@@ -21,10 +21,11 @@
     pbc = "pbcopy";
     pbp = "pbpaste";
     o = "open";
+    darwin-rebuild = "darwin-rebuild --option extra-builtins-file ${<dotfiles/setup/common/secrets/extra-builtins.nix>}";
   };
   
   nix.extraOptions = ''
-      builders = @/etc/nix/machines
+    builders = @/etc/nix/machines
   '';
 
   networking.knownNetworkServices = ["Wi-Fi" "Bluetooth PAN" "Thunderbolt Bridge"];
@@ -33,11 +34,5 @@
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
   programs.nix-index.enable = true;
-
-
-  system.activationScripts.text = ''
-    ln -sfn /etc/static/gitconfig $HOME/.gitconfig
-    ln -sfn /etc/static/gitignore $HOME/.gitignore
-  '';
 
 }

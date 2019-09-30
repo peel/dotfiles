@@ -6,8 +6,8 @@ let
   sources = import <dotfiles/pinned> { inherit (pkgs) fetchgit lib; };
   username = "peel";
   hostName = "nuke";
-  domain = builtins.readFile (<dotfiles/setup/secret/domain>);
-  orgdomain = builtins.readFile (<dotfiles/setup/secret/org.domain>);
+  domain = builtins.extraBuiltins.pass "duckdns.domain";
+  orgdomain = builtins.extraBuiltins.pass "organisation.domain";
 in {
   imports = let nur = (import <nurpkgs-peel/modules>); in [
     ./hardware-configuration.nix
@@ -126,32 +126,14 @@ in {
         init_config = null;
         instances = [ { nginx_status_url = "http://localhost:80/nginx_status"; } ];
       };
-      snmp = {
-        init_config = [ { mibs_folder = "/etc/datadog-agent/mibs"; } ];
-        instances = [
-          { ip_address = "192.168.1.9";
-            snmp_version = 3;
-            port = 161;
-            user = builtins.readFile <dotfiles/setup/secret/datavism.user>;
-            authKey = builtins.readFile <dotfiles/setup/secret/datavism.auth.key>;
-            privKey = builtins.readFile <dotfiles/setup/secret/datavism.priv.key>;
-            authProtocol = builtins.readFile <dotfiles/setup/secret/datavism.auth.protocol>;
-            privProtocol = builtins.readFile <dotfiles/setup/secret/datavism.priv.protocol>;
-            metrics = [
-              { MIB = "UDP-MIB"; symbol = "udpInDatagrams"; }
-              { MIB = "TCP-MIB"; symbol = "tcpActiveOpens"; }
-          ];
-          }
-        ];
-      };
     };
-    apiKeyFile = <dotfiles/setup/secret/datadog.private.key>;
+    apiKeyFile = builtins.extraBuiltins.pass "datadog.key";
   };
 
   # general routes  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   services.fail2ban.enable = true;
   services.dnsmasq =
-    let nuke = builtins.readFile (<dotfiles/setup/secret/nuke.ip>);
+    let nuke = builtins.extraBuiltins.pass "nuke.ip";
     in {
       enable = true;
       servers = [ "1.1.1.1" "1.0.0.1" ];

@@ -105,7 +105,7 @@ let
     echo >&2
    
     ${pkgs.lib.optionalString pkgs.stdenvNoCC.isDarwin ''
-      darwin-rebuild switch -j 4
+      darwin-rebuild --option extra-builtins-file ${targetDir}/dotfiles/common/secrets/extra-builtins.nix switch
       echo "Current generation: $(darwin-rebuild --list-generations | tail -1)"
     ''}
     ${pkgs.lib.optionalString pkgs.stdenvNoCC.isLinux ''

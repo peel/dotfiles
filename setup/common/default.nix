@@ -8,10 +8,13 @@
     ./git.nix
     ./gnupg.nix
     ./languages.nix
-    ./packages.nix    
+    ./packages.nix
+    ./secrets
     ./shells.nix
     ./tmux.nix
   ];
+
+  peel.secrets.enable = true;
 
   time.timeZone = "Europe/Warsaw";
 }
