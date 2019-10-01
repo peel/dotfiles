@@ -17,9 +17,9 @@
         shopt -s globstar     # enable **
       fi
       __prompt_nix() {
-        [ -z "$IN_NIX_SHELL" ] || echo " - ''${name:+$name}"
+        [ -z "$IN_NIX_SHELL" ] && echo "λ" || echo ""
       }
-      PS1='\W$(__git_ps1 " - %s")$(__prompt_nix) λ '
+      PS1='\W$(__git_ps1 " - %s") $(__prompt_nix) '
     '';
   };
 

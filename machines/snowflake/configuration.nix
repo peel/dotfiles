@@ -5,10 +5,10 @@ with lib;
 let
   sources = import <dotfiles/pinned> { inherit (pkgs) fetchgit lib; };
   username = "peel";
-  hostName = "fff666";
+  hostName = "snowflake";
 in rec {
   # TODO no
-  nixpkgs.overlays = 
+  nixpkgs.overlays =
     let path = <dotfiles/overlays>; in with builtins;
       map (n: import (path + ("/" + n)))
           (filter (n: match ".*\\.nix" n != null ||
@@ -18,12 +18,13 @@ in rec {
 
   # TODO nay
   networking.hostName = hostName;
-  
+
   nix.maxJobs = lib.mkDefault 12;
-  
-  environment.darwinConfig = <dotfiles/machines/darwin/configuration.nix>;
+
+  #FIXME
+  environment.darwinConfig = <dotfiles/machines/snowflake/configuration.nix>;
   system.stateVersion = 3;
-  
+
   nix.nixPath = [
     "darwin-config=${environment.darwinConfig}"
     "darwin=${sources."nix-darwin"}"
