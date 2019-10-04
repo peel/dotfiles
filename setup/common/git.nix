@@ -1,6 +1,25 @@
 { config, pkgs, ... }:
 
 let
+  gitignore = pkgs.writeText "gitignore.global" ''
+    *~
+    .Trash-*
+    .nfs*
+    .DS_Store
+    ._*
+    .Spotlight-V100
+    .Trashes
+    \#*\#
+    *.elc
+    tramp
+    .\#*
+    result/
+    .projectile
+    .dir-locals.el
+    .envrc
+    .bloop/
+    .metals/
+ '';
   gitConfig = ''
     [user]
       email = piotr@codearsonist.com
@@ -44,6 +63,7 @@ let
       default = upstream
     [core]
       autocrlf = false
+      excludefile = ${gitignore}
     [advice]
       statusHints = false
     [diff]
