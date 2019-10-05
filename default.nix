@@ -7,6 +7,7 @@
 }:
 
 let
+  rebuildCmd = "${if pkgs.stdenvNoCC.isDarwin then "darwin" else "nixos"}-rebuild --option extra-builtins-file ${targetDir}/dotfiles/common/secrets/extra-builtins.nix";
   darwin = ''
     echo >&2
     echo >&2 "Building initial configuration..."
@@ -104,12 +105,9 @@ let
     echo >&2 "Switching environment..."
     echo >&2
    
+    ${rebuildCmd} switch
     ${pkgs.lib.optionalString pkgs.stdenvNoCC.isDarwin ''
-      darwin-rebuild --option extra-builtins-file ${targetDir}/dotfiles/common/secrets/extra-builtins.nix switch
       echo "Current generation: $(darwin-rebuild --list-generations | tail -1)"
-    ''}
-    ${pkgs.lib.optionalString pkgs.stdenvNoCC.isLinux ''
-      nixos-rebuild switch
     ''}
 
     echo >&2
@@ -138,13 +136,15 @@ in pkgs.stdenvNoCC.mkDerivation {
     set -e
 
     while [ "$#" -gt 0 ]; do
-        i="$1"; shift
+        i="$1"
         case "$i" in
             install)
+                shift
                 ${install} "$@"
                 exit
                 ;;
             link)
+                shift
                 ${link} "$@"
                 exit
                 ;;
@@ -160,10 +160,14 @@ in pkgs.stdenvNoCC.mkDerivation {
                 ${uninstall}
                 exit
                 ;;
-           *)
+            help)
                 echo "dotfiles: [help] [install machine-name] [uninstall] [link machine-name] [unlink] [switch]"
                 exit
                 ;;
+            *)
+               ${rebuildCmd} "$@"
+               exit
+               ;;
         esac
     done
     exit
