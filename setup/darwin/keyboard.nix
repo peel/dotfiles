@@ -43,7 +43,7 @@ in {
       echo "configuring keybindings..." >&2
       mkdir -p ~/Library/KeyBindings || true
       # FIXME hardling required
-      ln -fv ${pkgs.writeText "DefaultKeyBindings.dict" keybindings} ~/Library/KeyBindings/DefaultKeyBinding.dict
+      ln -f ${pkgs.writeText "DefaultKeyBindings.dict" keybindings} ~/Library/KeyBindings/DefaultKeyBinding.dict
      '';
   };
 }

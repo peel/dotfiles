@@ -35,6 +35,7 @@ in {
     moveMask = "ctrl + cmd";
     myTerminal = "emacsclient -a '' -nc --eval '(peel/vterm)'";
     myEditor = "emacsclient -a '' -nc";
+    myBrowser = "open /Applications/Safari.app";
     noop = "/dev/null";
     prefix = "${pkgs.yabai}/bin/yabai -m";
     fstOrSnd = {fst, snd}: domain: "${prefix} ${domain} --focus ${fst} || ${prefix} ${domain} --focus ${snd}";
@@ -80,6 +81,8 @@ in {
     # apps  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
     ${modMask} - return                       : ${myTerminal} 
     ${modMask} + shift - return               : ${myEditor}
+    ${modMask} - b                            : ${myBrowser}
+
 
     # reset  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
     ${modMask} - q                            : pkill yabai; pkill skhd
