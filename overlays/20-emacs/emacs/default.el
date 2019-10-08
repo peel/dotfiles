@@ -410,8 +410,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
              haskell-ident-at-point
              haskell-mode-handle-generic-loc))
 (use-package haskell-interactive-mode)
-(use-package shm
-    :hook (haskell-mode . structured-haskell-mode))
 (use-package hindent
     :hook (haskell-mode . hindent-mode)
     :config (setq hindent-reformat-buffer-on-save t))
@@ -427,7 +425,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     (add-hook 'dante-mode-hook
               '(lambda () (flycheck-add-next-checker 'haskell-dante
                                                      '(warning . haskell-hlint)))))
-(use-package lsp-haskell)
 
 ;; ......................................................................... nix
 (use-package nix-mode
@@ -470,19 +467,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         scala-indent:align-parameters t
         scala-indent:default-run-on-strategy scala-indent:operator-strategy)
   (setq projectile-globally-ignored-directories (append '(".metals" ".bloop"))))
-
-(use-package sbt-mode
-  :commands sbt-start sbt-command
-  :config
-  (substitute-key-definition
-   'minibuffer-complete-word
-   'self-insert-command
-   minibuffer-local-completion-map)
-  (defun peel/sbt-start ()
-    "Execute sbt from nix-sandbox"
-    (interactive)
-    (setq sbt:program-name (nix-executable-find (nix-current-sandbox) "sbt"))
-    (sbt-start)))
 
 ;; .......................................................................... js
 (use-package js2-mode
@@ -682,7 +666,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     ;; and the workaround for the above thats's broken
     (when (memq window-system '(mac ns))
       (progn
-        (setq frame-title-format nil)
+        (setq frame-title-format '("%b . %m"))
         (setq ns-use-proxy-icon t)
         (add-to-list 'default-frame-alist '(ns-transparent-titlebar t))
         (add-to-list 'default-frame-alist '(ns-appearance dark))))
