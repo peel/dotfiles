@@ -45,10 +45,10 @@ let
       algorithm = "patience";
     };
     apply.whitespace = "nowarn";
-    branch.autosetupmerge = true;
+    branch.autosetuprebase = "always";
     push.default = "upstream";
     core = {
-      autocrlf = true;
+      autocrlf = false;
       excludefile = "${gitignore}";
     };
     advice.statusHints = false;

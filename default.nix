@@ -117,6 +117,8 @@ let
     git branch -f working update
     git branch -D update
     git push
+
+    cd -
   '';
 in pkgs.stdenvNoCC.mkDerivation {
   name = "dotfiles";
