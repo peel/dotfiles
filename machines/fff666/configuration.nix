@@ -23,7 +23,7 @@ in rec {
   nix.maxJobs = lib.mkDefault 12;
 
   #FIXME
-  environment.darwinConfig = <dotfiles/machines/snowflake/configuration.nix>;
+  environment.darwinConfig = <dotfiles/machines/fff666/configuration.nix>;
   system.stateVersion = 3;
 
   nix.nixPath = [
