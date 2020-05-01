@@ -28,7 +28,7 @@ in rec {
   nix.nixPath = [
     "darwin-config=${environment.darwinConfig}"
     "darwin=${sources."nix-darwin"}"
-    "nixpkgs=${sources.nixpkgs}"
+    "nixpkgs=channel:nixos-20.03"
     "dotfiles=$HOME/.config/nixpkgs"
     "nurpkgs-peel=${sources.nurpkgs}"
     "$HOME/.nix-defexpr/channels"

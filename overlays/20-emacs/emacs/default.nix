@@ -97,7 +97,6 @@ pkgs.emacsWithPackagesFromUsePackage {
     
     ## http
     restclient
-    weechat
 
     ## nix
     nix-mode

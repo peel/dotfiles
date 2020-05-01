@@ -23,7 +23,7 @@
 
 (use-package exec-path-from-shell
   :ensure t
-  :init
+  :config
   (setq exec-path-from-shell-variables
     '("PATH"
       "SHELL"
@@ -350,8 +350,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :diminish pragmatapro-lig-mode
   :hook ((prog-mode . prettify-symbols-mode)
          (prog-mode . pragmatapro-lig-mode)
-         (prog-mode . hs-minor-mode)
-         (prog-mode . direnv-mode))
+         (prog-mode . hs-minor-mode))
   :init
   (load (locate-file "pragmatapro-lig.el" load-path) 'noerror)
   ;; disable showing compilation *buffer*
@@ -438,7 +437,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package direnv
   :commands direnv-mode
-  :config (direnv-mode))
+  :config (direnv-mode)
+  :hook (prog-mode . direnv-mode))
 
 ;; ....................................................................... dhall
 (use-package dhall-mode
@@ -603,28 +603,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; communication ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
-;; .......................................................................... im
-(use-package weechat
-  :commands (weechat-connect weechat-disconnect)
-  :config
-  (setq ;weechat-auto-monitor-buffers t
-        ;weechat-auto-monitor-new-buffers t
-        weechat-auto-close-buffers t
-        ;weechat-auto-recenter nil
-        weechat-auto-reconnect-retries 99999
-        weechat-notification-mode t
-        weechat-complete-order-nickname nil
-        weechat-buffer-kill-buffers-on-disconnect t
-        weechat-relay-ping-idle-seconds 10
-        weechat-initial-lines 256
-        weechat-completing-read-function 'ivy-completing-read)
-  (require 'weechat-notifications)
-  (require 'weechat-image)
-  (require 'weechat-tracking)
-  (require 'gnutls)
-  (add-to-list 'gnutls-trustfiles (expand-file-name "~/.config/weechat/ssl/relay.cert"))
-  (add-hook 'kill-emacs-hook (lambda () (when weechat--connected (weechat-disconnect)))))
-
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
 ;; ...................................................................... themes
@@ -635,17 +613,25 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (defvar semi-dark-theme 'nord)
   (defvar light-theme 'apropospriate-light)
   (defvar default-theme dark-theme)
+  (use-package nord-theme
+    :preface
+    (add-to-list 'custom-theme-load-path
+                 (file-name-directory (locate-library "nord-theme")))
+    :config
+    ;; term colors
+    (setq ansi-color-names-vector
+          [unspecified "#bf616a" "#a3be8c" "#ebcb8b" "#81a1c1" "#b48ead" "#8fbcbb" "#d8dee9"]))
 
-  (defun peel/load-glitter (frame)
-    (select-frame frame)
-    (peel/load-theme)
-    (peel/load-font)
-    (peel/load-ui))
-  
-  (if (daemonp)
-      (add-hook 'after-make-frame-functions #'peel/load-glitter)
-    (peel/load-glitter))
-  
+  (use-package gotham-theme
+    :preface
+    (add-to-list 'custom-theme-load-path
+                 (file-name-directory (locate-library "gotham-theme"))))
+
+  (use-package apropospriate-theme
+    :preface
+    (add-to-list 'custom-theme-load-path
+                 (file-name-directory (locate-library "apropospriate-theme"))))
+
   (defun peel/load-theme ()
     (load-theme default-theme t))
 
@@ -660,8 +646,17 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     "Remove UI bars."
     (tool-bar-mode -1)
     (scroll-bar-mode -1)
-    (blink-cursor-mode -1)
+    (blink-cursor-mode -1))
     
+  (defun peel/load-glitter ()
+    (peel/load-theme)
+    (peel/load-font)
+    (peel/load-ui))
+
+    (if (daemonp)
+      (add-hook 'after-make-frame-functions #'peel/load-glitter)
+    (peel/load-glitter))
+  
     ;; (setq default-frame-alist '((undecorated . t)))
     ;; and the workaround for the above thats's broken
     (when (memq window-system '(mac ns))
@@ -672,26 +667,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         (add-to-list 'default-frame-alist '(ns-appearance dark))))
     
     (when (not (memq window-system '(mac ns)))
-      (menu-bar-mode -1))))
+      (menu-bar-mode -1)))
 
-(use-package nord-theme
-    :preface
-    (add-to-list 'custom-theme-load-path
-                 (file-name-directory (locate-library "nord-theme")))
-    :config
-    ;; term colors
-    (setq ansi-color-names-vector
-          [unspecified "#bf616a" "#a3be8c" "#ebcb8b" "#81a1c1" "#b48ead" "#8fbcbb" "#d8dee9"]))
-
-(use-package gotham-theme
-    :preface
-    (add-to-list 'custom-theme-load-path
-                 (file-name-directory (locate-library "gotham-theme"))))
-
-(use-package apropospriate-theme
-    :preface
-    (add-to-list 'custom-theme-load-path
-                 (file-name-directory (locate-library "apropospriate-theme"))))
 
 (use-package writeroom-mode
   :config
