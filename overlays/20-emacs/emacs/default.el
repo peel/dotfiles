@@ -457,6 +457,19 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package yaml-mode
   :mode ("\\.yml\\'" "\\.yaml\\'"))
 
+;; .......................................................................... go
+(use-package go-mode
+  :commands go-mode
+  :mode ("\\.go?\\'" . go-mode)
+  :defer t
+  :hook (lsp-format-buffer))
+
+;; .......................................................................... go
+(use-package rust-mode
+  :commands go-mode
+  :mode ("\\.rs?\\'" . rust-mode)
+  :defer t)
+
 ;; ....................................................................... scala
 (use-package scala-mode
   :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
@@ -612,7 +625,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (defvar dark-theme 'gotham)
   (defvar semi-dark-theme 'nord)
   (defvar light-theme 'apropospriate-light)
-  (defvar default-theme dark-theme)
+  (defvar current-theme dark-theme)
   (use-package nord-theme
     :preface
     (add-to-list 'custom-theme-load-path
@@ -633,7 +646,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
                  (file-name-directory (locate-library "apropospriate-theme"))))
 
   (defun peel/load-theme ()
-    (load-theme default-theme t))
+    (load-theme dark-theme t)
+    (setq current-theme dark-theme))
 
   (defun peel/load-font ()
     "Load default font."
@@ -647,7 +661,19 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     (tool-bar-mode -1)
     (scroll-bar-mode -1)
     (blink-cursor-mode -1))
-    
+  
+  (defun peel/lights ()
+    "Toggles dark mode on Darwin."
+    (interactive)
+    (defun switch (theme)
+      (counsel-load-theme-action theme)
+      (load-theme theme)
+      (setq current-theme theme))
+    (if (eq current-theme dark-theme)
+        (switch light-theme)
+      (switch dark-theme))
+    (shell-command "osascript -e 'tell app \"System Events\" to tell appearance preferences to set dark mode to not dark mode'"))
+  
   (defun peel/load-glitter ()
     (peel/load-theme)
     (peel/load-font)

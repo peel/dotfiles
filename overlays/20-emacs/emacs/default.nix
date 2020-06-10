@@ -98,6 +98,12 @@ pkgs.emacsWithPackagesFromUsePackage {
     ## http
     restclient
 
+    ## rust
+    rust-mode
+    
+    ## go
+    go-mode
+
     ## nix
     nix-mode
     direnv
