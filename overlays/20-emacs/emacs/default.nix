@@ -84,7 +84,7 @@ pkgs.emacsWithPackagesFromUsePackage {
 
     ## haskell
     haskell-mode
-    hindent
+    # hindent
     dante
     attrap
     lsp-haskell
