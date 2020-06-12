@@ -16,7 +16,7 @@ dotfiles [command]
 - ~uninstall~ - ~unlink~ and remove configurations
 - ~unlink~ - unlink dotfiles
 * Sources
-See[[https://github.com/peel/dotfiles][ peel/dotfiles]] at Github [[https://travis-ci.org/peel/dotfiles.svg]]
+See[[https://github.com/peel/dotfiles][ peel/dotfiles]] at Github [[https://github.com/peel/dotfiles/workflows/Build/badge.svg]]
 
 #+ATTR_HTML: :alt codearsonist.com image :title codearsonist.com
 [[https://codearsonist.com/assets/img/bloglogo.png]]
