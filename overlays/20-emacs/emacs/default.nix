@@ -64,7 +64,7 @@ pkgs.emacsWithPackagesFromUsePackage {
     yasnippet-snippets
     smartparens
     dash-at-point
-    emacs-libvterm
+    vterm
     
     # themes
     gotham-theme
@@ -93,6 +93,7 @@ pkgs.emacsWithPackagesFromUsePackage {
     ## javascript
     prettier-js
     js2-mode
+    typescript-mode
     web-mode
     
     ## http

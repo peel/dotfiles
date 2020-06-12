@@ -3,7 +3,7 @@ on:
   pull_request:
   push:
 jobs:
-  tests:
+  build:
     strategy:
       matrix:
         os:
@@ -11,25 +11,72 @@ jobs:
           - macos-latest    
     runs-on: ${{matrix.os}}
     steps:
-    - uses: actions/checkout@v2
-    - uses: cachix/install-nix-action@v9
-      with:
-        nix_path: nixpkgs=channel:nixos-unstable
-    - uses: cachix/cachix-action@v6
-      with:
-        name: peel
-        signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-    - run: cachix use nix-community
-    - run: nix-build
-    - run: nix-build ./overlays/20-emacs/emacs/default.nix
-    - run: nix-env -f default.nix -i
-    - run: dotfiles install
-    - run: dotfiles link
-    - run: dotfiles uninstall
-    - run: ls result/bin && cd docs && ../result/bin/emacs -Q index.org --batch --eval "(progn (org-babel-tangle)(org-html-export-to-html))" --kill
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        cname: dotfiles.codearsonist.com
-        publish_dir: ./docs
+      - uses: actions/checkout@v2
+      - uses: cachix/install-nix-action@v10
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - uses: cachix/cachix-action@v6
+        with:
+          name: peel
+          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'        
+      - run: cachix use nix-community
+      - run: cachix use peel
+      - run: nix-build
+            
+  test:
+    needs: build
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    runs-on: ${{matrix.os}}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: cachix/install-nix-action@v10
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - uses: cachix/cachix-action@v6
+        with:
+          name: peel
+          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+      - run: cachix use nix-community
+      - run: cachix use peel
+      - run: nix-env -f default.nix -i
+      - run: dotfiles install
+      - run: dotfiles link
+      - run: dotfiles uninstall
+
+  emacs:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    runs-on: ${{matrix.os}}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: cachix/install-nix-action@v10
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - uses: cachix/cachix-action@v6
+        with:
+          name: peel
+          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+      - run: cachix use nix-community
+      - run: cachix use peel
+      - run: nix-build ./overlays/20-emacs/emacs/default.nix
+        
+  docs:
+    needs: [build, emacs, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2      
+      - name: Tangle
+        run: cd docs && ../result/bin/emacs -Q index.org --batch --eval "(progn (org-babel-tangle)(org-html-export-to-html))" --kill
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          cname: dotfiles.codearsonist.com
+          publish_dir: ./docs

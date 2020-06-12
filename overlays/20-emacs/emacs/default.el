@@ -130,26 +130,26 @@
     :commands (counsel-descbinds)
     :bind (([remap execute-extended-command] . counsel-M-x)
   	       ([remap find-file] . counsel-find-file)
-	       ([remap find-library] . counsel-find-library)
-	       ([remap describe-function] . counsel-describe-function)
-	       ([remap describe-variable] . counsel-describe-variable)
-	       ([remap describe-bindings] . counsel-descbinds)
-	       ([remap describe-face]  . counsel-describe-faces)
-	       ([remap list-faces-display] . counsel-faces)
-	       ([remap imenu] . counsel-imenu)
-	       ([remap load-library] . counsel-load-library)
-	       ([remap load-theme] . counsel-load-theme)
-	       ([remap yank-pop] . counsel-yank-pop)
-	       ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
-	       ([remap pop-to-mark-command] . counsel-mark-ring)
-	       ([remap bookmark-jump] . counsel-bookmark)
+	         ([remap find-library] . counsel-find-library)
+	         ([remap describe-function] . counsel-describe-function)
+	         ([remap describe-variable] . counsel-describe-variable)
+	         ([remap describe-bindings] . counsel-descbinds)
+	         ([remap describe-face]  . counsel-describe-faces)
+	         ([remap list-faces-display] . counsel-faces)
+	         ([remap imenu] . counsel-imenu)
+	         ([remap load-library] . counsel-load-library)
+	         ([remap load-theme] . counsel-load-theme)
+	         ([remap yank-pop] . counsel-yank-pop)
+	         ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
+	         ([remap pop-to-mark-command] . counsel-mark-ring)
+	         ([remap bookmark-jump] . counsel-bookmark)
            ("C-x j" . counsel-imenu)
-	       ("C-c g" . counsel-git)
-	       ("C-c j" . counsel-git-grep)
-	       ("M-y" . counsel-yank-pop)
-	       ("C-c i 8" . counsel-unicode-char)
+	         ("C-c g" . counsel-git)
+	         ("C-c j" . counsel-git-grep)
+	         ("M-y" . counsel-yank-pop)
+	         ("C-c i 8" . counsel-unicode-char)
            ("C-c r" . counsel-rg)
-	       ("C-c d" . counsel-descbinds)))
+	         ("C-c d" . counsel-descbinds)))
 
 ;; syntax checking ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package flycheck
@@ -491,6 +491,10 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :hook ((web-mode . prettier-js-mode)
          (js-mode . prettier-js-mode)))
 
+(use-package typescript-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+  
 (use-package web-mode
   :mode ("\\.html?\\'" "\\.css\\'" "\\.scss\\'")
   :config

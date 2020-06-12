@@ -18,10 +18,10 @@ self: super: {
   scalaEnv = self.buildEnv {
     name = "scala";
     paths = with self; [
-      bloop
-      scalafmt
-      sbt
       ammonite
+      bloop
+      metals
+      sbt
     ];
   };
 

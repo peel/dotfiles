@@ -30,14 +30,4 @@ let
     '';
   };
 in {
-  services.weechat = {
-    enable = true;
-    home = home;
-    withSlack = false;
-    withMatrix = false;
-    extraConfigFiles = [
-      ./weechat.private.nix
-      cfg
-    ];
-  };
 }
