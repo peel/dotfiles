@@ -493,7 +493,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package typescript-mode
   :config
-  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode)))
   
 (use-package web-mode
   :mode ("\\.html?\\'" "\\.css\\'" "\\.scss\\'")
