@@ -60,6 +60,7 @@ pkgs.emacsWithPackagesFromUsePackage {
     exec-path-from-shell
     which-key
     writeroom-mode
+    focus
     yasnippet
     yasnippet-snippets
     smartparens

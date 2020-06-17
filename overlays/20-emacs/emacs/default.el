@@ -706,6 +706,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         writeroom-width 126
         writeroom-bottom-divider-width 0
         writeroom-major-modes '(prog-mode))
+  (use-package focus
+  :hook (prog-mode . focus-mode))
   (global-writeroom-mode))
 
 
