@@ -69,7 +69,6 @@ pkgs.emacsWithPackagesFromUsePackage {
     
     # themes
     gotham-theme
-    nord-theme
     apropospriate-theme
 
     lsp-mode

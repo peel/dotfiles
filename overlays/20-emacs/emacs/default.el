@@ -126,6 +126,7 @@
     :after (ivy counsel)
     :init
     (setq-default smex-history-length 32)))
+
   (use-package counsel
     :commands (counsel-descbinds)
     :bind (([remap execute-extended-command] . counsel-M-x)
@@ -627,17 +628,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :ensure nil
   :config
   (defvar dark-theme 'gotham)
-  (defvar semi-dark-theme 'nord)
   (defvar light-theme 'apropospriate-light)
   (defvar current-theme dark-theme)
-  (use-package nord-theme
-    :preface
-    (add-to-list 'custom-theme-load-path
-                 (file-name-directory (locate-library "nord-theme")))
-    :config
-    ;; term colors
-    (setq ansi-color-names-vector
-          [unspecified "#bf616a" "#a3be8c" "#ebcb8b" "#81a1c1" "#b48ead" "#8fbcbb" "#d8dee9"]))
 
   (use-package gotham-theme
     :preface
