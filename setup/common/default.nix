@@ -16,5 +16,5 @@
 
   peel.secrets.enable = true;
 
-  time.timeZone = "Europe/Warsaw";
+  time.timeZone = "America/Los_Angeles";
 }

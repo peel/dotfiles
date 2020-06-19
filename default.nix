@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> {}
 , machine ? "fff666"
-, repoUrl ? "https://github.com/peel/dotfiles.git"
-, nurpkgs ? "https://github.com/peel/nur-packages.git"
+, repoUrl ? "https://github.com/orther/nix-dotfiles.git"
+, nurpkgs ? "https://github.com/orther/nur-packages.git"
 , channel ? "nixpkgs-unstable"
 , targetDir ? "$HOME/wrk"
 }:
@@ -18,7 +18,7 @@ let
     /run/current-system/sw/bin/darwin-rebuild switch \
         -I "darwin-config=$HOME/.config/nixpkgs/machines/darwin/configuration.nix" \
         -I "nixpkgs-overlays=$HOME/.config/nixpkgs/overlays" \
-        -I "nurpkgs-peel=$HOME/.config/nurpkgs" \
+        -I "nurpkgs-orther=$HOME/.config/nurpkgs" \
         -I "dotfiles=$HOME/.config/nixpkgs"
   '';
   install = pkgs.writeScript "install" ''

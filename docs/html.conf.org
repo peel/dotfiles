@@ -1,10 +1,10 @@
-#+CREATOR: Piotr Limanowski
-#+KEYWORDS: code arsonist, codearsonist, limanowski, piotr limanowski, scala, elixir, erlang, haskell
-#+DESCRIPTION: a personal page for Piotr Limanowski - a full-time señor '(#scala #elixir #haskell) code arsonist & el modo evil brujito. Part-time #hoverboard'er lifting heavy shit 🏴 Time considered monotonic.
+#+CREATOR: Brandon Orther
+#+KEYWORDS: orther, orther.dev, brandon orther, elixir, javascript, react, react-native
+#+DESCRIPTION: a personal page for Brandon Orther - a product-focused software engineer and family man. 
 #+OPTIONS: toc:nil todo:nil HTML_DOCTYPE:html5
-#+HTML_LINK_UP: https://codearsonist.com
-#+HTML_LINK_HOME: https://dotfiles.codearsonist.com
-#+HTML_HEAD_EXTRA: <link rel="shortcut icon" href="https://codearsonist.com/favicon.ico" />
+#+HTML_LINK_UP: https://orther.dev
+#+HTML_LINK_HOME: https://dotfiles.orther.dev
+#+HTML_HEAD_EXTRA: <link rel="shortcut icon" href="https://orther.dev/favicon.ico" />
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="style.css" />
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="https://codearsonist.com/assets/css/screen.css" />
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto+Slab:700,300,400|Source+Code+Pro:500" />

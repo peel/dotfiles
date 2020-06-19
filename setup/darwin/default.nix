@@ -3,7 +3,7 @@
 {
   imports = [
     ../common
-    ../common/weechat.nix
+    #../common/weechat.nix
     ./defaults.nix
     ./keyboard.nix
     ./wm.nix
@@ -29,8 +29,8 @@
     builders = @/etc/nix/machines
   '';
 
-  networking.knownNetworkServices = ["Wi-Fi" "Bluetooth PAN" "Thunderbolt Bridge"];
-  networking.dns = ["1.1.1.1" "1.0.0.1" "2606:4700:4700::1111" "2606:4700:4700::1001"];
+  #networking.knownNetworkServices = ["Wi-Fi" "Bluetooth PAN" "Thunderbolt Bridge"];
+  #networking.dns = ["1.1.1.1" "1.0.0.1" "2606:4700:4700::1111" "2606:4700:4700::1001"];
   
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;

@@ -1,10 +1,10 @@
-#+TITLE: dotfiles.codearsonist.com
+#+TITLE: nix-dotfiles.orther.dev/
 #+SUBTITLE: well-tailored NixOS & nix-darwin
 #+SETUPFILE: html.conf.org
 
 * Installation
 #+BEGIN_SRC shell
-nix-env -f https://github.com/peel/dotfiles/archive/master.tar.gz -i ; dotfiles
+nix-env -f https://github.com/orther/nix-dotfiles/archive/master.tar.gz -i ; dotfiles
 #+END_SRC
 * Usage
 #+BEGIN_SRC shell
@@ -16,10 +16,10 @@ dotfiles [command]
 - ~uninstall~ - ~unlink~ and remove configurations
 - ~unlink~ - unlink dotfiles
 * Sources
-See[[https://github.com/peel/dotfiles][ peel/dotfiles]] at Github [[https://github.com/peel/dotfiles/workflows/Build/badge.svg]]
+See[[https://github.com/orther/nix-dotfiles][ orther/nix-dotfiles]] at Github [[https://github.com/orther/nix-dotfiles/workflows/Build/badge.svg]]
 
-#+ATTR_HTML: :alt codearsonist.com image :title codearsonist.com
-[[https://codearsonist.com/assets/img/bloglogo.png]]
+#+ATTR_HTML: :alt orther.dev image :title orther.dev
+[[https://orther.dev/android-chrome-192x192.png]]
 
 * License :noexport:
 Distributed in hope to be helpful under [[https://creativecommons.org/publicdomain/zero/1.0/legalcode][=Creative Commonts CC0 1.0=]] license.
