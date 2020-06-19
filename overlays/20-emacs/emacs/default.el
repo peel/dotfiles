@@ -23,8 +23,8 @@
 
 (use-package exec-path-from-shell
   :ensure t
-  :config
-  (setq exec-path-from-shell-variables
+  :custom
+  (exec-path-from-shell-variables
     '("PATH"
       "SHELL"
       "NIX_PATH"
@@ -34,6 +34,7 @@
       "NIX_USER_PROFILE_DIR"
       "JAVA_HOME"
       ))
+  :config
   (exec-path-from-shell-initialize))
 
 ;; navigation ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
@@ -77,10 +78,12 @@
   :diminish company-mode
   :commands (company-mode global-company-mode)
   :defer 1
-  :config
-  (setq company-require-match nil
-	    company-selection-wrap-around t)
-  (global-company-mode))
+  :custom
+  (company-require-match nil)
+	(company-selection-wrap-around t)
+  (global-company-mode)
+  (company-idle-delay 0))
+;; TODO company-posframe
 
 (use-package dash-at-point
   :commands (dash-at-point dash-at-point-with-docset)
@@ -118,10 +121,16 @@
   (setq ivy-use-virtual-buffers t    ;; highlight recent
         ivy-count-format "%d/%d "    ;; current / total
         ivy-initial-inputs-alist nil ;; do not preset ^ in buffer
-        ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+        ivy-re-builders-alist '((counsel-rg            . ivy--regex-plus)
+                                (counsel-projectile-rg . ivy--regex-plus)
+                                (swiper                . ivy--regex-plus)
+                                (t                     . ivy--regex-fuzzy)))
   (use-package swiper
     :bind (("C-s" . swiper)
            ("C-r" . swiper-backward)))
+  ;; TODO move po prescient.el
+  ;; https://github.com/raxod502/prescient.el
+  ;; https://github.com/ianpan870102/.personal-emacs.d/blob/master/init.el#L391-L412
   (use-package smex
     :after (ivy counsel)
     :init
@@ -170,7 +179,7 @@
   :bind (("C-x g" . magit-status)
          ("C-x G" . magit-dispatch))
   :custom
-  (magit-completing-read-function 'ivy-completing-read)
+  (magit-completing-read-function 'ivy-completing-read "Use ivy with magit")
   :config
   (use-package gitignore-mode))
 
@@ -200,17 +209,17 @@
 ;; files ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package dired
   :ensure nil
-  :config
-  (setq dired-dwim-target t
-        dired-recursive-deletes t
-        dired-use-ls-dired nil
-        delete-by-moving-to-trash t))
+  :custom
+  (dired-dwim-target t)
+  (dired-recursive-deletes t)
+  (dired-use-ls-dired nil)
+  (delete-by-moving-to-trash t))
 
 (use-package dired-sidebar
   :commands (dired-sidebar-toggle-sidebar)
   :bind ("C-x C-n" . dired-sidebar-toggle-sidebar)
-  :config
-  (setq dired-sidebar-subtree-line-prefix " ."))
+  :custom
+  (dired-sidebar-subtree-line-prefix " ."))
 
 ;; bindings ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
@@ -362,7 +371,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package lsp-mode
   :bind ("C-c l" . lsp-hydra/body)
-  :hook (scala-mode . lsp)
+  :hook ((scala-mode . lsp)
+         (js-mode . lsp)
+         (typescript-mode . lsp))
   :after hydra
   :config
   (setq lsp-eldoc-render-all t)
@@ -412,7 +423,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package haskell-interactive-mode)
 (use-package hindent
     :hook (haskell-mode . hindent-mode)
-    :config (setq hindent-reformat-buffer-on-save t))
+    :custom
+    (hindent-reformat-buffer-on-save t))
 (use-package attrap
     :bind ("C-x /" . attrap-attrap))
 (use-package dante
@@ -476,17 +488,15 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
   :hook (scala-mode . subword-mode)
   :interpreter ("scala" . scala-mode)
-  :config
-  (setq scala-indent:align-forms t
-        scala-indent:align-parameters t
-        scala-indent:default-run-on-strategy scala-indent:operator-strategy)
-  (setq projectile-globally-ignored-directories (append '(".metals" ".bloop"))))
+  :custom
+  (scala-indent:align-forms t)
+  (scala-indent:align-parameters t)
+  (scala-indent:default-run-on-strategy scala-indent:operator-strategy)
+  (projectile-globally-ignored-directories (append '(".metals" ".bloop"))))
 
 ;; .......................................................................... js
 (use-package js2-mode
-  :ensure t
-  :config
-  (add-hook 'js-mode-hook 'js2-minor-mode))
+  :hook (js-mode . js2-minor-mode))
 
 (use-package prettier-js
   :hook ((web-mode . prettier-js-mode)
@@ -498,14 +508,15 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   
 (use-package web-mode
   :mode ("\\.html?\\'" "\\.css\\'" "\\.scss\\'")
-  :config
-  (setq web-mode-markup-indent-offset 2
-        web-mode-css-indent-offset 2
-        web-mode-code-indent-offset 2
-        css-indent-offset 2
-        js-switch-indent-offset 2
-        js-indent-level 2
-        js-indent-switch-body t))
+  :custom
+  (web-mode-markup-indent-offset 2 "2 spaces")
+  (web-mode-css-indent-offset 2)
+  (web-mode-markup-indent-offset 2)
+  (web-mode-code-indent-offset 2)
+  (css-indent-offset 2)
+  (js-switch-indent-offset 2)
+  (js-indent-level 2)
+  (js-indent-switch-body t))
 
 
 ;; .................................................................. restclient
@@ -537,6 +548,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package org
   :ensure nil
   :defer nil
+  :hook ((org-mode . visual-line-mode)
+         (org-mode . auto-fill-mode)
+         (org-mode . org-indent-mode))
   :config
   (setq org-agenda-files '("~/Dropbox/Documents/notes/"))
   (org-babel-do-load-languages
@@ -567,35 +581,35 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package org-noter
   :commands org-noter
-  :config
-  (setq org-noter-default-notes-file-names '("index-org")
-	  org-noter-notes-search-path (list papers-dir)
-	  org-noter-auto-save-last-location t
-	  org-noter-doc-split-fraction '(0.8 . 0.8)
-	  org-noter-always-create-frame nil
-	  org-noter-insert-note-no-questions t
-	  org-noter-notes-window-location 'vertical-split))
+  :custom
+  (org-noter-default-notes-file-names '("index-org"))
+	(org-noter-notes-search-path (list papers-dir))
+	(org-noter-auto-save-last-location t)
+	(org-noter-doc-split-fraction '(0.8 . 0.8))
+	(org-noter-always-create-frame nil)
+	(org-noter-insert-note-no-questions t)
+	(org-noter-notes-window-location 'vertical-split))
 
 (use-package ivy-bibtex
   :after ivy
-  :config
-  (setq bibtex-completion-bibliography papers-refs
-        bibtex-completion-library-path papers-pdfs
-        bibtex-completion-notes-path papers-notes))
+  :custom
+  (bibtex-completion-bibliography papers-refs)
+  (bibtex-completion-library-path papers-pdfs)
+  (bibtex-completion-notes-path papers-notes))
 
 
 ;; builtins ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
 (use-package vterm
   :ensure nil
+  :hook (vterm-mode . (lambda ()
+                        (setq-local global-hl-line-mode nil)
+                        (setq-local line-spacing nil)))
   :config
   (require 'vterm)
   (setq ansi-color-names-vector
         [unspecified "#bf616a" "#a3be8c" "#ebcb8b" "#81a1c1" "#b48ead" "#8fbcbb" "#d8dee9"])
   (add-to-list 'vterm-keymap-exceptions "C-b")
-  (add-hook 'vterm-mode-hook 'peel/no-spacing)
-  (defun peel/no-spacing ()
-    (setq line-spacing 0))
   (defun peel/vterm ()
     (interactive)
     (setq vterm-buffer (get-buffer "vterm"))
@@ -693,13 +707,14 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 
 (use-package writeroom-mode
+  :custom
+  (writeroom-fullscreen-effect "maximized")
+  (writeroom-width 126)
+  (writeroom-bottom-divider-width 0)
+  (writeroom-major-modes '(prog-mode))
   :config
-  (setq writeroom-fullscreen-effect "maximized"
-        writeroom-width 126
-        writeroom-bottom-divider-width 0
-        writeroom-major-modes '(prog-mode))
   (use-package focus
-  :hook (prog-mode . focus-mode))
+    :hook (writeroom-mode . focus-mode))
   (global-writeroom-mode))
 
 
@@ -709,7 +724,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :init
   (setq inhibit-startup-screen t
       initial-scratch-message nil
-      make-backup-files nil
+      make-backup-files ynil
       frame-resize-pixelwise t
       pop-up-windows nil
       column-number-mode t
