@@ -448,10 +448,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package nix-sandbox
   :defer 2)
 
-(use-package direnv
-  :commands direnv-mode
-  :config (direnv-mode)
-  :hook (prog-mode . direnv-mode))
+(use-package envrc
+  :diminish
+  :init (envrc-global-mode))
 
 ;; ....................................................................... dhall
 (use-package dhall-mode
@@ -488,11 +487,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
   :hook (scala-mode . subword-mode)
   :interpreter ("scala" . scala-mode)
-  :custom
-  (scala-indent:align-forms t)
-  (scala-indent:align-parameters t)
-  (scala-indent:default-run-on-strategy scala-indent:operator-strategy)
-  (projectile-globally-ignored-directories (append '(".metals" ".bloop"))))
+  :config
+  (setq scala-indent:align-forms t)
+  (setq scala-indent:align-parameters t)
+  (setq scala-indent:default-run-on-strategy scala-indent:operator-strategy)
+  (setq projectile-globally-ignored-directories (append '(".metals" ".bloop"))))
 
 ;; .......................................................................... js
 (use-package js2-mode
@@ -663,7 +662,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     "Load default font."
     (add-to-list 'initial-frame-alist '(font . "PragmataPro"))
     (add-to-list 'default-frame-alist '(font . "PragmataPro"))
-    (set-face-attribute 'default nil :height 210)
+    (set-face-attribute 'default nil :height 220)
     (setq-default line-spacing 9))
   
   (defun peel/load-ui ()
@@ -724,7 +723,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :init
   (setq inhibit-startup-screen t
       initial-scratch-message nil
-      make-backup-files ynil
+      make-backup-files nil
       frame-resize-pixelwise t
       pop-up-windows nil
       column-number-mode t

@@ -107,7 +107,7 @@ pkgs.emacsWithPackagesFromUsePackage {
 
     ## nix
     nix-mode
-    direnv
+    envrc
     nix-buffer
     nix-sandbox
 
