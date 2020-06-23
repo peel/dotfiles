@@ -669,7 +669,14 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     "Remove UI bars."
     (tool-bar-mode -1)
     (scroll-bar-mode -1)
-    (blink-cursor-mode -1))
+    (blink-cursor-mode -1)
+    (if (memq window-system '(mac ns))
+        (progn
+          (setq frame-title-format '("%b . %m"))
+          (setq ns-use-proxy-icon t)
+          (add-to-list 'default-frame-alist '(ns-transparent-titlebar t))
+          (add-to-list 'default-frame-alist '(ns-appearance dark)))
+      (menu-bar-mode -1)))
   
   (defun peel/lights ()
     "Toggles dark mode on Darwin."
@@ -683,26 +690,19 @@ _k_: kill        _s_: split                   _{_: wrap with { }
       (switch dark-theme))
     (shell-command "osascript -e 'tell app \"System Events\" to tell appearance preferences to set dark mode to not dark mode'"))
   
-  (defun peel/load-glitter ()
-    (peel/load-theme)
-    (peel/load-font)
-    (peel/load-ui))
-
-    (if (daemonp)
-      (add-hook 'after-make-frame-functions #'peel/load-glitter)
-    (peel/load-glitter))
+  (defun peel/load-glitter (&optional frame)
+    (unless frame
+      (setq frame (selected-frame)))
+    (when frame
+      (with-selected-frame frame
+        (when (display-graphic-p)
+          (peel/load-theme)
+          (peel/load-font)
+          (peel/load-ui)))))
   
-    ;; (setq default-frame-alist '((undecorated . t)))
-    ;; and the workaround for the above thats's broken
-    (when (memq window-system '(mac ns))
-      (progn
-        (setq frame-title-format '("%b . %m"))
-        (setq ns-use-proxy-icon t)
-        (add-to-list 'default-frame-alist '(ns-transparent-titlebar t))
-        (add-to-list 'default-frame-alist '(ns-appearance dark))))
-    
-    (when (not (memq window-system '(mac ns)))
-      (menu-bar-mode -1)))
+  (if (daemonp)
+        (add-hook 'after-make-frame-functions #'peel/load-glitter t)
+    (peel/load-glitter)))
 
 
 (use-package writeroom-mode
