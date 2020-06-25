@@ -398,8 +398,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   ("x" lsp-execute-code-action)
 
   ("M-s" lsp-describe-session)
-  ("M-r" lsp-restart-workspace)
-  ("S" lsp-shutdown-workspace)))
+  ("M-r" lsp-workspace-restart)
+  ("S" lsp-workspace-shutdown)))
 
 (use-package lsp-ui)
 (use-package company-lsp)
@@ -412,7 +412,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :preface
   (load "haskell-mode-autoloads" t t)
   :mode (("\\.hs\\(c\\|-boot\\)?\\'" . haskell-mode)
-         ("\\.lhs\\'" . literate-haskell-mode)
+         ("\\.lhs\\'" . haskell-literate-mode)
          ("\\.cabal\\'" . haskell-cabal-mode))
   :hook (haskell-mode . subword-mode)
   :functions xref-push-marker-stack
@@ -672,7 +672,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     (blink-cursor-mode -1)
     (if (memq window-system '(mac ns))
         (progn
-          (setq frame-title-format '("%b . %m"))
+          (setq frame-title-format '("%b"))
           (setq ns-use-proxy-icon t)
           (add-to-list 'default-frame-alist '(ns-transparent-titlebar t))
           (add-to-list 'default-frame-alist '(ns-appearance dark)))
@@ -729,7 +729,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
       column-number-mode t
       confirm-kill-emacs 'yes-or-no-p
       echo-keystrokes 0.1
-      apropos-do-all t
       visible-bell nil
       hl-line-mode t)
   :bind (("C-z" . kill-whole-line)
