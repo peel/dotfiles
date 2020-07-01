@@ -14,7 +14,6 @@
     Alfred
     Dash
     Docker
-    pinentry_mac
     yabai
   ];
 

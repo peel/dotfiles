@@ -6,6 +6,6 @@ pkgs.stdenv.mkDerivation {
   phases = [ "buildPhase" ];
   buildCommand = ''
     mkdir -p $out/bin
-    makeWrapper "${pkgs.xmobar}/bin/xmobar" $out/bin/xmobar --add-flags "-x0 ${./xmobarrcx}"
+    makeWrapper "${pkgs.xmobar}/bin/xmobar" $out/bin/xmobar --add-flags "-x0 ${./xmobarrc}"
   '';
 }
