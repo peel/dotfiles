@@ -404,9 +404,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package lsp-ui)
 (use-package company-lsp)
 
-
 ;; ..................................................................... Haskell
-
 (use-package haskell-mode
   :mode ("\\.hs\\'")
   :preface
@@ -517,7 +515,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (js-indent-level 2)
   (js-indent-switch-body t))
 
-
 ;; .................................................................. restclient
 (use-package restclient
   :diminish (restclient-mode . " ")
@@ -525,11 +522,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 	     ("\\.rest\\'" . restclient-mode)
 	     ("\\.restclient\\'" . restclient-mode)))
 
-
 ;; ................................................................... terraform
 (use-package terraform-mode
   :mode ("\\.tf\\'"))
-
 
 ;; .................................................................... markdown
 (use-package markdown-mode
@@ -596,9 +591,10 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (bibtex-completion-library-path papers-pdfs)
   (bibtex-completion-notes-path papers-notes))
 
+;; email  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+(use-package notmuch)
 
-;; builtins ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-
+;; terminal ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package vterm
   :ensure nil
   :hook (vterm-mode . (lambda ()
@@ -616,13 +612,13 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         (switch-to-buffer vterm-buffer)
       (vterm))))
 
+;; builtins ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ;; .................................................................. autorevert
 (use-package autorevert
   :ensure nil
   :commands global-auto-revert-mode
   :demand
   :config (global-auto-revert-mode t))
-
 
 ;; ............................................................ delete selection
 (use-package delsel
@@ -631,11 +627,19 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :commands delete-selection-mode
   :config (delete-selection-mode t))
 
+;; ....................................................................... folds
+(use-package hideshow
+  :hook (prog-mode . hs-minor-mode)
+  :diminish hs-minor-mode
+  :custom (hs-isearch-opean t "Automatically open a block if it matches a search")
+  :bind (("M-<tab>" . hs-toggle-hiding)
+         ("M-+" . hs-show-all)
+         ("M--" . hs-hide-level)))
 
-;; communication ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+(use-package hide-comnt
+  :commands hide/show-comments-toggle)
 
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-
 ;; ...................................................................... themes
 (use-package emacs
   :ensure nil
@@ -731,8 +735,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
       echo-keystrokes 0.1
       visible-bell nil
       hl-line-mode t)
-  :bind (("C-z" . kill-whole-line)
-         ("M-<tab>" . hs-toggle-hiding)))
+  :bind ("C-z" . kill-whole-line))
 
 (setq backup-by-copying t
       backup-directory-alist '((".*" . "~/.emacs.d/saves/"))

@@ -3,13 +3,14 @@
     }))];} }:
 
 let
-  prettifyPragmata = pkgs.fetchFromGitHub {
-    owner = "lumiknit";
-    repo = "emacs-pragmatapro-ligatures";
-    rev = "87bc656ace7b15aa088537b6bd369ee49e323dc1";
-    sha256 = "19np1zfkdfcjjyvzpnn0p6kppfh6isrwxy8bqs0jd7bjh98n42jd";
-  };
-  myEmacs = pkgs.emacsGit;
+  elisp = src: file:
+    pkgs.runCommand "${file}.el" {} ''
+    mkdir -p $out/share/emacs/site-lisp
+    cp -r ${src}/* $out/share/emacs/site-lisp/
+  '';
+  myEmacs = pkgs.emacsGit.overrideAttrs(old: {
+    patches = old.patches ++ [];
+  });
   myEmacsConfig = ./default.el;
 in 
 pkgs.emacsWithPackagesFromUsePackage {
@@ -20,10 +21,18 @@ pkgs.emacsWithPackagesFromUsePackage {
     mkdir -p $out/share/emacs/site-lisp
     cp -r ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
    '');
-   prettify-pragmata = (pkgs.runCommand "pragmatapro-lig.el" {} ''
-    mkdir -p $out/share/emacs/site-lisp
-    cp -r ${prettifyPragmata}/* $out/share/emacs/site-lisp/
-    '');
+   prettify-pragmata = elisp (pkgs.fetchFromGitHub {
+     owner = "lumiknit";
+     repo = "emacs-pragmatapro-ligatures";
+     rev = "87bc656ace7b15aa088537b6bd369ee49e323dc1";
+     sha256 = "19np1zfkdfcjjyvzpnn0p6kppfh6isrwxy8bqs0jd7bjh98n42jd";
+   }) "prettify-pragmata";
+   hide-comnt = elisp (pkgs.fetchFromGitHub {
+     owner = "emacsmirror";
+     repo = "hide-comnt";
+     rev = "d1e94f5152f20b2dc7b0d42898c1db37e5be57a6";
+     sha256 = "002i9f97sq3jfknrw2nim1bhvj7xz3icviw7iffqmpmww4g1hq9l";
+   }) "hide-comnt";
    weechat = epkgs.melpaPackages.weechat.overrideAttrs(old: {
      patches = [ ./patches/weechat-el.patch ];
    });
@@ -141,5 +150,6 @@ pkgs.emacsWithPackagesFromUsePackage {
   [
     my-config
     prettify-pragmata
+    hide-comnt
   ];
 }
