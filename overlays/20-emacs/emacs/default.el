@@ -604,6 +604,18 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :config
   (setq vterm-kill-buffer-on-exit t)
   (add-to-list 'vterm-keymap-exceptions "C-b")
+  
+  (defun vterm-counsel-yank-pop-action (orig-fun &rest args)
+    "Use vterm-yank-pop to make counsel-yank-pop work in vterm"
+    (if (equal major-mode 'vterm-mode)
+        (let ((inhibit-read-only t)
+              (yank-undo-function #'(lambda(_start _end) (vterm-undo))))
+          (cl-letf (((symbol-function 'insert-for-yank)
+                     #'(lambda(str) (vterm-send-string str t))))
+            (apply orig-fun args)))
+      (apply orig-fun args)))
+  (advice-add 'counsel-yank-pop-action :around #'vterm-counsel-yank-pop-action)
+  
   (defun peel/vterm--new (&optional force)
     "Starts or switches to vterm. If forced starts a new instance"
     (let* ((buffer-name "vterm")
