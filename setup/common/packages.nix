@@ -29,11 +29,4 @@ in {
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreeRedistributable = true;
-
-  environment.systemPackages = with pkgs; [
-    # cachix
-    coreutils
-    ripgrep
-    scripts
-  ];
 }

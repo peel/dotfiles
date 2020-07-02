@@ -12,5 +12,8 @@
     docker_compose
     pinentry
   ];
-  
+
+  environment.shellAliases = {
+    nixos-rebuild = "nixos-rebuild --option extra-builtins-file ${<dotfiles/setup/common/secrets/extra-builtins.nix>}";
+  };
 }

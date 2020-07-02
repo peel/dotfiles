@@ -16,8 +16,8 @@ in {
     yabai -m config window_border                off
     yabai -m config active_window_opacity        1.0
     yabai -m config normal_window_opacity        0.85
-    yabai -m config split_ratio                  0.7
-    yabai -m config auto_balance                 on
+    yabai -m config split_ratio                  0.62
+    yabai -m config auto_balance                 off
 
     yabai -m config layout                       bsp
     yabai -m config top_padding                  0
@@ -48,13 +48,13 @@ in {
     ${modMask} - k                            : ${prefix} window --focus prev || ${prefix} window --focus "$((yabai -m query --spaces --display prev || ${prefix} query --spaces --display last) | ${pkgs.jq}/bin/jq -re '.[] | select(.visible == 1)."last-window"')" || ${prefix} display --focus prev || ${prefix} display --focus last
 
     # close
-    ${modMask} - ${keycodes.Delete}           : ${prefix} window --close
+    ${modMask} - ${keycodes.Delete}           : ${prefix} window --close && yabai -m window --focus prev
 
     # fullscreen
     ${modMask} - h                            : ${prefix} window --toggle zoom-fullscreen
 
     # rotate
-    ${modMask} - r                            : ${prefix} space --rotate 180
+    ${modMask} - r                            : ${prefix} window --focus smallest && yabai -m window --warp largest && yabai -m window --focus largest
 
     # increase region
     ${modMask} - ${keycodes.LeftBracket}      : ${prefix} window --resize left:-20:0

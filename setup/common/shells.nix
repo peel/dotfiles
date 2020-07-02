@@ -1,7 +1,11 @@
 { config, pkgs, ...}:
 
 {
-  environment.shells = [ pkgs.bashInteractive ];
+  environment.shells = [ pkgs.bashInteractive  ];
+  environment.systemPackages = with pkgs; [
+    coreutils
+    ripgrep
+  ];
   environment.variables.SHELL = "/run/current-system/sw/bin/bash";
   programs.bash = {
     enable = true;
@@ -24,18 +28,13 @@
   };
 
   environment.shellAliases = {
-    k9 = "kill -9";
+    d = "docker";
     dc = "docker-compose";
     less = "less -R";
-    tailf = "tail -f";
     ls = "ls -Gh";
     ll = "ls -al";
     df = "df -h";
-    du = "du -h -d 2";
-    grep = "${pkgs.ripgrep}/bin/rg";
-    n = "nix";
     ns = "nix-shell";
-    rebuild = if pkgs.stdenvNoCC.isLinux then "nixos-rebuild" else "darwin-rebuild";
   };
   
 }

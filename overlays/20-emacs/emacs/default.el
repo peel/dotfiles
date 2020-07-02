@@ -596,21 +596,33 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; terminal ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package vterm
-  :ensure nil
   :hook (vterm-mode . (lambda ()
                         (setq-local global-hl-line-mode nil)
                         (setq-local line-spacing nil)))
+  :bind (("C-!" . peel/vterm)
+         ("C-£" . peel/vterm-force))
   :config
-  (require 'vterm)
-  (setq ansi-color-names-vector
-        [unspecified "#bf616a" "#a3be8c" "#ebcb8b" "#81a1c1" "#b48ead" "#8fbcbb" "#d8dee9"])
+  (setq vterm-kill-buffer-on-exit t)
   (add-to-list 'vterm-keymap-exceptions "C-b")
-  (defun peel/vterm ()
+  (defun peel/vterm--new (&optional force)
+    "Starts or switches to vterm. If forced starts a new instance"
+    (let* ((buffer-name "vterm")
+           (vterm-buffer (get-buffer "vterm"))
+           (in-buffer (string-match-p (regexp-quote buffer-name) (buffer-name))))
+      (cond (force (vterm))
+            (in-buffer (switch-to-buffer (other-buffer (current-buffer) 1)))
+            (vterm-buffer (switch-to-buffer vterm-buffer))
+            (t (vterm)))))
+
+  (defun peel/vterm-force ()
+    "Starts new vterm"
     (interactive)
-    (setq vterm-buffer (get-buffer "vterm"))
-    (if vterm-buffer
-        (switch-to-buffer vterm-buffer)
-      (vterm))))
+    (peel/vterm--new t))
+  
+  (defun peel/vterm ()
+    "Starts or switches to vterm"
+    (interactive)
+    (peel/vterm--new)))
 
 ;; builtins ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ;; .................................................................. autorevert
