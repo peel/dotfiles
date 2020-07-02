@@ -89,20 +89,6 @@
   :commands (dash-at-point dash-at-point-with-docset)
   :bind (("C-c h" . dash-at-point)
          ("C-c H" . dash-at-point-with-docset)))
-;; (use-package yasnippet
-;;   :config
-;;   (use-package yasnippet-snippets)
-;;   (yas-global-mode t)
-;;   (define-key yas-minor-mode-map (kbd "<tab>") nil)
-;;   (define-key yas-minor-mode-map (kbd "C-'") #'yas-expand)
-;;   (add-to-list #'yas-snippet-dirs "my-personal-snippets")
-;;   (yas-reload-all)
-;;   (setq yas-prompt-functions '(yas-ido-prompt))
-;;   (defun help/yas-after-exit-snippet-hook-fn ()
-;;     (prettify-symbols-mode)
-;;     (prettify-symbols-mode))
-;;   (add-hook 'yas-after-exit-snippet-hook #'help/yas-after-exit-snippet-hook-fn)
-;;   :diminish yas-minor-mode)
 
 ;; ivy ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package ivy
@@ -591,20 +577,17 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (bibtex-completion-library-path papers-pdfs)
   (bibtex-completion-notes-path papers-notes))
 
-;; email  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-(use-package notmuch)
-
 ;; terminal ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package vterm
   :hook (vterm-mode . (lambda ()
                         (setq-local global-hl-line-mode nil)
                         (setq-local line-spacing nil)))
   :bind (("C-!" . peel/vterm)
-         ("C-£" . peel/vterm-force))
+         ("C-£" . peel/vterm-force)
+         ("C-c C-d" . peel/vterm-cd))
   :config
   (setq vterm-kill-buffer-on-exit t)
   (add-to-list 'vterm-keymap-exceptions "C-b")
-  
   (defun vterm-counsel-yank-pop-action (orig-fun &rest args)
     "Use vterm-yank-pop to make counsel-yank-pop work in vterm"
     (if (equal major-mode 'vterm-mode)
@@ -615,6 +598,14 @@ _k_: kill        _s_: split                   _{_: wrap with { }
             (apply orig-fun args)))
       (apply orig-fun args)))
   (advice-add 'counsel-yank-pop-action :around #'vterm-counsel-yank-pop-action)
+
+  (defun peel/vterm-cd (dir)
+    "Prompt for directory and cd"
+    (interactive "Dcd ")
+    (let* ((inhibit-read-only t))
+      (vterm-send-string (concat "cd " dir))
+      (vterm-send-return)
+      (vterm-clear)))
   
   (defun peel/vterm--new (&optional force)
     "Starts or switches to vterm. If forced starts a new instance"
