@@ -52,6 +52,7 @@ pkgs.emacsWithPackagesFromUsePackage {
     #hl-todo
     hydra
     counsel
+    request # counsel-search
     smex
     counsel-projectile
     

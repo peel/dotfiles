@@ -111,6 +111,7 @@
                                 (counsel-projectile-rg . ivy--regex-plus)
                                 (swiper                . ivy--regex-plus)
                                 (t                     . ivy--regex-fuzzy)))
+  (use-package request)
   (use-package swiper
     :bind (("C-s" . swiper)
            ("C-r" . swiper-backward)))
