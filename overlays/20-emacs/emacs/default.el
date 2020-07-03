@@ -584,7 +584,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
                         (setq-local global-hl-line-mode nil)
                         (setq-local line-spacing nil)))
   :bind (("C-!" . peel/vterm)
-         ("C-£" . peel/vterm-force)
+         ("C-@" . peel/vterm-force)
          ("C-c C-d" . peel/vterm-cd))
   :config
   (setq vterm-kill-buffer-on-exit t)
