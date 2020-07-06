@@ -10,7 +10,6 @@
 
   environment.systemPackages = with pkgs; [
     skhd
-    Alfred
     Dash
     Docker
     yabai
