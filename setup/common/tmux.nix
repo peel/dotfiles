@@ -25,7 +25,7 @@ let tmuxConfig = ''
     '';
 in {
     programs.tmux = {
-      enable = true;
+      enable = false;
     } // (if pkgs.stdenvNoCC.isLinux then {
       extraTmuxConf = tmuxConfig;
     } else {

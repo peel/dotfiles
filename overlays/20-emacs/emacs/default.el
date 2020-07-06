@@ -734,6 +734,17 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :config
   (use-package focus
     :hook (writeroom-mode . focus-mode))
+
+  (defun peel/work ()
+    "Trigger work env"
+    (interactive)
+    (shell-command "$HOME/wrk/dotfiles/setup/bin/bin/work on"))
+
+  (defun peel/chill ()
+    "Trigger work env"
+    (interactive)
+    (shell-command "$HOME/wrk/dotfiles/setup/bin/bin/work off"))
+
   (global-writeroom-mode))
 
 
