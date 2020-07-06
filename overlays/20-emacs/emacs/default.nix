@@ -33,9 +33,6 @@ pkgs.emacsWithPackagesFromUsePackage {
      rev = "d1e94f5152f20b2dc7b0d42898c1db37e5be57a6";
      sha256 = "002i9f97sq3jfknrw2nim1bhvj7xz3icviw7iffqmpmww4g1hq9l";
    }) "hide-comnt";
-   weechat = epkgs.melpaPackages.weechat.overrideAttrs(old: {
-     patches = [ ./patches/weechat-el.patch ];
-   });
  };
  extraEmacsPackages = epkgs: with epkgs; [
     # avy

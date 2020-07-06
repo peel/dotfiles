@@ -13,7 +13,6 @@ in
     nur.udiskie
     nur.autocutsel
     nur.dunst
-    nur.weechat
   ];
 
   # mbp config
@@ -332,13 +331,6 @@ in
   services.autorandr.enable = true;
   services.autocutsel.enable = true;
   services.udiskie.enable = true;
-  services.weechat = {
-    enable = true;
-    home = "/home/${username}/.weechat";
-    portsToOpen = [ 40900 ];
-    withSlack = true;
-    withMatrix = true;
-  };
 
   # shared config
   nixpkgs.config.packageOverrides = pkgs : rec {

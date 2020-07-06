@@ -38,7 +38,6 @@ in rec {
   imports = let modules = (import <nurpkgs-peel/darwin-modules>); in [
     modules.bloop
     modules.yabai
-    modules.weechat
     <dotfiles/setup/darwin>
   ];
 

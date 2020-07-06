@@ -11,7 +11,6 @@
     ./packages.nix
     ./secrets
     ./shells.nix
-    ./tmux.nix
   ];
 
   peel.secrets.enable = true;

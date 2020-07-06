@@ -3,7 +3,6 @@
 {
   imports = [
     ../common
-    ../common/weechat.nix
     ./defaults.nix
     ./keyboard.nix
     ./wm.nix

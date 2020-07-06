@@ -21,19 +21,6 @@ installApplication =
     };
   };
 
-Alfred = self.installApplication rec {
-  name = "Alfred";
-  version = "3.8_959";
-  sourceRoot = "Alfred 3.app";
-  src = super.fetchurl {
-    url = "https://cachefly.alfredapp.com/Alfred_${version}.dmg";
-    sha256 = "1md43m33fxd5c4gz4va1j7b62amhp7zzh1za7sjj4g4iccq5zl8x";
-    # date = 2018-09-28T23:36:13-0700;
-  };
-  description = "Alfred is an award-winning app for macOS which boosts your efficiency with hotkeys, keywords, text expansion and more. Search your Mac and the web, and be more productive with custom actions to control your Mac.";
-  homepage = https://alfredapp.com;
-};
-
 Calibre = self.installApplication rec {
   name = "Calibre";
   version = "3.40.1";
