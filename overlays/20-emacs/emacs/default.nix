@@ -120,7 +120,7 @@ pkgs.emacsWithPackagesFromUsePackage {
 
     ## scala
     scala-mode
-    sbt-mode
+    lsp-metals
     
     ## markups
     dockerfile-mode

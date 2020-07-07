@@ -481,6 +481,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (setq scala-indent:default-run-on-strategy scala-indent:operator-strategy)
   (setq projectile-globally-ignored-directories (append '(".metals" ".bloop"))))
 
+(use-package lsp-metals)
+
 ;; .......................................................................... js
 (use-package js2-mode
   :hook (js-mode . js2-minor-mode))
@@ -735,8 +737,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (writeroom-bottom-divider-width 0)
   (writeroom-major-modes '(prog-mode))
   :config
-  (use-package focus
-    :hook (writeroom-mode . focus-mode))
+  (use-package focus)
 
   (defun peel/work ()
     "Trigger work env"

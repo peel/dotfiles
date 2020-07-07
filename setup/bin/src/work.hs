@@ -43,6 +43,6 @@ main = sh (do
   mState <- options "Setup work env" parser
   case mState of
     "off" ->
-      kill clis
+      kill $ apps ++ clis
     "on"  ->
-      cli clis)
+      start apps *> cli clis)
