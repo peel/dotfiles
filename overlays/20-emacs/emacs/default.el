@@ -146,7 +146,10 @@
 	         ("M-y" . counsel-yank-pop)
 	         ("C-c i 8" . counsel-unicode-char)
            ("C-c r" . counsel-rg)
-	         ("C-c d" . counsel-descbinds)))
+	         ("C-c d" . counsel-descbinds))
+    :config
+    ;; disable matching ^+ in M-x
+    (setcdr (assoc 'counsel-M-x ivy-initial-inputs-alist) ""))
 
 ;; syntax checking ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package flycheck
@@ -584,7 +587,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
                         (setq-local global-hl-line-mode nil)
                         (setq-local line-spacing nil)))
   :bind (("C-!" . peel/vterm)
-         ("C-@" . peel/vterm-force)
+         ("s-!" . peel/vterm-force)
          ("C-c C-d" . peel/vterm-cd))
   :config
   (setq vterm-kill-buffer-on-exit t)
