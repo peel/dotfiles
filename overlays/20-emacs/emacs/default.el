@@ -373,7 +373,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 -------------------------------------------------------------------------------------
  [_f_] format           [_M-r_] restart            [_d_] declaration  [_i_] implementation  [_o_] documentation
  [_m_] imenu            [_S_]   shutdown           [_D_] definition   [_t_] type            [_r_] rename
- [_x_] execute action   [_M-s_] describe session   [_R_] references   [_s_] signature"
+ [_x_] execute action   [_M-s_] describe session   [_R_] references   [_s_] signature       [_w_] workspace"
   ("d" lsp-find-declaration)
   ("D" lsp-ui-peek-find-definitions)
   ("R" lsp-ui-peek-find-references)
@@ -382,6 +382,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   ("s" lsp-signature-help)
   ("o" lsp-describe-thing-at-point)
   ("r" lsp-rename)
+  ("w" lsp-ivy-workspace-symbol)
 
   ("f" lsp-format-buffer)
   ("m" lsp-ui-imenu)
@@ -392,6 +393,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   ("S" lsp-workspace-shutdown)))
 
 (use-package lsp-ui)
+(use-package lsp-ivy)
 (use-package company-lsp)
 
 ;; ..................................................................... Haskell
@@ -547,6 +549,12 @@ _k_: kill        _s_: split                   _{_: wrap with { }
      (clojure    . t)
      (haskell    . t)
      (dot . t))))
+
+(use-package org-roam
+  :hook after-init-hook
+  :custom
+  (org-roam-directory "~/Dropbox/Documents/roam/")
+  (org-roam-graph-viewer "/usr/bin/open"))
 
 (use-package nov
   :mode ("\\.epub\\'" . nov-mode))

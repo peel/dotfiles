@@ -78,9 +78,11 @@ pkgs.emacsWithPackagesFromUsePackage {
     gotham-theme
     apropospriate-theme
 
+    # lsp
     lsp-mode
     company-lsp
     lsp-ui
+    lsp-ivy
     
     ## dhall
     dhall-mode
@@ -94,7 +96,6 @@ pkgs.emacsWithPackagesFromUsePackage {
     # hindent
     dante
     attrap
-    lsp-haskell
     structured-haskell-mode
     
     ## javascript
@@ -129,6 +130,7 @@ pkgs.emacsWithPackagesFromUsePackage {
     yaml-mode
 
     ## org-mode
+    org-roam
     ob-async
     org-ref
     org-noter
