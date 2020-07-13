@@ -93,7 +93,7 @@ pkgs.emacsWithPackagesFromUsePackage {
 
     ## haskell
     haskell-mode
-    # hindent
+    ormolu
     dante
     attrap
     structured-haskell-mode

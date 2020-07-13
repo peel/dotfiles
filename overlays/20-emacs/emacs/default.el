@@ -411,10 +411,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
              haskell-ident-at-point
              haskell-mode-handle-generic-loc))
 (use-package haskell-interactive-mode)
-(use-package hindent
-    :hook (haskell-mode . hindent-mode)
-    :custom
-    (hindent-reformat-buffer-on-save t))
+(use-package ormolu
+ :hook (haskell-mode . ormolu-format-on-save-mode)
+ :bind
+ (:map haskell-mode-map
+   ("C-c r" . ormolu-format-buffer)))
 (use-package attrap
     :bind ("C-x /" . attrap-attrap))
 (use-package dante

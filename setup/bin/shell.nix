@@ -2,6 +2,6 @@ with import <nixpkgs> {};
 
 mkShell {
   buildInputs = [
-    (haskellPackages.ghcWithPackages (hs: [hs.turtle]))
+    (haskellPackages.ghcWithPackages (hs: [hs.turtle hs.ormolu]))
   ];
 }
