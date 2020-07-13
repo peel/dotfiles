@@ -5,7 +5,8 @@ let
 in {
   services.yabai.enable = true;
   services.yabai.package = pkgs.yabai;
-  services.yabai.config = ''
+  services.yabai.enableScriptingAddition = true;
+  services.yabai.extraConfig = ''
     yabai -m config mouse_follows_focus          off
     yabai -m config focus_follows_mouse          off
     yabai -m config window_placement             second_child
@@ -26,7 +27,7 @@ in {
     yabai -m config right_padding                0
     yabai -m config window_gap                   0
 
-    yabai -m rule --add app="emacs" role="^AXTextField$" subrole="^AXStandardWindow$" manage="on"
+    yabai -m rule --add app="emacs" manage="on"
  '';
   services.skhd.enable = true;
   services.skhd.package =  pkgs.skhd;
@@ -85,6 +86,6 @@ in {
 
 
     # reset  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-    ${modMask} - q                            : pkill yabai; pkill skhd
+    ${modMask} - q                            : pkill yabai; pkill skhd; osascript -e 'display notification "wm restarted"'
   '';
 }

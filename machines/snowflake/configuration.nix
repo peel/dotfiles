@@ -30,14 +30,13 @@ in rec {
     "darwin=${sources."nix-darwin"}"
     "nixpkgs=channel:nixos-20.03"
     "dotfiles=$HOME/.config/nixpkgs"
-    "nurpkgs-peel=${sources.nurpkgs}"
+    "nurpkgs-peel=$HOME/.config/nurpkgs"
     "$HOME/.nix-defexpr/channels"
     "$HOME/.nix-defexpr"
   ];
 
   imports = let modules = (import <nurpkgs-peel/darwin-modules>); in [
     modules.bloop
-    modules.yabai
     <dotfiles/setup/darwin>
   ];
 

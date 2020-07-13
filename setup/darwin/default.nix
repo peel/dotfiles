@@ -12,7 +12,6 @@
     skhd
     Dash
     Docker
-    yabai
   ];
 
   environment.shellAliases = {
