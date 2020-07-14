@@ -61,7 +61,6 @@
 	(company-selection-wrap-around t)
   (global-company-mode)
   (company-idle-delay 0))
-;; TODO company-posframe
 
 (use-package dash-at-point
   :commands (dash-at-point dash-at-point-with-docset)
@@ -110,17 +109,12 @@
 	         ([remap describe-variable] . counsel-describe-variable)
 	         ([remap describe-bindings] . counsel-descbinds)
 	         ([remap describe-face]  . counsel-describe-faces)
-	         ([remap list-faces-display] . counsel-faces)
 	         ([remap imenu] . counsel-imenu)
-	         ([remap load-library] . counsel-load-library)
 	         ([remap load-theme] . counsel-load-theme)
 	         ([remap yank-pop] . counsel-yank-pop)
-	         ([remap info-lookup-symbol] . counsel-info-lookup-symbol)
 	         ([remap pop-to-mark-command] . counsel-mark-ring)
 	         ([remap bookmark-jump] . counsel-bookmark)
            ("C-x j" . counsel-imenu)
-	         ("C-c g" . counsel-git)
-	         ("C-c j" . counsel-git-grep)
 	         ("M-y" . counsel-yank-pop)
 	         ("C-c i 8" . counsel-unicode-char)
            ("C-c r" . counsel-rg)
@@ -234,19 +228,7 @@
          ("M-p" . diff-hl-previous-hunk)))
 
 (use-package dumb-jump
-  :after hydra
-  :bind ("s-." . dumb-jump-hydra/body)
-  :init (require 'hydra)
-  :config
-  (defhydra dumb-jump-hydra (:color blue :columns 3)
-    "Dumb Jump"
-    ("j" dumb-jump-go "Go")
-    ("o" dumb-jump-go-other-window "Other window")
-    ("e" dumb-jump-go-prefer-external "Go external")
-    ("x" dumb-jump-go-prefer-external-other-window "Go external other window")
-    ("i" dumb-jump-go-prompt "Prompt")
-    ("l" dumb-jump-quick-look "Quick look")
-    ("b" dumb-jump-back "Back")))
+  :bind ("s-." . dumb-jump-go))
 
 (use-package expand-region
   :bind (("C-c v" . er/expand-region)))
@@ -428,11 +410,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; ...................................................................... docker
 (use-package dockerfile-mode)
-
-;; ...................................................................... elixir
-(use-package elixir-mode
-  :config
-  (use-package alchemist))
 
 ;; ........................................................................ yaml
 (use-package yaml-mode
