@@ -8,9 +8,7 @@ let
     mkdir -p $out/share/emacs/site-lisp
     cp -r ${src}/* $out/share/emacs/site-lisp/
   '';
-  myEmacs = pkgs.emacsGit.overrideAttrs(old: {
-    patches = old.patches ++ [];
-  });
+  myEmacs = pkgs.emacsGit;
   myEmacsConfig = ./default.el;
 in 
 pkgs.emacsWithPackagesFromUsePackage {

@@ -15,25 +15,6 @@ self: super: {
       stylish-haskell
     ]);
 
-  scalaEnv = self.buildEnv {
-    name = "scala";
-    paths = with self; [
-      ammonite
-      bloop
-      metals
-      sbt
-    ];
-  };
-
-  beamEnv = self.buildEnv {
-    name = "beam";
-    paths = with self; [
-      elixir_1_7
-    ] ++ (with beamPackages; [
-      
-    ]);
-  };
-
   awsEnv = self.buildEnv {
     name = "aws";
     paths = with self; [
@@ -44,16 +25,4 @@ self: super: {
     ];
   };
 
-  nodeEnv = self.buildEnv {
-    name = "node";
-    paths = with self; [
-      nodejs
-      yarn
-      nodePackages.prettier
-    ];
-  };
-    
-  pythonEnv = (self.python36.withPackages(ps: with ps; [
-    virtualenvwrapper
-  ]));
 }

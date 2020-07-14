@@ -15,8 +15,6 @@
   ];
 
   environment.shellAliases = {
-    pbc = "pbcopy";
-    pbp = "pbpaste";
     o = "open";
     darwin-rebuild = "darwin-rebuild --option extra-builtins-file ${<dotfiles/setup/common/secrets/extra-builtins.nix>}";
   };
