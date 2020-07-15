@@ -28,6 +28,8 @@ in {
     yabai -m config window_gap                   0
 
     yabai -m rule --add app="emacs" manage="on"
+    yabai -m rule --add app="Dash"  manage="off"
+    yabai -m rule --add app="System Preferences"  manage="off"
  '';
   services.skhd.enable = true;
   services.skhd.package =  pkgs.skhd;
