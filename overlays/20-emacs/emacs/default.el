@@ -43,12 +43,8 @@
 
 (use-package windmove
   :ensure nil
-  :bind (("C-|" . split-window-right)
-         ("C--" . split-window-below))
-  :init
-  (windmove-default-keybindings 'meta)
-  :config
-  (setq windmove-wrap-around t))
+  :init (windmove-default-keybindings 'meta)
+  :custom (windmove-wrap-around t))
 
 ;; completion ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package company
@@ -161,10 +157,8 @@
   :bind-keymap ("C-c p" . projectile-command-map)
   :defer 5
   :diminish projectile-mode
-  :custom
-  (projectile-completion-system 'ivy)
-  :config
-  (projectile-mode))
+  :custom (projectile-completion-system 'ivy)
+  :config (projectile-mode))
 
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
@@ -180,8 +174,7 @@
 (use-package dired-sidebar
   :commands (dired-sidebar-toggle-sidebar)
   :bind ("C-x C-n" . dired-sidebar-toggle-sidebar)
-  :custom
-  (dired-sidebar-subtree-line-prefix " ."))
+  :custom (dired-sidebar-subtree-line-prefix " ."))
 
 ;; bindings ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
@@ -241,8 +234,7 @@
          :map smartparens-strict-mode-map
          ;; A fill paragraph in strict mode
          ("M-q" . sp-indent-defun))
-  :init
-  (require 'hydra)
+  :init (require 'hydra)
   :config
   (setq sp-highlight-wrap-overlay t
         sp-highlight-pair-overlay t
@@ -387,7 +379,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         (lambda (args) (apply 'nix-shell-command (nix-current-sandbox) args)))
     (add-hook 'dante-mode-hook
               '(lambda () (flycheck-add-next-checker 'haskell-dante
-                                                     '(warning . haskell-hlint)))))
+                                                '(warning . ormolu)))))
 
 ;; ......................................................................... nix
 (use-package nix-mode
@@ -450,8 +442,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
          (js-mode . prettier-js-mode)))
 
 (use-package typescript-mode
-  :config
-  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode)))
+  :config (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode)))
   
 (use-package web-mode
   :mode ("\\.html?\\'" "\\.css\\'" "\\.scss\\'")
@@ -502,9 +493,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
    '((shell      . t)
      (js         . t)
      (emacs-lisp . t)
-     (clojure    . t)
      (haskell    . t)
-     (dot . t))))
+     (dot        . t))))
 
 (use-package org-roam
   :hook after-init-hook
