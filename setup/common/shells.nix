@@ -31,7 +31,6 @@ in {
   environment.shells = [ pkgs.bashInteractive  ];
   environment.systemPackages = with pkgs; [
     coreutils
-    fzf
     ripgrep
   ];
   environment.variables.SHELL = "/run/current-system/sw/bin/bash";

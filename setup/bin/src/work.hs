@@ -4,31 +4,34 @@ import Turtle
 import Prelude hiding (FilePath)
 import qualified Data.Text (empty)
 
-data App = App { name :: String, path :: String }
-         | Cmd { name :: String, path :: String, args :: [String] } deriving Show
+data App = App { name :: Text, path :: Text }
+         | Cmd { name :: Text, path :: Text, args :: [Text] } deriving Show
 
-paths = fmap (\(App{name=n, path=p}) -> fromString (p <> "/" <> n <> ".app"))
-names = fmap (\(App{name=n, path=_}) -> fromString n)
+app = fmap (\(App{name=n, path=p}) -> p <> "/" <> n <> ".app")
+paths apps = fmap path apps
+names apps = fmap name apps
 
 apps =
   [ App { name = "Dash",   path = "/Applications" }
   , App { name = "Docker", path = "/Applications" }
   , App { name = "Focus",  path = "/Applications" }
   , App { name = "Firefox\\ Developer\\ Edition", path = "/Applications" }
+  , App { name = "Endel", path = "/Applications" }
+  , App { name = "Noizio", path = "/Applications" }
   ] ++ -- temporary
   [ App { name = "Canary\\ Mail", path = "/Applications" } -- notmuch/mbsync pm
   ]
 
 clis =
   [ App { name = "focus",  path = "open focus://focus?minutes=25" }
-  , App { name = "emacsclient",  path = "emacsclient -a \'\' -nc" }
-  ]    
+  , App { name = "emacsclient",  path = "emacsclient -a '' -nc" }
+  ]
 
 run cmd fn apps =
   (select $ fn apps) >>= exec
-  where exec a = inshell (cmd <> " " <> a <> " -gj") empty
+  where exec a = inshell (cmd <> " " <> a) empty
   
-start = run "open" paths
+start = run "open -gj" app
 kill = run "pkill" names
 cli = run Data.Text.empty paths
 tell str = inshell msg empty
@@ -44,6 +47,7 @@ main = sh (do
       sh $ kill (apps ++ clis)
       tell "Stopped..."
     "on"  -> do
+      -- filter active, open -gj does not really work
       sh $ start apps
       sh $ cli clis
       tell "Focusing...")
