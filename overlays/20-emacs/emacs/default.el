@@ -309,7 +309,17 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (add-to-list
    'display-buffer-alist
    '("\\*compilation\\*"
-     (display-buffer-no-window))))
+     (display-buffer-no-window)))
+  :config
+  (setq compilation-finish-functions
+      (append compilation-finish-functions
+          '(peel/compilation-finish)))
+
+  (defun peel/compilation-finish (buffer status)
+    ;; ('require alert)
+    ;; (alert status :title "Compilation" :severity 'trivial)
+    (call-process "osascript" nil 0 nil "-e"
+                  (concat "display notification \"Compilation: " status "\" with title \"Emacs\""))))
 
 (use-package lsp-mode
   :bind ("C-c l" . lsp-hydra/body)
