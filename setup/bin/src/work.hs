@@ -1,53 +1,43 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Turtle
+import qualified Control.Foldl as Fold
 import Prelude hiding (FilePath)
-import qualified Data.Text (empty)
+import Data.List
+import qualified Data.Text as T (intercalate, empty) 
 
-data App = App { name :: Text, path :: Text }
-         | Cmd { name :: Text, path :: Text, args :: [Text] } deriving Show
+apps = [ "Dash", "Docker", "Endel", "Focus", "Noizio" ]
+clis = [ "open focus://focus?minutes=25", "emacsclient -a '' -nc" ]
 
-app = fmap (\(App{name=n, path=p}) -> p <> "/" <> n <> ".app")
-paths apps = fmap path apps
-names apps = fmap name apps
+path app = "/Applications/" <> app <> ".app"
 
-apps =
-  [ App { name = "Dash",   path = "/Applications" }
-  , App { name = "Docker", path = "/Applications" }
-  , App { name = "Focus",  path = "/Applications" }
-  , App { name = "Firefox\\ Developer\\ Edition", path = "/Applications" }
-  , App { name = "Endel", path = "/Applications" }
-  , App { name = "Noizio", path = "/Applications" }
-  ] ++ -- temporary
-  [ App { name = "Canary\\ Mail", path = "/Applications" } -- notmuch/mbsync pm
-  ]
-
-clis =
-  [ App { name = "focus",  path = "open focus://focus?minutes=25" }
-  , App { name = "emacsclient",  path = "emacsclient -a '' -nc" }
-  ]
-
-run cmd fn apps =
-  (select $ fn apps) >>= exec
+run cmd apps =
+  (select apps) >>= exec
   where exec a = inshell (cmd <> " " <> a) empty
-  
-start = run "open -gj" app
-kill = run "pkill" names
-cli = run Data.Text.empty paths
-tell str = inshell msg empty
-  where msg = "osascript -e 'display notification \"" <> str <> "\" with title \"Focus Mode\"'"
+
+active = inshell "ps aux | rg '.+~?/Applications/((\\w|\\s|\\d)+)\\.app\\W?.*' -r '$1' | sort -u" empty
+managedApps active = (filter (\a -> a `elem` active))
+
+tell str apps = inshell msg empty
+  where
+    msg = "osascript -e 'display notification \"" <> str <> ": " <> names <> "\" with title \"Focus Mode\"'"
+    names = T.intercalate (", ") apps
   
 parser :: Parser (FilePath)
 parser = argPath "src" "The source file"
 
 main = sh (do
-  mState <- options "Setup work env" parser
-  stdout $ case mState of
+  toggle <- options "Setup work env" parser
+  as <- fold active Fold.list
+
+  let running = managedApps (lineToText <$> as) apps
+  let toRun = apps \\ running
+
+  stdout $ case toggle of
     "off" -> do
-      sh $ kill (apps ++ clis)
-      tell "Stopped..."
-    "on"  -> do
-      -- filter active, open -gj does not really work
-      sh $ start apps
-      sh $ cli clis
-      tell "Focusing...")
+      sh $ run "pkill" running
+      tell "Stopped" running
+    "on" -> do
+      sh $ run "open -gj" (path <$> toRun)
+      sh $ run T.empty clis
+      tell "Running" (toRun <> clis))
