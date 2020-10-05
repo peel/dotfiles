@@ -80,7 +80,7 @@ in
     facetimehd.enable = true;
     opengl.enable = true;
     opengl.driSupport32Bit = true;
-    opengl.extraPackages = with pkgs; [ vaapiIntel ];
+    opengl.extraPackages = [ pkgs.vaapiIntel ];
     pulseaudio.enable = true;
     pulseaudio.package = pkgs.pulseaudioFull;
     pulseaudio.systemWide = false;

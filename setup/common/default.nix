@@ -7,6 +7,7 @@
     ./fonts.nix
     ./git.nix
     ./gnupg.nix
+    # ./home.nix
     ./languages.nix
     ./packages.nix
     ./secrets

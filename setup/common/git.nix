@@ -54,9 +54,9 @@ let
     advice.statusHints = false;
   };
 in {
-  environment.systemPackages = with pkgs; [
-    git
-    gitAndTools.git-crypt
+  environment.systemPackages =  [
+    pkgs.git
+    pkgs.gitAndTools.git-crypt
   ];
   
   environment.shellAliases = {

@@ -29,9 +29,9 @@ let
   '';
 in {
   environment.shells = [ pkgs.bashInteractive  ];
-  environment.systemPackages = with pkgs; [
-    coreutils
-    ripgrep
+  environment.systemPackages = [
+    pkgs.coreutils
+    pkgs.ripgrep
   ];
   environment.variables.SHELL = "/run/current-system/sw/bin/bash";
   programs.bash = {

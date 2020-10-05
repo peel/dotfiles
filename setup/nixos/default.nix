@@ -1,19 +1,20 @@
 { config, pkgs, ... }:
 
-{
+let
+  home = builtins.getEnv "HOME";
+in {
 
   imports = [
     ../common
     ./gui.nix
   ];
   
-  environment.systemPackages = with pkgs; [
-    docker            
-    docker_compose
-    pinentry
+  environment.systemPackages = [
+    pkgs.docker
+    pkgs.docker_compose
   ];
 
   environment.shellAliases = {
-    nixos-rebuild = "nixos-rebuild --option extra-builtins-file ${<dotfiles/setup/common/secrets/extra-builtins.nix>}";
+    nixos-rebuild = "nixos-rebuild --option extra-builtins-file ${home}/setup/common/secrets/extra-builtins.nix";
   };
 }

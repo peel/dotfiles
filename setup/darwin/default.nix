@@ -1,22 +1,20 @@
 { config, pkgs, ... }:
 
-{
+let
+  home = builtins.getEnv "HOME";
+in {
   imports = [
+    ./config.nix
     ../common
     ./defaults.nix
     ./keyboard.nix
     ./wm.nix
-  ];
-
-  environment.systemPackages = with pkgs; [
-    skhd
-    Dash
-    Docker
+    (import "${home}/.config/nurpkgs/darwin-modules").bloop
   ];
 
   environment.shellAliases = {
     o = "open";
-    darwin-rebuild = "darwin-rebuild --option extra-builtins-file ${<dotfiles/setup/common/secrets/extra-builtins.nix>}";
+    darwin-rebuild = "darwin-rebuild --option extra-builtins-file ${home}/.config/nixpkgs/setup/common/secrets/extra-builtins.nix";
   };
   
   nix.extraOptions = ''

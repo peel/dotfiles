@@ -2,9 +2,9 @@
 
 with lib; 
 {
-  environment.systemPackages = with pkgs; [ gnupg ]
-    ++ optionals stdenv.isDarwin [ pkgs.pinentry_mac ]
-    ++ optionals stdenv.isLinux  [ pkgs.pinentry ];
+  environment.systemPackages = [ pkgs.gnupg ]
+    ++ optionals pkgs.stdenvNoCC.isDarwin [ pkgs.pinentry_mac ]
+    ++ optionals pkgs.stdenvNoCC.isLinux  [ pkgs.pinentry ];
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;

@@ -19,26 +19,32 @@
   (require 'use-package))
 
 (use-package diminish
+  :ensure t
   :init (require 'diminish))
+
+(use-package try
+  :ensure t
+  :defer t)
 
 (use-package exec-path-from-shell
   :ensure t
   :custom
   (exec-path-from-shell-variables
-    '("PATH"
-      "SHELL"
-      "NIX_PATH"
-      "NIX_PROFILES"
-      "NIX_REMOTE"
-      "NIX_SSL_CERT_FILE"
-      "NIX_USER_PROFILE_DIR"
-      "JAVA_HOME"
-      ))
+   '("PATH"
+     "SHELL"
+     "NIX_PATH"
+     "NIX_PROFILES"
+     "NIX_REMOTE"
+     "NIX_SSL_CERT_FILE"
+     "NIX_USER_PROFILE_DIR"
+     "JAVA_HOME"
+     ))
   :config
   (exec-path-from-shell-initialize))
 
 ;; navigation ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package winner
+  :ensure nil
   :config (winner-mode 1))
 
 (use-package windmove
@@ -48,6 +54,7 @@
 
 ;; completion ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package company
+  :ensure t
   :bind ("<C-tab>" . company-complete)
   :diminish company-mode
   :commands (company-mode global-company-mode)
@@ -59,17 +66,19 @@
   (company-idle-delay 0))
 
 (use-package dash-at-point
+  :ensure t
   :commands (dash-at-point dash-at-point-with-docset)
   :bind (("C-c h" . dash-at-point)
          ("C-c H" . dash-at-point-with-docset)))
 
 ;; ivy ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package ivy
+  :ensure t
   :defer 1
   :bind (("C-c C-r" . ivy-resume)
-	     ([remap list-buffers] . ivy-switch-buffer)
-	     ([remap switch-to-buffer] . ivy-switch-buffer)
-	     ([remap switch-to-buffer-other-window] . ivy-switch-buffer-other-window)
+	       ([remap list-buffers] . ivy-switch-buffer)
+	       ([remap switch-to-buffer] . ivy-switch-buffer)
+	       ([remap switch-to-buffer-other-window] . ivy-switch-buffer-other-window)
          ("C-c C-f" . counsel-recentf)
          :map ivy-minibuffer-map
          ("C-j" . ivy-call))
@@ -84,43 +93,48 @@
                                 (counsel-projectile-rg . ivy--regex-plus)
                                 (swiper                . ivy--regex-plus)
                                 (t                     . ivy--regex-fuzzy)))
-  (use-package request)
+  (use-package request
+    :ensure t)
   (use-package swiper
+    :ensure t
     :bind (("C-s" . swiper)
            ("C-r" . swiper-backward)))
   ;; TODO move po prescient.el
   ;; https://github.com/raxod502/prescient.el
   ;; https://github.com/ianpan870102/.personal-emacs.d/blob/master/init.el#L391-L412
   (use-package smex
+    :ensure t
     :after (ivy counsel)
     :init
     (setq-default smex-history-length 32)))
 
-  (use-package counsel
-    :commands (counsel-descbinds)
-    :bind (([remap execute-extended-command] . counsel-M-x)
-  	       ([remap find-file] . counsel-find-file)
-	         ([remap find-library] . counsel-find-library)
-	         ([remap describe-function] . counsel-describe-function)
-	         ([remap describe-variable] . counsel-describe-variable)
-	         ([remap describe-bindings] . counsel-descbinds)
-	         ([remap describe-face]  . counsel-describe-faces)
-	         ([remap imenu] . counsel-imenu)
-	         ([remap load-theme] . counsel-load-theme)
-	         ([remap yank-pop] . counsel-yank-pop)
-	         ([remap pop-to-mark-command] . counsel-mark-ring)
-	         ([remap bookmark-jump] . counsel-bookmark)
-           ("C-x j" . counsel-imenu)
-	         ("M-y" . counsel-yank-pop)
-	         ("C-c i 8" . counsel-unicode-char)
-           ("C-c r" . counsel-rg)
-	         ("C-c d" . counsel-descbinds))
-    :config
-    ;; disable matching ^+ in M-x
-    (setcdr (assoc 'counsel-M-x ivy-initial-inputs-alist) ""))
+(use-package counsel
+  :ensure t
+  :commands (counsel-descbinds)
+  :bind (([remap execute-extended-command] . counsel-M-x)
+  	     ([remap find-file] . counsel-find-file)
+	       ([remap find-library] . counsel-find-library)
+	       ([remap describe-function] . counsel-describe-function)
+	       ([remap describe-variable] . counsel-describe-variable)
+	       ([remap describe-bindings] . counsel-descbinds)
+	       ([remap describe-face]  . counsel-describe-faces)
+	       ([remap imenu] . counsel-imenu)
+	       ([remap load-theme] . counsel-load-theme)
+	       ([remap yank-pop] . counsel-yank-pop)
+	       ([remap pop-to-mark-command] . counsel-mark-ring)
+	       ([remap bookmark-jump] . counsel-bookmark)
+         ("C-x j" . counsel-imenu)
+	       ("M-y" . counsel-yank-pop)
+	       ("C-c i 8" . counsel-unicode-char)
+         ("C-c r" . counsel-rg)
+	       ("C-c d" . counsel-descbinds))
+  :config
+  ;; disable matching ^+ in M-x
+  (setcdr (assoc 'counsel-M-x ivy-initial-inputs-alist) ""))
 
 ;; syntax checking ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package flycheck
+  :ensure t
   :after nix-sandbox
   :hook (prog-mode . flycheck-mode)
   :diminish flycheck-mode " ✓"
@@ -133,26 +147,31 @@
 
 ;; git ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package magit
+  :ensure t
   :if (executable-find "git")
   :bind (("C-x g" . magit-status)
          ("C-x G" . magit-dispatch))
   :custom
   (magit-completing-read-function 'ivy-completing-read "Use ivy with magit")
   :config
-  (use-package gitignore-mode))
+  (use-package gitignore-mode
+    :ensure t))
 
 (use-package git-link
+  :ensure t
   :after magit
   :commands (git-link git-link-commit git-link-homepage)
   :bind (("C-c C-g l" . git-link)
          ("C-c C-g c" . git-link-commit)
          ("C-c C-g h" . git-link-homepage)))
 (use-package forge
+  :ensure t
   :after magit)
-  
+
 
 ;; project management ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package projectile
+  :ensure t
   :commands projectile-mode
   :bind-keymap ("C-c p" . projectile-command-map)
   :defer 5
@@ -172,6 +191,7 @@
   (delete-by-moving-to-trash t))
 
 (use-package dired-sidebar
+  :ensure t
   :commands (dired-sidebar-toggle-sidebar)
   :bind ("C-x C-n" . dired-sidebar-toggle-sidebar)
   :custom (dired-sidebar-subtree-line-prefix " ."))
@@ -180,16 +200,17 @@
 
 ;; ....................................................................... popup
 (use-package which-key
+  :ensure t
   :defer 1
   :diminish which-key-mode
   :config
   (setq which-key-idle-delay 0
         which-key-sort-order 'which-key-prefix-then-key-order)
   (which-key-add-key-based-replacements
-    "C-c !" "flycheck"
-    "C-c p" "projectile"
-    "C-c i" "unicode"
-    "C-c &" "yas")
+   "C-c !" "flycheck"
+   "C-c p" "projectile"
+   "C-c i" "unicode"
+   "C-c &" "yas")
   (which-key-mode))
 
 
@@ -204,29 +225,35 @@
 ;; ..................................................................... generic
 ;; indentation
 (setq-default indent-tabs-mode nil
-	          tab-width 2
-	          fill-column 80)
+	            tab-width 2
+	            fill-column 80)
 ;; rainbow
 (use-package rainbow-delimiters
+  :ensure t
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package rainbow-identifiers
+  :ensure t
   :hook (prog-mode . rainbow-identifiers-mode))
 
 ;; git-gutter
 (use-package diff-hl
+  :ensure t
   :hook (prog-mode . diff-hl-mode)
   :diminish diff-hl-mode
   :bind (("M-n" . diff-hl-next-hunk)
          ("M-p" . diff-hl-previous-hunk)))
 
 (use-package dumb-jump
+  :ensure t
   :bind ("s-." . dumb-jump-go))
 
 (use-package expand-region
+  :ensure t
   :bind (("C-c v" . er/expand-region)))
 
 (use-package smartparens
+  :ensure t
   :after hydra
   :hook (prog-mode . smartparens-strict-mode)
   :diminish smartparens-mode
@@ -312,8 +339,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
      (display-buffer-no-window)))
   :config
   (setq compilation-finish-functions
-      (append compilation-finish-functions
-          '(peel/compilation-finish)))
+        (append compilation-finish-functions
+                '(peel/compilation-finish)))
 
   (defun peel/compilation-finish (buffer status)
     ;; ('require alert)
@@ -322,6 +349,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
                   (concat "display notification \"Compilation: " status "\" with title \"Emacs\""))))
 
 (use-package lsp-mode
+  :ensure t
   :bind ("C-c l" . lsp-hydra/body)
   :hook ((scala-mode . lsp)
          (js-mode . lsp)
@@ -330,36 +358,40 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :config
   (setq lsp-eldoc-render-all t)
   (defhydra lsp-hydra (:exit t :hint nil)
-  "
+    "
  Buffer^^               Server^^                   Symbol
 -------------------------------------------------------------------------------------
  [_f_] format           [_M-r_] restart            [_d_] declaration  [_i_] implementation  [_o_] documentation
  [_m_] imenu            [_S_]   shutdown           [_D_] definition   [_t_] type            [_r_] rename
  [_x_] execute action   [_M-s_] describe session   [_R_] references   [_s_] signature       [_w_] workspace"
-  ("d" lsp-find-declaration)
-  ("D" lsp-ui-peek-find-definitions)
-  ("R" lsp-ui-peek-find-references)
-  ("i" lsp-ui-peek-find-implementation)
-  ("t" lsp-find-type-definition)
-  ("s" lsp-signature-help)
-  ("o" lsp-describe-thing-at-point)
-  ("r" lsp-rename)
-  ("w" lsp-ivy-workspace-symbol)
+    ("d" lsp-find-declaration)
+    ("D" lsp-ui-peek-find-definitions)
+    ("R" lsp-ui-peek-find-references)
+    ("i" lsp-ui-peek-find-implementation)
+    ("t" lsp-find-type-definition)
+    ("s" lsp-signature-help)
+    ("o" lsp-describe-thing-at-point)
+    ("r" lsp-rename)
+    ("w" lsp-ivy-workspace-symbol)
 
-  ("f" lsp-format-buffer)
-  ("m" lsp-ui-imenu)
-  ("x" lsp-execute-code-action)
+    ("f" lsp-format-buffer)
+    ("m" lsp-ui-imenu)
+    ("x" lsp-execute-code-action)
 
-  ("M-s" lsp-describe-session)
-  ("M-r" lsp-workspace-restart)
-  ("S" lsp-workspace-shutdown)))
+    ("M-s" lsp-describe-session)
+    ("M-r" lsp-workspace-restart)
+    ("S" lsp-workspace-shutdown)))
 
-(use-package lsp-ui)
-(use-package lsp-ivy)
-(use-package company-lsp)
+(use-package lsp-ui
+  :ensure t)
+(use-package lsp-ivy
+  :ensure t)
+(use-package company-lsp
+  :ensure t)
 
 ;; ..................................................................... Haskell
 (use-package haskell-mode
+  :ensure t  
   :mode ("\\.hs\\'")
   :preface
   (load "haskell-mode-autoloads" t t)
@@ -374,51 +406,60 @@ _k_: kill        _s_: split                   _{_: wrap with { }
              haskell-mode-handle-generic-loc))
 (use-package haskell-interactive-mode)
 (use-package ormolu
- :hook (haskell-mode . ormolu-format-on-save-mode)
- :bind
- (:map haskell-mode-map
-   ("C-c r" . ormolu-format-buffer)))
+  :ensure t  
+  :hook (haskell-mode . ormolu-format-on-save-mode)
+  :bind
+  (:map haskell-mode-map
+        ("C-c r" . ormolu-format-buffer)))
 (use-package attrap
-    :bind ("C-x /" . attrap-attrap))
+  :ensure t
+  :bind ("C-x /" . attrap-attrap))
 (use-package dante
-    :commands dante-mode
-    :hook ((haskell-mode . dante-mode)
-           (haskell-mode . flycheck-mode))
-    :config
-    (setq haskell-process-wrapper-function
-        (lambda (args) (apply 'nix-shell-command (nix-current-sandbox) args)))
-    (add-hook 'dante-mode-hook
-              '(lambda () (flycheck-add-next-checker 'haskell-dante
-                                                '(warning . ormolu)))))
+  :ensure t
+  :commands dante-mode
+  :hook ((haskell-mode . dante-mode)
+         (haskell-mode . flycheck-mode))
+  :config
+  (setq haskell-process-wrapper-function
+        (lambda (args) (apply 'nix-shell-command (nix-current-sandbox) args))))
 
 ;; ......................................................................... nix
 (use-package nix-mode
+  :ensure t
   :mode "\\.nix\\'")
 
 (use-package nix-buffer
+  :ensure t  
   :commands nix-buffer)
 
 (use-package nix-sandbox
+  :ensure t  
   :defer 2)
 
 (use-package envrc
+  :ensure t
   :diminish
   :init (envrc-global-mode))
 
 ;; ....................................................................... dhall
 (use-package dhall-mode
+  :ensure t  
   :disabled
-  :mode "\\.dhall\\'")
+  :mode "\\.dhall\\'"
+  :custom (dhall-format-at-save . -1))
 
 ;; ...................................................................... docker
-(use-package dockerfile-mode)
+(use-package dockerfile-mode
+  :ensure t)
 
 ;; ........................................................................ yaml
 (use-package yaml-mode
+  :ensure t
   :mode ("\\.yml\\'" "\\.yaml\\'"))
 
 ;; .......................................................................... go
 (use-package go-mode
+  :ensure t
   :commands go-mode
   :mode ("\\.go?\\'" . go-mode)
   :defer t
@@ -426,12 +467,13 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; .......................................................................... go
 (use-package rust-mode
-  :commands go-mode
+  :ensure t  
   :mode ("\\.rs?\\'" . rust-mode)
   :defer t)
 
 ;; ....................................................................... scala
 (use-package scala-mode
+  :ensure t
   :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
   :hook (scala-mode . subword-mode)
   :interpreter ("scala" . scala-mode)
@@ -441,19 +483,22 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (setq scala-indent:default-run-on-strategy scala-indent:operator-strategy)
   (setq projectile-globally-ignored-directories (append '(".metals" ".bloop"))))
 
-(use-package lsp-metals)
+(use-package lsp-metals
+  :ensure t)
 
 ;; .......................................................................... js
 (use-package js2-mode
   :hook (js-mode . js2-minor-mode))
 
 (use-package prettier-js
+  :ensure t
   :hook ((web-mode . prettier-js-mode)
          (js-mode . prettier-js-mode)))
 
 (use-package typescript-mode
-  :config (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode)))
-  
+  :ensure t
+  :mode "\\.tsx?\\'")
+
 (use-package web-mode
   :mode ("\\.html?\\'" "\\.css\\'" "\\.scss\\'")
   :custom
@@ -468,24 +513,27 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; .................................................................. restclient
 (use-package restclient
+  :ensure t
   :diminish (restclient-mode . " ")
   :mode (("\\.http\\'" . restclient-mode)
-	     ("\\.rest\\'" . restclient-mode)
-	     ("\\.restclient\\'" . restclient-mode)))
+	       ("\\.rest\\'" . restclient-mode)
+	       ("\\.restclient\\'" . restclient-mode)))
 
 ;; ................................................................... terraform
 (use-package terraform-mode
+  :ensure t
   :mode ("\\.tf\\'"))
 
 ;; .................................................................... markdown
 (use-package markdown-mode
+  :ensure t
   :mode (("\\.markdown\\'" . markdown-mode)
          ("\\.md\\'" . markdown-mode))
   :diminish (markdown-mode . " "))
 
 
 ;; org ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-(setq papers-dir (expand-file-name "~/Dropbox/Documents/notes/reading/")
+(setq papers-dir (expand-file-name "~/Dropbox/Documents/roam/")
       papers-pdfs (concat papers-dir "lib/")
       papers-notes (concat papers-dir "index.org")
       papers-refs (concat papers-dir "index.bib"))
@@ -497,7 +545,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
          (org-mode . auto-fill-mode)
          (org-mode . org-indent-mode))
   :config
-  (setq org-agenda-files '("~/Dropbox/Documents/notes/"))
+  (setq org-agenda-files '("~/Dropbox/Documents/roam/"))
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((shell      . t)
@@ -507,21 +555,46 @@ _k_: kill        _s_: split                   _{_: wrap with { }
      (dot        . t))))
 
 (use-package org-roam
+  :ensure t
   :hook after-init-hook
   :custom
-  (org-roam-directory "~/Dropbox/Documents/roam/")
-  (org-roam-graph-viewer "/usr/bin/open"))
+  (org-roam-directory "~/Dropbox/Documents/roam/"))
+
+(use-package org-roam-server
+  :ensure t
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 8080
+        org-roam-server-authenticate nil
+        org-roam-server-export-inline-images t
+        org-roam-server-serve-files nil
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20))
+
+(use-package org-roam-bibtex
+  :ensure t
+  :after org-roam
+  :hook (org-roam-mode . org-roam-bibtex-mode)
+  :bind (:map org-mode-map
+              (("C-c n a" . orb-note-actions))))
 
 (use-package nov
+  :ensure t
   :mode ("\\.epub\\'" . nov-mode))
 
 (use-package pdf-tools
+  :ensure t
   :hook (pdf-view-mode . pdf-view-midnight-minor-mode)
   :config
   (require 'pdf-occur)
   (pdf-tools-install))
 
 (use-package org-ref
+  :ensure t
   :config
   ;; (setq reftex-default-bibliography (list papers-refs))
   (setq org-ref-completion-library 'org-ref-ivy-cite
@@ -530,6 +603,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         org-ref-pdf-directory papers-pdfs))
 
 (use-package org-noter
+  :ensure t
   :commands org-noter
   :custom
   (org-noter-default-notes-file-names '("index-org"))
@@ -541,6 +615,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 	(org-noter-notes-window-location 'vertical-split))
 
 (use-package ivy-bibtex
+  :ensure t
   :after ivy
   :custom
   (bibtex-completion-bibliography papers-refs)
@@ -549,6 +624,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; terminal ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package vterm
+  :ensure t
   :hook (vterm-mode . (lambda ()
                         (setq-local global-hl-line-mode nil)
                         (setq-local line-spacing nil)))
@@ -614,6 +690,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; ....................................................................... folds
 (use-package hideshow
+  :ensure nil
   :hook (prog-mode . hs-minor-mode)
   :diminish hs-minor-mode
   :custom (hs-isearch-opean t "Automatically open a block if it matches a search")
@@ -623,6 +700,18 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package hide-comnt
   :commands hide/show-comments-toggle)
+
+;; .................................................................. newsticker
+(use-package newsticker
+  :ensure nil
+  :custom
+  (newsticker-retrieval-interval 0 "don't fetch in the background")
+  (newsticker-automatically-mark-items-as-old nil)
+  (newsticker-url-list
+   '(("Becoming Minimalist" "https://www.becomingminimalist.com/feed")
+     ("Manuel Morale" "https://manuelmoreale.com//feed")
+     ("No/Sidebar" "https://nosidebar.com/feed/")
+     ("Donald Robertson" "https://donaldrobertson.name/feed/"))))
 
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ;; ...................................................................... themes
@@ -634,11 +723,13 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (defvar current-theme dark-theme)
 
   (use-package gotham-theme
+    :ensure t
     :preface
     (add-to-list 'custom-theme-load-path
                  (file-name-directory (locate-library "gotham-theme"))))
 
   (use-package apropospriate-theme
+    :ensure t
     :preface
     (add-to-list 'custom-theme-load-path
                  (file-name-directory (locate-library "apropospriate-theme"))))
@@ -674,10 +765,10 @@ _k_: kill        _s_: split                   _{_: wrap with { }
       (counsel-load-theme-action theme)
       (load-theme theme)
       (setq current-theme theme))
+    (shell-command "osascript -e 'tell app \"System Events\" to tell appearance preferences to set dark mode to not dark mode'")
     (if (eq current-theme dark-theme)
         (switch light-theme)
-      (switch dark-theme))
-    (shell-command "osascript -e 'tell app \"System Events\" to tell appearance preferences to set dark mode to not dark mode'"))
+      (switch dark-theme)))
   
   (defun peel/load-glitter (&optional frame)
     (unless frame
@@ -690,18 +781,20 @@ _k_: kill        _s_: split                   _{_: wrap with { }
           (peel/load-ui)))))
   
   (if (daemonp)
-        (add-hook 'after-make-frame-functions #'peel/load-glitter t)
+      (add-hook 'after-make-frame-functions #'peel/load-glitter t)
     (peel/load-glitter)))
 
 
 (use-package writeroom-mode
+  :ensure t  
   :custom
   (writeroom-fullscreen-effect "maximized")
   (writeroom-width 126)
   (writeroom-bottom-divider-width 0)
   (writeroom-major-modes '(prog-mode))
   :config
-  (use-package focus)
+  (use-package focus
+    :ensure t)
 
   (defun peel/work ()
     "Trigger work env"
@@ -721,15 +814,15 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :defer 0
   :init
   (setq inhibit-startup-screen t
-      initial-scratch-message nil
-      make-backup-files nil
-      frame-resize-pixelwise t
-      pop-up-windows nil
-      column-number-mode t
-      confirm-kill-emacs 'yes-or-no-p
-      echo-keystrokes 0.1
-      visible-bell nil
-      hl-line-mode t)
+        initial-scratch-message nil
+        make-backup-files nil
+        frame-resize-pixelwise t
+        pop-up-windows nil
+        column-number-mode t
+        confirm-kill-emacs 'yes-or-no-p
+        echo-keystrokes 0.1
+        visible-bell nil
+        hl-line-mode t)
   :bind ("C-z" . kill-whole-line))
 
 (setq backup-by-copying t

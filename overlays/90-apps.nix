@@ -37,10 +37,10 @@ Calibre = self.installApplication rec {
 
 Dash = self.installApplication rec {
   name = "Dash";
-  version = "4.5.1";
+  version = "5.4.0";
   sourceRoot = "Dash.app";
   src = super.fetchurl {
-    url = https://kapeli.com/downloads/v4/Dash.zip;
+    url = https://kapeli.com/downloads/v5/Dash.zip;
     sha256 = "1dizd4mmmr3vrqa5x4pdbyy0g00d3d5y45dfrh95zcj5cscypdg2";
     # date = 2018-09-28T23:36:13-0700;
   };

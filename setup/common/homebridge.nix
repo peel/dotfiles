@@ -57,7 +57,7 @@ let
       homebridge-xiaomi-roborock-vacuum = "0.4.1";
       homebridge-webos-tv = "1.5.4";
       homebridge-yeelight-platform = "1.2.4";
-      homebridge-zigbee = "1.3.0";
+      homebridge-zigbee-v2 = "0.0.22";
     };
   });
   version = "no-avahi";

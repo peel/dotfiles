@@ -22,7 +22,7 @@ in rec {
 
   nix.maxJobs = lib.mkDefault 12;
 
-  #FIXME
+  # FIXME
   environment.darwinConfig = <dotfiles/machines/fff666/configuration.nix>;
   system.stateVersion = 3;
 

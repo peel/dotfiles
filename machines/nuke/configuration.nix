@@ -77,7 +77,7 @@ in {
     defaultLocale = "en_US.UTF-8";
   };
 
-  environment.systemPackages = with pkgs; [ emacs docker ];
+  environment.systemPackages = [ pkgs.emacs pkgs.docker ];
 
   users.extraUsers = {
     "${username}"= {

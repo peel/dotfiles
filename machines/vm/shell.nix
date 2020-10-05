@@ -14,7 +14,7 @@ let
   '';
   kaput = "vagrant destroy && vagrant box remove --all --force";
 in pkgs.mkShell {
-  buildInputs = with pkgs; [ vagrant ];
+  buildInputs = [ pkgs.vagrant ];
   shellHook = ''
     alias hande-hoch=${hande-hoch}
     alias kaput=${kaput}
