@@ -56,6 +56,7 @@
 (use-package company
   :ensure t
   :bind ("<C-tab>" . company-complete)
+  :hook (after-init-hook . global-company-mode)
   :diminish company-mode
   :commands (company-mode global-company-mode)
   :defer 1
@@ -127,10 +128,7 @@
 	       ("M-y" . counsel-yank-pop)
 	       ("C-c i 8" . counsel-unicode-char)
          ("C-c r" . counsel-rg)
-	       ("C-c d" . counsel-descbinds))
-  :config
-  ;; disable matching ^+ in M-x
-  (setcdr (assoc 'counsel-M-x ivy-initial-inputs-alist) ""))
+	       ("C-c d" . counsel-descbinds)))
 
 ;; syntax checking ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package flycheck
@@ -391,7 +389,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; ..................................................................... Haskell
 (use-package haskell-mode
-  :ensure t  
+  :ensure t
   :mode ("\\.hs\\'")
   :preface
   (load "haskell-mode-autoloads" t t)
@@ -405,8 +403,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
              haskell-ident-at-point
              haskell-mode-handle-generic-loc))
 (use-package haskell-interactive-mode)
+;; TODO hls?
 (use-package ormolu
-  :ensure t  
+  :ensure t
   :hook (haskell-mode . ormolu-format-on-save-mode)
   :bind
   (:map haskell-mode-map
@@ -488,6 +487,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; .......................................................................... js
 (use-package js2-mode
+  :ensure t
   :hook (js-mode . js2-minor-mode))
 
 (use-package prettier-js
@@ -499,17 +499,18 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :ensure t
   :mode "\\.tsx?\\'")
 
-(use-package web-mode
-  :mode ("\\.html?\\'" "\\.css\\'" "\\.scss\\'")
-  :custom
-  (web-mode-markup-indent-offset 2 "2 spaces")
-  (web-mode-css-indent-offset 2)
-  (web-mode-markup-indent-offset 2)
-  (web-mode-code-indent-offset 2)
-  (css-indent-offset 2)
-  (js-switch-indent-offset 2)
-  (js-indent-level 2)
-  (js-indent-switch-body t))
+;; (use-package web-mode
+;;   :ensure t
+;;   :mode ("\\.html?\\'" "\\.css\\'" "\\.scss\\'")
+;;   :custom
+;;   (web-mode-markup-indent-offset 2 "2 spaces")
+;;   (web-mode-css-indent-offset 2)
+;;   (web-mode-markup-indent-offset 2)
+;;   (web-mode-code-indent-offset 2)
+;;   (css-indent-offset 2)
+;;   (js-switch-indent-offset 2)
+;;   (js-indent-level 2)
+;;   (js-indent-switch-body t))
 
 ;; .................................................................. restclient
 (use-package restclient
@@ -535,7 +536,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; org ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (setq papers-dir (expand-file-name "~/Dropbox/Documents/roam/")
       papers-pdfs (concat papers-dir "lib/")
-      papers-notes (concat papers-dir "index.org")
+      papers-notes (concat papers-dir "books.org")
       papers-refs (concat papers-dir "index.bib"))
 
 (use-package org
@@ -545,6 +546,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
          (org-mode . auto-fill-mode)
          (org-mode . org-indent-mode))
   :config
+  (require 'org-protocol)
+  (setq org-directory "~/Dropbox/Documents/roam/")
   (setq org-agenda-files '("~/Dropbox/Documents/roam/"))
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -554,11 +557,26 @@ _k_: kill        _s_: split                   _{_: wrap with { }
      (haskell    . t)
      (dot        . t))))
 
+(use-package org-capture
+  :bind ("C-C n" . org-capture)
+  :custom
+  ;; FIXME
+  (setq org-capture-templates `(
+    ("p" "Protocol" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
+        "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+    ("L" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
+        "* %? [[%:link][%:description]] \nCaptured On: %U"))))
+
 (use-package org-roam
   :ensure t
-  :hook after-init-hook
-  :custom
-  (org-roam-directory "~/Dropbox/Documents/roam/"))
+  :hook ((after-init-hook)
+         (org-mode . org-roam-mode))
+  :config
+  (setq org-roam-completion-everywhere t
+        org-roam-directory "~/Dropbox/Documents/roam/"
+        company-backends '(company-capf))
+  (require 'org-roam-protocol)
+  (org-roam))
 
 (use-package org-roam-server
   :ensure t
@@ -607,7 +625,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :commands org-noter
   :custom
   (org-noter-default-notes-file-names '("index-org"))
-	(org-noter-notes-search-path (list papers-dir))
+	(org-noter-notes-search-path (list "~/Dropbox/Documents/roam/"))
 	(org-noter-auto-save-last-location t)
 	(org-noter-doc-split-fraction '(0.8 . 0.8))
 	(org-noter-always-create-frame nil)
@@ -621,6 +639,24 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (bibtex-completion-bibliography papers-refs)
   (bibtex-completion-library-path papers-pdfs)
   (bibtex-completion-notes-path papers-notes))
+
+(use-package org-static-blog
+  :ensure t
+  :load-path "~/Dropbox/Documents/roam/"
+  :custom
+  (org-export-with-section-numbers nil)
+  (org-export-with-toc nil)
+  (org-static-blog-enable-tags t)
+  (org-static-blog-drafts-directory "/tmp/drafts")
+  (org-static-blog-posts-directory "~/Dropbox/Documents/roam/")
+  (org-static-blog-publish-directory "~/Dropbox/Documents/roam-html/")
+  (org-static-blog-publish-title "notes.codearsonist.com")
+  (org-static-blog-publish-url "/")
+  (org-static-blog-use-preview t)
+  (org-static-blog-index-file "landing.html")
+  (org-static-blog-page-preamble nil)
+  (org-static-blog-page-postamble nil)
+  (org-static-blog-page-header "<link href= \"export/html/style.css\" rel=\"stylesheet\" type=\"text/css\" />"))
 
 ;; terminal ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package vterm

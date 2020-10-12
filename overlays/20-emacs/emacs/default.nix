@@ -8,7 +8,12 @@ let
     mkdir -p $out/share/emacs/site-lisp
     cp -r ${src}/* $out/share/emacs/site-lisp/
   '';
-  myEmacs = pkgs.emacsGcc;
+  myEmacs = (pkgs.emacsGcc.overrideAttrs(old: {
+    buildInputs = old.buildInputs ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+      pkgs.darwin.apple_sdk.frameworks.CoreFoundation
+      pkgs.darwin.apple_sdk.frameworks.WebKit
+    ];}
+  )).override{ withXwidgets = true; };
   myEmacsConfig = ./default.el;
 in 
 pkgs.emacsWithPackagesFromUsePackage {
