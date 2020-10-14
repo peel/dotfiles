@@ -64,7 +64,8 @@
   (company-require-match nil)
 	(company-selection-wrap-around t)
   (global-company-mode)
-  (company-idle-delay 0))
+  (company-idle-delay 0)
+  (company-minimum-prefix-length 0))
 
 (use-package dash-at-point
   :ensure t
@@ -536,7 +537,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 ;; org ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (setq papers-dir (expand-file-name "~/Dropbox/Documents/roam/")
       papers-pdfs (concat papers-dir "lib/")
-      papers-notes (concat papers-dir "books.org")
+      papers-notes (concat papers-dir "books/")
       papers-refs (concat papers-dir "index.bib"))
 
 (use-package org
@@ -544,9 +545,12 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :defer nil
   :hook ((org-mode . visual-line-mode)
          (org-mode . auto-fill-mode)
-         (org-mode . org-indent-mode))
+         (org-mode . org-indent-mode)
+         (org-mode . writeroom-mode)
+         (org-mode . company-mode))
   :config
   (require 'org-protocol)
+  (add-to-list 'company-backends 'company-capf)
   (setq org-directory "~/Dropbox/Documents/roam/")
   (setq org-agenda-files '("~/Dropbox/Documents/roam/"))
   (org-babel-do-load-languages
@@ -563,20 +567,32 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   ;; FIXME
   (setq org-capture-templates `(
     ("p" "Protocol" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
-        "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+     "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
     ("L" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
-        "* %? [[%:link][%:description]] \nCaptured On: %U"))))
+     "* %? [[%:link][%:description]] \nCaptured On: %U"))))
 
 (use-package org-roam
   :ensure t
-  :hook ((after-init-hook)
-         (org-mode . org-roam-mode))
-  :config
-  (setq org-roam-completion-everywhere t
-        org-roam-directory "~/Dropbox/Documents/roam/"
-        company-backends '(company-capf))
-  (require 'org-roam-protocol)
-  (org-roam))
+  :hook ((after-init-hook . org-roam)
+         (org-mode . org-roam-mode)
+         (smartpartents-strict))
+  :custom
+  (org-roam-db-location "~/.config/emacs/org-roam.db")
+  (org-roam-directory "~/Dropbox/Documents/roam/")
+  (org-roam-link-auto-replace t)
+  (org-roam-dailies-capture-templates '(("d" "daily" plain (function org-roam-capture--get-point)
+                                         ""
+                                         :immediate-finish t
+                                         :file-name "journal/%<%Y-%m-%d>"
+                                         :head "#+title: %<%Y-%m-%d>\n#+date: %<%Y-%m-%d>\n#+filetags: private\n\n* Rozmyślania\n** TODO Co uczyni ten dzień lepszym? (okazje do ćwiczenia):\n** TODO Konsekwencje pasji:\n** TODO Rzeczy za które jestem wdzięczny (wykorzystane szanse):\n** TODO Rzeczy które mogłem zrobić inaczej (niewykorzystane szanse):\n** TODO Do zrobienia (jutro):\n* Varia\n")))
+  :bind (:map org-roam-mode-map
+              ("C-c n l" . org-roam)
+              ("C-c n f" . org-roam-find-file)
+              ("C-c n g" . org-roam-graph)
+              ("C-c n d" . org-roam-dailies-today)
+              ("C-c n h" . org-roam-jump-to-index)              
+              :map org-mode-map
+              ("C-c n i" . org-roam-insert)))
 
 (use-package org-roam-server
   :ensure t
@@ -822,7 +838,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 
 (use-package writeroom-mode
-  :ensure t  
+  :ensure t
   :custom
   (writeroom-fullscreen-effect "maximized")
   (writeroom-width 126)
@@ -858,7 +874,8 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         confirm-kill-emacs 'yes-or-no-p
         echo-keystrokes 0.1
         visible-bell nil
-        hl-line-mode t)
+        hl-line-mode t
+        xwidget-webkit-enable-plugins nil)
   :bind ("C-z" . kill-whole-line))
 
 (setq backup-by-copying t
