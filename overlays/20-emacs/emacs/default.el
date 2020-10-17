@@ -552,7 +552,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (require 'org-protocol)
   (add-to-list 'company-backends 'company-capf)
   (setq org-directory "~/Dropbox/Documents/roam/")
-  (setq org-agenda-files '("~/Dropbox/Documents/roam/"))
+  (setq org-agenda-files '("~/Dropbox/Documents/roam/journal"))
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((shell      . t)
@@ -574,22 +574,26 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 (use-package org-roam
   :ensure t
   :hook ((after-init-hook . org-roam)
-         (org-mode . org-roam-mode)
-         (smartpartents-strict))
+         (smartpartents-strict)
+         (org-roam-mode . (lambda ()
+                            (set (make-local-variable 'company-backends)
+                                 '((company-capf))))))
   :custom
   (org-roam-db-location "~/.config/emacs/org-roam.db")
   (org-roam-directory "~/Dropbox/Documents/roam/")
   (org-roam-link-auto-replace t)
+  (org-roam-tag-sources '(prop all-directories))
+  (org-roam-buffer-window-parameters '((no-delete-other-windows . t)))
   (org-roam-dailies-capture-templates '(("d" "daily" plain (function org-roam-capture--get-point)
                                          ""
                                          :immediate-finish t
                                          :file-name "journal/%<%Y-%m-%d>"
-                                         :head "#+title: %<%Y-%m-%d>\n#+date: %<%Y-%m-%d>\n#+filetags: private\n\n* Rozmyślania\n** TODO Co uczyni ten dzień lepszym? (okazje do ćwiczenia):\n** TODO Konsekwencje pasji:\n** TODO Rzeczy za które jestem wdzięczny (wykorzystane szanse):\n** TODO Rzeczy które mogłem zrobić inaczej (niewykorzystane szanse):\n** TODO Do zrobienia (jutro):\n* Varia\n")))
+                                         :head "#+title: %<%Y-%m-%d>\n#+date: %<%Y-%m-%d>\n#+filetags: private\n\nPart of [[file:journal.org][Journal]] notes.\n\n* Rozmyślania\n** TODO Co uczyni ten dzień lepszym? (okazje do ćwiczenia)\n** TODO Konsekwencje pasji\n** TODO Rzeczy za które jestem wdzięczny (wykorzystane szanse)\n** TODO Rzeczy które mogłem zrobić inaczej (niewykorzystane szanse)\n** Do zrobienia (jutro)\n* Varia\n")))
   :bind (:map org-roam-mode-map
-              ("C-c n l" . org-roam)
+              ("C-c n r" . org-roam)
               ("C-c n f" . org-roam-find-file)
               ("C-c n g" . org-roam-graph)
-              ("C-c n d" . org-roam-dailies-today)
+              ("C-c n t" . org-roam-dailies-today)
               ("C-c n h" . org-roam-jump-to-index)              
               :map org-mode-map
               ("C-c n i" . org-roam-insert)))
@@ -616,6 +620,15 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :bind (:map org-mode-map
               (("C-c n a" . orb-note-actions))))
 
+(use-package deft
+  :ensure t
+  :bind ("C-c n l" . deft)
+  :custom
+  (deft-recursive t)
+  (deft-use-filter-string-for-filename t)
+  (deft-default-extension "org")
+  (deft-directory papers-dir))
+
 (use-package nov
   :ensure t
   :mode ("\\.epub\\'" . nov-mode))
@@ -629,6 +642,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package org-ref
   :ensure t
+  :bind ("C-c n r" . org-ref-bibtex-hydra/body)
   :config
   ;; (setq reftex-default-bibliography (list papers-refs))
   (setq org-ref-completion-library 'org-ref-ivy-cite
