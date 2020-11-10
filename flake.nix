@@ -12,8 +12,8 @@
   outputs = { self, darwin, nixpkgs, emacs-overlay, ... }@inputs: {
     darwinConfigurations."snowflake" = darwin.lib.darwinSystem {
       modules = [
-        ./machines/snowflake/configuration.nix 
         { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
+        ./machines/snowflake/configuration.nix
         # home-manager.nixosModules.home-manager
         #   {
         #     home-manager.useGlobalPkgs = true;
