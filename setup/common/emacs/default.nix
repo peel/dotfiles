@@ -1,6 +1,4 @@
-{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/502845c3e31ef3de0e424f3fcb09217df2ce6df6.tar.gz") { overlays = [(import (builtins.fetchTarball {
-     url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
-}))];} }:
+{ pkgs, ... }:
 
 let
   elisp = src: file:

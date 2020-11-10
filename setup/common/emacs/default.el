@@ -47,11 +47,6 @@
   :ensure nil
   :config (winner-mode 1))
 
-(use-package windmove
-  :ensure nil
-  :init (windmove-default-keybindings 'meta)
-  :custom (windmove-wrap-around t))
-
 ;; completion ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package company
   :ensure t
@@ -74,6 +69,7 @@
          ("C-c H" . dash-at-point-with-docset)))
 
 ;; ivy ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+;; todo selectrum ctrlf prescient
 (use-package ivy
   :ensure t
   :defer 1
@@ -132,6 +128,7 @@
 	       ("C-c d" . counsel-descbinds)))
 
 ;; syntax checking ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+;; todo remove
 (use-package flycheck
   :ensure t
   :after nix-sandbox
@@ -166,17 +163,6 @@
 (use-package forge
   :ensure t
   :after magit)
-
-
-;; project management ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-(use-package projectile
-  :ensure t
-  :commands projectile-mode
-  :bind-keymap ("C-c p" . projectile-command-map)
-  :defer 5
-  :diminish projectile-mode
-  :custom (projectile-completion-system 'ivy)
-  :config (projectile-mode))
 
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
@@ -214,7 +200,7 @@
 
 
 ;; ....................................................................... setup
-;; hydra
+;; todo transient?
 (use-package hydra
   :ensure t
   :demand t)
@@ -235,13 +221,10 @@
   :ensure t
   :hook (prog-mode . rainbow-identifiers-mode))
 
-;; git-gutter
 (use-package diff-hl
   :ensure t
   :hook (prog-mode . diff-hl-mode)
-  :diminish diff-hl-mode
-  :bind (("M-n" . diff-hl-next-hunk)
-         ("M-p" . diff-hl-previous-hunk)))
+  :diminish diff-hl-mode)
 
 (use-package dumb-jump
   :ensure t
@@ -251,6 +234,7 @@
   :ensure t
   :bind (("C-c v" . er/expand-region)))
 
+;; todo remove hydra
 (use-package smartparens
   :ensure t
   :after hydra
@@ -429,11 +413,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :mode "\\.nix\\'")
 
 (use-package nix-buffer
-  :ensure t  
+  :ensure t
   :commands nix-buffer)
 
 (use-package nix-sandbox
-  :ensure t  
+  :ensure t
   :defer 2)
 
 (use-package envrc
@@ -551,6 +535,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :config
   (require 'org-protocol)
   (add-to-list 'company-backends 'company-capf)
+  ;; todo paths
   (setq org-directory "~/Dropbox/Documents/roam/")
   (setq org-agenda-files '("~/Dropbox/Documents/roam/journal"))
   (org-babel-do-load-languages
@@ -579,11 +564,13 @@ _k_: kill        _s_: split                   _{_: wrap with { }
                             (set (make-local-variable 'company-backends)
                                  '((company-capf))))))
   :custom
+  ;; todo paths
   (org-roam-db-location "~/.config/emacs/org-roam.db")
   (org-roam-directory "~/Dropbox/Documents/roam/")
   (org-roam-link-auto-replace t)
   (org-roam-tag-sources '(prop all-directories))
   (org-roam-buffer-window-parameters '((no-delete-other-windows . t)))
+  ;; todo template management
   (org-roam-dailies-capture-templates '(("d" "daily" plain (function org-roam-capture--get-point)
                                          ""
                                          :immediate-finish t
@@ -602,7 +589,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :ensure t
   :config
   (setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 8080
+        org-roam-server-port 1234
         org-roam-server-authenticate nil
         org-roam-server-export-inline-images t
         org-roam-server-serve-files nil
@@ -670,6 +657,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (bibtex-completion-library-path papers-pdfs)
   (bibtex-completion-notes-path papers-notes))
 
+;; todo paths
 (use-package org-static-blog
   :ensure t
   :load-path "~/Dropbox/Documents/roam/"
@@ -681,7 +669,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (org-static-blog-posts-directory "~/Dropbox/Documents/roam/")
   (org-static-blog-publish-directory "~/Dropbox/Documents/roam-html/")
   (org-static-blog-publish-title "notes.codearsonist.com")
-  (org-static-blog-publish-url "/")
+  (org-static-blog-publish-url "notes.codearsonist.com")
   (org-static-blog-use-preview t)
   (org-static-blog-index-file "landing.html")
   (org-static-blog-page-preamble nil)
@@ -764,21 +752,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
          ("M-+" . hs-show-all)
          ("M--" . hs-hide-level)))
 
-(use-package hide-comnt
-  :commands hide/show-comments-toggle)
-
-;; .................................................................. newsticker
-(use-package newsticker
-  :ensure nil
-  :custom
-  (newsticker-retrieval-interval 0 "don't fetch in the background")
-  (newsticker-automatically-mark-items-as-old nil)
-  (newsticker-url-list
-   '(("Becoming Minimalist" "https://www.becomingminimalist.com/feed")
-     ("Manuel Morale" "https://manuelmoreale.com//feed")
-     ("No/Sidebar" "https://nosidebar.com/feed/")
-     ("Donald Robertson" "https://donaldrobertson.name/feed/"))))
-
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ;; ...................................................................... themes
 (use-package emacs
@@ -850,7 +823,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
       (add-hook 'after-make-frame-functions #'peel/load-glitter t)
     (peel/load-glitter)))
 
-
 (use-package writeroom-mode
   :ensure t
   :custom
@@ -890,7 +862,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         visible-bell nil
         hl-line-mode t
         xwidget-webkit-enable-plugins nil)
-  :bind ("C-z" . kill-whole-line))
+  :bind (("C-z" . kill-whole-line)
+         ("M-n" . forward-paragraph)
+         ("M-p" . backward-paragraph)))
 
 (setq backup-by-copying t
       backup-directory-alist '((".*" . "~/.emacs.d/saves/"))
