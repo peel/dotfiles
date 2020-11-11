@@ -571,6 +571,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (org-roam-tag-sources '(prop all-directories))
   (org-roam-buffer-window-parameters '((no-delete-other-windows . t)))
   ;; todo template management
+  (org-roam-capture-templates '(("d" "default" plain (function org-roam-capture--get-point)
+                                 "%?"
+                                 :file-name "${slug}"
+                                 :head "#+title: ${title}\n#+created: %u\n#+last_modified: %U\n#+filetags:\n\n"
+                                 :unnarowed t)))
   (org-roam-dailies-capture-templates '(("d" "daily" plain (function org-roam-capture--get-point)
                                          ""
                                          :immediate-finish t
@@ -675,6 +680,21 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (org-static-blog-page-preamble nil)
   (org-static-blog-page-postamble nil)
   (org-static-blog-page-header "<link href= \"export/html/style.css\" rel=\"stylesheet\" type=\"text/css\" />"))
+
+;; browser ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+(use-package xwidget-webkit
+  :ensure nil
+  :custom (xwidget-webkit-enable-plugins nil))
+
+(use-package xwwp-follow-link-ivy
+  :ensure t)
+
+(use-package xwwp
+  :ensure t
+  :custom (xwwp-follow-link-completion-system 'ivy)
+  :bind (:map xwidget-webkit-mode-map
+              ("v" . xwwp-follow-link)
+              ("t" . xwwp-ace-toggle)))
 
 ;; terminal ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package vterm
