@@ -10,7 +10,7 @@
   };
 
   outputs = { self, darwin, nixpkgs, emacs-overlay, ... }@inputs: {
-    darwinConfigurations."snowflake" = darwin.lib.darwinSystem {
+    darwinConfigurations.snowflake = darwin.lib.darwinSystem {
       modules = [
         { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
         ./machines/snowflake/configuration.nix
@@ -18,10 +18,34 @@
         #   {
         #     home-manager.useGlobalPkgs = true;
         #     home-manager.useUserPackages = true;
-        #     home-manager.users.user = import ./home.nix;
-        #   }        
+        #     home-manager.users.user = import ./setup/common/home.nix;
+        #   }
+      ];      
+    };
+    darwinConfigurations.fff666 = darwin.lib.darwinSystem {
+      modules = [
+        { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
+        ./machines/fff666/configuration.nix
+        # home-manager.nixosModules.home-manager
+        #   {
+        #     home-manager.useGlobalPkgs = true;
+        #     home-manager.useUserPackages = true;
+        #     home-manager.users.user = import ./setup/common/home.nix;
+        #   }
+      ];      
+    };
+    nixosConfigurations.nuke = nixpkgs.lib.nixosSystem {
+      modules = [
+        { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
+        ./machines/nuke/configuration.nix
+        ./machines/nuke/hardware-configuration.nix
+        # home-manager.nixosModules.home-manager
+        #   {
+        #     home-manager.useGlobalPkgs = true;
+        #     home-manager.useUserPackages = true;
+        #     home-manager.users.user = import ./setup/common/home.nix;
+        #   }
       ];
-      
     };
   };
 }
