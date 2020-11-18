@@ -427,8 +427,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; ....................................................................... dhall
 (use-package dhall-mode
-  :ensure t  
-  :disabled
+  :ensure t
   :mode "\\.dhall\\'"
   :custom (dhall-format-at-save . -1))
 
