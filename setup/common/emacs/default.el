@@ -306,6 +306,11 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     :ensure nil
     :demand))
 
+(use-package project
+  :ensure nil
+  :custom
+  (project-vc-ignores '("result" ".node_modules" ".bloop" ".metals" "target")))
+
 (use-package prog-mode
   :defer 3
   :ensure nil
@@ -463,8 +468,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :config
   (setq scala-indent:align-forms t)
   (setq scala-indent:align-parameters t)
-  (setq scala-indent:default-run-on-strategy scala-indent:operator-strategy)
-  (setq projectile-globally-ignored-directories (append '(".metals" ".bloop"))))
+  (setq scala-indent:default-run-on-strategy scala-indent:operator-strategy))
 
 (use-package lsp-metals
   :ensure t)
