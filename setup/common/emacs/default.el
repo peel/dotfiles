@@ -193,7 +193,6 @@
         which-key-sort-order 'which-key-prefix-then-key-order)
   (which-key-add-key-based-replacements
    "C-c !" "flycheck"
-   "C-c p" "projectile"
    "C-c i" "unicode"
    "C-c &" "yas")
   (which-key-mode))
@@ -308,8 +307,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package project
   :ensure nil
+  :defer 10
   :custom
-  (project-vc-ignores '("result" ".node_modules" ".bloop" ".metals" "target")))
+  (project-vc-ignores '("result" ".node_modules" ".bloop" ".metals" "target" ".DS_Store")))
 
 (use-package prog-mode
   :defer 3
