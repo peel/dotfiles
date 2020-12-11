@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
+  networking.firewall.enable = false; #TODO
   virtualisation.oci-containers.containers = {
     home-assistant = {
       autoStart = true;
@@ -12,12 +13,12 @@
         "8123:8123"
       ];
       volumes = [
-        "/home/peel/wrk/hassiol:/config"
+        "/home/peel/wrk/hassio:/config"
         "/etc/localtime:/etc/localtime"
       ];
       extraOptions = [
         "--network=host"
-        "--device=/dev/ttyACM0:/dev/ttyACM0"
+#        "--device=/dev/ttyACM0:/dev/ttyACM0"
       ];
     };
   };
