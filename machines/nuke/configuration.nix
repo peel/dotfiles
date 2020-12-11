@@ -11,7 +11,7 @@ in {
   imports = [
     ./hardware-configuration.nix
     ../../setup/nixos
-    #../setup/common/homebridge.nix
+    ../../setup/common/hassio.nix
   ];
 
   #peel.gui.enable = false;
