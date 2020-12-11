@@ -37,6 +37,7 @@
       ];      
     };
     nixosConfigurations.nuke = nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
       modules = [
         { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
         ./machines/nuke/configuration.nix
