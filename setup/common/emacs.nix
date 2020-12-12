@@ -6,7 +6,7 @@ in {
   environment.variables.EDITOR = "${emacs}/bin/emacsclient -tc";
   environment.variables.ALTERNATE_EDITOR = "${emacs}/bin/emacs";
 
-  environment.systemPackages = [ emacs ];
+  environment.systemPackages = [ pkgs.binutils emacs ];
   
   services.emacs = {
     enable = true;

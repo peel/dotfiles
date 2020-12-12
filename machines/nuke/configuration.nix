@@ -11,7 +11,7 @@ in {
   imports = [
     ./hardware-configuration.nix
     ../../setup/nixos
-    ../../setup/common/hassio.nix
+    #../../setup/common/hassio.nix
   ];
 
   #peel.gui.enable = false;
@@ -55,6 +55,8 @@ experimental-features = nix-command flakes
     useDHCP = false;
     interfaces.eno1.useDHCP = true;
     interfaces.wlp0s20f3.useDHCP = true;
+    bridges.br0 = { interfaces = [ ]; };
+    interfaces.br0 = { virtual = true; ipv4.addresses = [{address ="10.0.0.1"; prefixLength = 24;}]; ipv6.addresses = [{address= "fd99:cbc4:692::1"; prefixLength = 64;}]; };
   };
 
   i18n = {
@@ -63,13 +65,13 @@ experimental-features = nix-command flakes
     defaultLocale = "en_US.UTF-8";
   };
 
-  environment.systemPackages = [ pkgs.emacs pkgs.docker ];
+  environment.systemPackages = [ pkgs.emacs pkgs.docker pkgs.virtualbox pkgs.virt-manager ];
 
   users.extraUsers = {
     "${username}"= {
       home = "/home/${username}";
       isNormalUser = true;
-      extraGroups = [ "wheel" "docker" ];
+      extraGroups = [ "wheel" "docker" "libvirtd" ];
       uid = 1000;
       openssh.authorizedKeys.keys = [
         "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCnKhXt4exPC3wNmDw2hBRFHPv6y0ubv0l4RiCzSFl2bxUE6BY1svnsxwkr8kPc2FzAK+cVT4jORb75f4+mSjbJHYq9+IxZIQyqG+4UZQoLgns371PXSlvCbu7G8tvdqYHOs0q07uYNupgtNYVqSrWYUdfNuePDXafY7TqIgMvt8MXN2m9w5dGupoTh5bCpB9yAA/C0dKqCP8gCG/2QK/9ko76bSowvKONwcqlxi4QBXBCWAH5eWkkNX/dpLSrZAEtnS2cfhsThqvp1cJNoM2y2qwWYpu1xsNI+7QmO4p81bpc64giwHbJhE0/N3Am6m4geTYVKsOtMjFMsWtG7Qng2XfUnnb9acoUkVjxejGpZyPHCVQ7VCSQNkui9uD+/lx41PRdLUcCqzgzn9GILTXY9Q8OXMiuE1bVMLyhJFMftz69yB2SG63eVWoGbEbEpSVvS2lnCjTejJVpSpU9a8Abw+DH8isHCHfXFwDJmi/T5RTRrUrlqH5MIkj9UoZiKl6mgRiqMYGNiuTL/hzurKuNraigovBm5zM1NkGYICF9nG4qtxxIApyVNMMlu2kCsSTCgBIFq4xe18tgGUWlsYrWCPVgdkdC9B9vDVzH3VJG3GYVSvuDIFehlwpCWvo31VJTMVIm6JN6CIWiyBN0roETags4h+oDNf2mPptLQFDBzpw== peel@fff666
@@ -119,10 +121,19 @@ experimental-features = nix-command flakes
     liveRestore = true;
   };
   
+  networking.firewall.enable = false; #TODO
+  virtualisation.libvirtd.enable = true;
+  programs.dconf.enable = true;
+  users.extraGroups.vboxusers.members = [ username ];
+  virtualisation.virtualbox = {
+    host.enable = true;
+    guest.enable = true;
+  };
+  
   # enable access to external network from containers
   networking.nat.enable = true;
   networking.nat.internalInterfaces = ["ve-+"];
-  networking.nat.externalInterface = "eth0";
+  networking.nat.externalInterface = "wlp0s20f3";
   networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
   
   containers = {
