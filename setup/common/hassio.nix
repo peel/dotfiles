@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  networking.firewall.enable = false; #TODO
   virtualisation.oci-containers.containers = {
     home-assistant = {
       autoStart = true;

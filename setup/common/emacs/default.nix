@@ -7,7 +7,7 @@ let
     cp -r ${src}/* $out/share/emacs/site-lisp/
   '';
   myEmacs = (pkgs.emacsGcc.overrideAttrs(old: {
-    buildInputs = old.buildInputs ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+    buildInputs = old.buildInputs ++ [pkgs.binutils] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
       pkgs.darwin.apple_sdk.frameworks.CoreFoundation
       pkgs.darwin.apple_sdk.frameworks.WebKit
     ];}
