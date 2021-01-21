@@ -400,17 +400,18 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :bind
   (:map haskell-mode-map
         ("C-c r" . ormolu-format-buffer)))
-(use-package attrap
-  :ensure t
-  :bind ("C-x /" . attrap-attrap))
-(use-package dante
-  :ensure t
-  :commands dante-mode
-  :hook ((haskell-mode . dante-mode)
-         (haskell-mode . flycheck-mode))
-  :config
-  (setq haskell-process-wrapper-function
-        (lambda (args) (apply 'nix-shell-command (nix-current-sandbox) args))))
+(use-package lsp-haskell)
+;; (use-package attrap
+;;   :ensure t
+;;   :bind ("C-x /" . attrap-attrap))
+;; (use-package dante
+;;   :ensure t
+;;   :commands dante-mode
+;;   :hook ((haskell-mode . dante-mode)
+;;          (haskell-mode . flycheck-mode))
+;;   :config
+;;   (setq haskell-process-wrapper-function
+;;         (lambda (args) (apply 'nix-shell-command (nix-current-sandbox) args))))
 
 ;; ......................................................................... nix
 (use-package nix-mode

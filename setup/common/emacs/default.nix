@@ -34,10 +34,17 @@ pkgs.emacsWithPackagesFromUsePackage {
      rev = "d1e94f5152f20b2dc7b0d42898c1db37e5be57a6";
      sha256 = "002i9f97sq3jfknrw2nim1bhvj7xz3icviw7iffqmpmww4g1hq9l";
    }) "hide-comnt";
+   clockifuck = elisp (pkgs.fetchFromGitHub {
+     owner = "bit4bit";
+     repo = "clockifuck";
+     rev = "a2143194d77053ffbb80fb13b7f49de509159b03";
+     sha256 = "1ji0mwmqa3i9fd82rzn9lyr9i47n0lmf4mv3ahf6xlk9rdszr76g";
+   }) "clockifuck";
  };
  extraEmacsPackages = epkgs: with epkgs; [
     my-config
     prettify-pragmata
     hide-comnt
+    clockifuck
   ];
 }
