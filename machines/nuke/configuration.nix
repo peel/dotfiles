@@ -11,7 +11,7 @@ in {
   imports = [
     ./hardware-configuration.nix
     ../../setup/nixos
-    #../../setup/common/hassio.nix
+    ../../setup/common/hassio.nix
   ];
 
   #peel.gui.enable = false;
@@ -55,8 +55,6 @@ experimental-features = nix-command flakes
     useDHCP = false;
     interfaces.eno1.useDHCP = true;
     interfaces.wlp0s20f3.useDHCP = true;
-    bridges.br0 = { interfaces = [ ]; };
-    interfaces.br0 = { virtual = true; ipv4.addresses = [{address ="10.0.0.1"; prefixLength = 24;}]; ipv6.addresses = [{address= "fd99:cbc4:692::1"; prefixLength = 64;}]; };
   };
 
   i18n = {
@@ -65,7 +63,7 @@ experimental-features = nix-command flakes
     defaultLocale = "en_US.UTF-8";
   };
 
-  environment.systemPackages = [ pkgs.emacs pkgs.docker pkgs.virtualbox pkgs.virt-manager ];
+  environment.systemPackages = with pkgs; [ emacs docker firefox _1passwordAM ];
 
   users.extraUsers = {
     "${username}"= {
@@ -123,18 +121,23 @@ experimental-features = nix-command flakes
   
   networking.firewall.enable = false; #TODO
   virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd.allowedBridges = ["br0" "virbr0" "tap0"];
   programs.dconf.enable = true;
   users.extraGroups.vboxusers.members = [ username ];
   virtualisation.virtualbox = {
     host.enable = true;
-    guest.enable = true;
+    host.enableExtensionPack = true;
+    host.enableHardening = false;
   };
   
   # enable access to external network from containers
-  networking.nat.enable = true;
-  networking.nat.internalInterfaces = ["ve-+"];
-  networking.nat.externalInterface = "wlp0s20f3";
+  # networking.nat.enable = true;
+  # networking.nat.internalInterfaces = ["ve-+"];
+  # networking.nat.externalInterface = "wlp0s20f3";
   networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
+  networking.interfaces.tap0 = { virtual = true; virtualType = "tap"; };
+  networking.bridges.br0 = { interfaces = ["tap0"]; };
+
   
   containers = {
     # hass = {
