@@ -64,4 +64,12 @@ Docker = self.installApplication rec {
   '';
   homepage = https://store.docker.com/editions/community/docker-ce-desktop-mac;
 };
+_1passwordAM = super.appimageTools.wrapType2 {
+  name = "1password";
+  src = super.fetchurl {
+    url = "https://downloads.1password.com/linux/appimage/1password-0.9.7.AppImage";
+    sha256 = "184aypa1i15g9j2vglbi3mzv9jrg9wr2mv1awhhhqgmqplj0b9i5";
+  };
+  extraPkgs = pkgs: with pkgs; [];
+};
 }

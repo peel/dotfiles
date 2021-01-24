@@ -4,7 +4,7 @@
   virtualisation.oci-containers.containers = {
     home-assistant = {
       autoStart = true;
-      image = "homeassistant/home-assistant:1.0.0b5";
+      image = "homeassistant/home-assistant:2021.1.5";
       environment = {
         TZ="Europe/Warsaw";
       };
@@ -16,8 +16,9 @@
         "/etc/localtime:/etc/localtime"
       ];
       extraOptions = [
-        "--network=host"
-#        "--device=/dev/ttyACM0:/dev/ttyACM0"
+       "--privileged"
+       "--network=host"
+       "--device=/dev/ttyACM0:/dev/ttyACM0"
       ];
     };
   };
