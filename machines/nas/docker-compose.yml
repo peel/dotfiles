@@ -1,0 +1,26 @@
+version: '3.3'
+services:
+    transmission:
+        cap_add:
+            - NET_ADMIN
+        volumes:
+          - '/volume1/homes/peel/complete:/data/completed'
+          - '/volume1/homes/peel/incomplete:/data/incomplete'
+          - '/volume1/docker/transmission-openvpn:/data/config'
+        environment:
+            - OPENVPN_PROVIDER=NORDVPN
+            - OPENVPN_USERNAME=piotr@codearsonist.com
+            - OPENVPN_PASSWORD=9CAA%y}d7C4Fm8wX
+            - NORDVPN_CATEGORY=legacy_p2p
+            - LOCAL_NETWORK=192.168.0.0/16
+            - TRANSMISSION_SPEED_LIMIT_UP=1
+            - TRANSMISSION_SPEED_LIMIT_UP_ENABLE=true
+            - TRANSMISSION_WEB_UI=combustion
+            - TZ=UTC+1
+        logging:
+            driver: json-file
+            options:
+                max-size: 10m
+        ports:
+            - '9091:9091'
+        image: haugene/transmission-openvpn

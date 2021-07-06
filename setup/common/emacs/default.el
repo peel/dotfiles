@@ -148,10 +148,7 @@
   :bind (("C-x g" . magit-status)
          ("C-x G" . magit-dispatch))
   :custom
-  (magit-completing-read-function 'ivy-completing-read "Use ivy with magit")
-  :config
-  (use-package gitignore-mode
-    :ensure t))
+  (magit-completing-read-function 'ivy-completing-read "Use ivy with magit"))
 
 (use-package git-link
   :ensure t
@@ -393,25 +390,17 @@ _k_: kill        _s_: split                   _{_: wrap with { }
              haskell-ident-at-point
              haskell-mode-handle-generic-loc))
 (use-package haskell-interactive-mode)
-;; TODO hls?
 (use-package ormolu
   :ensure t
   :hook (haskell-mode . ormolu-format-on-save-mode)
   :bind
   (:map haskell-mode-map
         ("C-c r" . ormolu-format-buffer)))
-(use-package lsp-haskell)
-;; (use-package attrap
-;;   :ensure t
-;;   :bind ("C-x /" . attrap-attrap))
-;; (use-package dante
-;;   :ensure t
-;;   :commands dante-mode
-;;   :hook ((haskell-mode . dante-mode)
-;;          (haskell-mode . flycheck-mode))
-;;   :config
-;;   (setq haskell-process-wrapper-function
-;;         (lambda (args) (apply 'nix-shell-command (nix-current-sandbox) args))))
+(use-package lsp-haskell
+  :ensure t
+  :config
+  (setq lsp-haskell-server-path "haskell-language-server"
+        lsp-haskell-hlint-on t))
 
 ;; ......................................................................... nix
 (use-package nix-mode

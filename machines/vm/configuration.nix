@@ -6,7 +6,6 @@ let
   sources = import /dotfiles/pinned { inherit (pkgs) fetchgit lib; };
   username = "peel";
   hostName = "vm";
-  headless = true;
 in {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = true;
