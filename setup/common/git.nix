@@ -30,7 +30,7 @@ let
     github.user = "peel";
     ghi.token = "!security find-internet-password -a peel -s github.com -l 'ghi token' -w";
     use.signingkey = "piotr@codearsonist.com";
-    commit.gpgsign = true;
+    commit.gpgsign = false;
     color.ui = true;
     format.pretty = "format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset";
     mergetool.prompt = false;
