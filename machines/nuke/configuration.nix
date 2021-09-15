@@ -5,8 +5,8 @@ with lib;
 let
   username = "peel";
   hostName = "nuke";
-  domain = builtins.extraBuiltins.pass "duckdns.domain";
-  orgdomain = builtins.extraBuiltins.pass "organisation.domain";
+  # domain = builtins.extraBuiltins.pass "duckdns.domain";
+  orgdomain = "fff666.org"; # builtins.extraBuiltins.pass "organisation.domain";
 in {
   imports = [
     ./hardware-configuration.nix
@@ -132,13 +132,66 @@ experimental-features = nix-command flakes
   
   # enable access to external network from containers
   # networking.nat.enable = true;
-  # networking.nat.internalInterfaces = ["ve-+"];
+  # networing.nat.internalInterfaces = ["ve-+"];
   # networking.nat.externalInterface = "wlp0s20f3";
   networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
-  networking.interfaces.tap0 = { virtual = true; virtualType = "tap"; };
-  networking.bridges.br0 = { interfaces = ["tap0"]; };
-
   
+  networking.wireguard.interfaces = {
+    wg0 = {
+      ips = [ "192.168.100.2/24" ];
+      listenPort = 5553;
+      privateKeyFile = "/home/peel/wg-private";
+      peers = [
+        {
+          publicKey = "fPBjHcK+P3Xb0OU6f9ITONSoMLZK1l1ixkWz+K4Y6yo=";
+          allowedIPs = [ "192.168.100.0/22" ];
+          endpoint = "162.55.214.59:5553";
+          persistentKeepalive = 25;
+        }
+      ];
+    };
+  };
+
+  services.nginx = {
+    enable = true;
+    recommendedProxySettings = true;
+
+    statusPage = true;
+        
+    # syno
+    virtualHosts."px.${orgdomain}" = {
+      # enableACME = true;
+      # forceSSL = true;
+      locations."/" = {
+        proxyPass = "https://192.168.1.6:32400";
+        proxyWebsockets = true;
+      };
+    };
+    virtualHosts."data.${orgdomain}" = {
+      # enableACME = true;
+      # forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://192.168.1.6";
+        proxyWebsockets = true;
+      };
+    };
+    virtualHosts."drive.${orgdomain}" = {
+      # enableACME = true;
+      # forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://192.168.1.6/drive";
+        proxyWebsockets = true;
+      };
+    };
+    virtualHosts."photo.${orgdomain}" = {
+      # enableACME = true;
+      # forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://192.168.1.6/photo";
+        proxyWebsockets = true;
+      };
+    };
+  };
   containers = {
     # hass = {
     #   config = import <setup/ha.nix>;
