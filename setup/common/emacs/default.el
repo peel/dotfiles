@@ -371,8 +371,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :ensure t)
 (use-package lsp-ivy
   :ensure t)
-(use-package company-lsp
-  :ensure t)
 
 ;; ..................................................................... Haskell
 (use-package haskell-mode
@@ -583,20 +581,14 @@ _k_: kill        _s_: split                   _{_: wrap with { }
               :map org-mode-map
               ("C-c n i" . org-roam-insert)))
 
-(use-package org-roam-server
+(use-package org-roam-ui
   :ensure t
+  :after org-roam
   :config
-  (setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 1234
-        org-roam-server-authenticate nil
-        org-roam-server-export-inline-images t
-        org-roam-server-serve-files nil
-        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-        org-roam-server-network-poll t
-        org-roam-server-network-arrows nil
-        org-roam-server-network-label-truncate t
-        org-roam-server-network-label-truncate-length 60
-        org-roam-server-network-label-wrap-length 20))
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
 
 (use-package org-roam-bibtex
   :ensure t

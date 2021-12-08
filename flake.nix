@@ -2,7 +2,7 @@
   description = "peel's env";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-20.09-darwin";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-21.11-darwin";
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
@@ -13,6 +13,7 @@
 
   outputs = { self, darwin, nixpkgs, emacs-overlay, ... }@inputs: {
     darwinConfigurations.snowflake = darwin.lib.darwinSystem {
+      system = "x86_64-darwin";
       modules = [
         { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
         ./machines/snowflake/configuration.nix
@@ -25,6 +26,7 @@
       ];      
     };
     darwinConfigurations.fff666 = darwin.lib.darwinSystem {
+      system = "x86_64-darwin";
       modules = [
         { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
         ./machines/fff666/configuration.nix
@@ -37,7 +39,7 @@
       ];      
     };
     nixosConfigurations.nuke = nixpkgs.lib.nixosSystem {
-    system = "x86_64-linux";
+      system = "x86_64-linux";
       modules = [
         { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
         ./machines/nuke/configuration.nix
