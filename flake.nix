@@ -52,5 +52,19 @@
         #   }
       ];
     };
+    nixosConfigurations.wrkvm = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
+        ./machines/peel-work-vm/configuration.nix
+        ./machines/peel-work-vm/hardware-configuration.nix
+        # home-manager.nixosModules.home-manager
+        #   {
+        #     home-manager.useGlobalPkgs = true;
+        #     home-manager.useUserPackages = true;
+        #     home-manager.users.user = import ./setup/common/home.nix;
+        #   }
+      ];
+    };
   };
 }
