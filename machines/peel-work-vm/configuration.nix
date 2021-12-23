@@ -40,7 +40,7 @@ in {
     defaultLocale = "en_US.UTF-8";
   };
 
-  environment.systemPackages = [ pkgs.emacs pkgs.docker ];
+  environment.systemPackages = [ pkgs.emacs pkgs.docker pkgs.sentinelone pkgs.firefox ];
 
   users.extraUsers = {
     "${username}"= {
@@ -54,6 +54,37 @@ in {
       ];
     };
   };
+
+  systemd.services.sentinelone = {
+     description = "sentinelone agent";
+     wantedBy = [ "multi-user.target" ];
+     after = [ "network.target" ];
+     environment.S1_AGENT_INSTALL_CONFIG_PATH="/home/sentinelone/config.cfg";
+     serviceConfig = {
+       Type = "simple";
+       User = "root";
+       Group = "root";
+       ExecStart = ''
+         ${pkgs.sentinelone}/bin/sentinelctl control run
+       '';
+       ExecStop = ''
+         ${pkgs.sentinelone}/bin/sentinelctl control shutdown
+       '';
+       Restart = "on-failure";
+       RestartSec = 1;
+     };
+  };
+  
+  users.extraUsers.sentinelone = {
+    description = "User for sentinelone";
+    isNormalUser = true;
+    shell = "${pkgs.coreutils}/bin/true";
+    home = "/home/sentinelone";
+    extraGroups = [ "wheel" ];
+  };
+  users.groups.sentinelone.members = [
+    "sentinelone"
+  ];
   
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;

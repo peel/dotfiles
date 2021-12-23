@@ -5,10 +5,3 @@ let
 in {
   haskell-nix = import sources."haskell-nix" {};
 }
-
-
-
-
-
-
-

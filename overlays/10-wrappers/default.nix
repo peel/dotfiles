@@ -9,4 +9,5 @@ self: super:
   urxvt = import ./urxvt { inherit (super) colors fonts; pkgs = super; };
   dunst = import ./dunst { inherit (super) colors fonts; pkgs = super; browser = "firefox"; };
   stalonetray = import ./stalonetray { pkgs = super; };
+  sentinelone = import ./sentinelone.nix { inherit (super)  stdenv lib autoPatchelfHook dpkg zlib libelf; };
 }
