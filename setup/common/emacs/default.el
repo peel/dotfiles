@@ -339,9 +339,13 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :hook ((scala-mode . lsp)
          (js-mode . lsp)
          (typescript-mode . lsp))
-  :after hydra
+  :after (hydra envrc)
   :config
+  (advice-add 'lsp :before #'envrc-reload)
   (setq lsp-eldoc-render-all t)
+  (setq lsp-file-watch-ignored '(
+                                 "[/\\\\]\\.direnv$"
+                                 "[/\\\\]\\.git$"))
   (defhydra lsp-hydra (:exit t :hint nil)
     "
  Buffer^^               Server^^                   Symbol
