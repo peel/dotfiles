@@ -10,6 +10,7 @@ in {
     ./keyboard.nix
     ./wm.nix
     ./bloop.nix
+    ./brew.nix
   ];
 
   environment.shellAliases = {
