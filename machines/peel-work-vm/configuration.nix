@@ -56,14 +56,15 @@ in {
   };
 
   systemd.services.sentinelone = {
+     enable = true;
      description = "sentinelone agent";
      wantedBy = [ "multi-user.target" ];
      after = [ "network.target" ];
      environment.S1_AGENT_INSTALL_CONFIG_PATH="/home/sentinelone/config.cfg";
      serviceConfig = {
        Type = "simple";
-       User = "root";
-       Group = "root";
+       # User = "root";
+       # Group = "root";
        ExecStart = ''
          ${pkgs.sentinelone}/bin/sentinelctl control run
        '';
@@ -71,7 +72,7 @@ in {
          ${pkgs.sentinelone}/bin/sentinelctl control shutdown
        '';
        Restart = "on-failure";
-       RestartSec = 1;
+       RestartSec = 2;
      };
   };
   

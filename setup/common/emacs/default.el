@@ -392,12 +392,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
              haskell-ident-at-point
              haskell-mode-handle-generic-loc))
 (use-package haskell-interactive-mode)
-(use-package ormolu
-  :ensure t
-  :hook (haskell-mode . ormolu-format-on-save-mode)
-  :bind
-  (:map haskell-mode-map
-        ("C-c r" . ormolu-format-buffer)))
 (use-package lsp-haskell
   :ensure t
   :config

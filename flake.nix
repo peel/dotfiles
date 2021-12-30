@@ -2,7 +2,7 @@
   description = "peel's env";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-21.11-darwin";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-21.11";
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
