@@ -94,6 +94,25 @@ in {
   services.xserver.xkbOptions = "eurosign:e";
 
   services = {
+    # xserver = {
+    #   enable = true;
+    #   startDbusSession = true;
+    #   layout = "us";
+    #   xkbOptions = "eurosign:e,caps:ctrl_modifier";
+    #   libinput = {
+    #     enable = true;
+    #     disableWhileTyping = true;
+    #   };
+    #   displayManager.defaultSession = "none+xmonad";
+    #   windowManager.xmonad = {
+    #     enable = true;
+    #     enableContribAndExtras = true;
+    #   };
+    # };
+    dbus = {
+      enable = true;
+      packages = [ pkgs.gnome3.dconf ];
+    };
     openssh = {
       enable = true;
     };
@@ -111,7 +130,6 @@ in {
   # monitoring  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
   # general routes  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-  services.fail2ban.enable = true;
 
   # containers ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   virtualisation.vmware.guest.enable = true;

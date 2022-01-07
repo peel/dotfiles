@@ -11,7 +11,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";    
   };
 
-  outputs = { self, darwin, nixpkgs, emacs-overlay, ... }@inputs: {
+  outputs = { self, darwin, nixpkgs, emacs-overlay, home-manager, ... }@inputs: {
     darwinConfigurations.snowflake = darwin.lib.darwinSystem {
       system = "x86_64-darwin";
       modules = [
@@ -58,12 +58,11 @@
         { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
         ./machines/peel-work-vm/configuration.nix
         ./machines/peel-work-vm/hardware-configuration.nix
-        # home-manager.nixosModules.home-manager
-        #   {
-        #     home-manager.useGlobalPkgs = true;
-        #     home-manager.useUserPackages = true;
-        #     home-manager.users.user = import ./setup/common/home.nix;
-        #   }
+        home-manager.nixosModules.home-manager {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.peel = import ./setup/common/home.nix;
+        }
       ];
     };
   };

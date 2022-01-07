@@ -341,7 +341,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
          (typescript-mode . lsp))
   :after (hydra envrc)
   :config
-  (advice-add 'lsp :before #'envrc-reload)
+  ;; (advice-add 'lsp :before #'envrc-reload)
   (setq lsp-eldoc-render-all t)
   (setq lsp-file-watch-ignored '(
                                  "[/\\\\]\\.direnv$"
