@@ -545,6 +545,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     ("L" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
      "* %? [[%:link][%:description]] \nCaptured On: %U"))))
 
+(use-package pikchr-mode
+  :ensure t)
+
 (use-package org-roam
   :ensure t
   :hook ((after-init-hook . org-roam)
