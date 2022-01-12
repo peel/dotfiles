@@ -87,28 +87,24 @@ in {
     "sentinelone"
   ];
   
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.layout = "us";
-  services.xserver.xkbOptions = "eurosign:e";
 
   services = {
-    # xserver = {
-    #   enable = true;
-    #   startDbusSession = true;
-    #   layout = "us";
-    #   xkbOptions = "eurosign:e,caps:ctrl_modifier";
-    #   libinput = {
-    #     enable = true;
-    #     disableWhileTyping = true;
-    #   };
+    xserver = {
+      enable = true;
+      layout = "us";
+      xkbOptions = "eurosign:e,caps:ctrl_modifier";
+      libinput = {
+        enable = true;
+        disableWhileTyping = true;
+      };
+      displayManager.gdm.enable = true;
+      desktopManager.gnome.enable = true;
     #   displayManager.defaultSession = "none+xmonad";
     #   windowManager.xmonad = {
     #     enable = true;
     #     enableContribAndExtras = true;
     #   };
-    # };
+    };
     dbus = {
       enable = true;
       packages = [ pkgs.gnome3.dconf ];
