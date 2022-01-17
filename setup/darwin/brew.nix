@@ -5,12 +5,17 @@
     enable = true;
     casks = [
       "dash"
-      "slack"
+      "plexamp"
       "vmware-fusion"
       "zoom"
     ];
     masApps = {
-      "1Password" = 1107421413;
+      "Slack" = 803453959;
+      "1Password" = 1333542190;
+      "Endel" = 1484348796;
+      "PopClip" = 445189367;
+      "HomeAssistant" = 1099568401;
     };
+    cleanup = "zap";
   };
 }

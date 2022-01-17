@@ -536,7 +536,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
      (dot        . t))))
 
 (use-package org-capture
-  :bind ("C-C n" . org-capture)
+  :bind ("C-C n n" . org-capture)
   :custom
   ;; FIXME
   (setq org-capture-templates `(
@@ -550,37 +550,26 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package org-roam
   :ensure t
-  :hook ((after-init-hook . org-roam)
+  :after org
+  :hook ((after-init-hook . org-roam-db-autosync-enable)
          (smartpartents-strict)
          (org-roam-mode . (lambda ()
                             (set (make-local-variable 'company-backends)
                                  '((company-capf))))))
   :custom
-  ;; todo paths
+  (org-roam-autosync-enable t)
   (org-roam-db-location "~/.config/emacs/org-roam.db")
   (org-roam-directory "~/Dropbox/Documents/roam/")
-  (org-roam-link-auto-replace t)
-  (org-roam-tag-sources '(prop all-directories))
-  (org-roam-buffer-window-parameters '((no-delete-other-windows . t)))
-  ;; todo template management
-  (org-roam-capture-templates '(("d" "default" plain (function org-roam-capture--get-point)
-                                 "%?"
-                                 :file-name "${slug}"
-                                 :head "#+title: ${title}\n#+created: %u\n#+last_modified: %U\n#+filetags:\n\n"
-                                 :unnarowed t)))
-  (org-roam-dailies-capture-templates '(("d" "daily" plain (function org-roam-capture--get-point)
-                                         ""
-                                         :immediate-finish t
-                                         :file-name "journal/%<%Y-%m-%d>"
-                                         :head "#+title: %<%Y-%m-%d>\n#+date: %<%Y-%m-%d>\n#+filetags: private\n\nPart of [[file:journal.org][Journal]] notes.\n\n* Rozmyślania\n** TODO Co uczyni ten dzień lepszym? (okazje do ćwiczenia)\n** TODO Konsekwencje pasji\n** TODO Rzeczy za które jestem wdzięczny (wykorzystane szanse)\n** TODO Rzeczy które mogłem zrobić inaczej (niewykorzystane szanse)\n** Do zrobienia (jutro)\n* Varia\n")))
-  :bind (:map org-roam-mode-map
-              ("C-c n r" . org-roam)
-              ("C-c n f" . org-roam-find-file)
-              ("C-c n g" . org-roam-graph)
-              ("C-c n t" . org-roam-dailies-today)
-              ("C-c n h" . org-roam-jump-to-index)              
-              :map org-mode-map
-              ("C-c n i" . org-roam-insert)))
+  (org-roam-link-auto-replace)
+  (add-to-list 'display-buffer-alist
+             '("\\*org-roam\\*"
+               (display-buffer-in-direction)
+               (direction . right)
+               (window-width . 0.33)
+               (window-height . fit-window-to-buffer)))    
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert)))
 
 (use-package org-roam-ui
   :ensure t
