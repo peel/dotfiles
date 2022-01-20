@@ -306,7 +306,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :ensure nil
   :defer 10
   :custom
-  (project-vc-ignores '("result" ".node_modules" ".bloop" ".metals" "target" ".DS_Store")))
+  (project-vc-ignores '("result/" ".direnv/" ".node_modules/" ".bloop/" ".metals/" "target/" ".DS_Store")))
 
 (use-package prog-mode
   :defer 3
@@ -345,7 +345,10 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   (setq lsp-eldoc-render-all t)
   (setq lsp-file-watch-ignored '(
                                  "[/\\\\]\\.direnv$"
-                                 "[/\\\\]\\.git$"))
+                                 "[/\\\\]\\.git$"
+                                 "[/\\\\]\\.metals$"
+                                 "[/\\\\]\\.bloop$"
+                                 "[/\\\\]\\target$"))
   (defhydra lsp-hydra (:exit t :hint nil)
     "
  Buffer^^               Server^^                   Symbol
@@ -857,6 +860,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
         visible-bell nil
         hl-line-mode t
         xwidget-webkit-enable-plugins nil)
+  (setq-default show-trailing-whitespace t)
+  (setq-default indicate-empty-lines t)
+  (setq-default indicate-buffer-boundaries 'left)
   :bind (("C-z" . kill-whole-line)
          ("M-n" . forward-paragraph)
          ("M-p" . backward-paragraph)))
