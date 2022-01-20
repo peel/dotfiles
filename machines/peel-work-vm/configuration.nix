@@ -62,9 +62,7 @@ in {
      after = [ "network.target" ];
      environment.S1_AGENT_INSTALL_CONFIG_PATH="/home/sentinelone/config.cfg";
      serviceConfig = {
-       Type = "simple";
-       # User = "root";
-       # Group = "root";
+       Type = "oneshot";
        ExecStart = ''
          ${pkgs.sentinelone}/bin/sentinelctl control run
        '';
@@ -75,7 +73,7 @@ in {
        RestartSec = 2;
      };
   };
-  
+
   users.extraUsers.sentinelone = {
     description = "User for sentinelone";
     isNormalUser = true;
@@ -86,24 +84,29 @@ in {
   users.groups.sentinelone.members = [
     "sentinelone"
   ];
-  
 
   services = {
     xserver = {
       enable = true;
+      dpi = 220;
       layout = "us";
       xkbOptions = "eurosign:e,caps:ctrl_modifier";
       libinput = {
         enable = true;
         disableWhileTyping = true;
       };
-      displayManager.gdm.enable = true;
-      desktopManager.gnome.enable = true;
-    #   displayManager.defaultSession = "none+xmonad";
-    #   windowManager.xmonad = {
-    #     enable = true;
-    #     enableContribAndExtras = true;
-    #   };
+      desktopManager.gnome.enable = false;
+      desktopManager.xterm.enable = false;
+      displayManager.defaultSession = "none+xmonad";
+      displayManager.lightdm = {
+        enable = true;
+        autoLogin.enable = true;
+        autoLogin.user = username;
+      };
+      windowManager.xmonad = {
+        enable = true;
+        enableContribAndExtras = true;
+      };
     };
     dbus = {
       enable = true;

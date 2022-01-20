@@ -47,10 +47,36 @@ let
   #     #     };
   #     #     passwordCommand = "${config.peel.secrets.protonmail-local}";
   #     #     userName = "plimanowski@pm.me";
-  #     #   };      
+  #     #   };
   #     };
   };
-  linux = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {};
+  nixos = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+    programs.rofi = {
+      enable = true;
+    };
+    services.dunst = {
+      enable = true;
+    };
+    services.polybar = {
+      enable = true;
+      script = ''
+        polybar top &
+      '';
+    };
+    xsession = {
+      enable = true;
+      windowManager.xmonad = {
+        enable = true;
+        enableContribAndExtras = true;
+        extraPackages = hp: [
+          hp.dbus
+          hp.monad-logger
+          hp.xmonad-contrib
+        ];
+        config = ./config.hs;
+      };
+    };
+  };
   darwin = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {};
 in
-lib.mkMerge [common linux darwin]
+lib.mkMerge [common nixos darwin]
