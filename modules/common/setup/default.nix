@@ -14,7 +14,7 @@ let
     in [ nixos peel cachix nix-community nix-tools ];
 in {
   imports = [
-    #./emacs.nix
+    ./emacs.nix
     ./fonts.nix
     ./git.nix
     ./gnupg.nix
@@ -26,6 +26,7 @@ in {
     package = pkgs.nixUnstable;
     binaryCaches = builtins.map (x: x.url) caches;
     binaryCachePublicKeys = builtins.map (x: x.key) caches;
+    settings.trusted-substituters = builtins.map (x: x.url) caches;
     gc = {
       automatic = true;
       options = "--delete-older-than 30d";

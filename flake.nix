@@ -8,11 +8,12 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    emacs-darwin.url = "github:cmacrae/emacs";
     home-manager.url = "github:nix-community/home-manager/release-22.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, darwin, nixpkgs, nixpkgs-unstable, emacs-overlay, home-manager, ... }@inputs:
+  outputs = { self, darwin, nixpkgs, nixpkgs-unstable, emacs-overlay, emacs-darwin, home-manager, ... }@inputs:
     let
       # FIXME nixpkgs.lib.extend
       myLib = (import ./lib {inherit (nixpkgs) lib targetSystem;});
@@ -30,7 +31,7 @@
           let
             linuxOr = a: b: if (hasInfix "linux" system) then a else b;
             systemFn = linuxOr nixosSystem darwinSystem;
-            overlayModules = [{ nixpkgs.overlays = [ emacs-overlay.overlay ] ++ (attrValues self.overlays); }];
+            overlayModules = [{ nixpkgs.overlays = [ emacs-overlay.overlay ] ++ [ emacs-darwin.overlay ] ++ (attrValues self.overlays); }];
             systemModules = traceValSeqN 3 (attrValues (linuxOr self.nixosModules self.darwinModules));
             # FIXME load with systemModules
             configModules = traceValSeqN 2 (linuxOr [ ./modules/nixos/setup ] [ ./modules/darwin/setup ]);

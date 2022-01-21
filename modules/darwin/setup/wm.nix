@@ -2,11 +2,23 @@
 
 let
   keycodes = import ./keycodes.nix;
+  nav = order: operation: pkgs.writeShellScriptBin "yabai-cycle-clockwise" ''
+    win=$(${pkgs.yabai} -m query --windows --window ${order} | ${pkgs.jq} '.id')
+    while : ; do
+        ${pkgs.yabai} -m window $win --${operation} prev &> /dev/null
+        if [[ $? -eq 1 ]]; then
+            break
+        fi
+    done
+  '';
+  clockwise = nav "last" "swap";
+  counterClockwise = "nav" "first" "swap";
 in {
   services.yabai.enable = true;
-  services.yabai.package = pkgs.yabaiM1;
+  services.yabai.package = pkgs.yabai;
   services.yabai.enableScriptingAddition = true;
   services.yabai.extraConfig = ''
+    yabai -m config debug_output                  on
     yabai -m config mouse_follows_focus           off
     yabai -m config focus_follows_mouse           off
     yabai -m config window_placement              second_child
@@ -42,7 +54,7 @@ in {
     myEditor = "emacsclient -a '' -nc";
     myPlayer = "open /Applications/Plexamp.app";
     noop = "/dev/null";
-    prefix = "${pkgs.yabaiM1}/bin/yabai -m";
+    prefix = "yabai -m";
     fstOrSnd = {fst, snd}: domain: "${prefix} ${domain} --focus ${fst} || ${prefix} ${domain} --focus ${snd}";
     nextOrFirst = fstOrSnd { fst = "next"; snd = "first";};
     prevOrLast = fstOrSnd { fst = "prev"; snd = "last";};

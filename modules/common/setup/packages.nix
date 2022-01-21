@@ -11,6 +11,7 @@ let
       nix-community = mkCache "https://nix-community.cachix.org" "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=";
       iohk = mkCache "https://hydra.iohk.io" "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=";
       iohk-cachix = mkCache "https://iohk.cachix.org" "iohk.cachix.org-1:DpRUyj7h7V830dp/i6Nti+NEO2/nhblbov/8MW7Rqoo=";
+      emacs-darwin = mkCache "https://cachix.org/api/v1/cache/emacs" "emacs.cachix.org-1:b1SMJNLY/mZF6GxQE+eDBeps7WnkT0Po55TAyzwOxTY=";
     in [ nixos peel cachix nix-community nix-tools ];
 in {
   nix.useSandbox = !pkgs.targetPlatform.isx86;

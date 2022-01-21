@@ -280,40 +280,47 @@
     ;; (alert status :title "Compilation" :severity 'trivial)
     (call-process "osascript" nil 0 nil "-e"
                   (concat "display notification \"Compilation: " status "\" with title \"Emacs\""))))
-
-(use-package lsp-mode
-  :ensure t
-  :bind-keymap ("C-c l" . lsp-command-map)
-  :hook ((scala-mode . lsp-deferred)
-         (js-mode . lsp-deferred)
-         (typescript-mode . lsp-deferred)
-         (haskell-mode . lsp-defrred)
-         (rust-mode . lsp-deferred)
-         (lsp-mode . #'lsp-enable-which-key-integration)
-         (go-mode . lsp-deferred)
-         (lsp-mode . #'peel/corfu-lsp-setup))
-  :after (envrc)
-  :config
-  (advice-add 'lsp :before #'envrc-reload)
-  (setq lsp-file-watch-ignored '(
-                                 "[/\\\\]\\.devenv$"
-                                 "[/\\\\]\\.direnv$"
-                                 "[/\\\\]\\.git$"
-                                 "[/\\\\]\\.metals$"
-                                 "[/\\\\]\\.bloop$"
-                                 "[/\\\\]\\target$"
-                                 "[/\\\\]\\result$"))
-  (setq lsp-completion-provider :none)
-  (setq lsp-ui-doc-header t)
-  (setq lsp-enable-snippet nil)
-  (setq lsp-ui-doc-include-signature t)
-  (setq lsp-ui-doc-include-function-signatures t
-        lsp-eldoc-render-all t)
-  (setq lsp-idle-delay 0.5)
-  (setq lsp-treemacs-errors-position-params '((side . top)))
-  (defun peel/corfu-lsp-setup ()
-    (setq-local completion-styles '(orderless)
-                completion-category-defaults nil)))
+(use-package eglot
+  :bind ("C-c l" . eglot-menu)
+  :config (advice-add 'eglot :before #'envrc-reload)
+  :hook ((scala-mode . eglot)
+         (js-mode . eglot)
+         (typescript-mode . eglot)
+         (haskell-mode . eglot)
+         (rust-mode . eglot)))
+;; (use-package lsp-mode
+;;   :ensure t
+;;   :bind-keymap ("C-c l" . lsp-command-map)
+;;   :hook ((scala-mode . lsp-deferred)
+;;          (js-mode . lsp-deferred)
+;;          (typescript-mode . lsp-deferred)
+;;          (haskell-mode . lsp-defrred)
+;;          (rust-mode . lsp-deferred)
+;;          (lsp-mode . #'lsp-enable-which-key-integration)
+;;          ;; (go-mode . lsp-deferred)
+;;          (lsp-mode . #'peel/corfu-lsp-setup))
+;;   :after (envrc)
+;;   :config
+;;   (advice-add 'lsp :before #'envrc-reload)
+;;   (setq lsp-file-watch-ignored '(
+;;                                  "[/\\\\]\\.devenv$"
+;;                                  "[/\\\\]\\.direnv$"
+;;                                  "[/\\\\]\\.git$"
+;;                                  "[/\\\\]\\.metals$"
+;;                                  "[/\\\\]\\.bloop$"
+;;                                  "[/\\\\]\\target$"
+;;                                  "[/\\\\]\\result$"))
+;;   (setq lsp-completion-provider :none)
+;;   (setq lsp-ui-doc-header t)
+;;   (setq lsp-enable-snippet nil)
+;;   (setq lsp-ui-doc-include-signature t)
+;;   (setq lsp-ui-doc-include-function-signatures t
+;;         lsp-eldoc-render-all t)
+;;   (setq lsp-idle-delay 0.5)
+;;   (setq lsp-treemacs-errors-position-params '((side . top)))
+;;   (defun peel/corfu-lsp-setup ()
+;;     (setq-local completion-styles '(orderless)
+;;                 completion-category-defaults nil)))
 (use-package lsp-ui
   :ensure t)
 

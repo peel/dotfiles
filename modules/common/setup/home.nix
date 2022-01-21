@@ -2,7 +2,8 @@
 
 let
   common = {
-    home.stateVersion = "22.11";
+    home.stateVersion = "22.11"; 
+    manual.manpages.enable = false;
     programs.direnv = {
       enable = true;
       # does not work, we're overriding through system-module
