@@ -39,6 +39,9 @@ with pkgs.lib;
         let check = paths: foldl' (x: y: x && (pathExists y)) true paths;
         in check paths || trace "weechat-config: defined extra config files missing. Configuration will not be applied." false;
     };
+    targetSystem = rec {
+      isDarwinArm64 = pkgs.targetSystem.isDarwin && pkgs.targetSystem.darwinArch == "arm64";
+    };
   };
 }
 

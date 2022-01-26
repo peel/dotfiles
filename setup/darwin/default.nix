@@ -9,7 +9,6 @@ in {
     ./defaults.nix
     ./keyboard.nix
     ./wm.nix
-    ./bloop.nix
     ./brew.nix
   ];
 

@@ -2,7 +2,7 @@
   description = "peel's env";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-21.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
@@ -24,6 +24,18 @@
         #     home-manager.users.user = import ./setup/common/home.nix;
         #   }
       ];      
+    };
+    darwinConfigurations.snowberry = darwin.lib.darwinSystem{
+      system = "aarch64-darwin";
+      modules = [
+        { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
+        ./machines/snowberry/configuration.nix
+        # home-manager.nixosModules.home-manager {
+        #  home-manager.useGlobalPkgs = true;
+        #  home-manager.useUserPackages = true;
+        #  home-manager.users.peel = import ./setup/common/home.nix;
+        # }
+      ];
     };
     darwinConfigurations.fff666 = darwin.lib.darwinSystem {
       system = "x86_64-darwin";
