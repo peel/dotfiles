@@ -46,12 +46,15 @@ in {
         shopt -s autocd       # type 'dir' instead 'cd dir'
         shopt -s dirspell     # correct typos when tab-completing names
         shopt -s globstar     # enable **
-      fi
-      
+      fi      
       __prompt_nix() {
         [ -z "$IN_NIX_SHELL" ] && echo "λ" || echo ""
       }
-      PS1='\W$(__git_ps1 " - %s") $(__prompt_nix) '
+      if [[ $TERM == "dumb" ]]; then
+        PS1="$ "
+      else
+        PS1='\W$(__git_ps1 " - %s") $(__prompt_nix) '
+      fi
       ${vtermIntegration}
       ${vtermClearScrollback}
       ${vtermPromptTracking}

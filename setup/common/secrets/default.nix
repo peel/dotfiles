@@ -9,6 +9,8 @@ in {
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs._1password ];
     nix.extraOptions = ''
+      plugin-files = ${pkgs.nix-plugins-latest}/lib/nix/plugins
+      extra-builtins-file = ${./extra-builtins.nix}
     '';
   };
 }

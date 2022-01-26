@@ -5,6 +5,6 @@ set -euo pipefail
 
 f=$(mktemp)
 trap "rm $f" EXIT
-eval $(op signin my)
-op get item "$1" | jq -c '.details.fields[] | select(.designation=="password") | .value' > $f
+#eval $(op signin my)
+op get item "$1" | jq -j -c '.details.password' > $f
 nix-instantiate --eval -E "builtins.readFile $f"

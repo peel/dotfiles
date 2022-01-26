@@ -4,7 +4,7 @@
   virtualisation.oci-containers.containers = {
     home-assistant = {
       autoStart = true;
-      image = "homeassistant/home-assistant:2021.10.0";
+      image = "homeassistant/home-assistant:2021.12.9";
       environment = {
         TZ="Europe/Warsaw";
       };
@@ -24,7 +24,7 @@
     };
     esphome = {
       autoStart = true;
-      image = "esphome/esphome:2021.9.3";
+      image = "esphome/esphome:2021.12.0";
       environment = {
         TZ="Europe/Warsaw";
       };

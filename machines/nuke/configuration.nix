@@ -29,20 +29,20 @@ in {
   boot.loader.efi.canTouchEfiVariables = true;
   hardware.bluetooth.package = pkgs.bluezFull;
   services.xserver.libinput = {
-  enable = true;
-  tapping = true;
-  middleEmulation = true;
-  accelProfile = "adaptive";
-  clickMethod = "clickfinger";
-  naturalScrolling = true;
-  tappingDragLock = true;
+    enable = true;
+    tapping = true;
+    middleEmulation = true;
+    accelProfile = "adaptive";
+    clickMethod = "clickfinger";
+    naturalScrolling = true;
+    tappingDragLock = true;
   };
   # os ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   system.stateVersion = "20.09";
   nix.package = pkgs.nixFlakes;
-nix.extraOptions = ''
-experimental-features = nix-command flakes
-''; 
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+  ''; 
   nix.gc = {
     automatic = true;
     options = "--delete-older-than 30d";
@@ -115,7 +115,11 @@ experimental-features = nix-command flakes
     fsType = "nfs";
     options = [ "nfsvers=4.1" ];
   };
-
+  fileSystems."/mnt/download" = {
+    device = "192.168.1.6:/volume1/download";
+    fsType = "nfs";
+    options = [ "nfsvers=4.1" ];
+  };
 
   # monitoring  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
@@ -164,18 +168,27 @@ experimental-features = nix-command flakes
     };
   };
 
+  #services.adguardhome = {
+  #  enable = true;
+  #  openFirewall = true;
+  #};
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;
-
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    recommendedTlsSettings = true;
+    clientMaxBodySize = "2G";
     statusPage = true;
         
     # syno
     virtualHosts."px.${orgdomain}" = {
       # enableACME = true;
+      default = true;
+      http2 = false;
       # forceSSL = true;
       locations."/" = {
-        proxyPass = "https://192.168.1.6:32400";
+        proxyPass = "http://127.0.0.1:32400";
         proxyWebsockets = true;
       };
     };
