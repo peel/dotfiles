@@ -29,7 +29,6 @@
     nixosConfigurations.nuke = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
         ./machines/nuke/configuration.nix
         ./machines/nuke/hardware-configuration.nix
       ];
@@ -65,8 +64,10 @@
          self.nixosConfigurations.wrkvm64.config.system.build.vmwareImage;
      };
     packages.x86_64-linux = {
-       vmwareImage =
+       vmwareImage.x86_64-linux =
          self.nixosConfigurations.wrkvm.config.system.build.vmwareImage;
+       vmwareImage.aarch64-linux = 
+	self.nixosConfigurations.wrkvm64.config.system.build.vmwareImage;
     };
   };
  }

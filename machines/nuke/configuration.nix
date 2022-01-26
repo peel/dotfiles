@@ -27,6 +27,8 @@ in {
   # hardware ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
   hardware.bluetooth.package = pkgs.bluezFull;
   services.xserver.libinput = {
     enable = true;
@@ -63,7 +65,7 @@ in {
     defaultLocale = "en_US.UTF-8";
   };
 
-  environment.systemPackages = with pkgs; [ emacs docker firefox _1passwordAM ];
+  environment.systemPackages = with pkgs; [  ];
 
   users.extraUsers = {
     "${username}"= {
@@ -181,7 +183,6 @@ in {
     clientMaxBodySize = "2G";
     statusPage = true;
         
-    # syno
     virtualHosts."px.${orgdomain}" = {
       # enableACME = true;
       default = true;
@@ -192,41 +193,6 @@ in {
         proxyWebsockets = true;
       };
     };
-    virtualHosts."data.${orgdomain}" = {
-      # enableACME = true;
-      # forceSSL = true;
-      locations."/" = {
-        proxyPass = "http://192.168.1.6";
-        proxyWebsockets = true;
-      };
-    };
-    virtualHosts."drive.${orgdomain}" = {
-      # enableACME = true;
-      # forceSSL = true;
-      locations."/" = {
-        proxyPass = "http://192.168.1.6/drive";
-        proxyWebsockets = true;
-      };
-    };
-    virtualHosts."photo.${orgdomain}" = {
-      # enableACME = true;
-      # forceSSL = true;
-      locations."/" = {
-        proxyPass = "http://192.168.1.6/photo";
-        proxyWebsockets = true;
-      };
-    };
-  };
-  containers = {
-    # hass = {
-    #   config = import <setup/ha.nix>;
-    #   autoStart = true;
-    # };
-    # plex = {
-    #   config = import <setup/plex.nix>;
-    #   autoStart = true;
-    # };
-    # vault = {};
   };
   
 }

@@ -8,9 +8,14 @@ let
 in {
   imports = [
     ./hardware-configuration.nix
+    ./vmware-guest.nix
     ../../setup/nixos
   ];
   
+  # Disable the default module and import our override. We have
+  # customizations to make this work on aarch64.
+  disabledModules = [ "virtualisation/vmware-guest.nix" ];
+
   nixpkgs.config.allowBroken = true;
   nixpkgs.overlays = 
     let path = ../../overlays ; in with builtins;
@@ -97,7 +102,7 @@ in {
   # display resolution. This is a known issue with VMware Fusion.
   services.xserver.displayManager.sessionCommands = ''
         ${pkgs.xlibs.xset}/bin/xset r rate 200 40
-      '' + (if currentSystem == "aarch64-linux" then ''
+      '' + (if pkgs.stdenv.system == "aarch64-linux" then ''
         ${pkgs.xorg.xrandr}/bin/xrandr -s '2880x1800'
       '' else "");
   services.xserver.desktopManager.gnome.enable = true;
@@ -122,7 +127,7 @@ in {
     # };
     dbus = {
       enable = true;
-      packages = [ pkgs.gnome3.dconf ];
+      packages = [ pkgs.dconf ];
     };
     openssh = {
       enable = true;

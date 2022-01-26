@@ -33,6 +33,6 @@ stdenv.mkDerivation {
     description = "sentinelone";
     homepage = https://www.sentinelone.com/;
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

@@ -41,7 +41,7 @@ in {
     defaultLocale = "en_US.UTF-8";
   };
 
-  environment.systemPackages = [ pkgs.emacs pkgs.docker pkgs.sentinelone pkgs.firefox ];
+  environment.systemPackages = [ pkgs.emacs pkgs.sentinelone pkgs.firefox ];
 
   users.extraUsers = {
     "${username}"= {
@@ -113,7 +113,7 @@ in {
     };
     dbus = {
       enable = true;
-      packages = [ pkgs.gnome3.dconf ];
+      packages = [ pkgs.dconf ];
     };
     openssh = {
       enable = true;
