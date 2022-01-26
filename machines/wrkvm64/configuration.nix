@@ -10,19 +10,21 @@ in {
     ./hardware-configuration.nix
     ../../setup/nixos
   ];
-
+  
   nixpkgs.config.allowBroken = true;
-  nixpkgs.overlays =
+  nixpkgs.overlays = 
     let path = ../../overlays ; in with builtins;
       map (n: import (path + ("/" + n)))
           (filter (n: match ".*\\.nix" n != null ||
                       pathExists (path + ("/" + n + "/default.nix")))
                   (attrNames (readDir path)));
-
+    
   # hardware ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+  # We require 5.14+ for VMware Fusion on M1.
+  boot.kernelPackages = pkgs.linuxPackages_5_15;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  hardware.video.hidpi.enable = true;
+  hardware.video.hidpi.enable = true;  
 
   # os ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   system.stateVersion = "21.11";
@@ -41,8 +43,9 @@ in {
     defaultLocale = "en_US.UTF-8";
   };
 
-  environment.systemPackages = [ pkgs.emacs pkgs.docker pkgs.sentinelone pkgs.firefox ];
+  environment.systemPackages = with pkgs; [ emacs sentinelone gtkmm3 ];
 
+  users.mutableUsers = false;
   users.extraUsers = {
     "${username}"= {
       home = "/home/${username}";
@@ -63,20 +66,20 @@ in {
      after = [ "network.target" ];
      environment.S1_AGENT_INSTALL_CONFIG_PATH="/home/sentinelone/config.cfg";
      serviceConfig = {
-       User = "sentinelone";
-       Group = "sentinelone";
-       Type = "oneshot";
+       Type = "simple";
+       # User = "root";
+       # Group = "root";
        ExecStart = ''
-         ${pkgs.sentinelone}/bin/sentinelctl control start
+         ${pkgs.sentinelone}/bin/sentinelctl control run
        '';
        ExecStop = ''
-         ${pkgs.sentinelone}/bin/sentinelctl control stop
+         ${pkgs.sentinelone}/bin/sentinelctl control shutdown
        '';
        Restart = "on-failure";
        RestartSec = 2;
      };
   };
-
+  
   users.extraUsers.sentinelone = {
     description = "User for sentinelone";
     isNormalUser = true;
@@ -87,30 +90,36 @@ in {
   users.groups.sentinelone.members = [
     "sentinelone"
   ];
+  
+  services.xserver.enable = true;
+  services.xserver.displayManager.gdm.enable = true;
+  # AARCH64: For now, on Apple Silicon, we must manually set the
+  # display resolution. This is a known issue with VMware Fusion.
+  services.xserver.displayManager.sessionCommands = ''
+        ${pkgs.xlibs.xset}/bin/xset r rate 200 40
+      '' + (if currentSystem == "aarch64-linux" then ''
+        ${pkgs.xorg.xrandr}/bin/xrandr -s '2880x1800'
+      '' else "");
+  services.xserver.desktopManager.gnome.enable = true;
+  services.xserver.layout = "us";
+  services.xserver.xkbOptions = "eurosign:e";
 
   services = {
-    xserver = {
-      enable = true;
-      dpi = 220;
-      layout = "us";
-      xkbOptions = "eurosign:e,caps:ctrl_modifier";
-      libinput = {
-        enable = true;
-        disableWhileTyping = true;
-      };
-      desktopManager.gnome.enable = false;
-      desktopManager.xterm.enable = false;
-      displayManager.defaultSession = "none+xmonad";
-      displayManager.lightdm = {
-        enable = true;
-        autoLogin.enable = true;
-        autoLogin.user = username;
-      };
-      windowManager.xmonad = {
-        enable = true;
-        enableContribAndExtras = true;
-      };
-    };
+    # xserver = {
+    #   enable = true;
+    #   startDbusSession = true;
+    #   layout = "us";
+    #   xkbOptions = "eurosign:e,caps:ctrl_modifier";
+    #   libinput = {
+    #     enable = true;
+    #     disableWhileTyping = true;
+    #   };
+    #   displayManager.defaultSession = "none+xmonad";
+    #   windowManager.xmonad = {
+    #     enable = true;
+    #     enableContribAndExtras = true;
+    #   };
+    # };
     dbus = {
       enable = true;
       packages = [ pkgs.gnome3.dconf ];
@@ -135,15 +144,11 @@ in {
 
   # containers ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   virtualisation.vmware.guest.enable = true;
-  fileSystems."/mnt" = {
-    device = ".host:/";
-    fsType = "fuse./run/current-system/sw/bin/vmhgfs-fuse";
-    options = ["umask=22" "uid=1000" "gid=1000" "allow_other" "defaults" "auto_unmount"];
-  };
   virtualisation.docker = {
     enable = true;
     enableOnBoot = true;
     autoPrune.enable = true;
     liveRestore = true;
   };
+  
 }

@@ -17,38 +17,14 @@
       modules = [
         { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
         ./machines/snowflake/configuration.nix
-        # home-manager.nixosModules.home-manager
-        #   {
-        #     home-manager.useGlobalPkgs = true;
-        #     home-manager.useUserPackages = true;
-        #     home-manager.users.user = import ./setup/common/home.nix;
-        #   }
       ];      
     };
-    darwinConfigurations.snowberry = darwin.lib.darwinSystem{
+    darwinConfigurations.snowberry = darwin.lib.darwinSystem {
       system = "aarch64-darwin";
       modules = [
         { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
         ./machines/snowberry/configuration.nix
-        # home-manager.nixosModules.home-manager {
-        #  home-manager.useGlobalPkgs = true;
-        #  home-manager.useUserPackages = true;
-        #  home-manager.users.peel = import ./setup/common/home.nix;
-        # }
       ];
-    };
-    darwinConfigurations.fff666 = darwin.lib.darwinSystem {
-      system = "x86_64-darwin";
-      modules = [
-        { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
-        ./machines/fff666/configuration.nix
-        # home-manager.nixosModules.home-manager
-        #   {
-        #     home-manager.useGlobalPkgs = true;
-        #     home-manager.useUserPackages = true;
-        #     home-manager.users.user = import ./setup/common/home.nix;
-        #   }
-      ];      
     };
     nixosConfigurations.nuke = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
@@ -56,12 +32,6 @@
         { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
         ./machines/nuke/configuration.nix
         ./machines/nuke/hardware-configuration.nix
-        # home-manager.nixosModules.home-manager
-        #   {
-        #     home-manager.useGlobalPkgs = true;
-        #     home-manager.useUserPackages = true;
-        #     home-manager.users.user = import ./setup/common/home.nix;
-        #   }
       ];
     };
     nixosConfigurations.wrkvm = nixpkgs.lib.nixosSystem {
@@ -77,5 +47,26 @@
         }
       ];
     };
+    nixosConfigurations.wrkvm64 = nixpkgs.lib.nixosSystem {
+      system = "aarch64-linux";
+      modules = [
+        { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
+        ./machines/wrkvm64/configuration.nix
+        ./machines/wrkvm64/hardware-configuration.nix
+        home-manager.nixosModules.home-manager {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.peel = import ./setup/common/home.nix;
+        }
+      ];
+    };
+    packages.aarch64-linux = {
+       vmwareImage =
+         self.nixosConfigurations.wrkvm64.config.system.build.vmwareImage;
+     };
+    packages.x86_64-linux = {
+       vmwareImage =
+         self.nixosConfigurations.wrkvm.config.system.build.vmwareImage;
+    };
   };
-}
+ }
