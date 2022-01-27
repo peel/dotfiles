@@ -10,15 +10,15 @@ in {
     ./hardware-configuration.nix
     ../../setup/nixos
   ];
-  
+
   nixpkgs.config.allowBroken = true;
-  nixpkgs.overlays = 
+  nixpkgs.overlays =
     let path = ../../overlays ; in with builtins;
       map (n: import (path + ("/" + n)))
           (filter (n: match ".*\\.nix" n != null ||
                       pathExists (path + ("/" + n + "/default.nix")))
                   (attrNames (readDir path)));
-    
+
   # hardware ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -62,12 +62,14 @@ in {
      after = [ "network.target" ];
      environment.S1_AGENT_INSTALL_CONFIG_PATH="/home/sentinelone/config.cfg";
      serviceConfig = {
+       User = "sentinelone";
+       Group = "sentinelone";
        Type = "oneshot";
        ExecStart = ''
-         ${pkgs.sentinelone}/bin/sentinelctl control run
+         ${pkgs.sentinelone}/bin/sentinelctl control start
        '';
        ExecStop = ''
-         ${pkgs.sentinelone}/bin/sentinelctl control shutdown
+         ${pkgs.sentinelone}/bin/sentinelctl control stop
        '';
        Restart = "on-failure";
        RestartSec = 2;
@@ -143,5 +145,4 @@ in {
     autoPrune.enable = true;
     liveRestore = true;
   };
-  
 }
