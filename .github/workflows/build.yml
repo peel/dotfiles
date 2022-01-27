@@ -2,89 +2,29 @@ name: "Build"
 on:
   pull_request:
   push:
+    branches:
+      main
 jobs:
   build:
     strategy:
       matrix:
         os:
           - ubuntu-latest
-          - macos-latest    
     runs-on: ${{matrix.os}}
     steps:
-      - uses: actions/checkout@v2
-      - uses: cachix/install-nix-action@v12
-        with:
-          install_url: https://github.com/numtide/nix-flakes-installer/releases/download/nix-3.0pre20200820_4d77513/install
-          extra_nix_config: |
-            experimental-features = nix-command flakes
-      - uses: cachix/cachix-action@v8
-        with:
-          name: peel
-          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'        
-      - run: cachix use nix-community
-      - run: cachix use peel
-      - run: nix-build
-            
-  test:
-    needs: build
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          # - macos-latest
-    runs-on: ${{matrix.os}}
-    steps:
-      - uses: actions/checkout@v2
-      - uses: cachix/install-nix-action@v12
+      - uses: actions/checkout@v2.4.0
+      - uses: cachix/install-nix-action@v15
         with:
           nix_path: nixpkgs=channel:nixos-unstable
-      - uses: cachix/cachix-action@v8
+      # - uses: cachix/cachix-action@v10
+      #   with:
+      #     name: peel
+      #     authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'        
+      - run: nix flake check
+      - run: nix build .#nixosConfigurations.wrkvm
+      - run: nix build .#vmwareImage.aarch64-linux
+      - run: nix build .#vmwareImage.x86_64-linux
+      - uses: actions/upload-artifact@v2
         with:
-          name: peel
-          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-      - run: cachix use nix-community
-      - run: cachix use peel
-      - run: nix-env -f default.nix -i
-      - run: dotfiles install
-      - run: dotfiles link
-      - run: dotfiles uninstall
-
-  emacs:
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
-    runs-on: ${{matrix.os}}
-    steps:
-      - uses: actions/checkout@v2
-      - uses: cachix/install-nix-action@v12
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
-      - uses: cachix/cachix-action@v8
-        with:
-          name: peel
-          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-      - run: cachix use nix-community
-      - run: cachix use peel
-      - run: nix-build ./overlays/20-emacs/emacs/default.nix
-        
-  docs:
-    needs: [build, emacs, test]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: cachix/install-nix-action@v12
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
-      - uses: cachix/cachix-action@v8
-        with:
-          name: peel
-          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-      - run: cd docs && nix-shell --pure -p 'emacsWithPackages(ps:[ps.htmlize])' --run 'emacs -Q index.org --batch --eval "(progn (org-babel-tangle)(org-html-export-to-html))" --kill'
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          cname: dotfiles.codearsonist.com
-          publish_dir: ./docs
+          name: vmware
+          path: ./result/*.vmdk
