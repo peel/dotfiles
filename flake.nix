@@ -67,7 +67,7 @@
        vmwareImage.x86_64-linux =
          self.nixosConfigurations.wrkvm.config.system.build.vmwareImage;
        vmwareImage.aarch64-linux = 
-	self.nixosConfigurations.wrkvm64.config.system.build.vmwareImage;
+	       self.nixosConfigurations.wrkvm64.config.system.build.vmwareImage;
     };
   };
  }

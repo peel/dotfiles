@@ -32,6 +32,7 @@ in {
   hardware.video.hidpi.enable = true;  
 
   # os ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+  documentation.nixos.enable = false;
   system.stateVersion = "21.11";
   nix.package = pkgs.nixUnstable;
   nix.extraOptions = "experimental-features = nix-command flakes";
