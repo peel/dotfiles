@@ -15,7 +15,7 @@ let
 in {
   imports = [
     ./direnv.nix
-    #./emacs.nix
+    ./emacs.nix
     ./fonts.nix
     ./git.nix
     ./gnupg.nix

@@ -4,7 +4,7 @@ with lib;
 
 let
   username = "peel";
-  hostName = "peel-work-vm";
+  hostName = "${username}-nixos-aarch64";
 in {
   imports = [
     ./hardware-configuration.nix
@@ -42,7 +42,7 @@ in {
   };
 
   networking.useDHCP = false;
-  networking.interfaces.ens33.useDHCP = true;
+  networking.interfaces.ens160.useDHCP = true;
   i18n = {
     consoleFont = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
     consoleKeyMap = "us";
@@ -72,20 +72,20 @@ in {
      after = [ "network.target" ];
      environment.S1_AGENT_INSTALL_CONFIG_PATH="/home/sentinelone/config.cfg";
      serviceConfig = {
-       Type = "simple";
-       # User = "root";
-       # Group = "root";
+       User = "sentinelone";
+       Group = "sentinelone";
+       Type = "oneshot";
        ExecStart = ''
-         ${pkgs.sentinelone}/bin/sentinelctl control run
+         ${pkgs.sentinelone}/bin/sentinelctl control start
        '';
        ExecStop = ''
-         ${pkgs.sentinelone}/bin/sentinelctl control shutdown
+         ${pkgs.sentinelone}/bin/sentinelctl control stop
        '';
        Restart = "on-failure";
        RestartSec = 2;
      };
   };
-  
+
   users.extraUsers.sentinelone = {
     description = "User for sentinelone";
     isNormalUser = true;
@@ -97,35 +97,37 @@ in {
     "sentinelone"
   ];
   
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  # AARCH64: For now, on Apple Silicon, we must manually set the
-  # display resolution. This is a known issue with VMware Fusion.
-  services.xserver.displayManager.sessionCommands = ''
+  services = {
+    xserver = {
+      enable = true;
+      dpi = 220;
+      layout = "us";
+      xkbOptions = "eurosign:e,caps:ctrl_modifier";
+      libinput = {
+        enable = true;
+        disableWhileTyping = true;
+      };
+      desktopManager.gnome.enable = false;
+      desktopManager.xterm.enable = false;
+      displayManager.defaultSession = "none+xmonad";
+      # AARCH64: For now, on Apple Silicon, we must manually set the
+      # display resolution. This is a known issue with VMware Fusion.
+      displayManager.sessionCommands = ''
         ${pkgs.xlibs.xset}/bin/xset r rate 200 40
       '' + (if pkgs.stdenv.system == "aarch64-linux" then ''
         ${pkgs.xorg.xrandr}/bin/xrandr -s '2880x1800'
       '' else "");
-  services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.layout = "us";
-  services.xserver.xkbOptions = "eurosign:e";
 
-  services = {
-    # xserver = {
-    #   enable = true;
-    #   startDbusSession = true;
-    #   layout = "us";
-    #   xkbOptions = "eurosign:e,caps:ctrl_modifier";
-    #   libinput = {
-    #     enable = true;
-    #     disableWhileTyping = true;
-    #   };
-    #   displayManager.defaultSession = "none+xmonad";
-    #   windowManager.xmonad = {
-    #     enable = true;
-    #     enableContribAndExtras = true;
-    #   };
-    # };
+      displayManager.lightdm = {
+        enable = true;
+        autoLogin.enable = true;
+        autoLogin.user = username;
+      };
+      windowManager.xmonad = {
+        enable = true;
+        enableContribAndExtras = true;
+      };
+    };
     dbus = {
       enable = true;
       packages = [ pkgs.dconf ];
@@ -142,6 +144,7 @@ in {
       publish.domain = true;
     };
   };
+
 
 
   # monitoring  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
