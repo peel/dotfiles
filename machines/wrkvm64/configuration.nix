@@ -69,6 +69,7 @@ in {
   ];
 
   users.mutableUsers = false;
+  security.sudo.wheelNeedsPassword = false;
   users.extraUsers = {
     "${username}"= {
       home = "/home/${username}";
