@@ -8,6 +8,9 @@ in {
     fonts = [pragmatapro];
   } // lib.optionalAttrs pkgs.stdenvNoCC.isLinux {
     fontconfig.enable = true;
-    #fontconfig.dpi = 180;
+    enableDefaultFonts = false;
+    fontconfig.defaultFonts.monospace = ["PragmataPro"];
+    fontconfig.defaultFonts.sansSerif = ["PragmataPro"];
+    fontconfig.defaultFonts.serif = ["PragmataPro"];
   };
 }
