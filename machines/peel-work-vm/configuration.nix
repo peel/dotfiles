@@ -11,7 +11,9 @@ in {
     ../../setup/nixos
   ];
 
+  # FIXME for now
   nixpkgs.config.allowBroken = true;
+  nixpkgs.config.allowUnsupportedSystem = true;
   nixpkgs.overlays =
     let path = ../../overlays ; in with builtins;
       map (n: import (path + ("/" + n)))

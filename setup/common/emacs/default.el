@@ -444,7 +444,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 ;; .......................................................................... go
 (use-package rust-mode
-  :ensure t  
+  :ensure t
   :mode ("\\.rs?\\'" . rust-mode)
   :defer t)
 
@@ -548,9 +548,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     ("L" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
      "* %? [[%:link][%:description]] \nCaptured On: %U"))))
 
-(use-package pikchr-mode
-  :ensure t)
-
 (use-package org-roam
   :ensure t
   :after org
@@ -569,7 +566,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
                (display-buffer-in-direction)
                (direction . right)
                (window-width . 0.33)
-               (window-height . fit-window-to-buffer)))    
+               (window-height . fit-window-to-buffer)))
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
          ("C-c n i" . org-roam-node-insert)))
@@ -704,7 +701,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
       (vterm-send-string (concat "cd " dir))
       (vterm-send-return)
       (vterm-clear)))
-  
+
   (defun peel/vterm--new (&optional force)
     "Starts or switches to vterm. If forced starts a new instance"
     (let* ((buffer-name "vterm")
@@ -719,7 +716,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     "Starts new vterm"
     (interactive)
     (peel/vterm--new t))
-  
+
   (defun peel/vterm ()
     "Starts or switches to vterm"
     (interactive)
@@ -779,9 +776,9 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     "Load default font."
     (add-to-list 'initial-frame-alist '(font . "PragmataPro"))
     (add-to-list 'default-frame-alist '(font . "PragmataPro"))
-    (set-face-attribute 'default nil :height 220)
+    (set-face-attribute 'default nil :height 66)
     (setq-default line-spacing 9))
-  
+
   (defun peel/load-ui ()
     "Remove UI bars."
     (tool-bar-mode -1)
@@ -794,7 +791,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
           (add-to-list 'default-frame-alist '(ns-transparent-titlebar t))
           (add-to-list 'default-frame-alist '(ns-appearance dark)))
       (menu-bar-mode -1)))
-  
+
   (defun peel/lights ()
     "Toggles dark mode on Darwin."
     (interactive)
@@ -806,7 +803,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     (if (eq current-theme dark-theme)
         (switch light-theme)
       (switch dark-theme)))
-  
+
   (defun peel/load-glitter (&optional frame)
     (unless frame
       (setq frame (selected-frame)))
@@ -816,7 +813,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
           (peel/load-theme)
           (peel/load-font)
           (peel/load-ui)))))
-  
+
   (if (daemonp)
       (add-hook 'after-make-frame-functions #'peel/load-glitter t)
     (peel/load-glitter)))

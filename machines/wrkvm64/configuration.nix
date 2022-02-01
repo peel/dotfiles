@@ -11,19 +11,21 @@ in {
     ./vmware-guest.nix
     ../../setup/nixos
   ];
-  
+
+  # FIXME
   # Disable the default module and import our override. We have
   # customizations to make this work on aarch64.
   disabledModules = [ "virtualisation/vmware-guest.nix" ];
-
   nixpkgs.config.allowBroken = true;
-  nixpkgs.overlays = 
+  nixpkgs.config.allowUnsupportedSystem = true;
+
+  nixpkgs.overlays =
     let path = ../../overlays ; in with builtins;
       map (n: import (path + ("/" + n)))
           (filter (n: match ".*\\.nix" n != null ||
                       pathExists (path + ("/" + n + "/default.nix")))
                   (attrNames (readDir path)));
-    
+
   # hardware ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   # We require 5.14+ for VMware Fusion on M1.
   boot.kernelPackages = pkgs.linuxPackages_5_15;
