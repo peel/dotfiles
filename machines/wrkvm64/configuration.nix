@@ -49,7 +49,7 @@ in {
     defaultLocale = "en_US.UTF-8";
   };
 
-  environment.systemPackages = with pkgs; [ emacs sentinelone gtkmm3 ];
+  environment.systemPackages = with pkgs; [ sentinelone gtkmm3 ];
 
   users.mutableUsers = false;
   users.extraUsers = {
