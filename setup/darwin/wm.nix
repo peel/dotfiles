@@ -4,7 +4,7 @@ let
   keycodes = import ./keycodes.nix;
 in {
   services.yabai.enable = true;
-  services.yabai.package = pkgs.yabai;
+  services.yabai.package = pkgs.yabaiM1;
   services.yabai.enableScriptingAddition = true;
   services.yabai.extraConfig = ''
     yabai -m config mouse_follows_focus           off
@@ -40,7 +40,7 @@ in {
     myEditor = "emacsclient -a '' -nc";
     myBrowser = "open /Applications/Firefox\ Developer\ Edition.app";
     noop = "/dev/null";
-    prefix = "${pkgs.yabai}/bin/yabai -m";
+    prefix = "${pkgs.yabaiM1}/bin/yabai -m";
     fstOrSnd = {fst, snd}: domain: "${prefix} ${domain} --focus ${fst} || ${prefix} ${domain} --focus ${snd}";
     nextOrFirst = fstOrSnd { fst = "next"; snd = "first";};
     prevOrLast = fstOrSnd { fst = "prev"; snd = "last";};

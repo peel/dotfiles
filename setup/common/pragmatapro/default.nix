@@ -1,7 +1,7 @@
 { stdenv, lib, requireFile, unzip }:
 
 let
-  version = "0.828";
+  version = "0.829";
   installPath = "share/fonts/truetype/";
 in stdenv.mkDerivation rec {
   name = "pragmatapro-${version}";
