@@ -335,44 +335,21 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package lsp-mode
   :ensure t
-  :bind ("C-c l" . lsp-hydra/body)
+  :bind-keymap ("C-c l" . lsp-command-map)
   :hook ((scala-mode . lsp)
          (js-mode . lsp)
-         (typescript-mode . lsp))
-  :after (hydra envrc)
+         (typescript-mode . lsp)
+         (lsp-mode . #'lsp-enable-which-key-integration))
+  :after (envrc)
   :config
-  ;; (advice-add 'lsp :before #'envrc-reload)
+  (advice-add 'lsp :before #'envrc-reload)
   (setq lsp-eldoc-render-all t)
   (setq lsp-file-watch-ignored '(
                                  "[/\\\\]\\.direnv$"
                                  "[/\\\\]\\.git$"
                                  "[/\\\\]\\.metals$"
                                  "[/\\\\]\\.bloop$"
-                                 "[/\\\\]\\target$"))
-  (defhydra lsp-hydra (:exit t :hint nil)
-    "
- Buffer^^               Server^^                   Symbol
--------------------------------------------------------------------------------------
- [_f_] format           [_M-r_] restart            [_d_] declaration  [_i_] implementation  [_o_] documentation
- [_m_] imenu            [_S_]   shutdown           [_D_] definition   [_t_] type            [_r_] rename
- [_x_] execute action   [_M-s_] describe session   [_R_] references   [_s_] signature       [_w_] workspace"
-    ("d" lsp-find-declaration)
-    ("D" lsp-ui-peek-find-definitions)
-    ("R" lsp-ui-peek-find-references)
-    ("i" lsp-ui-peek-find-implementation)
-    ("t" lsp-find-type-definition)
-    ("s" lsp-signature-help)
-    ("o" lsp-describe-thing-at-point)
-    ("r" lsp-rename)
-    ("w" lsp-ivy-workspace-symbol)
-
-    ("f" lsp-format-buffer)
-    ("m" lsp-ui-imenu)
-    ("x" lsp-execute-code-action)
-
-    ("M-s" lsp-describe-session)
-    ("M-r" lsp-workspace-restart)
-    ("S" lsp-workspace-shutdown)))
+                                 "[/\\\\]\\target$")))
 
 (use-package lsp-ui
   :ensure t)
@@ -776,7 +753,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     "Load default font."
     (add-to-list 'initial-frame-alist '(font . "PragmataPro"))
     (add-to-list 'default-frame-alist '(font . "PragmataPro"))
-    (set-face-attribute 'default nil :height 66)
+    (set-face-attribute 'default nil :height 60)
     (setq-default line-spacing 9))
 
   (defun peel/load-ui ()
