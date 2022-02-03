@@ -5,6 +5,7 @@ nix/.config/configstore/
 nix/.config/htop/
 result
 .vagrant
+*.private.*
 
 prompt-history
 xmonad-x86_64-linux
