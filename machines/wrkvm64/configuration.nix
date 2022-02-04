@@ -31,7 +31,7 @@ in {
   boot.kernelPackages = pkgs.linuxPackages_5_15;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  hardware.video.hidpi.enable = true;  
+  hardware.video.hidpi.enable = true;
 
   # os ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   documentation.nixos.enable = false;
@@ -56,17 +56,17 @@ in {
       # cvt 3840 2160 60.00
       # 3840x2160 59.98 Hz (CVT 8.29M9) hsync: 134.18 kHz; pclk: 712.75 MHz
       # Modeline "3840x2160 60.00" 712.75 3840 4160 4576 5312 2160 2163 2168 2237 -hsync +vsync
-      xrandr --newmode "3840x2160_60" 712.75 3840 4160 4576 5312 2160 2163 2168 2237 -hsync +vsync
-      xrandr --addmode Virtual-1 3840x2160_60
-      xrandr -s '3840x2160_60'
+      xrandr --newmode "3840x2160h60" 712.75 3840 4160 4576 5312 2160 2163 2168 2237 -hsync +vsync
+      xrandr --addmode Virtual-1 3840x2160h60
+      xrandr -s '3840x2160h60'
     '')
     (writeShellScriptBin "xrandr-mbp" ''
      # cvt 3456 2234 120
      # 3456x2234 179.94 Hz (CVT) hsync: 287.38 kHz; pclk: 1397.75 MHz
      # Modeline "3456x2234 120.00" 1397.75 3456 3776 4160 4864 2234 2237 2247 2396 -hsync +vsync
-      xrandr --newmode "3456x2234_120" 1397.75 3456 3776 4160 4864 2234 2237 2247 2396 -hsync +vsync
-      xrandr --addmode Virtual-1 3456x2234_120
-      xrandr -s '3456x2234_120'
+      xrandr --newmode "3456x2234h120" 1397.75 3456 3776 4160 4864 2234 2237 2247 2396 -hsync +vsync
+      xrandr --addmode Virtual-1 3456x2234h120
+      xrandr -s '3456x2234h120'
     '')
   ];
 

@@ -196,10 +196,6 @@
 
 
 ;; ....................................................................... setup
-;; todo transient?
-(use-package hydra
-  :ensure t
-  :demand t)
 
 ;; languages ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
@@ -230,74 +226,14 @@
   :ensure t
   :bind (("C-c v" . er/expand-region)))
 
-;; todo remove hydra
 (use-package smartparens
   :ensure t
-  :after hydra
   :hook (prog-mode . smartparens-strict-mode)
   :diminish smartparens-mode
-  :bind (("C-c k" . peel-smartparens/body)
-         :map smartparens-strict-mode-map
-         ;; A fill paragraph in strict mode
-         ("M-q" . sp-indent-defun))
-  :init (require 'hydra)
   :config
   (setq sp-highlight-wrap-overlay t
         sp-highlight-pair-overlay t
         sp-highlight-wrap-tag-overlay t)
-  ;; Hydra for Smartparens
-  (defhydra peel-smartparens (:hint nil)
-    "
-Sexps (quit with _q_)
-
-^Nav^            ^Barf/Slurp^                 ^Depth^
-^---^------------^----------^-----------------^-----^-----------------
-_f_: forward     _→_:         slurp forward   _R_: splice
-_b_: backward    _←_:         barf forward    _r_: raise
-_u_: backward ↑  _C-<right>_:  slurp backward  _↑_: raise backward
-_d_: forward ↓   _C-<left>_:   barf backward   _↓_: raise forward
-_p_: backward ↓
-_n_: forward ↑
-
-^Kill^           ^Misc^                       ^Wrap^
-^----^-----------^----^-----------------------^----^------------------
-_w_: copy        _j_: join                    _(_: wrap with ( )
-_k_: kill        _s_: split                   _{_: wrap with { }
-^^               _t_: transpose               _'_: wrap with ' '
-^^               _c_: convolute               _\"_: wrap with \" \"
-^^               _i_: indent defun"
-    ("q" nil)
-    ;; Wrapping
-    ("(" (lambda (_) (interactive "P") (sp-wrap-with-pair "(")))
-    ("{" (lambda (_) (interactive "P") (sp-wrap-with-pair "{")))
-    ("'" (lambda (_) (interactive "P") (sp-wrap-with-pair "'")))
-    ("\"" (lambda (_) (interactive "P") (sp-wrap-with-pair "\"")))
-    ;; Navigation
-    ("f" sp-forward-sexp )
-    ("b" sp-backward-sexp)
-    ("u" sp-backward-up-sexp)
-    ("d" sp-down-sexp)
-    ("p" sp-backward-down-sexp)
-    ("n" sp-up-sexp)
-    ;; Kill/copy
-    ("w" sp-copy-sexp)
-    ("k" sp-kill-sexp)
-    ;; Misc
-    ("t" sp-transpose-sexp)
-    ("j" sp-join-sexp)
-    ("s" sp-split-sexp)
-    ("c" sp-convolute-sexp)
-    ("i" sp-indent-defun)
-    ;; Depth changing
-    ("R" sp-splice-sexp)
-    ("r" sp-splice-sexp-killing-around)
-    ("<up>" sp-splice-sexp-killing-backward)
-    ("<down>" sp-splice-sexp-killing-forward)
-    ;; Barfing/slurping
-    ("<right>" sp-forward-slurp-sexp)
-    ("<left>" sp-forward-barf-sexp)
-    ("C-<left>" sp-backward-barf-sexp)
-    ("C-<right>" sp-backward-slurp-sexp))
   (use-package smartparens-config
     :ensure nil
     :demand))
@@ -339,17 +275,22 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :hook ((scala-mode . lsp)
          (js-mode . lsp)
          (typescript-mode . lsp)
+         (haskell-mode . lsp)
          (lsp-mode . #'lsp-enable-which-key-integration))
   :after (envrc)
   :config
   (advice-add 'lsp :before #'envrc-reload)
-  (setq lsp-eldoc-render-all t)
   (setq lsp-file-watch-ignored '(
                                  "[/\\\\]\\.direnv$"
                                  "[/\\\\]\\.git$"
                                  "[/\\\\]\\.metals$"
                                  "[/\\\\]\\.bloop$"
-                                 "[/\\\\]\\target$")))
+                                 "[/\\\\]\\target$"))
+  (setq lsp-ui-doc-header t)
+  (setq lsp-ui-doc-include-signature t)
+  (setq lsp-ui-doc-include-function-signatures t
+        lsp-eldoc-render-all t)
+  (setq lsp-idle-delay 0.5))
 
 (use-package lsp-ui
   :ensure t)
@@ -586,7 +527,6 @@ _k_: kill        _s_: split                   _{_: wrap with { }
 
 (use-package org-ref
   :ensure t
-  :bind ("C-c n r" . org-ref-bibtex-hydra/body)
   :config
   ;; (setq reftex-default-bibliography (list papers-refs))
   (setq org-ref-completion-library 'org-ref-ivy-cite
@@ -800,23 +740,7 @@ _k_: kill        _s_: split                   _{_: wrap with { }
   :custom
   (writeroom-fullscreen-effect "maximized")
   (writeroom-width 126)
-  (writeroom-bottom-divider-width 0)
-  (writeroom-major-modes '(prog-mode))
-  :config
-  (use-package focus
-    :ensure t)
-
-  (defun peel/work ()
-    "Trigger work env"
-    (interactive)
-    (shell-command "$HOME/wrk/dotfiles/setup/bin/bin/work on"))
-
-  (defun peel/chill ()
-    "Trigger work env"
-    (interactive)
-    (shell-command "$HOME/wrk/dotfiles/setup/bin/bin/work off"))
-
-  (global-writeroom-mode))
+  (writeroom-bottom-divider-width 0))
 
 
 ;; .................................................................... unclutter

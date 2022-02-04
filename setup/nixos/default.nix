@@ -6,9 +6,8 @@ in {
 
   imports = [
     ../common
-    ./gui.nix
   ];
-  
+
   environment.systemPackages = [
     pkgs.docker
     pkgs.docker_compose

@@ -5,13 +5,8 @@ let
     programs.direnv = {
       enable = true;
       enableBashIntegration = true;
-      stdlib = ''
-        use_flake() {
-          watch_file flake.nix
-          watch_file flake.lock
-          eval "$(nix print-dev-env --profile "$(direnv_layout_dir)/flake-profile")"
-        }
-      '';
+      nix-direnv.enable = true;
+      nix-direnv.enableFlakes = true;
     };
   #     # programs.mbsync.enable = true;
   #     # programs.msmtp.enable = true;

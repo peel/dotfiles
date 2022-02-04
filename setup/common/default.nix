@@ -14,13 +14,11 @@ let
     in [ nixos peel cachix nix-community nix-tools ];
 in {
   imports = [
-    ./direnv.nix
     ./emacs.nix
     ./fonts.nix
     ./git.nix
     ./gnupg.nix
-    # ./home.nix
-    ./languages.nix
+    ./home.nix
     ./packages.nix
     #./secrets
     ./shells.nix
