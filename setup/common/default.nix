@@ -18,7 +18,6 @@ in {
     ./fonts.nix
     ./git.nix
     ./gnupg.nix
-    ./home.nix
     ./packages.nix
     #./secrets
     ./shells.nix
