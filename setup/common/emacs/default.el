@@ -6,10 +6,7 @@
 ;;; Code:
 ;;; ▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
 
-(setq gc-cons-threshold 64000000)
-(add-hook 'after-init-hook (lambda ()
-                             ;; restore after startup
-                             (setq gc-cons-threshold 800000)))
+(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold 800000)))
 
 ;; package.el ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (require 'package)
@@ -21,10 +18,6 @@
 (use-package diminish
   :ensure t
   :init (require 'diminish))
-
-(use-package try
-  :ensure t
-  :defer t)
 
 (use-package exec-path-from-shell
   :ensure t
@@ -61,12 +54,6 @@
   (global-company-mode)
   (company-idle-delay 0)
   (company-minimum-prefix-length 0))
-
-(use-package dash-at-point
-  :ensure t
-  :commands (dash-at-point dash-at-point-with-docset)
-  :bind (("C-c h" . dash-at-point)
-         ("C-c H" . dash-at-point-with-docset)))
 
 ;; ivy ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ;; todo selectrum ctrlf prescient
@@ -505,15 +492,6 @@
   :bind (:map org-mode-map
               (("C-c n a" . orb-note-actions))))
 
-(use-package deft
-  :ensure t
-  :bind ("C-c n l" . deft)
-  :custom
-  (deft-recursive t)
-  (deft-use-filter-string-for-filename t)
-  (deft-default-extension "org")
-  (deft-directory papers-dir))
-
 (use-package nov
   :ensure t
   :mode ("\\.epub\\'" . nov-mode))
@@ -747,7 +725,8 @@
 (use-package emacs
   :defer 0
   :init
-  (setq inhibit-startup-screen t
+  (setq gc-cons-threshold (* 2 100000000)
+        inhibit-startup-screen t
         initial-scratch-message nil
         make-backup-files nil
         frame-resize-pixelwise t
