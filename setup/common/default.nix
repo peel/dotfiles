@@ -22,7 +22,15 @@ in {
     ./shells.nix
   ];
 
-  nix.binaryCaches = builtins.map (x: x.url) caches;
-  nix.binaryCachePublicKeys = builtins.map (x: x.key) caches;
+  nix = {
+    package = pkgs.nixUnstable;
+    binaryCaches = builtins.map (x: x.url) caches;
+    binaryCachePublicKeys = builtins.map (x: x.key) caches;
+    gc = {
+      automatic = true;
+      options = "--delete-older-than 30d";
+    };
+    extraOptions = "experimental-features = nix-command flakes";
+  };
   time.timeZone = "Europe/Warsaw";
 }

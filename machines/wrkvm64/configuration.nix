@@ -4,19 +4,15 @@ with lib;
 
 let
   username = "peel";
-  hostName = "${username}-nixos-aarch64";
 in {
   imports = [
     ./hardware-configuration.nix
     ./vmware-guest.nix
-    ../../setup/nixos
   ];
 
   # Disable the default module and import our override. We have
   # customizations to make this work on aarch64.
   disabledModules = [ "virtualisation/vmware-guest.nix" ];
-  nixpkgs.config.allowBroken = true;
-  nixpkgs.config.allowUnsupportedSystem = false;
 
   # hardware ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   # We require 5.14+ for VMware Fusion on M1.
@@ -28,20 +24,9 @@ in {
   # os ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   documentation.nixos.enable = false;
   system.stateVersion = "21.11";
-  nix.package = pkgs.nixUnstable;
-  nix.extraOptions = "experimental-features = nix-command flakes";
-  nix.gc = {
-    automatic = true;
-    options = "--delete-older-than 30d";
-  };
 
   networking.useDHCP = false;
   networking.interfaces.ens160.useDHCP = true;
-  i18n = {
-    consoleFont = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
-    consoleKeyMap = "us";
-    defaultLocale = "en_US.UTF-8";
-  };
 
   environment.systemPackages = with pkgs; [ gtkmm3 ] ++ [
     (writeShellScriptBin "xrandr-ext" ''
@@ -62,7 +47,6 @@ in {
     '')
   ];
 
-  # peel.secrets.enable = true;
   users.mutableUsers = false;
   security.sudo.wheelNeedsPassword = false;
   users.extraUsers = {
@@ -78,8 +62,6 @@ in {
     };
   };
 
-
-  
   services = {
     xserver = {
       enable = true;
@@ -88,25 +70,26 @@ in {
       xkbOptions = "eurosign:e,caps:ctrl_modifier";
       libinput = {
         enable = true;
-        disableWhileTyping = true;
+        touchpad.disableWhileTyping = true;
       };
       desktopManager.gnome.enable = false;
       desktopManager.xterm.enable = false;
-      displayManager.defaultSession = "none+xmonad";
-      # AARCH64: For now, on Apple Silicon, we must manually set the
-      # display resolution. This is a known issue with VMware Fusion.
-      displayManager.sessionCommands = ''
-        ${pkgs.xlibs.xset}/bin/xset r rate 220 40
-      '' + (if pkgs.stdenv.system == "aarch64-linux" then ''
-        ${pkgs.xorg.xrandr}/bin/xrandr --newmode "3456x2234_120.00" 1397.75 3456 3776 4160 4864 2234 2237 2247 2396 -hsync +vsync
-        ${pkgs.xorg.xrandr}/bin/xrandr --addmode Virtual-1 3456x2234_120.00
-        ${pkgs.xorg.xrandr}/bin/xrandr -s 3456x2234_120.00
-      '' else "");
-
-      displayManager.lightdm = {
-        enable = true;
-        autoLogin.enable = true;
+      displayManager = {
         autoLogin.user = username;
+        defaultSession = "none+xmonad";
+        # AARCH64: For now, on Apple Silicon, we must manually set the
+        # display resolution. This is a known issue with VMware Fusion.
+        sessionCommands = ''
+          ${pkgs.xlibs.xset}/bin/xset r rate 220 40
+        '' + (if pkgs.stdenv.system == "aarch64-linux" then ''
+          ${pkgs.xorg.xrandr}/bin/xrandr --newmode "3456x2234_120.00" 1397.75 3456 3776 4160 4864 2234 2237 2247 2396 -hsync +vsync
+          ${pkgs.xorg.xrandr}/bin/xrandr --addmode Virtual-1 3456x2234_120.00
+          ${pkgs.xorg.xrandr}/bin/xrandr -s 3456x2234_120.00
+        '' else "");
+        lightdm = {
+          enable = true;
+          autoLogin.enable = true;
+        };
       };
       windowManager.xmonad = {
         enable = true;
@@ -117,32 +100,8 @@ in {
       enable = true;
       packages = [ pkgs.dconf ];
     };
-    openssh = {
-      enable = true;
-    };
-    avahi = {
-      enable = true;
-      nssmdns = true;
-      publish.addresses = true;
-      publish.enable = true;
-      publish.workstation = true;
-      publish.domain = true;
-    };
   };
 
-
-
-  # monitoring  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-
-  # general routes  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-
-  # containers ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   virtualisation.vmware.guest.enable = true;
-  virtualisation.docker = {
-    enable = true;
-    enableOnBoot = true;
-    autoPrune.enable = true;
-    liveRestore = true;
-  };
-  
+
 }

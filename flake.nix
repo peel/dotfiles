@@ -24,10 +24,23 @@
           listToAttrs (map
             (n: named n (apply fn path n))
             (filter (isModuleIn path) (attrsIn path)));
-      pkgs = import nixpkgs {
-        allowUnfree = true;
-        overlays = (nixpkgs.lib.attrValues self.overlays);
-      };
+      mkSystem = fn: { hostname, user ? "peel", system ? "x86_64-linux", extraModules ? [], homeModules ? import ./setup/common/home.nix , ...}:
+        fn {
+          inherit system;
+          modules = [
+            { nixpkgs.overlays = [ emacs-overlay.overlay ] ++ (nixpkgs.lib.attrValues self.overlays); }
+            ./machines/${hostname}
+            home-manager.nixosModules.home-manager {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.${user} = homeModules;
+            }
+            ./setup/common
+            ./setup/nixos
+          ]
+          ++ (nixpkgs.lib.attrValues self.nixosModules)
+          ++ extraModules;
+        };
     in {
       overlays = mapModules ./overlays import;
       # FIXME abstract
@@ -43,6 +56,11 @@
         modules = [
           { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
           ./machines/snowberry/configuration.nix
+          home-manager.nixosModules.home-manager {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.peel = import ./setup/common/home.nix;
+          }
         ] ++ (nixpkgs.lib.attrValues  self.darwinModules);
       };
       # FIXME
@@ -57,8 +75,8 @@
         system = "x86_64-linux";
         modules = [
           { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
-          ./machines/peel-work-vm/configuration.nix
-          ./machines/peel-work-vm/hardware-configuration.nix
+          ./machines/wrkvm-x86/configuration.nix
+          ./machines/wrkvm-x86/hardware-configuration.nix
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
@@ -66,19 +84,24 @@
           }
         ];
       };
-      nixosConfigurations.wrkvm64 = nixpkgs.lib.nixosSystem {
+
+      nixosConfigurations.wrkvm64 = mkSystem nixpkgs.lib.nixosSystem rec {
+        hostname = "wrkvm64";
+        user = "peel";
         system = "aarch64-linux";
-        modules = [
-          # FIXME overlays
-          { nixpkgs.overlays = [ emacs-overlay.overlay ] ++ (nixpkgs.lib.attrValues self.overlays); }
-          ./machines/wrkvm64/configuration.nix
-          ./machines/wrkvm64/hardware-configuration.nix
-          home-manager.nixosModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.peel = import ./setup/common/home.nix;
+        extraModules = [
+          {
+            networking = {
+              hostName = hostname;
+            };
+          #   users.extraUsers.${user} = {
+          #     home = "/home/${user}";
+          #     isNormalUser = true;
+          #     extraGroups = [ "wheel" "docker" ];
+          #     uid = 1000;
+          #   };
           }
-        ] ++ (nixpkgs.lib.attrValues self.nixosModules);
+        ];
       };
 
       nixosModules = (mapModules ./modules/nixos import) // (mapModules ./modules/common import);
