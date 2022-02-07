@@ -268,10 +268,10 @@
 (use-package lsp-mode
   :ensure t
   :bind-keymap ("C-c l" . lsp-command-map)
-  :hook ((scala-mode . lsp)
-         (js-mode . lsp)
-         (typescript-mode . lsp)
-         (haskell-mode . lsp)
+  :hook ((scala-mode . lsp-deferred)
+         (js-mode . lsp-deferred)
+         (typescript-mode . lsp-deferred)
+         (haskell-mode . lsp-defrred)
          (lsp-mode . #'lsp-enable-which-key-integration))
   :after (envrc)
   :config

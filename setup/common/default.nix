@@ -19,11 +19,9 @@ in {
     ./git.nix
     ./gnupg.nix
     ./packages.nix
-    #./secrets
     ./shells.nix
   ];
 
-  #peel.secrets.enable = true;
   nix.binaryCaches = builtins.map (x: x.url) caches;
   nix.binaryCachePublicKeys = builtins.map (x: x.key) caches;
   time.timeZone = "Europe/Warsaw";
