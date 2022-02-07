@@ -218,6 +218,7 @@
   :ensure t
   :bind (:map puni-mode-map
               ("M-s" . puni-splice)
+              ("C-|" . puni-split)
               ("C-<right>" . puni-slurp-forward)
               ("C-<left>" . puni-barf-forward)
               ("C-M-<right>" . puni-barf-backward)
