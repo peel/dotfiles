@@ -40,5 +40,5 @@
        NSNavPanelExpandedStateForSaveMode2 = true;
      };
    };
-  
+
 }

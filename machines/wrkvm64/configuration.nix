@@ -12,19 +12,11 @@ in {
     ../../setup/nixos
   ];
 
-  # FIXME
   # Disable the default module and import our override. We have
   # customizations to make this work on aarch64.
   disabledModules = [ "virtualisation/vmware-guest.nix" ];
   nixpkgs.config.allowBroken = true;
-  nixpkgs.config.allowUnsupportedSystem = true;
-
-  nixpkgs.overlays =
-    let path = ../../overlays ; in with builtins;
-      map (n: import (path + ("/" + n)))
-          (filter (n: match ".*\\.nix" n != null ||
-                      pathExists (path + ("/" + n + "/default.nix")))
-                  (attrNames (readDir path)));
+  nixpkgs.config.allowUnsupportedSystem = false;
 
   # hardware ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   # We require 5.14+ for VMware Fusion on M1.
@@ -51,7 +43,7 @@ in {
     defaultLocale = "en_US.UTF-8";
   };
 
-  environment.systemPackages = with pkgs; [ sentinelone gtkmm3 ] ++ [
+  environment.systemPackages = with pkgs; [ gtkmm3 ] ++ [
     (writeShellScriptBin "xrandr-ext" ''
       # cvt 3840 2160 60.00
       # 3840x2160 59.98 Hz (CVT 8.29M9) hsync: 134.18 kHz; pclk: 712.75 MHz
@@ -70,6 +62,7 @@ in {
     '')
   ];
 
+  # peel.secrets.enable = true;
   users.mutableUsers = false;
   security.sudo.wheelNeedsPassword = false;
   users.extraUsers = {
@@ -85,37 +78,7 @@ in {
     };
   };
 
-  systemd.services.sentinelone = {
-     enable = true;
-     description = "sentinelone agent";
-     wantedBy = [ "multi-user.target" ];
-     after = [ "network.target" ];
-     environment.S1_AGENT_INSTALL_CONFIG_PATH="/home/sentinelone/config.cfg";
-     serviceConfig = {
-       User = "sentinelone";
-       Group = "sentinelone";
-       Type = "oneshot";
-       ExecStart = ''
-         ${pkgs.sentinelone}/bin/sentinelctl control start
-       '';
-       ExecStop = ''
-         ${pkgs.sentinelone}/bin/sentinelctl control stop
-       '';
-       Restart = "on-failure";
-       RestartSec = 2;
-     };
-  };
 
-  users.extraUsers.sentinelone = {
-    description = "User for sentinelone";
-    isNormalUser = true;
-    shell = "${pkgs.coreutils}/bin/true";
-    home = "/home/sentinelone";
-    extraGroups = [ "wheel" ];
-  };
-  users.groups.sentinelone.members = [
-    "sentinelone"
-  ];
   
   services = {
     xserver = {

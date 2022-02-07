@@ -213,17 +213,26 @@
   :ensure t
   :bind (("C-c v" . er/expand-region)))
 
-(use-package smartparens
+(use-package puni
+  :defer t
   :ensure t
-  :hook (prog-mode . smartparens-strict-mode)
-  :diminish smartparens-mode
-  :config
-  (setq sp-highlight-wrap-overlay t
-        sp-highlight-pair-overlay t
-        sp-highlight-wrap-tag-overlay t)
-  (use-package smartparens-config
-    :ensure nil
-    :demand))
+  :bind (:map puni-mode-map
+              ("M-s" . puni-splice)
+              ("C-<right>" . puni-slurp-forward)
+              ("C-<left>" . puni-barf-forward)
+              ("C-M-<right>" . puni-barf-backward)
+              ("C-M-<left>" . puni-slurp-backward)
+              ("C-M-p" . puni-syntactic-backward-punct)
+              ("C-M-n" . puni-syntactic-forward-punct)
+              ("C-M-t" . puni-transpose))
+  :hook
+  (after-init . puni-global-mode)
+  (vterm-mode . puni-disable-puni-mode))
+
+(use-package elec-pair
+  :ensure nil
+  :init
+  (electric-pair-mode))
 
 (use-package project
   :ensure nil
@@ -457,7 +466,6 @@
   :ensure t
   :after org
   :hook ((after-init-hook . org-roam-db-autosync-enable)
-         (smartpartents-strict)
          (org-roam-mode . (lambda ()
                             (set (make-local-variable 'company-backends)
                                  '((company-capf))))))
