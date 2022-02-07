@@ -21,6 +21,7 @@
 
 (use-package exec-path-from-shell
   :ensure t
+  :if (memq window-system '(mac ns x))
   :custom
   (exec-path-from-shell-variables
    '("PATH"
@@ -32,8 +33,7 @@
      "NIX_USER_PROFILE_DIR"
      "JAVA_HOME"
      ))
-  :config
-  (exec-path-from-shell-initialize))
+  :config (exec-path-from-shell-initialize))
 
 ;; navigation ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package winner
