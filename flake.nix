@@ -30,14 +30,14 @@
         , user ? "peel"
         , system ? "x86_64-linux"
         , extraModules ? []
-        , homeModules ? import ./setup/common/home.nix
+        , homeModules ? import ./modules/common/setup/home.nix
         , ...}: with nixpkgs.lib; with builtins;
           let
             linuxOr = a: b: if (hasInfix "linux" system) then a else b;
             systemFn = linuxOr nixosSystem darwin.lib.darwinSystem;
             overlayModules = [{ nixpkgs.overlays = [ emacs-overlay.overlay ] ++ (attrValues self.overlays); }];
             systemModules = attrValues (linuxOr self.nixosModules self.darwinModules);
-            configModules = linuxOr [ ./setup/nixos ] [ ./setup/darwin ];
+            configModules = []; #linuxOr [ ./setup/nixos ] [ ./setup/darwin ];
             homeManagerModules = linuxOr home-manager.nixosModules.home-manager home-manager.darwinModules.home-manager;
           in systemFn {
             inherit system;
@@ -49,12 +49,12 @@
                 home-manager.useUserPackages = true;
                 home-manager.users.${user} = homeModules;
               }
-              ./setup/common
+              # ./setup/common
             ] ++ overlayModules ++ systemModules ++ configModules ++ extraModules;
           };
     in {
       overlays = mapModules ./overlays import;
-      nixosModules = (mapModules ./modules/nixos import) // (mapModules ./modules/common import);
+      nixosModules = (mapModules ./modules/nixos import) // (mapModules ./modules/common import); 
       darwinModules = (mapModules ./modules/darwin import) // (mapModules ./modules/common import);
 
       nixosConfigurations = {
