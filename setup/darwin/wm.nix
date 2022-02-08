@@ -62,18 +62,18 @@ in {
     # increase region
     ${modMask} - ${keycodes.LeftBracket}      : ${prefix} window --resize left:-20:0
     ${modMask} - ${keycodes.RightBracket}     : ${prefix} window --resize right:-20:0
-    
+
     # spaces ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-    # switch 
+    # switch
     ${modMask} + alt - j                      : ${prevOrLast "space"}
     ${modMask} + alt - k                      : ${nextOrFirst "space"}
 
-    # send window 
+    # send window
     ${modMask} + ${moveMask} - j              : ${prefix} window --space prev
     ${modMask} + ${moveMask} - k              : ${prefix} window --space next
 
     # display  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-    # focus 
+    # focus
     ${modMask} - left                         : ${prevOrLast "display"}
     ${modMask} - right                        : ${nextOrFirst "display"}
 
@@ -82,7 +82,7 @@ in {
     ${moveMask} - left                        : ${prefix} window --display next
 
     # apps  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-    ${modMask} - return                       : ${myTerminal} 
+    ${modMask} - return                       : ${myTerminal}
     ${modMask} + shift - return               : ${myEditor}
     ${modMask} - b                            : ${myBrowser}
 

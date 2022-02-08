@@ -4,6 +4,22 @@ with lib;
 
 let
   username = "peel";
+  xrandr-ext = pkgs.writeShellScriptBin "xrandr-ext" ''
+      # cvt 3840 2160 60.00
+      # 3840x2160 59.98 Hz (CVT 8.29M9) hsync: 134.18 kHz; pclk: 712.75 MHz
+      # Modeline "3840x2160 60.00" 712.75 3840 4160 4576 5312 2160 2163 2168 2237 -hsync +vsync
+      xrandr --newmode "3840x2160h60" 712.75 3840 4160 4576 5312 2160 2163 2168 2237 -hsync +vsync
+      xrandr --addmode Virtual-1 3840x2160h60
+      xrandr -s '3840x2160h60'
+    '';
+  xrandr-mbp = pkgs.writeShellScriptBin "xrandr-mbp" ''
+     # cvt 3456 2234 120
+     # 3456x2234 179.94 Hz (CVT) hsync: 287.38 kHz; pclk: 1397.75 MHz
+     # Modeline "3456x2234 120.00" 1397.75 3456 3776 4160 4864 2234 2237 2247 2396 -hsync +vsync
+      xrandr --newmode "3456x2234h120" 1397.75 3456 3776 4160 4864 2234 2237 2247 2396 -hsync +vsync
+      xrandr --addmode Virtual-1 3456x2234h120
+      xrandr -s '3456x2234h120'
+    '';
 in {
   imports = [
     ./hardware-configuration.nix
@@ -28,25 +44,10 @@ in {
   networking.useDHCP = false;
   networking.interfaces.ens160.useDHCP = true;
 
-  environment.systemPackages = with pkgs; [ gtkmm3 ] ++ [
-    (writeShellScriptBin "xrandr-ext" ''
-      # cvt 3840 2160 60.00
-      # 3840x2160 59.98 Hz (CVT 8.29M9) hsync: 134.18 kHz; pclk: 712.75 MHz
-      # Modeline "3840x2160 60.00" 712.75 3840 4160 4576 5312 2160 2163 2168 2237 -hsync +vsync
-      xrandr --newmode "3840x2160h60" 712.75 3840 4160 4576 5312 2160 2163 2168 2237 -hsync +vsync
-      xrandr --addmode Virtual-1 3840x2160h60
-      xrandr -s '3840x2160h60'
-    '')
-    (writeShellScriptBin "xrandr-mbp" ''
-     # cvt 3456 2234 120
-     # 3456x2234 179.94 Hz (CVT) hsync: 287.38 kHz; pclk: 1397.75 MHz
-     # Modeline "3456x2234 120.00" 1397.75 3456 3776 4160 4864 2234 2237 2247 2396 -hsync +vsync
-      xrandr --newmode "3456x2234h120" 1397.75 3456 3776 4160 4864 2234 2237 2247 2396 -hsync +vsync
-      xrandr --addmode Virtual-1 3456x2234h120
-      xrandr -s '3456x2234h120'
-    '')
-  ];
+  virtualisation.vmware.guest.enable = true;
+  environment.systemPackages = with pkgs; [ gtkmm3 ] ++ [ xrandr-ext xrandr-mbp ];
 
+  # users ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   users.mutableUsers = false;
   security.sudo.wheelNeedsPassword = false;
   users.extraUsers = {
@@ -62,46 +63,43 @@ in {
     };
   };
 
-  services = {
-    xserver = {
+  # gui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+  services.xserver = {
+    enable = true;
+    dpi = 220;
+    layout = "us";
+    xkbOptions = "eurosign:e,caps:ctrl_modifier";
+    libinput = {
       enable = true;
-      dpi = 220;
-      layout = "us";
-      xkbOptions = "eurosign:e,caps:ctrl_modifier";
-      libinput = {
-        enable = true;
-        touchpad.disableWhileTyping = true;
-      };
-      desktopManager.gnome.enable = false;
-      desktopManager.xterm.enable = false;
-      displayManager = {
-        autoLogin.user = username;
-        defaultSession = "none+xmonad";
-        # AARCH64: For now, on Apple Silicon, we must manually set the
-        # display resolution. This is a known issue with VMware Fusion.
-        sessionCommands = ''
+      touchpad.disableWhileTyping = true;
+    };
+
+    desktopManager = {
+      gnome.enable = false;
+      xterm.enable = false;
+    };
+
+    displayManager = {
+      autoLogin.user = username;
+      defaultSession = "none+xmonad";
+      # AARCH64: For now, on Apple Silicon, we must manually set the
+      # display resolution. This is a known issue with VMware Fusion.
+      sessionCommands = ''
           ${pkgs.xlibs.xset}/bin/xset r rate 220 40
         '' + (if pkgs.stdenv.system == "aarch64-linux" then ''
           ${pkgs.xorg.xrandr}/bin/xrandr --newmode "3456x2234_120.00" 1397.75 3456 3776 4160 4864 2234 2237 2247 2396 -hsync +vsync
           ${pkgs.xorg.xrandr}/bin/xrandr --addmode Virtual-1 3456x2234_120.00
           ${pkgs.xorg.xrandr}/bin/xrandr -s 3456x2234_120.00
         '' else "");
-        lightdm = {
-          enable = true;
-          autoLogin.enable = true;
-        };
-      };
-      windowManager.xmonad = {
+      lightdm = {
         enable = true;
-        enableContribAndExtras = true;
+        autoLogin.enable = true;
       };
     };
-    dbus = {
+
+    windowManager.xmonad = {
       enable = true;
-      packages = [ pkgs.dconf ];
+      enableContribAndExtras = true;
     };
   };
-
-  virtualisation.vmware.guest.enable = true;
-
 }

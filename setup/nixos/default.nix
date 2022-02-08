@@ -2,10 +2,6 @@
 
 {
 
-  imports = [
-    ../common
-  ];
-
   console = {
     font = "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
     keyMap = "us";
@@ -13,10 +9,10 @@
 
   i18n.defaultLocale = "en_US.UTF-8";
 
-  environment.systemPackages = [
-    pkgs.docker
-    pkgs.docker_compose
-  ];
+  services.dbus = {
+    enable = true;
+    packages = [ pkgs.dconf ];
+  };
 
   services.openssh = {
     enable = true;

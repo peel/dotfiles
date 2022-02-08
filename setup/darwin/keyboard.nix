@@ -1,5 +1,3 @@
-{config, pkgs, ...}:
-
 {
   peel.keybindings.mappings  = {
     "C-l" = "centerSelectionInVisibleArea:";

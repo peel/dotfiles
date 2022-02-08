@@ -4,7 +4,6 @@ let
   home = builtins.getEnv "HOME";
 in {
   imports = [
-    ./config.nix
     ../common
     ./defaults.nix
     ./keyboard.nix

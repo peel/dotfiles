@@ -1,9 +1,5 @@
-{ pkgs
-, config
-, lib
-, ...
-}:
+{ pkgs, config, lib, ...}:
 
-(import ../../setup/darwin { inherit config pkgs; }) // {
-  peel.setup.host = "snowberry";
+{
+  system.stateVersion = 4;
 }
