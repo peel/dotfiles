@@ -37,7 +37,8 @@
             systemFn = linuxOr nixosSystem darwin.lib.darwinSystem;
             overlayModules = [{ nixpkgs.overlays = [ emacs-overlay.overlay ] ++ (attrValues self.overlays); }];
             systemModules = attrValues (linuxOr self.nixosModules self.darwinModules);
-            configModules = []; #linuxOr [ ./setup/nixos ] [ ./setup/darwin ];
+            # FIXME load with systemModules
+            configModules = linuxOr [ ./modules/nixos/setup ] [ ./modules/darwin/setup ];
             homeManagerModules = linuxOr home-manager.nixosModules.home-manager home-manager.darwinModules.home-manager;
           in systemFn {
             inherit system;
@@ -54,7 +55,7 @@
           };
     in {
       overlays = mapModules ./overlays import;
-      nixosModules = (mapModules ./modules/nixos import) // (mapModules ./modules/common import); 
+      nixosModules = (mapModules ./modules/nixos import) // (mapModules ./modules/common import);
       darwinModules = (mapModules ./modules/darwin import) // (mapModules ./modules/common import);
 
       nixosConfigurations = {
@@ -98,3 +99,4 @@
       # devShell = import ./shell.nix {pkgs;};
     };
 }
+
