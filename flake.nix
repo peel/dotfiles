@@ -14,24 +14,18 @@
 
   outputs = { self, darwin, nixpkgs, nixpkgs-unstable, emacs-overlay, home-manager, ... }@inputs:
     let
-      # FIXME move to lib and nixpkgs.lib.extend
-      mapModules =
-        path: fn: with nixpkgs.lib; with builtins;
-          let apply = fn: path: n: fn (path + ("/" + n));
-              attrsIn = path: attrNames (readDir path);
-              isModuleIn = path: n: match ".*\\.nix" n != null || pathExists (path + ("/" + n + "/default.nix"));
-              named = n: x: nameValuePair ((removeSuffix ".nix") n) x;
-          in
-            listToAttrs (map
-              (n: named n (apply fn path n))
-              (filter (isModuleIn path) (attrsIn path)));
+      # FIXME nixpkgs.lib.extend
+      myLib = (import ./lib {inherit (nixpkgs) lib targetSystem;});
+      inherit (myLib) mapModules;
+      inherit (nixpkgs.lib.strings) hasInfix;
+      inherit (nixpkgs.lib) nixosSystem attrValues;
       mkSystem =
         { hostname
         , user ? "peel"
         , system ? "x86_64-linux"
         , extraModules ? []
         , homeModules ? import ./modules/common/setup/home.nix
-        , ...}: with nixpkgs.lib; with builtins;
+        , ...}:
           let
             linuxOr = a: b: if (hasInfix "linux" system) then a else b;
             systemFn = linuxOr nixosSystem darwin.lib.darwinSystem;
@@ -50,7 +44,6 @@
                 home-manager.useUserPackages = true;
                 home-manager.users.${user} = homeModules;
               }
-              # ./setup/common
             ] ++ overlayModules ++ systemModules ++ configModules ++ extraModules;
           };
     in {
@@ -58,6 +51,7 @@
       nixosModules = (mapModules ./modules/nixos import) // (mapModules ./modules/common import);
       darwinModules = (mapModules ./modules/darwin import) // (mapModules ./modules/common import);
 
+      # FIXME double naming
       nixosConfigurations = {
         nuke = mkSystem {
           hostname = "nuke";

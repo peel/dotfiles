@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   username = "peel";
   xrandr-ext = pkgs.writeShellScriptBin "xrandr-ext" ''
@@ -45,7 +43,7 @@ in {
   networking.interfaces.ens160.useDHCP = true;
 
   virtualisation.vmware.guest.enable = true;
-  environment.systemPackages = with pkgs; [ gtkmm3 ] ++ [ xrandr-ext xrandr-mbp ];
+  environment.systemPackages = [ pkgs.gtkmm3 ] ++ [ xrandr-ext xrandr-mbp ];
 
   # users ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   users.mutableUsers = false;

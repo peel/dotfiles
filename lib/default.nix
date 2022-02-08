@@ -1,9 +1,11 @@
-self: pkgs:
+# self: pkgs:
+{ lib, targetSystem, ...}:
 
-with pkgs.lib;
-with builtins;
+let
+  inherit (lib) attrNames listToAttrs filter removeSuffix nameValuePair hasInfix nixosSystem mapAttrsToList filterAttrs strings lists foldl' trace;
+  inherit (builtins) readDir match pathExists attrValues;
+in {
 
-{
   files = rec {
 
     /**
@@ -39,18 +41,16 @@ with builtins;
       let check = paths: foldl' (x: y: x && (pathExists y)) true paths;
       in check paths || trace "weechat-config: defined extra config files missing. Configuration will not be applied." false;
   };
-  modules = rec {
-    mapModules = path: fn: with lib; with builtins;
-      let apply = fn: path: n: fn (path + ("/" + n));
-          attrsIn = path: attrNames (readDir path);
-          isModuleIn = path: n: match ".*\\.nix" n != null || pathExists (path + ("/" + n + "/default.nix"));
-          named = n: x: nameValuePair ((removeSuffix ".nix") n) x;
-      in
-        listToAttrs (map
-          (n: named n (apply fn path n))
-          (filter (isModuleIn path) (attrsIn path)));
+  stdenv.targetSystem = {
+    isDarwinArm64 = targetSystem.isDarwin && targetSystem.darwinArch == "arm64";
   };
-  stdenv.targetSystem = rec {
-    isDarwinArm64 = pkgs.targetSystem.isDarwin && pkgs.targetSystem.darwinArch == "arm64";
-  };
+  mapModules = path: fn:
+    let apply = fn: path: n: fn (path + ("/" + n));
+        attrsIn = path: lib.attrNames (readDir path);
+        isModuleIn = path: n: match ".*\\.nix" n != null || pathExists (path + ("/" + n + "/default.nix"));
+        named = n: x: nameValuePair ((removeSuffix ".nix") n) x;
+    in
+      listToAttrs (map
+        (n: named n (apply fn path n))
+        (filter (isModuleIn path) (attrsIn path)));
 }
