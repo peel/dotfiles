@@ -12,7 +12,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, darwin, nixpkgs, nixpkgs-unstable, emacs-overlay, flake-utils, home-manager, ... }@inputs:
+  outputs = { self, darwin, nixpkgs, nixpkgs-unstable, emacs-overlay, home-manager, ... }@inputs:
     let
       # FIXME move to lib and nixpkgs.lib.extend
       mapModules =
@@ -38,12 +38,13 @@
             overlayModules = [{ nixpkgs.overlays = [ emacs-overlay.overlay ] ++ (attrValues self.overlays); }];
             systemModules = attrValues (linuxOr self.nixosModules self.darwinModules);
             configModules = linuxOr [ ./setup/nixos ] [ ./setup/darwin ];
+            homeManagerModules = linuxOr home-manager.nixosModules.home-manager home-manager.darwinModules.home-manager;
           in systemFn {
             inherit system;
             modules = [
               { networking.hostName = hostname; }
               ./machines/${hostname}/configuration.nix
-              home-manager.nixosModules.home-manager {
+              homeManagerModules {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
                 home-manager.users.${user} = homeModules;
