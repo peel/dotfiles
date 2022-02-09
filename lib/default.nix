@@ -2,7 +2,7 @@
 { lib, targetSystem, ...}:
 
 let
-  inherit (lib) attrNames listToAttrs filter removeSuffix nameValuePair hasInfix nixosSystem mapAttrsToList filterAttrs strings lists foldl' trace;
+  inherit (lib) attrNames listToAttrs filter removeSuffix nameValuePair hasInfix nixosSystem mapAttrsToList filterAttrs strings lists foldl' trace traceVal;
   inherit (builtins) readDir match pathExists attrValues;
 in {
 

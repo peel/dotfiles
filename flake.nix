@@ -18,7 +18,8 @@
       myLib = (import ./lib {inherit (nixpkgs) lib targetSystem;});
       inherit (myLib) mapModules;
       inherit (nixpkgs.lib.strings) hasInfix;
-      inherit (nixpkgs.lib) nixosSystem attrValues;
+      inherit (nixpkgs.lib) nixosSystem attrValues traceValSeqN ;
+      inherit (darwin.lib) darwinSystem;
       mkSystem =
         { hostname
         , user ? "peel"
@@ -28,17 +29,17 @@
         , ...}:
           let
             linuxOr = a: b: if (hasInfix "linux" system) then a else b;
-            systemFn = linuxOr nixosSystem darwin.lib.darwinSystem;
+            systemFn = linuxOr nixosSystem darwinSystem;
             overlayModules = [{ nixpkgs.overlays = [ emacs-overlay.overlay ] ++ (attrValues self.overlays); }];
-            systemModules = attrValues (linuxOr self.nixosModules self.darwinModules);
+            systemModules = traceValSeqN 3 (attrValues (linuxOr self.nixosModules self.darwinModules));
             # FIXME load with systemModules
-            configModules = linuxOr [ ./modules/nixos/setup ] [ ./modules/darwin/setup ];
+            configModules = traceValSeqN 2 (linuxOr [ ./modules/nixos/setup ] [ ./modules/darwin/setup ]);
             homeManagerModules = linuxOr home-manager.nixosModules.home-manager home-manager.darwinModules.home-manager;
           in systemFn {
             inherit system;
             modules = [
               { networking.hostName = hostname; }
-              ./machines/${hostname}/configuration.nix
+              (./machines/${hostname}/configuration.nix)
               homeManagerModules {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
