@@ -20,20 +20,20 @@
   :init (require 'diminish))
 
 (use-package exec-path-from-shell
-  :ensure t
-  :if (memq window-system '(mac ns x))
-  :custom
-  (exec-path-from-shell-variables
-   '("PATH"
-     "SHELL"
-     "NIX_PATH"
-     "NIX_PROFILES"
-     "NIX_REMOTE"
-     "NIX_SSL_CERT_FILE"
-     "NIX_USER_PROFILE_DIR"
-     "JAVA_HOME"
-     ))
-  :config (exec-path-from-shell-initialize))
+    :ensure t
+    :custom
+    (exec-path-from-shell-variables
+     '("PATH"
+       "SHELL"
+       "NIX_PATH"
+       "NIX_PROFILES"
+       "NIX_REMOTE"
+       "NIX_SSL_CERT_FILE"
+       "NIX_USER_PROFILE_DIR"
+       "JAVA_HOME"
+       ))
+    :config
+    (when (eq system-type 'darwin) (exec-path-from-shell-initialize))
 
 ;; navigation ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package winner
@@ -680,7 +680,9 @@
     "Load default font."
     (add-to-list 'initial-frame-alist '(font . "PragmataPro"))
     (add-to-list 'default-frame-alist '(font . "PragmataPro"))
-    (set-face-attribute 'default nil :height 60)
+    (if (memq window-system '(mac ns))
+        (set-face-attribute 'default nil :height 220)
+      ((set-face-attribute 'default nil :height 60)))
     (setq-default line-spacing 9))
 
   (defun peel/load-ui ()
