@@ -228,7 +228,8 @@
               ("C-M-t" . puni-transpose))
   :hook
   (after-init . puni-global-mode)
-  (vterm-mode . puni-disable-puni-mode))
+  (vterm-mode . puni-disable-puni-mode)
+  (minibuffer-mode . puni-disable-puni-mode))
 
 (use-package elec-pair
   :ensure nil
@@ -678,8 +679,8 @@
 
   (defun peel/load-font ()
     "Load default font."
-    (add-to-list 'initial-frame-alist '(font . "PragmataPro"))
-    (add-to-list 'default-frame-alist '(font . "PragmataPro"))
+    (add-to-list 'initial-frame-alist '(font . "PragmataPro Liga"))
+    (add-to-list 'default-frame-alist '(font . "PragmataPro Liga"))
     (if (memq window-system '(mac ns))
         (set-face-attribute 'default nil :height 220)
       ((set-face-attribute 'default nil :height 60)))
