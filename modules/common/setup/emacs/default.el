@@ -33,7 +33,7 @@
        "JAVA_HOME"
        ))
     :config
-    (when (eq system-type 'darwin) (exec-path-from-shell-initialize))
+    (when (eq system-type 'darwin) (exec-path-from-shell-initialize)))
 
 ;; navigation ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package winner
@@ -163,7 +163,7 @@
   :ensure t
   :commands (dired-sidebar-toggle-sidebar)
   :bind ("C-x C-n" . dired-sidebar-toggle-sidebar)
-  :custom (dired-sidebar-subtree-line-prefix " ."))
+  :custom (setq dired-sidebar-subtree-line-prefix "▁"))
 
 ;; bindings ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
@@ -582,11 +582,11 @@
   :hook (vterm-mode . (lambda ()
                         (setq-local global-hl-line-mode nil)
                         (setq-local line-spacing nil)))
-  :bind (("C-!" . peel/vterm)
-         ("s-!" . peel/vterm-force)
-         ("C-c C-d" . peel/vterm-cd))
+  :bind ("C-c C-d" . peel/vterm-cd)
+  :custom
+  (vterm-max-scrollback 100000)
+  (vterm-kill-buffer-on-exit t)
   :config
-  (setq vterm-kill-buffer-on-exit t)
   (add-to-list 'vterm-keymap-exceptions "C-b")
   (defun vterm-counsel-yank-pop-action (orig-fun &rest args)
     "Use vterm-yank-pop to make counsel-yank-pop work in vterm"
@@ -605,27 +605,11 @@
     (let* ((inhibit-read-only t))
       (vterm-send-string (concat "cd " dir))
       (vterm-send-return)
-      (vterm-clear)))
+      (vterm-clear))))
 
-  (defun peel/vterm--new (&optional force)
-    "Starts or switches to vterm. If forced starts a new instance"
-    (let* ((buffer-name "vterm")
-           (vterm-buffer (get-buffer "vterm"))
-           (in-buffer (string-match-p (regexp-quote buffer-name) (buffer-name))))
-      (cond (force (vterm))
-            (in-buffer (switch-to-buffer (other-buffer (current-buffer) 1)))
-            (vterm-buffer (switch-to-buffer vterm-buffer))
-            (t (vterm)))))
-
-  (defun peel/vterm-force ()
-    "Starts new vterm"
-    (interactive)
-    (peel/vterm--new t))
-
-  (defun peel/vterm ()
-    "Starts or switches to vterm"
-    (interactive)
-    (peel/vterm--new)))
+(use-package multi-vterm
+  :ensure t
+  :bind ("C-!" . multi-vterm-project))
 
 ;; builtins ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ;; .................................................................. autorevert
@@ -683,7 +667,7 @@
     (add-to-list 'default-frame-alist '(font . "PragmataPro Liga"))
     (if (memq window-system '(mac ns))
         (set-face-attribute 'default nil :height 220)
-      ((set-face-attribute 'default nil :height 60)))
+      (set-face-attribute 'default nil :height 60))
     (setq-default line-spacing 9))
 
   (defun peel/load-ui ()
