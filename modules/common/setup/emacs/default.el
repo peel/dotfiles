@@ -740,6 +740,26 @@
          ("M-n" . forward-paragraph)
          ("M-p" . backward-paragraph)))
 
+(use-package modeline
+  :defer 0
+  :init
+  (setq auto-revert-check-vc-info t)
+  (defun vc-status-mode-line ()
+    "Builds a source control string or nil."
+    (when vc-mode
+      `(" "
+        ,(s-trim (substring-no-properties vc-mode))
+        " ")))
+  (setq-default
+   mode-line-format
+   (list
+    '(:eval (propertize " %b " 'face 'font-lock-keyword-face)) ;; buffer
+    "%l:%c "
+    '(:eval (propertize (pragmatapro-get-mode-icon) 'face 'font-lock-comment-face)) ;; major
+    '(:eval (propertize " %*" 'face 'font-lock-warning-face)) ;; ! ro | * mod | - clean
+    '(:eval (vc-status-mode-line))
+    '(global-mode-string global-mode-string))))
+
 (setq backup-by-copying t
       backup-directory-alist '((".*" . "~/.emacs.d/saves/"))
       delete-old-versions t

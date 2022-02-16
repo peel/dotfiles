@@ -7,6 +7,7 @@ in {
     enable = true;
     casks = [
       "dash"
+      "docker"
       "plexamp"
       "zoom"
     ] ++ lib.optionals (!isDarwinArm64) ["vmware-fusion"];
