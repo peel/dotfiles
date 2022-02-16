@@ -121,6 +121,13 @@
   :after nix-sandbox
   :hook (prog-mode . flycheck-mode)
   :diminish flycheck-mode " ✓"
+  :config
+  (add-to-list 'display-buffer-alist
+             '("\\*Flycheck errors\\*"
+               (display-buffer-in-direction)
+               (direction . right)
+               (window-width . 0.33)
+               (window-height . fit-window-to-buffer)))
   ;; :config
   ;; (setq flycheck-command-wrapper-function
   ;;       (lambda (command) (apply 'nix-shell-command (nix-current-sandbox) command))
@@ -176,9 +183,8 @@
   (setq which-key-idle-delay 0
         which-key-sort-order 'which-key-prefix-then-key-order)
   (which-key-add-key-based-replacements
-   "C-c !" "flycheck"
-   "C-c i" "unicode"
-   "C-c &" "yas")
+   "C-c f" "flycheck"
+   "C-c i" "unicode")
   (which-key-mode))
 
 
