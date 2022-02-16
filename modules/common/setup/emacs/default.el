@@ -125,8 +125,8 @@
   (add-to-list 'display-buffer-alist
              '("\\*Flycheck errors\\*"
                (display-buffer-in-direction)
-               (direction . right)
-               (window-width . 0.33)
+               (direction . top)
+               (window-width . 0.12)
                (window-height . fit-window-to-buffer)))
   ;; :config
   ;; (setq flycheck-command-wrapper-function
