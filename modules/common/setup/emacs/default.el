@@ -754,15 +754,15 @@
     "Builds a source control string or nil."
     (when vc-mode
       `(" "
-        ,(s-trim (substring-no-properties vc-mode))
+        ,(s-trim (substring-no-properties vc-mode 5))
         " ")))
   (setq-default
    mode-line-format
    (list
     '(:eval (propertize " %b " 'face 'font-lock-keyword-face)) ;; buffer
+    '(:eval (propertize "%* " 'face 'font-lock-warning-face)) ;; ! ro | * mod | - clean
     "%l:%c "
     '(:eval (propertize (pragmatapro-get-mode-icon) 'face 'font-lock-comment-face)) ;; major
-    '(:eval (propertize " %*" 'face 'font-lock-warning-face)) ;; ! ro | * mod | - clean
     '(:eval (vc-status-mode-line))
     '(global-mode-string global-mode-string))))
 
