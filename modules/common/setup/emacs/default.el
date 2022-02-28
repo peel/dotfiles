@@ -215,10 +215,6 @@
   :ensure t
   :bind ("s-." . dumb-jump-go))
 
-(use-package expand-region
-  :ensure t
-  :bind (("C-c v" . er/expand-region)))
-
 (use-package puni
   :defer t
   :ensure t
@@ -231,7 +227,8 @@
               ("C-M-<left>" . puni-slurp-backward)
               ("C-M-p" . puni-syntactic-backward-punct)
               ("C-M-n" . puni-syntactic-forward-punct)
-              ("C-M-t" . puni-transpose))
+              ("C-M-t" . puni-transpose)
+              ("C-c v" . puni-expand-region))
   :hook
   (after-init . puni-global-mode)
   (vterm-mode . puni-disable-puni-mode)
@@ -291,6 +288,7 @@
                                  "[/\\\\]\\.bloop$"
                                  "[/\\\\]\\target$"))
   (setq lsp-ui-doc-header t)
+  (setq lsp-enable-snippet nil)
   (setq lsp-ui-doc-include-signature t)
   (setq lsp-ui-doc-include-function-signatures t
         lsp-eldoc-render-all t)
