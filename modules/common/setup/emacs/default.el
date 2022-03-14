@@ -292,8 +292,8 @@
   (setq lsp-ui-doc-include-signature t)
   (setq lsp-ui-doc-include-function-signatures t
         lsp-eldoc-render-all t)
-  (setq lsp-idle-delay 0.5))
-
+  (setq lsp-idle-delay 0.5)
+  (setq lsp-treemacs-errors-position-params '((side . top))))
 (use-package lsp-ui
   :ensure t)
 (use-package lsp-ivy
@@ -748,12 +748,24 @@
   :defer 0
   :init
   (setq auto-revert-check-vc-info t)
+  (defun ww/diff-hl-reducer (acc it)
+    "A reducer to count added, removed, and modified lines for diff-hl."
+    (cl-destructuring-bind (added removed modified) acc
+      (let ((lines (nth 1 it))
+            (type (nth 2 it)))
+        (pcase type
+          ('insert (list (+ added lines) removed modified))
+          ('delete (list added (+ removed lines) modified))
+          ('change (list added removed (+ modified lines)))))))
+
+
   (defun vc-status-mode-line ()
     "Builds a source control string or nil."
     (when vc-mode
       `(" "
-        ,(s-trim (substring-no-properties vc-mode 5))
+        ,(concat (s-trim (substring-no-properties vc-mode 5)) )
         " ")))
+
   (setq-default
    mode-line-format
    (list
@@ -762,6 +774,7 @@
     "%l:%c "
     '(:eval (propertize (pragmatapro-get-mode-icon) 'face 'font-lock-comment-face)) ;; major
     '(:eval (vc-status-mode-line))
+    '(:eval (propertize (cl-reduce 'ww/diff-hl-reducer (diff-hl-changes) :initial-value '(0 0 0))) 'face 'font-lock-comment-face)
     '(global-mode-string global-mode-string))))
 
 (setq backup-by-copying t

@@ -10,10 +10,11 @@ in {
       "docker"
       "plexamp"
       "zoom"
+      "1password-beta"
     ] ++ lib.optionals (!isDarwinArm64) ["vmware-fusion"];
     masApps = {
       "Slack" = 803453959;
-      "1Password" = 1333542190;
+      # "1Password" = 1333542190;
       "Endel" = 1484348796;
       "PopClip" = 445189367;
     };
