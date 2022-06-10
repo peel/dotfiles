@@ -10,20 +10,12 @@ let
 in {
   imports = [
     ./hardware-configuration.nix
-    ../../setup/nixos
-    ../../setup/common/hassio.nix
   ];
 
   #peel.gui.enable = false;
   
   nixpkgs.config.allowBroken = true;
-  nixpkgs.overlays = 
-    let path = ../../overlays ; in with builtins;
-      map (n: import (path + ("/" + n)))
-          (filter (n: match ".*\\.nix" n != null ||
-                      pathExists (path + ("/" + n + "/default.nix")))
-                  (attrNames (readDir path)));
-    
+
   # hardware ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -49,14 +41,6 @@ in {
 
   # os ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   system.stateVersion = "20.09";
-  nix.package = pkgs.nixFlakes;
-  nix.extraOptions = ''
-    experimental-features = nix-command flakes
-  ''; 
-  nix.gc = {
-    automatic = true;
-    options = "--delete-older-than 30d";
-  };
 
   networking = {
     hostId = "675e1435";
@@ -149,12 +133,12 @@ in {
   virtualisation.libvirtd.enable = true;
   virtualisation.libvirtd.allowedBridges = ["br0" "virbr0" "tap0"];
   programs.dconf.enable = true;
-  users.extraGroups.vboxusers.members = [ username ];
-  virtualisation.virtualbox = {
-    host.enable = true;
-    host.enableExtensionPack = true;
-    host.enableHardening = false;
-  };
+  #users.extraGroups.vboxusers.members = [ username ];
+  #virtualisation.virtualbox = {
+  #  host.enable = true;
+  #  host.enableExtensionPack = true;
+  #  host.enableHardening = false;
+  #};
   
   # enable access to external network from containers
   # networking.nat.enable = true;
@@ -178,10 +162,10 @@ in {
     };
   };
 
-  #services.adguardhome = {
-  #  enable = true;
-  #  openFirewall = true;
-  #};
+  services.adguardhome = {
+    enable = true;
+    openFirewall = true;
+  };
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;
