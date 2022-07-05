@@ -40,21 +40,5 @@
        "--network=host"
       ];
     };
-    timescaledb = {
-      autoStart = true;
-      image = "timescale/timescaledb:2.4.2-pg13";
-      environment = {
-        TZ="Europe/Warsaw";
-#	POSTGRES_USER=(builtins.extraBuiltins.pass "hassio-db-user");
-#	POSTGRES_PASSWORD=secret "hassio-db-password";
-#	POSTGRES_DB=secret "hassio-db-name";
-      };
-      ports = [
-        "5432:5432"
-      ];
-      volumes = [
-        "/home/peel/wrk/hassio/data:/var/lib/postgresql/data"
-      ];
-    };
   };
 }

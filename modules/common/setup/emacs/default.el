@@ -456,7 +456,13 @@
      (js         . t)
      (emacs-lisp . t)
      (haskell    . t)
-     (dot        . t))))
+     (dot        . t)
+     (mermaid    . t))))
+
+(use-package ob-mermaid
+  :ensure t)
+(use-package ob-restclient
+  :ensure t)
 
 (use-package org-capture
   :bind ("C-C n n" . org-capture)

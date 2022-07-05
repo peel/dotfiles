@@ -17,6 +17,7 @@ in {
       # "1Password" = 1333542190;
       "Endel" = 1484348796;
       "PopClip" = 445189367;
+      "Tailscale" = 1475387142;
     };
     cleanup = "zap";
   } // lib.optionals isDarwinArm64 {

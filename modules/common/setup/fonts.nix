@@ -2,7 +2,7 @@
 
 {
   fonts = {
-    enableFontDir = true;
+    fontDir.enable = true;
     fonts = [ pkgs.pragmatapro ];
   } // lib.optionalAttrs pkgs.stdenvNoCC.isLinux {
     fontconfig.enable = true;

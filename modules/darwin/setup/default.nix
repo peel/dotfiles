@@ -15,4 +15,5 @@
   services.nix-daemon.enable = true;
   # FIXME AppleSilicon
   programs.nix-index.enable = pkgs.targetPlatform.isx86;
+  nixpkgs.config.allowBroken = !pkgs.targetPlatform.isx86;
 }

@@ -43,7 +43,15 @@ let
     diff = {
       mnemonicPrefix = true;
       algorithm = "patience";
+      tool = "difftastic";
     };
+    difftool = {
+      prompt = false;
+    };
+    "difftool \"difftastic\"" = {
+      cmd = ''difft "$LOCAL" "$REMOTE"'';
+    };
+    pager = { difftool = true; };
     apply.whitespace = "nowarn";
     branch.autosetuprebase = "always";
     push.default = "upstream";
@@ -57,6 +65,7 @@ in {
   environment.systemPackages =  [
     pkgs.git
     pkgs.gitAndTools.git-crypt
+    pkgs.difftastic
   ];
   
   environment.shellAliases = {

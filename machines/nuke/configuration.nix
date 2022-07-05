@@ -7,6 +7,7 @@ let
   hostName = "nuke";
   # domain = builtins.extraBuiltins.pass "duckdns.domain";
   orgdomain = "fff666.org"; # builtins.extraBuiltins.pass "organisation.domain";
+  s = import ../s.nix;
 in {
   imports = [
     ./hardware-configuration.nix
@@ -19,7 +20,7 @@ in {
   # hardware ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  #boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   hardware.bluetooth.package = pkgs.bluezFull;
   services.xserver.libinput = {
@@ -57,7 +58,7 @@ in {
     defaultLocale = "en_US.UTF-8";
   };
 
-  environment.systemPackages = with pkgs; [  ];
+  environment.systemPackages = with pkgs; [ ];
 
   users.extraUsers = {
     "${username}"= {
@@ -109,11 +110,11 @@ in {
     fsType = "nfs";
     options = [ "nfsvers=4.1" ];
   };
-  fileSystems."/mnt/download" = {
-    device = "192.168.1.6:/volume1/download";
-    fsType = "nfs";
-    options = [ "nfsvers=4.1" ];
-  };
+  #fileSystems."/mnt/download" = {
+  #  device = "192.168.1.6:/volume1/download";
+  #  fsType = "nfs";
+  #  options = [ "nfsvers=4.1" ];
+  #};
 
   # monitoring  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
@@ -129,10 +130,15 @@ in {
     liveRestore = true;
   };
   
-  networking.firewall.enable = false; #TODO
-  virtualisation.libvirtd.enable = true;
-  virtualisation.libvirtd.allowedBridges = ["br0" "virbr0" "tap0"];
-  programs.dconf.enable = true;
+  networking.firewall = {
+    enable = true;
+    trustedInterfaces = [ "tailscale0" ];
+    allowedTCPPorts = [ 22 53 80 443 5001 8123 32400 ];
+    allowedUDPPorts = [ 53 config.services.tailscale.port ];
+  };
+  #virtualisation.libvirtd.enable = true;
+  #virtualisation.libvirtd.allowedBridges = ["br0" "virbr0" "tap0"];
+  #programs.dconf.enable = true;
   #users.extraGroups.vboxusers.members = [ username ];
   #virtualisation.virtualbox = {
   #  host.enable = true;
@@ -144,28 +150,34 @@ in {
   # networking.nat.enable = true;
   # networing.nat.internalInterfaces = ["ve-+"];
   # networking.nat.externalInterface = "wlp0s20f3";
-  networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
+  #networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
   
-  networking.wireguard.interfaces = {
-    wg0 = {
-      ips = [ "192.168.100.2/24" ];
-      listenPort = 5553;
-      privateKeyFile = "/home/peel/wg-private";
-      peers = [
-        {
-          publicKey = "fPBjHcK+P3Xb0OU6f9ITONSoMLZK1l1ixkWz+K4Y6yo=";
-          allowedIPs = [ "192.168.100.0/22" ];
-          endpoint = "162.55.214.59:5553";
-          persistentKeepalive = 25;
-        }
-      ];
-    };
+  services.tailscale.enable = true;
+  systemd.services.tailscale-autoconnect = {
+    description = "Automatic connection to Tailscale";
+    after = [ "network-pre.target" "tailscale.service" ];
+    wants = [ "network-pre.target" "tailscale.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.Type = "oneshot";
+    script = with pkgs; ''
+      # wait for tailscaled to settle
+      sleep 2
+
+      # check if we are already authenticated to tailscale
+      status="$(${pkgs.tailscale}/bin/tailscale status -json | ${pkgs.jq}/bin/jq -r .BackendState)"
+      if [ $status = "Running" ]; then # if so, then do nothing
+        exit 0
+      fi
+
+      # otherwise authenticate with tailscale
+      ${pkgs.tailscale}/bin/tailscale up -authkey ${s.tsnuke}
+    '';
   };
 
-  services.adguardhome = {
-    enable = true;
-    openFirewall = true;
-  };
+  #services.adguardhome = {
+  #  enable = true;
+  #  openFirewall = true;
+  #};
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;

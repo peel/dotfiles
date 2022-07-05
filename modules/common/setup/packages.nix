@@ -13,7 +13,7 @@ let
       iohk-cachix = mkCache "https://iohk.cachix.org" "iohk.cachix.org-1:DpRUyj7h7V830dp/i6Nti+NEO2/nhblbov/8MW7Rqoo=";
     in [ nixos peel cachix nix-community nix-tools ];
 in {
-  nix.useSandbox = true;
+  nix.useSandbox = !pkgs.targetPlatform.isx86;
   nix.sandboxPaths = [] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
     "/System/Library/Frameworks"
     "/System/Library/PrivateFrameworks"
