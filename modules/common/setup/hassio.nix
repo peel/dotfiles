@@ -4,7 +4,7 @@
   virtualisation.oci-containers.containers = {
     home-assistant = {
       autoStart = true;
-      image = "homeassistant/home-assistant:2022.6.4";
+      image = "homeassistant/home-assistant:2022.7.2";
       environment = {
         TZ="Europe/Warsaw";
       };
