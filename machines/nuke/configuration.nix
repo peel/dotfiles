@@ -133,8 +133,8 @@ in {
   networking.firewall = {
     enable = true;
     trustedInterfaces = [ "tailscale0" ];
-    allowedTCPPorts = [ 22 53 80 443 5001 8123 32400 ];
-    allowedUDPPorts = [ 53 config.services.tailscale.port ];
+    allowedTCPPorts = [ 22 53 80 443 5001 8123 21063 21064 21065 21066 32400 ];
+    allowedUDPPorts = [ 53 5353 config.services.tailscale.port ];
   };
   #virtualisation.libvirtd.enable = true;
   #virtualisation.libvirtd.allowedBridges = ["br0" "virbr0" "tap0"];
