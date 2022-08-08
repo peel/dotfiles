@@ -277,6 +277,7 @@
          (js-mode . lsp-deferred)
          (typescript-mode . lsp-deferred)
          (haskell-mode . lsp-defrred)
+         (rust-mode . lsp-deferred)
          (lsp-mode . #'lsp-enable-which-key-integration))
   :after (envrc)
   :config
@@ -320,6 +321,12 @@
   :config
   (setq lsp-haskell-server-path "haskell-language-server"
         lsp-haskell-hlint-on t))
+
+;; ........................................................................ rust
+(use-package rustic
+  :ensure t
+  :config
+  (setq rustic-format-on-save t))
 
 ;; ......................................................................... nix
 (use-package nix-mode
