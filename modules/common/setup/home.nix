@@ -4,6 +4,7 @@ let
   common = {
     programs.direnv = {
       enable = true;
+      # does not work, we're overriding through system-module
       enableBashIntegration = true;
       nix-direnv.enable = true;
       nix-direnv.enableFlakes = true;

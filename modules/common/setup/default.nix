@@ -14,7 +14,7 @@ let
     in [ nixos peel cachix nix-community nix-tools ];
 in {
   imports = [
-    #./emacs.nix
+    ./emacs.nix
     ./fonts.nix
     ./git.nix
     ./gnupg.nix

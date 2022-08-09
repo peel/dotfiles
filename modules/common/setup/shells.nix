@@ -27,6 +27,9 @@ let
     }
     PS1=$PS1'\[$(vterm_prompt_end)\]'
   '';
+  direnvIntegration = ''
+    eval "$(${pkgs.direnv}/bin/direnv hook bash)"
+  '';
 in {
   environment.shells = [ pkgs.bashInteractive  ];
   environment.systemPackages = [
@@ -55,6 +58,7 @@ in {
       else
         PS1='\W$(__git_ps1 " - %s") $(__prompt_nix) '
       fi
+      ${direnvIntegration}
       ${vtermIntegration}
       ${vtermClearScrollback}
       ${vtermPromptTracking}

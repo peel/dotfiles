@@ -34,17 +34,17 @@
             systemModules = traceValSeqN 3 (attrValues (linuxOr self.nixosModules self.darwinModules));
             # FIXME load with systemModules
             configModules = traceValSeqN 2 (linuxOr [ ./modules/nixos/setup ] [ ./modules/darwin/setup ]);
-            #homeManagerModules = linuxOr home-manager.nixosModules.home-manager home-manager.darwinModules.home-manager;
+            homeManagerModules = linuxOr home-manager.nixosModules.home-manager home-manager.darwinModules.home-manager;
           in systemFn {
             inherit system;
             modules = [
               { networking.hostName = hostname; }
               (./machines/${hostname}/configuration.nix)
-              #homeManagerModules {
-              #  home-manager.useGlobalPkgs = true;
-              #  home-manager.useUserPackages = true;
-              #  home-manager.users.${user} = homeModules;
-              #}
+              homeManagerModules {
+               home-manager.useGlobalPkgs = true;
+               home-manager.useUserPackages = true;
+               home-manager.users.${user} = homeModules;
+              }
             ] ++ overlayModules ++ systemModules ++ configModules ++ extraModules;
           };
     in {
