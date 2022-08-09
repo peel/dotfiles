@@ -325,6 +325,7 @@
 ;; ........................................................................ rust
 (use-package rustic
   :ensure t
+  :after nix-sandbox
   :config
   (setq rustic-format-on-save t))
 
@@ -521,7 +522,13 @@
 
 (use-package nov
   :ensure t
-  :mode ("\\.epub\\'" . nov-mode))
+  :mode ("\\.epub\\'" . nov-mode)
+  :hook ((peel/nov-ui)
+         (nov-mode . org-noter))
+  :config
+  (defun peel/nov-ui ()
+    (face-remap-add-relative 'variable-pitch :family "Georgia"
+                                 :height 1.05)))
 
 (use-package pdf-tools
   :ensure t
@@ -549,7 +556,7 @@
 	(org-noter-doc-split-fraction '(0.8 . 0.8))
 	(org-noter-always-create-frame nil)
 	(org-noter-insert-note-no-questions t)
-	(org-noter-notes-window-location 'vertical-split))
+	(org-noter-notes-window-location 'horizontal-split))
 
 (use-package ivy-bibtex
   :ensure t
