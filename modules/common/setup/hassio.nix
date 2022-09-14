@@ -4,7 +4,7 @@
   virtualisation.oci-containers.containers = {
     home-assistant = {
       autoStart = true;
-      image = "homeassistant/home-assistant:2022.8.0";
+      image = "homeassistant/home-assistant:2022.9.4";
       environment = {
         TZ="Europe/Warsaw";
       };
@@ -20,24 +20,6 @@
        "--privileged"
        "--network=host"
        "--device=/dev/ttyACM0:/dev/ttyACM0"
-      ];
-    };
-    esphome = {
-      autoStart = true;
-      image = "esphome/esphome:2021.12.0";
-      environment = {
-        TZ="Europe/Warsaw";
-      };
-      ports = [
-        "6052:6052"
-	"6123:6123"
-      ];
-      volumes = [
-        "/home/peel/wrk/esphome:/config"
-      ];
-      extraOptions = [
-       "--privileged"
-       "--network=host"
       ];
     };
   };

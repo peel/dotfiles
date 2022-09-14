@@ -14,7 +14,7 @@ in {
   ];
 
   #peel.gui.enable = false;
-  
+
   nixpkgs.config.allowBroken = true;
 
   # hardware ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
@@ -110,11 +110,15 @@ in {
     fsType = "nfs";
     options = [ "nfsvers=4.1" ];
   };
-  #fileSystems."/mnt/download" = {
-  #  device = "192.168.1.6:/volume1/download";
-  #  fsType = "nfs";
-  #  options = [ "nfsvers=4.1" ];
-  #};
+  fileSystems."/mnt/download" = {
+   device = "192.168.1.6:/volume1/download";
+   fsType = "nfs";
+   options = [ "nfsvers=4.1" ];
+  };
+  fileSystems."/mnt/books" = {
+   device = "192.168.1.6:/volume1/books";
+   fsType = "nfs";
+   options = [ "nfsvers=4.1" ];
 
   # monitoring  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
@@ -145,13 +149,13 @@ in {
   #  host.enableExtensionPack = true;
   #  host.enableHardening = false;
   #};
-  
+
   # enable access to external network from containers
   # networking.nat.enable = true;
   # networing.nat.internalInterfaces = ["ve-+"];
   # networking.nat.externalInterface = "wlp0s20f3";
   #networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
-  
+
   services.tailscale.enable = true;
   systemd.services.tailscale-autoconnect = {
     description = "Automatic connection to Tailscale";
@@ -174,10 +178,21 @@ in {
     '';
   };
 
-  #services.adguardhome = {
-  #  enable = true;
-  #  openFirewall = true;
-  #};
+  services.calibre-server = {
+    enable = true;
+    libraries = ["/mnt/books/calibre"];
+  };
+  services.calibre-web = {
+    enable = true;
+    listen.port = 8899;
+    options.calibreLibrary = "/mnt/books/calibre";
+    options.enableBookConversion = true;
+    options.enableBookUploading = true;
+  };
+  services.adguardhome = {
+    enable = true;
+    openFirewall = true;
+  };
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;
@@ -186,7 +201,7 @@ in {
     recommendedTlsSettings = true;
     clientMaxBodySize = "2G";
     statusPage = true;
-        
+
     virtualHosts."px.${orgdomain}" = {
       # enableACME = true;
       default = true;
@@ -198,5 +213,5 @@ in {
       };
     };
   };
-  
+
 }
