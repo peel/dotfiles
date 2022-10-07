@@ -4,6 +4,7 @@ let
   dbUser = "hassio";
   dbPassword = "hassio";
   dbName = "hass";
+  secrets = import ./secrets.nix;
 in {
   systemd.timers.hassio-backup = {
     wantedBy = [ "timers.target" ];
@@ -29,19 +30,41 @@ in {
       environment = {
         TZ="Europe/Warsaw";
       };
-      ports = [
-        "8123:8123"
-        "8123:8080"
-      ];
       volumes = [
         "/home/peel/wrk/hassio:/config"
         "/etc/localtime:/etc/localtime"
         "/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2256895-if00:/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2256895-if00"
       ];
+      ports = [
+        "8123:8123"
+      ];
       extraOptions = [
        "--privileged"
        "--network=host"
        "--device=/dev/ttyACM0:/dev/ttyACM0"
+      ];
+    };
+    eufy-security = {
+      autoStart = true;
+      image = "bropat/eufy-security-ws:0.9.4";
+      environment = {
+        USERNAME = secrets.eufy.username;
+        PASSWORD = secrets.eufy.password;
+        COUNTRY = secrets.eufy.country;
+      };
+      ports = [
+        "3001:3000"
+      ];
+    };
+    rtsp-simple-server = {
+      autoStart = true;
+      image = "aler9/rtsp-simple-server";
+      environment = {
+        RTSP_PROTOCOLS = "tcp";
+      };
+      ports = [
+        "8554:8554"
+        "1935:1935"
       ];
     };
     # clickhouse = {

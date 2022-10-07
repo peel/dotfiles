@@ -73,7 +73,7 @@ in {
       ];
     };
   };
-  
+
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome3.enable = true;
@@ -120,13 +120,13 @@ in {
    fsType = "nfs";
    options = [ "nfsvers=4.1" ];
   };
-  
+
   # monitoring  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
   # general routes  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   services.fail2ban.enable = true;
 
-  
+
   # containers ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   virtualisation.docker = {
     enable = true;
@@ -134,12 +134,13 @@ in {
     autoPrune.enable = true;
     liveRestore = true;
   };
-  
+
   networking.firewall = {
     enable = true;
     trustedInterfaces = [ "tailscale0" ];
     allowedTCPPorts = [ 22 53 80 443 5001 8123 21063 21064 21065 21066 32400 ];
     allowedUDPPorts = [ 53 5353 config.services.tailscale.port ];
+    checkReversePath = "loose";
   };
   #virtualisation.libvirtd.enable = true;
   #virtualisation.libvirtd.allowedBridges = ["br0" "virbr0" "tap0"];
@@ -157,6 +158,7 @@ in {
   # networking.nat.externalInterface = "wlp0s20f3";
   #networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
 
+  # networking  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   services.tailscale.enable = true;
   systemd.services.tailscale-autoconnect = {
     description = "Automatic connection to Tailscale";
@@ -179,21 +181,6 @@ in {
     '';
   };
 
-  services.calibre-server = {
-    enable = true;
-    libraries = ["/mnt/books/calibre"];
-  };
-  services.calibre-web = {
-    enable = true;
-    listen.port = 8899;
-    options.calibreLibrary = "/mnt/books/calibre";
-    options.enableBookConversion = true;
-    options.enableBookUploading = true;
-  };
-  services.adguardhome = {
-    enable = true;
-    openFirewall = true;
-  };
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;
@@ -213,6 +200,17 @@ in {
         proxyWebsockets = true;
       };
     };
+  };
+
+  services.adguardhome = {
+    enable = true;
+    openFirewall = true;
+  };
+
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
   };
 
 }

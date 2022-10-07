@@ -7,7 +7,7 @@ let
       # does not work, we're overriding through system-module
       enableBashIntegration = true;
       nix-direnv.enable = true;
-      nix-direnv.enableFlakes = true;
+      # nix-direnv.enableFlakes = true;
     };
   #     # programs.mbsync.enable = true;
   #     # programs.msmtp.enable = true;
