@@ -49,14 +49,20 @@ in {
         shopt -s autocd       # type 'dir' instead 'cd dir'
         shopt -s dirspell     # correct typos when tab-completing names
         shopt -s globstar     # enable **
-      fi      
+      fi
+      __git_ps1() {
+        [ -d .git ] && echo " $(command git branch --show-current)"
+      }
       __prompt_nix() {
-        [ -z "$IN_NIX_SHELL" ] && echo "λ" || echo ""
+        [ -z "$IN_NIX_SHELL" ] && echo " λ" || echo " "
+      }
+      __terraform_ps1() {
+        [ -d .terraform ] && echo " $(command terraform workspace show 2>/dev/null)" || echo " "
       }
       if [[ $TERM == "dumb" ]]; then
         PS1="$ "
       else
-        PS1='\W$(__git_ps1 " - %s") $(__prompt_nix) '
+        PS1='\W$(__git_ps1 " %s")$(__terraform_ps1 " %s")$(__prompt_nix "%s")\[$(vterm_prompt_end)\] '
       fi
       ${direnvIntegration}
       ${vtermIntegration}
@@ -74,5 +80,5 @@ in {
     df = "df -h";
     ns = "nix-shell";
   };
-  
+
 }

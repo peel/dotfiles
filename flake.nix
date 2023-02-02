@@ -2,8 +2,8 @@
   description = "peel's env";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/release-22.05";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/release-22.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
@@ -66,6 +66,13 @@
         wrkvm64 = mkSystem {
           hostname = "wrkvm64";
           system = "aarch64-linux";
+          extraModules = [{
+          #   imports = [
+          #   "${modulesPath}/virtualisation/qemu-vm.nix"
+          # ];
+
+            virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+          }];
         };
       };
 
@@ -81,9 +88,15 @@
       };
 
       packages = {
+        aarch64-darwin = {
+          qcow2Image =
+            self.nixosConfigurations.wrkvm64.config.system.build.vm;
+        };
         aarch64-linux = {
           vmwareImage =
             self.nixosConfigurations.wrkvm64.config.system.build.vmwareImage;
+          qcow2Image =
+            self.nixosConfigurations.wrkvm64.config.system.build.vm;
         };
         x86_64-linux = {
           vmwareImage =

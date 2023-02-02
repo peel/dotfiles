@@ -40,79 +40,90 @@
   :ensure nil
   :config (winner-mode 1))
 
-;; completion ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-(use-package company
-  :ensure t
-  :bind ("<C-tab>" . company-complete)
-  :hook (after-init-hook . global-company-mode)
-  :diminish company-mode
-  :commands (company-mode global-company-mode)
-  :defer 1
-  :custom
-  (company-require-match nil)
-	(company-selection-wrap-around t)
-  (global-company-mode)
-  (company-idle-delay 0)
-  (company-minimum-prefix-length 0))
-
 ;; ivy ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-;; todo selectrum ctrlf prescient
-(use-package ivy
+(use-package vertico
   :ensure t
-  :defer 1
-  :bind (("C-c C-r" . ivy-resume)
-	       ([remap list-buffers] . ivy-switch-buffer)
-	       ([remap switch-to-buffer] . ivy-switch-buffer)
-	       ([remap switch-to-buffer-other-window] . ivy-switch-buffer-other-window)
-         ("C-c C-f" . counsel-recentf)
-         :map ivy-minibuffer-map
-         ("C-j" . ivy-call))
-  :diminish ivy-mode
-  :commands ivy-mode
-  :config
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t    ;; highlight recent
-        ivy-count-format "%d/%d "    ;; current / total
-        ivy-initial-inputs-alist nil ;; do not preset ^ in buffer
-        ivy-re-builders-alist '((counsel-rg            . ivy--regex-plus)
-                                (counsel-projectile-rg . ivy--regex-plus)
-                                (swiper                . ivy--regex-plus)
-                                (t                     . ivy--regex-fuzzy)))
-  (use-package request
-    :ensure t)
-  (use-package swiper
-    :ensure t
-    :bind (("C-s" . swiper)
-           ("C-r" . swiper-backward)))
-  ;; TODO move po prescient.el
-  ;; https://github.com/raxod502/prescient.el
-  ;; https://github.com/ianpan870102/.personal-emacs.d/blob/master/init.el#L391-L412
-  (use-package smex
-    :ensure t
-    :after (ivy counsel)
-    :init
-    (setq-default smex-history-length 32)))
+  :bind (:map vertico-map
+         ("C-j" . vertico-next)
+         ("C-k" . vertico-previous)
+         ("C-f" . vertico-exit)
+         :map minibuffer-local-map
+         ("M-h" . backward-kill-word))
+  :custom
+  (vertico-cycle t)
+  :init
+  (vertico-mode))
 
-(use-package counsel
+(use-package savehist
+  :init
+  (savehist-mode))
+
+(use-package marginalia
+  :after vertico
   :ensure t
-  :commands (counsel-descbinds)
-  :bind (([remap execute-extended-command] . counsel-M-x)
-  	     ([remap find-file] . counsel-find-file)
-	       ([remap find-library] . counsel-find-library)
-	       ([remap describe-function] . counsel-describe-function)
-	       ([remap describe-variable] . counsel-describe-variable)
-	       ([remap describe-bindings] . counsel-descbinds)
-	       ([remap describe-face]  . counsel-describe-faces)
-	       ([remap imenu] . counsel-imenu)
-	       ([remap load-theme] . counsel-load-theme)
-	       ([remap yank-pop] . counsel-yank-pop)
-	       ([remap pop-to-mark-command] . counsel-mark-ring)
-	       ([remap bookmark-jump] . counsel-bookmark)
-         ("C-x j" . counsel-imenu)
-	       ("M-y" . counsel-yank-pop)
-	       ("C-c i 8" . counsel-unicode-char)
-         ("C-c r" . counsel-rg)
-	       ("C-c d" . counsel-descbinds)))
+  :custom
+  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :init
+  (marginalia-mode))
+
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless))
+  (completion-category-overrides
+   '((file (styles basic-remote
+                   orderless)))))
+
+(use-package corfu
+  :ensure t
+  :bind (:map corfu-map
+              ("C-n" . corfu-next)
+              ("C-p" . corfu-previous))
+  :custom
+  (corfu-auto t)
+  (corfu-auto-prefix 1)
+  (corfu-commit-predicate nil)
+  (corfu-cycle t)
+  (corfu-quit-no-match nil)
+  :init (global-corfu-mode))
+
+(use-package consult
+  :ensure t
+  :bind (("C-x C-b" . consult-buffer)
+         ("C-s"     . consult-line)
+         ("C-x C-r" . consult-ripgrep)
+         ([remap switch-to-buffer] . consult-buffer))
+  :config
+  (recentf-mode +1)
+  :custom
+  (completion-in-region-function #'consult-completion-in-region)
+  (consult-async-input-debounce 0.1)
+  (consult-async-input-throttle 0.2)
+  (consult-async-refresh-delay  0.15)
+  (consult-line-numbers-widen t)
+  (consult-narrow-key "<")
+  (consult-preview-key (list (kbd "C-S-n") (kbd "C-S-p"))))
+
+(use-package embark
+  :ensure t
+  :bind
+  (("C-." . embark-act)         ;; pick some comfortable binding
+   ("C-;" . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+  :init
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+  :config
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+(use-package embark-consult
+  :ensure t
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
 
 ;; syntax checking ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ;; todo remove
@@ -297,8 +308,6 @@
   (setq lsp-treemacs-errors-position-params '((side . top))))
 (use-package lsp-ui
   :ensure t)
-(use-package lsp-ivy
-  :ensure t)
 
 ;; ..................................................................... Haskell
 (use-package haskell-mode
@@ -450,11 +459,9 @@
   :hook ((org-mode . visual-line-mode)
          (org-mode . auto-fill-mode)
          (org-mode . org-indent-mode)
-         (org-mode . writeroom-mode)
-         (org-mode . company-mode))
+         (org-mode . writeroom-mode))
   :config
   (require 'org-protocol)
-  (add-to-list 'company-backends 'company-capf)
   ;; todo paths
   (setq org-directory "~/Dropbox/Documents/roam/")
   (setq org-agenda-files '("~/Dropbox/Documents/roam/journal"))
@@ -465,10 +472,8 @@
      (emacs-lisp . t)
      (haskell    . t)
      (dot        . t)
-     (mermaid    . t))))
+     (python     . t))))
 
-(use-package ob-mermaid
-  :ensure t)
 (use-package ob-restclient
   :ensure t)
 
@@ -482,13 +487,15 @@
     ("L" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
      "* %? [[%:link][%:description]] \nCaptured On: %U"))))
 
+(use-package d2-mode
+  :ensure t)
+(use-package org-present
+  :ensure t)
+
 (use-package org-roam
   :ensure t
   :after org
-  :hook ((after-init-hook . org-roam-db-autosync-enable)
-         (org-roam-mode . (lambda ()
-                            (set (make-local-variable 'company-backends)
-                                 '((company-capf))))))
+  :hook (after-init-hook . org-roam-db-autosync-enable)
   :custom
   (org-roam-autosync-enable t)
   (org-roam-db-location "~/.config/emacs/org-roam.db")
@@ -512,6 +519,13 @@
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
+
+(use-package gnuplot
+  :ensure t
+  :defer t)
+
+(use-package gnuplot-mode
+  :ensure t)
 
 (use-package org-roam-bibtex
   :ensure t
@@ -541,8 +555,7 @@
   :ensure t
   :config
   ;; (setq reftex-default-bibliography (list papers-refs))
-  (setq org-ref-completion-library 'org-ref-ivy-cite
-        org-ref-bibliography-notes papers-notes
+  (setq org-ref-bibliography-notes papers-notes
         org-ref-default-bibliography (list papers-refs)
         org-ref-pdf-directory papers-pdfs))
 
@@ -557,14 +570,6 @@
 	(org-noter-always-create-frame nil)
 	(org-noter-insert-note-no-questions t)
 	(org-noter-notes-window-location 'horizontal-split))
-
-(use-package ivy-bibtex
-  :ensure t
-  :after ivy
-  :custom
-  (bibtex-completion-bibliography papers-refs)
-  (bibtex-completion-library-path papers-pdfs)
-  (bibtex-completion-notes-path papers-notes))
 
 ;; todo paths
 (use-package org-static-blog
@@ -589,16 +594,6 @@
 (use-package xwidget-webkit
   :ensure nil
   :custom (xwidget-webkit-enable-plugins nil))
-
-(use-package xwwp-follow-link-ivy
-  :ensure t)
-
-(use-package xwwp
-  :ensure t
-  :custom (xwwp-follow-link-completion-system 'ivy)
-  :bind (:map xwidget-webkit-mode-map
-              ("v" . xwwp-follow-link)
-              ("t" . xwwp-ace-toggle)))
 
 ;; terminal ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package vterm
@@ -711,8 +706,7 @@
     "Toggles dark mode on Darwin."
     (interactive)
     (defun switch (theme)
-      (counsel-load-theme-action theme)
-      (load-theme theme)
+      (consult-theme theme)
       (setq current-theme theme))
     (shell-command "osascript -e 'tell app \"System Events\" to tell appearance preferences to set dark mode to not dark mode'")
     (if (eq current-theme dark-theme)

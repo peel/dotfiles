@@ -106,8 +106,8 @@ resource "aws_eip" "eip" {
 }
 
 resource "aws_instance" "bastion" {
-  ami             = "ami-0702eee2e75d541d1" #module.nixos_image.ami
-  instance_type   = "t3a.micro"
+  ami             = "ami-07680df1026a9b54c" #module.nixos_image.ami
+  instance_type   = "a1.metal"
   key_name        = aws_key_pair.aws_key.key_name
   security_groups = [aws_security_group.ssh_and_egress.name, aws_security_group.web_sg.name, aws_security_group.wireguard_sg.name, aws_security_group.apps_sg.name ]
   root_block_device {
@@ -143,6 +143,12 @@ resource "aws_instance" "bastion" {
 #   ttl     = "300"
 #   records = [aws_eip.eip.public_ip]
 # }
+
+esource "null_resource" "git_clone" {
+  provisioner "local-exec" {
+    command = "git clone git@github.com:peel/dotfiles.git"
+  }
+}
 
 output "eip_ip" {
   value = aws_eip.eip.public_ip

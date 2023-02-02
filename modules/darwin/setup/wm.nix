@@ -27,9 +27,11 @@ in {
     yabai -m config right_padding                 0
     yabai -m config window_gap                    0
 
-    yabai -m rule --add app="emacs"               manage="on"
+    yabai -m rule --add app="emacs" title!="^$"   manage="on"
     yabai -m rule --add app="Dash"                manage="off"
+    yabai -m rule --add app="1Password"           manage="off"
     yabai -m rule --add app="System Preferences"  manage="off"
+    yabai -m rule --add app="Plexamp"             manage="off"
  '';
   services.skhd.enable = true;
   services.skhd.package =  pkgs.skhd;
@@ -38,7 +40,7 @@ in {
     moveMask = "ctrl + cmd";
     myTerminal = "emacsclient -a '' -nc --eval '(peel/vterm)'";
     myEditor = "emacsclient -a '' -nc";
-    myBrowser = "open /Applications/Firefox\ Developer\ Edition.app";
+    myPlayer = "open /Applications/Plexamp.app";
     noop = "/dev/null";
     prefix = "${pkgs.yabaiM1}/bin/yabai -m";
     fstOrSnd = {fst, snd}: domain: "${prefix} ${domain} --focus ${fst} || ${prefix} ${domain} --focus ${snd}";
@@ -84,7 +86,7 @@ in {
     # apps  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
     ${modMask} - return                       : ${myTerminal}
     ${modMask} + shift - return               : ${myEditor}
-    ${modMask} - b                            : ${myBrowser}
+    ${modMask} - p                            : ${myPlayer}
 
 
     # reset  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁

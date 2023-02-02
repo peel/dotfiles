@@ -25,7 +25,7 @@ in {
   
   nix.binaryCaches = builtins.map (x: x.url) caches;
   nix.binaryCachePublicKeys = builtins.map (x: x.key) caches;
-  nix.trustedUsers = [ "@admin" "root" ];
+  nix.trustedUsers = [ "@admin" "root" "peel" ];
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreeRedistributable = true;

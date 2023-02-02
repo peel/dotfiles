@@ -6,11 +6,15 @@ in {
   homebrew = {
     enable = true;
     casks = [
+      "1password-beta"
+      "alfred"
       "dash"
       "docker"
+      "openaudible"
       "plexamp"
+      "utm"
+      "vmware-fusion"
       "zoom"
-      "1password-beta"
     ] ++ lib.optionals (!isDarwinArm64) ["vmware-fusion"];
     masApps = {
       "Slack" = 803453959;
@@ -23,7 +27,7 @@ in {
   } // lib.optionals isDarwinArm64 {
     extraConfig = ''
         tap "homebrew/cask-versions"
-        cask "vmware-fusion-tech-preview"
+         # cask "vmware-fusion-tech-preview"
     '';
   };
 }

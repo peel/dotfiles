@@ -11,7 +11,7 @@ let
       pkgs.darwin.apple_sdk.frameworks.CoreFoundation
       pkgs.darwin.apple_sdk.frameworks.WebKit
     ];}
-  )).override{ withXwidgets = true; };
+  )).override{ withXwidgets = true; withGTK3 = true; };
   myEmacsConfig = ./default.el;
 in 
 pkgs.emacsWithPackagesFromUsePackage {

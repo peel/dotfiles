@@ -1,14 +1,14 @@
 {
-  inputs.nixpkgs.url = "nixpkgs/nixos-22.05";
+  inputs.nixpkgs.url = "nixpkgs/nixos-22.11";
 
   outputs = flakes @ { self, nixpkgs }: {
     nixosConfigurations.bastion = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
+      system = "aarch64-linux";
       modules = [ (import ./configuration.nix flakes) ];
     };
 
     devShell."aarch64-darwin" =
-      with nixpkgs.legacyPackages.x86_64-linux;
+      with nixpkgs.legacyPackages.aarch64-darwin;
       mkShell {
         nativeBuildInputs = [
           awscli
