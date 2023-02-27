@@ -2,6 +2,7 @@
 
 let
   common = {
+    home.stateVersion = "22.11";
     programs.direnv = {
       enable = true;
       # does not work, we're overriding through system-module

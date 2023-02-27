@@ -91,7 +91,7 @@
   :ensure t
   :bind (("C-x C-b" . consult-buffer)
          ("C-s"     . consult-line)
-         ("C-x C-r" . consult-ripgrep)
+         ("C-c C-r" . consult-ripgrep)
          ([remap switch-to-buffer] . consult-buffer))
   :config
   (recentf-mode +1)
@@ -153,7 +153,7 @@
   :bind (("C-x g" . magit-status)
          ("C-x G" . magit-dispatch))
   :custom
-  (magit-completing-read-function 'ivy-completing-read "Use ivy with magit"))
+  (magit-completing-read-function 'magit-builtin-completing-read "Use vertico"))
 
 (use-package git-link
   :ensure t
@@ -262,7 +262,8 @@
   :diminish pragmatapro-lig-mode
   :hook ((prog-mode . prettify-symbols-mode)
          (prog-mode . pragmatapro-lig-mode)
-         (prog-mode . hs-minor-mode))
+         (prog-mode . hs-minor-mode)
+         (go-mode . pragmata-pro-lig))
   :init
   (load (locate-file "pragmatapro-lig.el" load-path) 'noerror)
   ;; disable showing compilation *buffer*
@@ -289,23 +290,31 @@
          (typescript-mode . lsp-deferred)
          (haskell-mode . lsp-defrred)
          (rust-mode . lsp-deferred)
-         (lsp-mode . #'lsp-enable-which-key-integration))
+         (lsp-mode . #'lsp-enable-which-key-integration)
+         (go-mode . lsp-deferred)
+         (lsp-mode . #'peel/corfu-lsp-setup))
   :after (envrc)
   :config
   (advice-add 'lsp :before #'envrc-reload)
   (setq lsp-file-watch-ignored '(
+                                 "[/\\\\]\\.devenv$"
                                  "[/\\\\]\\.direnv$"
                                  "[/\\\\]\\.git$"
                                  "[/\\\\]\\.metals$"
                                  "[/\\\\]\\.bloop$"
-                                 "[/\\\\]\\target$"))
+                                 "[/\\\\]\\target$"
+                                 "[/\\\\]\\result$"))
+  (setq lsp-completion-provider :none)
   (setq lsp-ui-doc-header t)
   (setq lsp-enable-snippet nil)
   (setq lsp-ui-doc-include-signature t)
   (setq lsp-ui-doc-include-function-signatures t
         lsp-eldoc-render-all t)
   (setq lsp-idle-delay 0.5)
-  (setq lsp-treemacs-errors-position-params '((side . top))))
+  (setq lsp-treemacs-errors-position-params '((side . top)))
+  (defun peel/corfu-lsp-setup ()
+    (setq-local completion-styles '(orderless)
+                completion-category-defaults nil)))
 (use-package lsp-ui
   :ensure t)
 
@@ -750,7 +759,8 @@
         echo-keystrokes 0.1
         visible-bell nil
         hl-line-mode t
-        xwidget-webkit-enable-plugins nil)
+        xwidget-webkit-enable-plugins nil
+        tab-always-indent 'complete)
   (setq-default show-trailing-whitespace t)
   (setq-default indicate-empty-lines t)
   (setq-default indicate-buffer-boundaries 'left)
