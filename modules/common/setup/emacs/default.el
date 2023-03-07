@@ -101,8 +101,7 @@
   (consult-async-input-throttle 0.2)
   (consult-async-refresh-delay  0.15)
   (consult-line-numbers-widen t)
-  (consult-narrow-key "<")
-  (consult-preview-key (list (kbd "C-S-n") (kbd "C-S-p"))))
+  (consult-narrow-key "<"))
 
 (use-package embark
   :ensure t
@@ -499,7 +498,17 @@
 (use-package d2-mode
   :ensure t)
 (use-package org-present
-  :ensure t)
+  :ensure t
+  :hook (org-present-mode . (lambda ()
+                (org-present-big)
+                (org-display-inline-images)
+                (org-present-hide-cursor)
+                (org-present-read-only)))
+         (org-present-mode-quit . (lambda ()
+                 (org-present-small)
+                 (org-remove-inline-images)
+                 (org-present-show-cursor)
+                 (org-present-read-write))))
 
 (use-package org-roam
   :ensure t
