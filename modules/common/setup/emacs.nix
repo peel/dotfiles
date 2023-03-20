@@ -3,8 +3,8 @@
 let
   emacs = (import emacs/default.nix {inherit pkgs;});
 in {
-  environment.variables.EDITOR = "${emacs}/bin/emacsclient -tc";
-  environment.variables.ALTERNATE_EDITOR = "${emacs}/bin/emacs";
+  environment.variables.EDITOR = "/run/current-system/sw/bin/emacsclient -tc";
+  environment.variables.ALTERNATE_EDITOR = "/run/current-system/sw/bin/emacs";
 
   environment.systemPackages = [ pkgs.binutils emacs ];# pkgs.nodePackages.mermaid-cli ];
 
