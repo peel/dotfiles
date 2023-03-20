@@ -124,27 +124,6 @@
   (embark-collect-mode . consult-preview-at-point-mode))
 
 
-;; syntax checking ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-;; todo remove
-(use-package flycheck
-  :ensure t
-  :after nix-sandbox
-  :hook (prog-mode . flycheck-mode)
-  :diminish flycheck-mode " ✓"
-  :config
-  (add-to-list 'display-buffer-alist
-             '("\\*Flycheck errors\\*"
-               (display-buffer-in-direction)
-               (direction . top)
-               (window-width . 0.12)
-               (window-height . fit-window-to-buffer)))
-  ;; :config
-  ;; (setq flycheck-command-wrapper-function
-  ;;       (lambda (command) (apply 'nix-shell-command (nix-current-sandbox) command))
-  ;;     flycheck-executable-find
-  ;;     (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd)))
-  )
-
 ;; git ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package magit
   :ensure t
@@ -281,48 +260,27 @@
     (call-process "osascript" nil 0 nil "-e"
                   (concat "display notification \"Compilation: " status "\" with title \"Emacs\""))))
 (use-package eglot
-  :bind ("C-c l" . eglot-menu)
-  :config (advice-add 'eglot :before #'envrc-reload)
-  :hook ((scala-mode . eglot)
-         (js-mode . eglot)
-         (typescript-mode . eglot)
-         (haskell-mode . eglot)
-         (rust-mode . eglot)))
-;; (use-package lsp-mode
-;;   :ensure t
-;;   :bind-keymap ("C-c l" . lsp-command-map)
-;;   :hook ((scala-mode . lsp-deferred)
-;;          (js-mode . lsp-deferred)
-;;          (typescript-mode . lsp-deferred)
-;;          (haskell-mode . lsp-defrred)
-;;          (rust-mode . lsp-deferred)
-;;          (lsp-mode . #'lsp-enable-which-key-integration)
-;;          ;; (go-mode . lsp-deferred)
-;;          (lsp-mode . #'peel/corfu-lsp-setup))
-;;   :after (envrc)
-;;   :config
-;;   (advice-add 'lsp :before #'envrc-reload)
-;;   (setq lsp-file-watch-ignored '(
-;;                                  "[/\\\\]\\.devenv$"
-;;                                  "[/\\\\]\\.direnv$"
-;;                                  "[/\\\\]\\.git$"
-;;                                  "[/\\\\]\\.metals$"
-;;                                  "[/\\\\]\\.bloop$"
-;;                                  "[/\\\\]\\target$"
-;;                                  "[/\\\\]\\result$"))
-;;   (setq lsp-completion-provider :none)
-;;   (setq lsp-ui-doc-header t)
-;;   (setq lsp-enable-snippet nil)
-;;   (setq lsp-ui-doc-include-signature t)
-;;   (setq lsp-ui-doc-include-function-signatures t
-;;         lsp-eldoc-render-all t)
-;;   (setq lsp-idle-delay 0.5)
-;;   (setq lsp-treemacs-errors-position-params '((side . top)))
-;;   (defun peel/corfu-lsp-setup ()
-;;     (setq-local completion-styles '(orderless)
-;;                 completion-category-defaults nil)))
-(use-package lsp-ui
-  :ensure t)
+  :bind (("C-c C-l s" . eglot)
+         (:map eglot-mode-map
+               ("C-c C-l f" . eglot-format)
+               ("C-c C-l a" . eglot-code-actions)
+               ("C-c C-l r" . eglot-rename)
+               ("C-c C-l i" . peel/eglot-imports)
+               ("C-c C-l S" . eglot-reconnect)
+               ("C-c C-l q" . eglot-shutdown)
+               ("C-c C-l h" . flymake-show-project-diagnostics)))
+  :after (envrc)
+  :config
+  (advice-add 'eglot :before #'envrc-reload)
+  (defun peel/eglot-imports ()
+    (interactive)
+    (call-interactively #'eglot-code-action-organize-imports))
+  :hook ((scala-mode . eglot-ensure)
+         (js-mode . eglot-ensure)
+         (typescript-mode . eglot-ensure)
+         (haskell-mode . eglot-ensure)
+         (rust-mode . eglot-ensure)
+         (go-mode . eglot-ensure)))
 
 ;; ..................................................................... Haskell
 (use-package haskell-mode
@@ -340,11 +298,6 @@
              haskell-ident-at-point
              haskell-mode-handle-generic-loc))
 (use-package haskell-interactive-mode)
-(use-package lsp-haskell
-  :ensure t
-  :config
-  (setq lsp-haskell-server-path "haskell-language-server"
-        lsp-haskell-hlint-on t))
 
 ;; ........................................................................ rust
 (use-package rustic
@@ -392,7 +345,7 @@
   :commands go-mode
   :mode ("\\.go?\\'" . go-mode)
   :defer t
-  :hook (lsp-format-buffer))
+  :hook (eglot-format-buffer))
 
 ;; .......................................................................... go
 (use-package rust-mode
@@ -411,8 +364,6 @@
   (setq scala-indent:align-parameters t)
   (setq scala-indent:default-run-on-strategy scala-indent:operator-strategy))
 
-(use-package lsp-metals
-  :ensure t)
 
 ;; .......................................................................... js
 (use-package js2-mode
@@ -427,19 +378,6 @@
 (use-package typescript-mode
   :ensure t
   :mode "\\.tsx?\\'")
-
-;; (use-package web-mode
-;;   :ensure t
-;;   :mode ("\\.html?\\'" "\\.css\\'" "\\.scss\\'")
-;;   :custom
-;;   (web-mode-markup-indent-offset 2 "2 spaces")
-;;   (web-mode-css-indent-offset 2)
-;;   (web-mode-markup-indent-offset 2)
-;;   (web-mode-code-indent-offset 2)
-;;   (css-indent-offset 2)
-;;   (js-switch-indent-offset 2)
-;;   (js-indent-level 2)
-;;   (js-indent-switch-body t))
 
 ;; .................................................................. restclient
 (use-package restclient
@@ -502,8 +440,6 @@
     ("L" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
      "* %? [[%:link][%:description]] \nCaptured On: %U"))))
 
-(use-package d2-mode
-  :ensure t)
 (use-package org-present
   :ensure t
   :hook (org-present-mode . (lambda ()
@@ -726,17 +662,6 @@
           (add-to-list 'default-frame-alist '(ns-transparent-titlebar t))
           (add-to-list 'default-frame-alist '(ns-appearance dark)))
       (menu-bar-mode -1)))
-
-  (defun peel/lights ()
-    "Toggles dark mode on Darwin."
-    (interactive)
-    (defun switch (theme)
-      (consult-theme theme)
-      (setq current-theme theme))
-    (shell-command "osascript -e 'tell app \"System Events\" to tell appearance preferences to set dark mode to not dark mode'")
-    (if (eq current-theme dark-theme)
-        (switch light-theme)
-      (switch dark-theme)))
 
   (defun peel/load-glitter (&optional frame)
     (unless frame
