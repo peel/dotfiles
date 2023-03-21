@@ -237,13 +237,9 @@
 (use-package prog-mode
   :defer 3
   :ensure nil
-  :diminish pragmatapro-lig-mode
   :hook ((prog-mode . prettify-symbols-mode)
-         (prog-mode . pragmatapro-lig-mode)
-         (prog-mode . hs-minor-mode)
-         (go-mode . pragmata-pro-lig))
+         (prog-mode . hs-minor-mode))
   :init
-  (load (locate-file "pragmatapro-lig.el" load-path) 'noerror)
   ;; disable showing compilation *buffer*
   (add-to-list
    'display-buffer-alist
@@ -299,13 +295,6 @@
              haskell-mode-handle-generic-loc))
 (use-package haskell-interactive-mode)
 
-;; ........................................................................ rust
-(use-package rustic
-  :ensure t
-  :after nix-sandbox
-  :config
-  (setq rustic-format-on-save t))
-
 ;; ......................................................................... nix
 (use-package nix-mode
   :ensure t
@@ -347,11 +336,15 @@
   :defer t
   :hook (eglot-format-buffer))
 
-;; .......................................................................... go
-(use-package rust-mode
+;; ........................................................................ rust
+
+(use-package rustic
   :ensure t
   :mode ("\\.rs?\\'" . rust-mode)
-  :defer t)
+  :after nix-sandbox
+  :config
+  (setq rustic-format-on-save t))
+
 
 ;; ....................................................................... scala
 (use-package scala-mode
@@ -645,6 +638,7 @@
     "Load default font."
     (add-to-list 'initial-frame-alist '(font . "PragmataPro Liga"))
     (add-to-list 'default-frame-alist '(font . "PragmataPro Liga"))
+    (setq pragmatapro-lig-global-mode t)
     (if (memq window-system '(mac ns))
         (set-face-attribute 'default nil :height 220)
       (set-face-attribute 'default nil :height 60))
