@@ -23,15 +23,15 @@ pkgs.emacsWithPackagesFromUsePackage {
     mkdir -p $out/share/emacs/site-lisp
     cp -r ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
    '');
-   prettify-pragmata = elisp (pkgs.fetchFromGitHub {
-     owner = "lumiknit";
-     repo = "emacs-pragmatapro-ligatures";
-     rev = "87bc656ace7b15aa088537b6bd369ee49e323dc1";
-     sha256 = "19np1zfkdfcjjyvzpnn0p6kppfh6isrwxy8bqs0jd7bjh98n42jd";
-   }) "prettify-pragmata";
+   chatgpt-shell = elisp (pkgs.fetchFromGitHub {
+     owner = "xenodium";
+     repo = "chatgpt-shell";
+     rev = "b3a82b23d73263a00aef219f8055dcbe4fcecaec";
+     sha256 = "sha256-RufzE5SUU1h+c4zoOTcaI/EFYw6favPF3nLgh0hEWiM=";
+   }) "chatgpt-shell";
  };
  extraEmacsPackages = epkgs: with epkgs; [
     my-config
-    prettify-pragmata
+    chatgpt-shell
   ];
 }

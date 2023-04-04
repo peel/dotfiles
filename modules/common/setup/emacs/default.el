@@ -450,6 +450,19 @@
   :ensure t
   :after org
   :hook (after-init-hook . org-roam-db-autosync-enable)
+  :init
+  (defun peel/org-roam-capture ()
+    (interactive)
+    (org-roam-capture)
+    (defun peel/delete-if-capture-frame ()
+    (let (this-frame-name (substring-no-properties
+                      (cdr (assoc 'name (frame-parameters)))))
+      (message this-frame-name)
+      (if (string-equal this-frame-name "org-capture")
+          'delete-frame
+        nil)))
+    (advice-add 'org-roam-capture--finalize :after 'peel/delete-if-capture-frame))
+
   :custom
   (org-roam-autosync-enable t)
   (org-roam-db-location "~/.config/emacs/org-roam.db")
@@ -463,7 +476,8 @@
                (window-height . fit-window-to-buffer)))
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
-         ("C-c n i" . org-roam-node-insert)))
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)))
 
 (use-package org-roam-ui
   :ensure t
@@ -550,6 +564,11 @@
   :custom (xwidget-webkit-enable-plugins nil))
 
 ;; terminal ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+(use-package chatgpt-shell
+  :ensure nil
+  :custom
+  (chatgpt-shell-openai-key (lambda () (auth-source-pick-first-password :host "api.openai.com"))))
+
 (use-package vterm
   :ensure t
   :hook (vterm-mode . (lambda ()
@@ -561,16 +580,16 @@
   (vterm-kill-buffer-on-exit t)
   :config
   (add-to-list 'vterm-keymap-exceptions "C-b")
-  (defun vterm-counsel-yank-pop-action (orig-fun &rest args)
-    "Use vterm-yank-pop to make counsel-yank-pop work in vterm"
-    (if (equal major-mode 'vterm-mode)
-        (let ((inhibit-read-only t)
-              (yank-undo-function #'(lambda(_start _end) (vterm-undo))))
-          (cl-letf (((symbol-function 'insert-for-yank)
-                     #'(lambda(str) (vterm-send-string str t))))
-            (apply orig-fun args)))
-      (apply orig-fun args)))
-  (advice-add 'counsel-yank-pop-action :around #'vterm-counsel-yank-pop-action)
+  ;; (defun vterm-counsel-yank-pop-action (orig-fun &rest args)
+  ;;   "Use vterm-yank-pop to make counsel-yank-pop work in vterm"
+  ;;   (if (equal major-mode 'vterm-mode)
+  ;;       (let ((inhibit-read-only t)
+  ;;             (yank-undo-function #'(lambda(_start _end) (vterm-undo))))
+  ;;         (cl-letf (((symbol-function 'insert-for-yank)
+  ;;                    #'(lambda(str) (vterm-send-string str t))))
+  ;;           (apply orig-fun args)))
+  ;;     (apply orig-fun args)))
+  ;; (advice-add 'counsel-yank-pop-action :around #'vterm-counsel-yank-pop-action)
 
   (defun peel/vterm-cd (dir)
     "Prompt for directory and cd"
@@ -731,7 +750,7 @@
     '(:eval (propertize " %b " 'face 'font-lock-keyword-face)) ;; buffer
     '(:eval (propertize "%* " 'face 'font-lock-warning-face)) ;; ! ro | * mod | - clean
     "%l:%c "
-    '(:eval (propertize (pragmatapro-get-mode-icon) 'face 'font-lock-comment-face)) ;; major
+    '(:eval (propertize "%m" 'face 'font-lock-comment-face)) ;; major
     '(:eval (vc-status-mode-line))
     '(:eval (propertize (cl-reduce 'ww/diff-hl-reducer (diff-hl-changes) :initial-value '(0 0 0))) 'face 'font-lock-comment-face)
     '(global-mode-string global-mode-string))))
