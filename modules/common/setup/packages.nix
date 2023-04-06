@@ -23,7 +23,7 @@ in {
     "/private/var/tmp"
     "/usr/bin/env"
   ];
-  
+
   nix.binaryCaches = builtins.map (x: x.url) caches;
   nix.binaryCachePublicKeys = builtins.map (x: x.key) caches;
   nix.trustedUsers = [ "@admin" "root" "peel" ];

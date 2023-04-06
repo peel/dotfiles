@@ -10,7 +10,7 @@ myLauncher = "rofi -combi-modi window,drun,run -show combi -modi combi"
 main = xmonad $ defaultConfig
         { terminal = "emacsclient -c --eval '(vterm)'"
         , startupHook = myStartupHook
-        , modMask = mod4Mask
+        , modMask = mod1Mask
         } `additionalKeys`
-        [ ((mod4Mask, xK_p), spawn myLauncher)
+        [ ((mod1Mask, xK_p), spawn myLauncher)
         ]
