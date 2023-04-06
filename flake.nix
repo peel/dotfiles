@@ -52,7 +52,6 @@
       nixosModules = (mapModules ./modules/nixos import) // (mapModules ./modules/common import);
       darwinModules = (mapModules ./modules/darwin import) // (mapModules ./modules/common import);
 
-      # FIXME double naming
       nixosConfigurations = {
         nuke = mkSystem {
           hostname = "nuke";
@@ -66,9 +65,6 @@
         wrkvm64 = mkSystem {
           hostname = "wrkvm64";
           system = "aarch64-linux";
-          extraModules = [
-            { virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin; }
-          ];
         };
         demo = mkSystem {
           hostname = "demo";

@@ -73,9 +73,23 @@ in
   };
 
   nix = {
-    buildMachines = [{
-      hostName = "ssh://linux-builder";
-      maxJobs = 4;
+    buildMachines = [
+      # FIXME
+      {
+        hostName = "ssh-ng://peel@nuke.local";
+        maxJobs = 16;
+        supportedFeatures = [ "kvm" ];
+        system = "x86_64-linux";
+        #FIXME
+        publicHostKey = ''
+AAAAB3NzaC1yc2EAAAADAQABAAACAQDQRppOSxqH3JEzMyCIBbmCYWEuOg0+vR2l4GVV8ir7xsMgvsVmcFskUBUp4I/9LohouwycTiL/cnLz5gQVcTHmo3RGMlxJIeBobQ2WuZQqEkdRPL/QmNhiRTk/Pw+0T1u0Wt/CoktK/LG/8B3osDUbUOn5GmV1qg0gtyFcid7QFPeIIW9CEIxqpPRSoVuxSg2lGijdmGD4YPXiA6Dr6AZPu93Ujb6tQpTaqCECYd3YNGTMHE+z8qGxA0pcjP6n6MecIQzOEai+p7hT4i6rJ2lkVUGLIQu5k1Be+JvMD3/j5lGpS+8zt2dAYhdajY69PNezZSrZfm4end/YOuz/LAwgHJkYIPIYXQU3E3smU1bWOfH/Fo6NfrR1IQUxi5ERFvgxT/meRzaW5Jf1AcKH3kJSLlgivTQVbdaaBHLhEL22J+fs8y1z7f4dDN+0Y94kv9tK0CtjEEaKpisSUp60dUrm+d4c1mqVInPjyd3N3Bkf3Q4tLFGGj3zQT2Vuw0GwCSGNXKzH0j2YkuArnW+G7yk8L10OkyOXse+Sb+juR9pHhssflMdAgQ8zvtGAU6k83I1EWqvYpaPc+x/KExuTDPR8TSvnXxZiAUu+cwnwG7ZLElmte+cRXKJIKX4VRMeviTDKfO8f0Mz8DT4j9T1AR7xlgmbwEjSWJ9B8MUgsTmWX+w==
+        '';
+        #FIXME
+        sshKey = "/Users/peel/.ssh/local_id_rsa";
+      }
+      {
+      hostName = "ssh-ng://linux-builder";
+      maxJobs = 16;
       # This is cheating: KVM isn't actually available (?) but QEMU falls back to "slow mode" in this case
       supportedFeatures = [ "kvm" ];
       system = linuxSystem; # {x86_64|aarch64}-linux
