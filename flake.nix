@@ -66,13 +66,20 @@
         wrkvm64 = mkSystem {
           hostname = "wrkvm64";
           system = "aarch64-linux";
-          extraModules = [{
-          #   imports = [
-          #   "${modulesPath}/virtualisation/qemu-vm.nix"
-          # ];
-
-            virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin;
-          }];
+          extraModules = [
+            { virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin; }
+          ];
+        };
+        demo = mkSystem {
+          hostname = "demo";
+          system = "aarch64-linux";
+          extraModules = [
+            ./modules/nixos/setup
+            {
+              virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+              nixpkgs.pkgs = nixpkgs.legacyPackages.aarch64-linux.pkgs;
+            }
+          ];
         };
       };
 
@@ -88,7 +95,27 @@
       };
 
       packages = {
-        aarch64-darwin = {
+        aarch64-darwin = let pkgs = nixpkgs.legacyPackages.aarch64-darwin.pkgs; in rec {
+          virglrenderer = pkgs.stdenv.mkDerivation rec {
+            pname = "virglrenderer";
+            version = "2023-04-05";
+            src = pkgs.fetchurl {
+              url = "https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/77f600326956f4832a7999c53b2acf10e426f93c/virglrenderer-77f600326956f4832a7999c53b2acf10e426f93c.tar.gz";
+              sha256 = "sha256-EJmgDWj3GuIAINxV4qALYgLit31YKFPBOb0dKxLuIC0=";
+            };
+            buildInputs = [ pkgs.libepoxy ] ++ pkgs.lib.optionals pkgs.stdenv.isLinux [ pkgs.libGLU pkgs.xorg.libX11 pkgs.mesa ];
+            nativeBuildInputs = [ pkgs.cmake pkgs.meson pkgs.ninja pkgs.pkg-config pkgs.python3 ];
+            dontUseCmakeConfigure = true;
+            mesonFlags = [
+              "-D drm=disabled"
+            ];
+          };
+          qemu_virgl = pkgs.qemu.override {
+            virglrenderer = virglrenderer;
+            virglSupport = true;
+            openGLSupport = false;
+            hostCpuOnly = true;
+          };
           qcow2Image =
             self.nixosConfigurations.wrkvm64.config.system.build.vm;
         };
@@ -97,6 +124,8 @@
             self.nixosConfigurations.wrkvm64.config.system.build.vmwareImage;
           qcow2Image =
             self.nixosConfigurations.wrkvm64.config.system.build.vm;
+          demo =
+            self.nixosConfigurations.demo.config.system.build.vm;
         };
         x86_64-linux = {
           vmwareImage =
