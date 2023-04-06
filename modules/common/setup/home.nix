@@ -81,6 +81,7 @@ let
         output = {
           Virtual-1 = {
             res = "3840x2160";
+            scale = "2.6";
           };
         };
         input = {
