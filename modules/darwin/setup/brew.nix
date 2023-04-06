@@ -5,6 +5,13 @@ let
 in {
   homebrew = {
     enable = true;
+    taps = [
+      {
+        name = "akirakyle/homebrew-qemu-virgl";
+        clone_target = "https://github.com/akirakyle/homebrew-qemu-virgl.git";
+        force_auto_update = true;
+      }
+    ];
     casks = [
       "1password-beta"
       "alfred"
@@ -15,7 +22,10 @@ in {
       "utm"
       "vmware-fusion"
       "zoom"
-    ] ++ lib.optionals (!isDarwinArm64) ["vmware-fusion"];
+    ];
+    brews = [
+      "qemu-virgl"
+    ];
     masApps = {
       # "Slack" = 803453959;
       # "1Password" = 1333542190;
@@ -24,10 +34,5 @@ in {
       "Tailscale" = 1475387142;
     };
     cleanup = "zap";
-  } // lib.optionals isDarwinArm64 {
-    extraConfig = ''
-        tap "homebrew/cask-versions"
-         # cask "vmware-fusion-tech-preview"
-    '';
   };
 }
