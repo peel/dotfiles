@@ -657,10 +657,7 @@
     "Load default font."
     (add-to-list 'initial-frame-alist '(font . "PragmataPro Liga"))
     (add-to-list 'default-frame-alist '(font . "PragmataPro Liga"))
-    (setq pragmatapro-lig-global-mode t)
-    (if (memq window-system '(mac ns))
-        (set-face-attribute 'default nil :height 220)
-      (set-face-attribute 'default nil :height 60))
+    (set-face-attribute 'default nil :height 220)
     (setq-default line-spacing 9))
 
   (defun peel/load-ui ()
