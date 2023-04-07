@@ -7,10 +7,8 @@ let
     manual.manpages.enable = false;
     programs.direnv = {
       enable = true;
-      # does not work, we're overriding through system-module
       enableBashIntegration = true;
       nix-direnv.enable = true;
-      # nix-direnv.enableFlakes = true;
     };
     #     # programs.mbsync.enable = true;
     #     # programs.msmtp.enable = true;
@@ -62,21 +60,40 @@ let
       SDL_VIDEODRIVER = "wayland";
       XDG_SESSION_TYPE = "wayland";
     };
+    home.packages = [ pkgs.wofi ];
+    # FIXME
+    # (23.05) migrate to services.clipman.enable = true;
+    systemd.user.services.clipman = {
+      Unit = {
+        Description = "Clipboard management daemon";
+        PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
+      };
+      Service = {
+        ExecStart =
+          "${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store";
+        ExecReload = "${pkgs.coreutils}/bin/kill -SIGUSR2 $MAINPID";
+        Restart = "on-failure";
+        KillMode = "mixed";
+      };
+      Install = { WantedBy = [ "graphical-session.target" ]; };
+    };
     wayland.windowManager.sway = rec {
       enable = true;
       extraOptions = [ "--unsupported-gpu" ];
       wrapperFeatures.gtk = true;
       config = rec {
         modifier = "Mod1";
-        terminal = "${pkgs.alacritty}/bin/alacritty";
-        menu = "${pkgs.wofi}/bin/wofi";
+        terminal = "emacsclient -a '' -c --eval '(vterm)'";
+        menu = "wofi";
         startup = [
           {command = "dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY";}
         ];
         keybindings =
           let modMask = config.modifier;
           in lib.mkOptionDefault {
-            "${modMask}+Return" = "exec emacsclient -nc";
+            "${modMask}+Return" = "exec emacsclient -c";
+            "${modMask}+space" = "exec wofi --show=run";
           };
         output = {
           Virtual-1 = {

@@ -18,15 +18,6 @@
     enable = true;
   };
 
-  services.avahi = {
-    enable = true;
-    nssmdns = true;
-    publish.addresses = true;
-    publish.enable = true;
-    publish.workstation = true;
-    publish.domain = true;
-  };
-
   virtualisation.docker = {
     enable = true;
     enableOnBoot = true;

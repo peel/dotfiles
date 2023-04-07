@@ -1,3 +1,19 @@
+# RUNNING:
+#  nix build .#packages.aarch64-linux.demo
+#  edit result/bin/run-demo-vm
+#  move qemu-system-aarch64 to use this:
+#  https://github.com/akirakyle/homebrew-qemu-virgl
+#  and remove -device virtio-gpu-pci
+
+# TODO:
+#  (see homebrew build for details)
+#  - build libangle, libepoxy-libangle
+#  - build virgl-libepoxy-libangle
+#  - fix home-manager directories
+# Eventually should work with:
+#   nix run .#packages.aarch64-linux.demo
+
+
 { modulesPath, config, lib, pkgs, ... }:
 
 let
@@ -50,10 +66,17 @@ in {
   # users ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   users.mutableUsers = true;
   security.sudo.wheelNeedsPassword = false;
+
+  # match host gid/uid to share directories easily
+  # users.groups.staff.gid = 20;
   users.users = {
     "${username}"= {
       home = "/home/${username}";
       password = "${username}";
+      # uid = 501;
+      # createHome = true;
+      # useDefaultShell = true;
+      # group = "users";
       isNormalUser = true;
       extraGroups = [ "wheel" "docker" "video" ];
       uid = 1000;
@@ -62,6 +85,21 @@ in {
         "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC/NSWTPt4wYBay+78bclqOjD5vtaKmiu1zRmzrhsoChbfVYeuYM8TS+pGbiUqMXhRwIfFBqjPAMvEqlwhGuOTe42c0GKjGBq2kvF6p6/AiyutsRcMsKYqNj+3sR6Xx4J7awYvL6OjrzCgOoXonp2jzoMGbAxm6sHJ0Kg+1kLnlgJHGIveshzDUvnYhDd2xH3Y7jGVqzpekqaPEGcauCi91l0lKgjo2hiRWDM/Ho1gHgq6jpDsZIUAXbdPtQh7GTx7luUYUTc0SX08+YmlF8kQ2mmcLQV/Uy5tQMOZ0sqv1RLcraZd87nbJlYqXm97VODwHWNzAbm49kqwGXT2j+CnF0PrSLRABkcgkyaiJWx779vQKRzceENVk9WipavO07poL23egfiB5cYtU+jsC3F6uv61je0E6Z7/w8txb082gdwVVFxrPfoV4qDLgdISZabHV4/Ivp9RWiCtgauHjpv8qhg48IouQqLQT90uuoeA1TLU1ckNDHbqhvDtzmArZWJU= peel@snowberry"
       ];
     };
+  };
+
+  # create directories for home-manager
+  # fails otherwise :o
+  systemd.services.home-manager-directories = {
+    description = "Backup hassio directory to nas";
+    wantedBy = [ "multi-user.target" ];
+    before = [ "home-manager-${username}.service" ];
+    serviceConfig.Type = "oneshot";
+    serviceConfig.SyslogIdentifier = "hm-directories-${username}";
+    serviceConfig.RemainAfterExit = "yes";
+    serviceConfig.TimeoutStartSec = 30;
+    script = with pkgs; ''
+      ${pkgs.coreutils}/bin/install -d -m 0755 -o ${username} -g wheel /nix/var/nix/{profiles,gcroots}/per-user/${username}/
+    '';
   };
 
   services.spice-vdagentd.enable = true;
@@ -80,10 +118,8 @@ in {
     "-device qemu-xhci"
     "-device virtio-gpu-gl"
     "-display cocoa,gl=es"
-    # "-spice port=5900,addr=127.0.0.1,disable-ticketing=on,image-compression=off,playback-compression=off,streaming-video=off"
-    # "-chardev qemu-vdagent,id=spice,name=vdagent,clipboard=on"
-    # "-device virtio-serial-pci"
-    # "-device virtserialport,chardev=spice,name=com.redhat.spice.0"
+    "-chardev qemu-vdagent,id=spice,name=vdagent,clipboard=on"
+    "-device virtserialport,chardev=spice,name=com.redhat.spice.0"
   ];
   virtualisation.cores = 8;
   virtualisation.memorySize = 12288;
@@ -92,18 +128,13 @@ in {
     y = 2234;
   };
   virtualisation.rosetta.enable = false;
-  # virtualisation.sharedDirectories = {
-  #   source = "";
-  #   target = "/home/${username}/wrk";
-  # };
-  virtualisation.docker = {
-    enable = true;
-    enableOnBoot = true;
-    autoPrune.enable = true;
-    liveRestore = true;
+  virtualisation.writableStore = true;
+  virtualisation.sharedDirectories = {
+    wrk = {
+      source = "/Users/peel/wrk"; # FIXME impure
+      target = "/mnt/wrk";
+    };
   };
-
-
   # gui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   security.polkit.enable = true;
   services.greetd = {
