@@ -97,7 +97,7 @@ let
           };
         output = {
           Virtual-1 = {
-            res = "3840x2160";
+            res = "--custom 3024x1964";
             scale = "2.6";
           };
         };
