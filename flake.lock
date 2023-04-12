@@ -21,6 +21,42 @@
         "type": "github"
       }
     },
+    "depot-tools": {
+      "inputs": {
+        "depot_tools": "depot_tools",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1654218648,
+        "narHash": "sha256-O9kj2nLLw2S9j3GuCYmt5tLAHngcjostbYB4pND+kj4=",
+        "owner": "cir0x",
+        "repo": "depot-tools-nix-flake",
+        "rev": "df450c0996b3af62191552b8817e20d1520bb26c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cir0x",
+        "repo": "depot-tools-nix-flake",
+        "type": "github"
+      }
+    },
+    "depot_tools": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1654107530,
+        "narHash": "sha256-JvX9lkGpx9YUzu/EP9bekVnXGumsuaT48Myj1119uIA=",
+        "ref": "main",
+        "rev": "fe3a70a926480d4a6510c0c0fc736832dcfdea93",
+        "revCount": 8889,
+        "type": "git",
+        "url": "https://chromium.googlesource.com/chromium/tools/depot_tools.git"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "https://chromium.googlesource.com/chromium/tools/depot_tools.git"
+      }
+    },
     "emacs-overlay": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -81,16 +117,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1679172431,
-        "narHash": "sha256-XEh5gIt5otaUbEAPUY5DILUTyWe1goAyeqQtmwaFPyI=",
+        "lastModified": 1654007547,
+        "narHash": "sha256-G812EeXZeGeGjkAvbTleGwcKFCGxdLOQb9aViOWASPc=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "1603d11595a232205f03d46e635d919d1e1ec5b9",
+        "rev": "5643714dea562f0161529ab23058562afeff46d0",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixos-unstable",
+        "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -111,12 +147,29 @@
         "type": "github"
       }
     },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1679172431,
+        "narHash": "sha256-XEh5gIt5otaUbEAPUY5DILUTyWe1goAyeqQtmwaFPyI=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "1603d11595a232205f03d46e635d919d1e1ec5b9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "darwin": "darwin",
+        "depot-tools": "depot-tools",
         "emacs-overlay": "emacs-overlay",
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable"
       }
     },

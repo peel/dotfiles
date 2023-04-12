@@ -10,9 +10,10 @@
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager/release-22.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    depot-tools.url = "github:cir0x/depot-tools-nix-flake";
   };
 
-  outputs = { self, darwin, nixpkgs, nixpkgs-unstable, emacs-overlay, home-manager, ... }@inputs:
+  outputs = { self, darwin, nixpkgs, nixpkgs-unstable, emacs-overlay, home-manager, depot-tools, ... }@inputs:
     let
       # FIXME nixpkgs.lib.extend
       myLib = (import ./lib {inherit (nixpkgs) lib targetSystem;});
@@ -58,14 +59,6 @@
           system = "x86_64-linux";
           extraModules = [ ./modules/nixos/setup ./modules/common/setup/hassio.nix ];
         };
-        wrkvm = mkSystem {
-          hostname = "wrkvm";
-          system = "x86_64-linux";
-        };
-        wrkvm64 = mkSystem {
-          hostname = "wrkvm64";
-          system = "aarch64-linux";
-        };
         demo = mkSystem {
           hostname = "demo";
           system = "aarch64-linux";
@@ -92,40 +85,67 @@
 
       packages = {
         aarch64-darwin = let pkgs = nixpkgs.legacyPackages.aarch64-darwin.pkgs; in rec {
-          virglrenderer = pkgs.stdenv.mkDerivation rec {
-            pname = "virglrenderer";
-            version = "2023-04-05";
-            src = pkgs.fetchurl {
-              url = "https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/77f600326956f4832a7999c53b2acf10e426f93c/virglrenderer-77f600326956f4832a7999c53b2acf10e426f93c.tar.gz";
-              sha256 = "sha256-EJmgDWj3GuIAINxV4qALYgLit31YKFPBOb0dKxLuIC0=";
+          libangle = let
+            git_url = "https://chromium.googlesource.com";
+            deps = {
+              "build" = pkgs.fetchgit {
+                url    = "${git_url}/chromium/src/build.git";
+                rev    = "71ce49253a9af268a035cbe58e28b4dd7b36a9f5";
+                sha256 = "OF0pjGkW/aoFu9c2Pt5gEAcKRLP5j8xE8at4AjtMeX0=";
+              };
+              "config" = pkgs.fetchgit {
+                url    = "${git_url}/chromium/src/build/config.git";
+                rev    = "aca8b4d46bec59a930146fe6057ef297cb297bec";
+                sha256 = "mJzz8WrWdQ3FTjN8GmzrlfJliZmV56EoJ0PcDar9KA4=";
+              };
             };
-            buildInputs = [ pkgs.libepoxy ] ++ pkgs.lib.optionals pkgs.stdenv.isLinux [ pkgs.libGLU pkgs.xorg.libX11 pkgs.mesa ];
-            nativeBuildInputs = [ pkgs.cmake pkgs.meson pkgs.ninja pkgs.pkg-config pkgs.python3 ];
-            dontUseCmakeConfigure = true;
-            mesonFlags = [
-              "-D drm=disabled"
+            in pkgs.stdenv.mkDerivation {
+            name = "libangle";
+            vesion = "2023-04-07";
+            src = pkgs.fetchgit {
+              url = "https://chromium.googlesource.com/angle/angle";
+              rev = "23ec06204174174a3bb5bec3edad6df87bbd50b2";
+              sha256 = "sha256-Qa7fA6hxaTFrWptncp6ximWMKVlCXCd/ifxbBkihMB8=";
+            };
+            nativeBuildInputs = [
+              depot-tools.packages.aarch64-darwin.gclient
             ];
+            buildInputs = [
+              pkgs.meson
+              pkgs.gn
+              pkgs.ninja
+              pkgs.gcc
+            ];
+            postUnpack = ''
+              ${pkgs.lib.concatStringsSep "\n" (
+                  pkgs.lib.mapAttrsToList (n: v: ''
+                    mkdir -p $sourceRoot/${n}
+                    cp -r ${v}/* $sourceRoot/${n}
+                  '') deps)}
+                chmod u+w -R .
+              '';
+            configurePhase = ''
+            ${pkgs.tree}/bin/tree .
+            gn gen out/Release --args="is_component_build=false is_debug=false angle_assert_always_on=false angle_enable_cl=true angle_build_tests=false angle_enable_swiftshader=false use_android_unwinder_v2=false symbol_level=0" 
+            '';
+            buildPhase = ''
+              ls -al
+              ninja -C out/release libANGLE_static
+              ninja -C out/release libGLESv2_static
+              ninja -C out/release libEGL_static
+              ${pkgs.tree}/bin/tree .
+            '';
+            installPhase = ''
+              mkdir -p $out/{lib,include}
+              shopt -s globstar
+              cp -R build/release/arm64/* $out/lib/
+              cp -R include/* $our/include/
+            '';
           };
-          qemu_virgl = pkgs.qemu.override {
-            virglrenderer = virglrenderer;
-            virglSupport = true;
-            openGLSupport = false;
-            hostCpuOnly = true;
-          };
-          qcow2Image =
-            self.nixosConfigurations.wrkvm64.config.system.build.vm;
         };
         aarch64-linux = {
-          vmwareImage =
-            self.nixosConfigurations.wrkvm64.config.system.build.vmwareImage;
-          qcow2Image =
-            self.nixosConfigurations.wrkvm64.config.system.build.vm;
           demo =
             self.nixosConfigurations.demo.config.system.build.vm;
-        };
-        x86_64-linux = {
-          vmwareImage =
-            self.nixosConfigurations.wrkvm.config.system.build.vmwareImage;
         };
       };
 

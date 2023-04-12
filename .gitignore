@@ -7,6 +7,7 @@ result
 .vagrant
 # *.private.*
 s.nix
+*.qcow2
 
 prompt-history
 xmonad-x86_64-linux
