@@ -99,6 +99,7 @@ let
           Virtual-1 = {
             res = "--custom 3024x1964";
             scale = "2.6";
+            bg = "/mnt/wrk/bg/johnson-wang-iI4sR_nkkbc-unsplash.jpg fill";
           };
         };
         input = {
