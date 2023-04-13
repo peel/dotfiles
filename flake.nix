@@ -144,13 +144,22 @@
           };
         };
         aarch64-linux = {
-          demo =
-            self.nixosConfigurations.demo.config.system.build.vm;
+          demo = 
+            self.nixosConfigurations.demo.config.system.build.vm.overrideAttrs(_: old: {
+              # FIXME MASSIVE HACK
+              # requires akirakyle/homebrew-qemu-virgl
+              # that has virgl embedded
+              # can't build it easily yet
+              meta.mainProgram = "run-darwin-vm";
+              buildCommand = ''
+                ${old.buildCommand}
+                sed 's#/nix/store/\(.*\)-qemu-\(.*\)/bin#/opt/homebrew/bin#g;s#-device virtio-gpu-pci##g' \
+                  $out/bin/run-demo-vm > $out/bin/run-darwin-vm
+                chmod +x $out/bin/run-darwin-vm
+              '';
+            });
         };
       };
-
-      # FIXME shell so it supports all nixes
-      # devShell = import ./shell.nix {pkgs;};
     };
 }
 
