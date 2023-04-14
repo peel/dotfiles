@@ -1,18 +1,8 @@
-# RUNNING:
-#  nix build .#packages.aarch64-linux.demo
-#  edit result/bin/run-demo-vm
-#  move qemu-system-aarch64 to use this:
-#  https://github.com/akirakyle/homebrew-qemu-virgl
-#  and remove -device virtio-gpu-pci
-
 # TODO:
-#  (see homebrew build for details)
 #  - build libangle, libepoxy-libangle
 #  - build virgl-libepoxy-libangle
-#  - fix home-manager directories
-# Eventually should work with:
-#   nix run .#packages.aarch64-linux.demo
 
+#   nix run .#packages.aarch64-linux.demo
 
 { modulesPath, config, lib, pkgs, ... }:
 
@@ -67,8 +57,6 @@ in {
   users.mutableUsers = true;
   security.sudo.wheelNeedsPassword = false;
 
-  # match host gid/uid to share directories easily
-  # users.groups.staff.gid = 20;
   users.users = {
     "${username}"= {
       home = "/home/${username}";
@@ -122,18 +110,15 @@ in {
   ];
   virtualisation.cores = 8;
   virtualisation.memorySize = 12288;
-  virtualisation.resolution = {
-    x = 3456;
+  virtualisation.diskSize = 30*1024;
+  virtualisation.resolution = let notch = 38; in {
+    x = 3456-notch;
     y = 2234;
   };
-  virtualisation.rosetta.enable = false;
+  virtualisation.rosetta.enable = true;
   virtualisation.writableStore = true;
-  virtualisation.sharedDirectories = {
-    wrk = {
-      source = "/Users/peel/wrk"; # FIXME impure
-      target = "/mnt/wrk";
-    };
-  };
+  virtualisation.writableStoreUseTmpfs = false;
+
   # gui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   security.polkit.enable = true;
   services.greetd = {

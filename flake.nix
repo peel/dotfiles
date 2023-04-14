@@ -67,6 +67,12 @@
             {
               virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin;
               nixpkgs.pkgs = nixpkgs.legacyPackages.aarch64-linux.pkgs;
+              virtualisation.sharedDirectories = {
+                wrk = {
+                  source = "/Users/peel/wrk";
+                  target = "/home/peel/wrk";
+                };
+              };
             }
           ];
         };
