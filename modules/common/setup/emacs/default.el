@@ -271,6 +271,15 @@
   (defun peel/eglot-imports ()
     (interactive)
     (call-interactively #'eglot-code-action-organize-imports))
+  (add-to-list 'eglot-server-programs '((go-mode go-ts-mode) .
+    ("gopls" :initializationOptions
+      (:hints (:parameterNames t
+               :rangeVariableTypes t
+               :functionTypeParameters t
+               :assignVariableTypes t
+               :compositeLiteralFields t
+               :compositeLiteralTypes t
+               :constantValues t)))))
   :hook ((scala-mode . eglot-ensure)
          (js-mode . eglot-ensure)
          (typescript-mode . eglot-ensure)
@@ -427,6 +436,26 @@
   :bind ("C-C n n" . org-capture)
   :custom
   ;; FIXME
+  (defun peel/org-roam-capture ()
+    "Create a new frame and run `org-capture'."
+    (interactive)
+    (make-frame '((name . "org-capture")
+                  (top . 300)
+                  (left . 700)
+                  (width . 80)
+                  (height . 25)))
+    (defun peel/delete-if-capture-frame ()
+      (let (this-frame-name (substring-no-properties
+                             (cdr (assoc 'name (frame-parameters)))))
+        (message this-frame-name)
+        (if (string-equal this-frame-name "org-capture")
+            'delete-frame
+          nil)))
+    (select-frame-by-name "org-capture")
+    (delete-other-windows)
+    (advice-add 'org-roam-capture--finalize :after 'delete-frame)
+    (org-roam-capture))
+
   (setq org-capture-templates `(
     ("p" "Protocol" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
      "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
@@ -451,17 +480,17 @@
   :after org
   :hook (after-init-hook . org-roam-db-autosync-enable)
   :init
-  (defun peel/org-roam-capture ()
-    (interactive)
-    (org-roam-capture)
-    (defun peel/delete-if-capture-frame ()
-    (let (this-frame-name (substring-no-properties
-                      (cdr (assoc 'name (frame-parameters)))))
-      (message this-frame-name)
-      (if (string-equal this-frame-name "org-capture")
-          'delete-frame
-        nil)))
-    (advice-add 'org-roam-capture--finalize :after 'peel/delete-if-capture-frame))
+  ;; (defun peel/org-roam-capture ()
+  ;;   (interactive)
+  ;;   (org-roam-capture)
+  ;;   (defun peel/delete-if-capture-frame ()
+  ;;   (let (this-frame-name (substring-no-properties
+  ;;                     (cdr (assoc 'name (frame-parameters)))))
+  ;;     (message this-frame-name)
+  ;;     (if (string-equal this-frame-name "org-capture")
+  ;;         'delete-frame
+  ;;       nil)))
+  ;;   (advice-add 'org-roam-capture--finalize :after 'peel/delete-if-capture-frame))
 
   :custom
   (org-roam-autosync-enable t)
@@ -657,7 +686,7 @@
     "Load default font."
     (add-to-list 'initial-frame-alist '(font . "PragmataPro Liga"))
     (add-to-list 'default-frame-alist '(font . "PragmataPro Liga"))
-    (set-face-attribute 'default nil :height 220)
+    (set-face-attribute 'default nil :height 120)
     (setq-default line-spacing 9))
 
   (defun peel/load-ui ()
