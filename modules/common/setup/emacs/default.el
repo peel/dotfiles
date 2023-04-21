@@ -351,8 +351,9 @@
   :ensure t
   :mode ("\\.rs?\\'" . rust-mode)
   :after nix-sandbox
-  :config
-  (setq rustic-format-on-save t))
+  :custom
+  (rustic-format-on-save t)
+  (rustic-lsp-client 'eglot))
 
 
 ;; ....................................................................... scala
@@ -663,8 +664,16 @@
   :ensure nil
   :config
   (defvar dark-theme 'gotham)
-  (defvar light-theme 'apropospriate-light)
+  (defvar light-theme 'solo-jazz)
   (defvar current-theme dark-theme)
+
+  (use-package auto-dark
+    :ensure t
+    :custom
+    (auto-dark-dark-theme 'gotham)
+    (auto-dark-light-theme 'solo-jazz)
+    :config
+    (auto-dark-mode t))
 
   (use-package gotham-theme
     :ensure t
@@ -672,11 +681,13 @@
     (add-to-list 'custom-theme-load-path
                  (file-name-directory (locate-library "gotham-theme"))))
 
-  (use-package apropospriate-theme
+  (use-package solo-jazz-theme
     :ensure t
     :preface
     (add-to-list 'custom-theme-load-path
-                 (file-name-directory (locate-library "apropospriate-theme"))))
+                 (file-name-directory (locate-library "solo-jazz-theme")))
+    :config
+    (load-theme 'solo-jazz))
 
   (defun peel/load-theme ()
     (load-theme dark-theme t)
@@ -686,7 +697,7 @@
     "Load default font."
     (add-to-list 'initial-frame-alist '(font . "PragmataPro Liga"))
     (add-to-list 'default-frame-alist '(font . "PragmataPro Liga"))
-    (set-face-attribute 'default nil :height 120)
+    (set-face-attribute 'default nil :height 220)
     (setq-default line-spacing 9))
 
   (defun peel/load-ui ()
@@ -769,6 +780,7 @@
       `(" "
         ,(concat (s-trim (substring-no-properties vc-mode 5)) )
         " ")))
+
 
   (setq-default
    mode-line-format
