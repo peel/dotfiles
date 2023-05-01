@@ -24,12 +24,12 @@ let
  '';
   gitConfig = {
     user = {
-      email = "plimanowski@pm.me";
+      email = "peel@users.noreply.github.com";
       name = "Piotr Limanowski";
     };
     github.user = "peel";
     ghi.token = "!security find-internet-password -a peel -s github.com -l 'ghi token' -w";
-    use.signingkey = "plimanowski@pm.me";
+    use.signingkey = "peel@users.noreply.github.com";
     commit.gpgsign = false;
     color.ui = true;
     format.pretty = "format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset";
