@@ -13,7 +13,7 @@ in {
       }
     ];
     casks = [
-      "1password-beta"
+      "1password"
       "alfred"
       "dash"
       "docker"

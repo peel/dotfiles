@@ -10,6 +10,10 @@ let
       enableBashIntegration = true;
       nix-direnv.enable = true;
     };
+    home.packages = [
+      pkgs.awscli
+      pkgs._1password
+    ];
   };
   nixos = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
     home.sessionVariables = {
@@ -18,7 +22,7 @@ let
       SDL_VIDEODRIVER = "wayland";
       XDG_SESSION_TYPE = "wayland";
     };
-    home.packages = [ pkgs.wofi ];
+    home.packages = [ pkgs.wofi pkgs._1password-gui ];
     # FIXME
     # (23.05) migrate to services.clipman.enable = true;
     systemd.user.services.clipman = {
