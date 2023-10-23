@@ -8,7 +8,7 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:nix-community/home-manager/release-22.11";
+    home-manager.url = "github:nix-community/home-manager/release-23.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     depot-tools.url = "github:cir0x/depot-tools-nix-flake";
   };
@@ -39,7 +39,7 @@
           in systemFn {
             inherit system;
             modules = [
-              { networking.hostName = hostname; }
+              # { networking.hostName = hostname; }
               (./machines/${hostname}/configuration.nix)
               homeManagerModules {
                home-manager.useGlobalPkgs = true;

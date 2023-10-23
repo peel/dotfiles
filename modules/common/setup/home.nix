@@ -11,6 +11,7 @@ let
       nix-direnv.enable = true;
     };
     home.packages = [
+      pkgs.mpv
       pkgs.awscli
       pkgs._1password
     ];
