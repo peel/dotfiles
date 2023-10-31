@@ -1,11 +1,55 @@
 { config, lib, pkgs, ... }:
 
 let
-  dbUser = "hassio";
-  dbPassword = "hassio";
-  dbName = "hass";
   secrets = import ./secrets.nix;
 in {
+  services.navidrome = {
+    enable = true;
+    settings = {
+      MusicFolder = "/mnt/music";
+      ScanSchedule = "@every 20m";
+      Address = "0.0.0.0";
+      Port = 4533;
+    };
+  };
+  services.jellyfin = {
+    enable = true;
+    user = "root";
+    group = "root";	
+    openFirewall = true;
+  };
+  services.zigbee2mqtt = {
+    enable = true;
+    settings = {
+      homeassistant = true;
+      frontend = {
+        port = 8124;
+      };
+      permit_join = false;
+      mqtt = {
+        base_topic = "homeassistant/z2m";
+        server = "mqtt://127.0.0.1";
+        user = secrets.mqtt.username;
+        password = secrets.mqtt.password;
+      };
+      serial = {
+        port = "/dev/ttyACM0";
+      };
+    };
+  };
+  services.nats = {
+    enable = true;
+    jetstream = true;
+    settings = {
+      mqtt = {
+        port = 1883;
+        authorization = {
+          username = secrets.mqtt.username;
+          password = secrets.mqtt.password;
+        };
+      };
+    };
+  };
   systemd.timers.hassio-backup = {
     wantedBy = [ "timers.target" ];
     timerConfig.OnCalendar = "*-*-* 4:00:00"; # everyday at 4AM
@@ -22,18 +66,37 @@ in {
       ${pkgs.coreutils}/bin/mv hassio-backup.tar /mnt/download
     '';
   };
-
   virtualisation.oci-containers.containers = {
+    # expose navidrome to sonos
+    bonob = {
+      autoStart = true;
+      image = "simojenki/bonob";
+      environment = {
+        BNB_PORT = "4534";
+        BNB_SONOS_SERVICE_NAME = "nuke";
+        BNB_SONOS_SEED_HOST = "192.168.1.76";
+        BNB_SONOS_AUTO_REGISTER = "true";
+        BNB_SONOS_DEVICE_DISCOVERY = "true";
+      };
+      ports = [
+        "4534:4534"
+      ];
+      extraOptions = [
+       "--network=host"
+      ];
+    };
     home-assistant = {
       autoStart = true;
-      image = "homeassistant/home-assistant:2022.9.7";
+      image = "homeassistant/home-assistant:2023.10.3";
       environment = {
         TZ="Europe/Warsaw";
       };
       volumes = [
         "/home/peel/wrk/hassio:/config"
         "/etc/localtime:/etc/localtime"
-        "/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2256895-if00:/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2256895-if00"
+        "/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2256895-if00:/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2256895-if00" # zha
+        "/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2686951-if00:/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2686951-if00" # zigbee2mqtt
+ 	      "/run/dbus:/run/dbus:ro"
       ];
       ports = [
         "8123:8123"
@@ -42,29 +105,45 @@ in {
        "--privileged"
        "--network=host"
        "--device=/dev/ttyACM0:/dev/ttyACM0"
+       "--device=/dev/ttyACM1:/dev/ttyACM1"
       ];
     };
-    eufy-security = {
+    # eufy-security = {
+    #   autoStart = true;
+    #   image = "bropat/eufy-security-ws:1.6.4";
+    #   environment = {
+    #     USERNAME = secrets.eufy.username;
+    #     PASSWORD = secrets.eufy.password;
+    #     COUNTRY = secrets.eufy.country;
+    #   };
+    #   ports = [
+    #     "3001:3000"
+    #   ];
+    # };
+    # rtsp-simple-server = {
+    #   autoStart = true;
+    #   image = "aler9/rtsp-simple-server";
+    #   environment = {
+    #     RTSP_PROTOCOLS = "tcp";
+    #   };
+    #   ports = [
+    #     "8554:8554"
+    #     "1935:1935"
+    #   ];
+    # };
+    influxdb = {
       autoStart = true;
-      image = "bropat/eufy-security-ws:0.9.4";
+      image = "influxdb:2.4-alpine";
       environment = {
-        USERNAME = secrets.eufy.username;
-        PASSWORD = secrets.eufy.password;
-        COUNTRY = secrets.eufy.country;
+        DOCKER_INFLUXDB_INIT_USERNAME=secrets.influxdb.username;
+        DOCKER_INFLUXDB_INIT_PASSWORD=secrets.influxdb.username;
+        DOCKER_INFLUXDB_INIT_ORG=secrets.influxdb.org;
+        DOCKER_INFLUXDB_INIT_BUCKET=secrets.influxdb.bucket;
       };
-      ports = [
-        "3001:3000"
-      ];
-    };
-    rtsp-simple-server = {
-      autoStart = true;
-      image = "aler9/rtsp-simple-server";
-      environment = {
-        RTSP_PROTOCOLS = "tcp";
-      };
-      ports = [
-        "8554:8554"
-        "1935:1935"
+      ports = [ "8086:8086" ];
+      volumes = [
+        "/mnt/download/influx/influxdb2:/var/lib/influxdb2"
+        "/mnt/download/influx/config:/etc/influxdb2"
       ];
     };
     # clickhouse = {
@@ -90,23 +169,24 @@ in {
     #     "/home/peel/wrk/hassio/clickhouse-server/initdb.d:/docker-entrypoint-initdb.d"
     #   ];
     # };
-  #   esphome = {
-  #     autoStart = true;
-  #     image = "esphome/esphome:2021.12.0";
-  #     environment = {
-  #       TZ="Europe/Warsaw";
-  #     };
-  #     ports = [
-  #       "6052:6052"
-	#       "6123:6123"
-  #     ];
-  #     volumes = [
-  #       "/home/peel/wrk/esphome:/config"
-  #     ];
-  #     extraOptions = [
-  #      "--privileged"
-  #      "--network=host"
-  #     ];
-  #   };
+    esphome = {
+      autoStart = true;
+      image = "esphome/esphome:2022.11.1";
+      environment = {
+        TZ="Europe/Warsaw";
+      };
+      ports = [
+        "6052:6052"
+	      "6123:6123"
+      ];
+      volumes = [
+        "/home/peel/wrk/esphome:/config"
+        "/etc/localtime:/etc/localtime:ro"
+      ];
+      extraOptions = [
+       "--privileged"
+       "--network=host"
+      ];
+    };
   };
 }

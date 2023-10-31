@@ -2,6 +2,7 @@
 
 let
   common = {
+    home.stateVersion = "22.11";
     programs.direnv = {
       enable = true;
       # does not work, we're overriding through system-module
@@ -65,19 +66,19 @@ let
         polybar top &
       '';
     };
-    xsession = {
-      enable = true;
-      windowManager.xmonad = {
-        enable = true;
-        enableContribAndExtras = true;
-        extraPackages = hp: [
-          hp.dbus
-          hp.monad-logger
-          hp.xmonad-contrib
-        ];
-        config = ./config.hs;
-      };
-    };
+    # xsession = {
+    #   enable = true;
+    #   windowManager.xmonad = {
+    #     enable = true;
+    #     enableContribAndExtras = true;
+    #     extraPackages = hp: [
+    #       hp.dbus
+    #       hp.monad-logger
+    #       hp.xmonad-contrib
+    #     ];
+    #     config = ./config.hs;
+    #   };
+    # };
   };
   darwin = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {};
 in
