@@ -206,6 +206,13 @@ in {
     dnsProvider = "route53";
     credentialsFile = ./r53.conf;
   };
+  security.acme.certs."k.fff666.org" = {
+    group = "nginx";
+    email = "digest_yowl.0o@icloud.com";
+    dnsResolver = "1.1.1.1:53";
+    dnsProvider = "route53";
+    credentialsFile = ./r53.conf;
+  };
   security.acme.certs."m.fff666.org" = {
     group = "nginx";
     email = "digest_yowl.0o@icloud.com";
@@ -245,6 +252,15 @@ in {
         forceSSL = true;
         locations."/" = {
           proxyPass = "http://127.0.0.1:8083";
+          proxyWebsockets = true;
+        };
+      };
+      "k.${orgdomain}" = {
+        useACMEHost = "k.fff666.org";
+        http2 = false;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:65535";
           proxyWebsockets = true;
         };
       };
@@ -290,6 +306,7 @@ in {
     options = {
       calibreLibrary = "/mnt/books/calibre";
       enableBookConversion = true;
+      enableBookUploading = true;
     };
     user = "root";
   };

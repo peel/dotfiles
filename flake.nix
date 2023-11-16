@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/release-22.11";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/release-22.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
@@ -54,10 +54,19 @@
 
       # FIXME double naming
       nixosConfigurations = {
-        nuke = mkSystem {
+        nuke = mkSystem rec {
           hostname = "nuke";
           system = "x86_64-linux";
-          extraModules = [ ./modules/nixos/setup ./modules/common/setup/hassio.nix ];
+          extraModules = [
+            ./modules/nixos/setup
+            ./modules/common/setup/hassio.nix
+            { peel.hassio = {
+                enable = true;
+                zigbee2mqtt = nixpkgs-unstable.legacyPackages.${system}.zigbee2mqtt;
+                home-assistant = "2023.11.2";
+              };
+            }
+          ];
         };
         wrkvm = mkSystem {
           hostname = "wrkvm";
