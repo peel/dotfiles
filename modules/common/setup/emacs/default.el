@@ -70,9 +70,7 @@
   :ensure t
   :custom
   (completion-styles '(orderless))
-  (completion-category-overrides
-   '((file (styles basic-remote
-                   orderless)))))
+  (completion-category-overrides nil))
 
 (use-package corfu
   :ensure t
@@ -286,6 +284,9 @@
          (haskell-mode . eglot-ensure)
          (rust-mode . eglot-ensure)
          (go-mode . eglot-ensure)))
+(use-package eglot-booster
+	:after eglot
+	:config	(eglot-booster-mode))
 
 ;; ..................................................................... Haskell
 (use-package haskell-mode
@@ -429,6 +430,10 @@
      (haskell    . t)
      (dot        . t)
      (python     . t))))
+
+(use-package org-transclusion
+  :ensure t
+  :after org)
 
 (use-package ob-restclient
   :ensure t)
@@ -594,11 +599,6 @@
   :custom (xwidget-webkit-enable-plugins nil))
 
 ;; terminal ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-(use-package chatgpt-shell
-  :ensure nil
-  :custom
-  (chatgpt-shell-openai-key (lambda () (auth-source-pick-first-password :host "api.openai.com"))))
-
 (use-package vterm
   :ensure t
   :hook (vterm-mode . (lambda ()

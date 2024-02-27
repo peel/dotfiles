@@ -6,7 +6,7 @@ in {
   environment.variables.EDITOR = "/run/current-system/sw/bin/emacsclient -tc";
   environment.variables.ALTERNATE_EDITOR = "/run/current-system/sw/bin/emacs";
 
-  environment.systemPackages = [ pkgs.binutils emacs ];# pkgs.nodePackages.mermaid-cli ];
+  environment.systemPackages = [ pkgs.binutils emacs pkgs.emacs-lsp-booster];# pkgs.nodePackages.mermaid-cli ];
 
   services.emacs = {
     enable = true;

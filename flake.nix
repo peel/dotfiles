@@ -11,9 +11,10 @@
     home-manager.url = "github:nix-community/home-manager/release-23.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     depot-tools.url = "github:cir0x/depot-tools-nix-flake";
+    emacs-lsp-booster.url = "github:slotThe/emacs-lsp-booster-flake";
   };
 
-  outputs = { self, darwin, nixpkgs, nixpkgs-unstable, emacs-overlay, home-manager, depot-tools, ... }@inputs:
+  outputs = { self, darwin, nixpkgs, nixpkgs-unstable, emacs-overlay, home-manager, depot-tools, emacs-lsp-booster, ... }@inputs:
     let
       # FIXME nixpkgs.lib.extend
       myLib = (import ./lib {inherit (nixpkgs) lib targetSystem;});
@@ -31,7 +32,7 @@
           let
             linuxOr = a: b: if (hasInfix "linux" system) then a else b;
             systemFn = linuxOr nixosSystem darwinSystem;
-            overlayModules = [{ nixpkgs.overlays = [ emacs-overlay.overlay ] ++ (attrValues self.overlays); }];
+            overlayModules = [{ nixpkgs.overlays = [ emacs-overlay.overlay emacs-lsp-booster.overlays.default ] ++ (attrValues self.overlays); }];
             systemModules = traceValSeqN 3 (attrValues (linuxOr self.nixosModules self.darwinModules));
             # FIXME load with systemModules
             configModules = traceValSeqN 2 (linuxOr [ ./modules/nixos/setup ] [ ./modules/darwin/setup ]);

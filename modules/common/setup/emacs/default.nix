@@ -17,15 +17,15 @@ pkgs.emacsWithPackagesFromUsePackage {
     mkdir -p $out/share/emacs/site-lisp
     cp -r ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
    '');
-   chatgpt-shell = elisp (pkgs.fetchFromGitHub {
-     owner = "xenodium";
-     repo = "chatgpt-shell";
-     rev = "b3a82b23d73263a00aef219f8055dcbe4fcecaec";
-     sha256 = "sha256-RufzE5SUU1h+c4zoOTcaI/EFYw6favPF3nLgh0hEWiM=";
-   }) "chatgpt-shell";
+   eglot-booster = elisp (pkgs.fetchFromGitHub {
+     owner = "jdtsmith";
+     repo = "eglot-booster";
+     rev = "e79dea640356eb4a8ed9df3808fe73c7c6db4cc4";
+     sha256 = "sha256-ybNqMHCGjzT2+4OfywS7hNw551kIzwI3QqC8tU/GsQI=";
+   }) "eglot-booster";
  };
  extraEmacsPackages = epkgs: with epkgs; [
-    my-config
-    chatgpt-shell
+   eglot-booster
+   my-config
   ];
 }
