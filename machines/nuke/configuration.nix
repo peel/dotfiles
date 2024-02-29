@@ -22,7 +22,7 @@ in {
   boot.loader.efi.canTouchEfiVariables = true;
   #boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
-  hardware.bluetooth.package = pkgs.bluezFull;
+  hardware.bluetooth.package = pkgs.bluez;
   hardware.bluetooth.disabledPlugins = ["sap"];
   # hardware.bluetooth.settings = {
   #   General.ControllerMode = "dual";
@@ -118,28 +118,46 @@ in {
     publish.domain = true;
   };
 
+  services.apcupsd = {
+    enable = true;
+    configText = ''
+      UPSTYPE usb
+      BATTERYLEVEL 20
+      NETSERVER on
+      NISIP 0.0.0.0
+    '';
+    hooks = {
+      doshutdown = let
+        shutdown = pkgs.writeShellScriptBin "ups-shutdown" ''
+          echo 'Staring Shutdown Scirpt, initiated by NUT client'
+          ssh -i /home/peel/.ssh/id_rsa root@192.168.50.1 'ubnt-systool' & sleep 2 && /sbin/shutdown -h +0
+        ''; in
+        "${shutdown} >> /var/log/ups/ups.log";
+    };
+  };
+
   fileSystems."/mnt/music" = {
-    device = "192.168.1.6:/volume1/music";
+    device = "192.168.1.60:/volume1/music";
     fsType = "nfs";
     options = [ "nfsvers=4.1" ];
   };
   fileSystems."/mnt/video" = {
-    device = "192.168.1.6:/volume1/video";
+    device = "192.168.1.60:/volume1/video";
     fsType = "nfs";
     options = [ "nfsvers=4.1" ];
   };
   fileSystems."/mnt/download" = {
-   device = "192.168.1.6:/volume1/download";
+   device = "192.168.1.60:/volume1/download";
    fsType = "nfs";
    options = [ "nfsvers=4.1" ];
   };
   fileSystems."/mnt/books" = {
-   device = "192.168.1.6:/volume1/books";
+   device = "192.168.1.60:/volume1/books";
    fsType = "nfs";
    options = [ "nfsvers=4.1" ];
   };
   fileSystems."/mnt/audiobooks" = {
-   device = "192.168.1.6:/volume1/audiobooks";
+   device = "192.168.1.60:/volume1/audiobooks";
    fsType = "nfs";
    options = [ "nfsvers=4.1" ];
   };
@@ -155,7 +173,10 @@ in {
       let
         navidrome = [ 4533 4534 3000 ];
         hass = [ 8123 8124 ];
-      in [ 22 53 80 443 5001 8080 8083 21063 21064 21065 21066 32400 1883 ] ++ hass ++ navidrome;
+        natsHttp = [ 8222 ];
+        esphome = [ 6052 ];
+        go2rtc = [ 1984 8555 ];
+      in [ 22 53 80 443 5001 8080 8083 21063 21064 21065 21066 32400 1883 ] ++ hass ++ navidrome ++ natsHttp ++ esphome ++ go2rtc;
     allowedUDPPorts = 
       let govee = [ 4001 4002];
       in [ 53 5353 config.services.tailscale.port ] ++ govee;
@@ -185,48 +206,55 @@ in {
   };
 
   security.acme.acceptTerms = true;
-  security.acme.certs."px.fff666.org" = {
-    group = "nginx";
-    email = "digest_yowl.0o@icloud.com";
-    dnsResolver = "1.1.1.1:53";
-    dnsProvider = "route53";
-    credentialsFile = ./r53.conf;
-  };
-  security.acme.certs."h.fff666.org" = {
-    group = "nginx";
-    email = "digest_yowl.0o@icloud.com";
-    dnsResolver = "1.1.1.1:53";
-    dnsProvider = "route53";
-    credentialsFile = ./r53.conf;
-  };
-  security.acme.certs."b.fff666.org" = {
-    group = "nginx";
-    email = "digest_yowl.0o@icloud.com";
-    dnsResolver = "1.1.1.1:53";
-    dnsProvider = "route53";
-    credentialsFile = ./r53.conf;
-  };
-  security.acme.certs."k.fff666.org" = {
-    group = "nginx";
-    email = "digest_yowl.0o@icloud.com";
-    dnsResolver = "1.1.1.1:53";
-    dnsProvider = "route53";
-    credentialsFile = ./r53.conf;
-  };
-  security.acme.certs."m.fff666.org" = {
-    group = "nginx";
-    email = "digest_yowl.0o@icloud.com";
-    dnsResolver = "1.1.1.1:53";
-    dnsProvider = "route53";
-    credentialsFile = ./r53.conf;
-  };
-  security.acme.certs."d.fff666.org" = {
-    group = "nginx";
-    email = "digest_yowl.0o@icloud.com";
-    dnsResolver = "1.1.1.1:53";
-    dnsProvider = "route53";
-    credentialsFile = ./r53.conf;
-  };
+  # security.acme.certs."px.fff666.org" = {
+  #   group = "nginx";
+  #   email = "digest_yowl.0o@icloud.com";
+  #   dnsResolver = "1.1.1.1:53";
+  #   dnsProvider = "route53";
+  #   credentialsFile = ./r53.conf;
+  # };
+  # security.acme.certs."e.fff666.org" = {
+  #   group = "nginx";
+  #   email = "digest_yowl.0o@icloud.com";
+  #   dnsResolver = "1.1.1.1:53";
+  #   dnsProvider = "route53";
+  #   credentialsFile = ./r53.conf;
+  # };
+  # security.acme.certs."h.fff666.org" = {
+  #   group = "nginx";
+  #   email = "digest_yowl.0o@icloud.com";
+  #   dnsResolver = "1.1.1.1:53";
+  #   dnsProvider = "route53";
+  #   credentialsFile = ./r53.conf;
+  # };
+  # security.acme.certs."b.fff666.org" = {
+  #   group = "nginx";
+  #   email = "digest_yowl.0o@icloud.com";
+  #   dnsResolver = "1.1.1.1:53";
+  #   dnsProvider = "route53";
+  #   credentialsFile = ./r53.conf;
+  # };
+  # security.acme.certs."k.fff666.org" = {
+  #   group = "nginx";
+  #   email = "digest_yowl.0o@icloud.com";
+  #   dnsResolver = "1.1.1.1:53";
+  #   dnsProvider = "route53";
+  #   credentialsFile = ./r53.conf;
+  # };
+  # security.acme.certs."m.fff666.org" = {
+  #   group = "nginx";
+  #   email = "digest_yowl.0o@icloud.com";
+  #   dnsResolver = "1.1.1.1:53";
+  #   dnsProvider = "route53";
+  #   credentialsFile = ./r53.conf;
+  # };
+  # security.acme.certs."d.fff666.org" = {
+  #   group = "nginx";
+  #   email = "digest_yowl.0o@icloud.com";
+  #   dnsResolver = "1.1.1.1:53";
+  #   dnsProvider = "route53";
+  #   credentialsFile = ./r53.conf;
+  # };
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;
@@ -237,79 +265,88 @@ in {
     statusPage = true;
 
     virtualHosts = {
-      "px.${orgdomain}" = {
-        useACMEHost = "px.fff666.org";
-        http2 = false;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:32400";
-          proxyWebsockets = true;
-        };
-      };
-      "b.${orgdomain}" = {
-        useACMEHost = "b.fff666.org";
-        http2 = false;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:8083";
-          proxyWebsockets = true;
-        };
-      };
-      "k.${orgdomain}" = {
-        useACMEHost = "k.fff666.org";
-        http2 = false;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:65535";
-          proxyWebsockets = true;
-        };
-      };
-      "h.${orgdomain}" = {
-        useACMEHost = "h.fff666.org";
-        http2 = false;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:8123";
-          proxyWebsockets = true;
-        };
-      };
-      "m.${orgdomain}" = {
-        useACMEHost = "m.fff666.org";
-        http2 = false;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:4533";
-          proxyWebsockets = true;
-        };
-      };
-      "d.${orgdomain}" = {
-        useACMEHost = "d.fff666.org";
-        http2 = false;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "https://192.168.1.6:5001";
-          proxyWebsockets = true;
-        };
-      };
+      # "px.${orgdomain}" = {
+      #   useACMEHost = "px.fff666.org";
+      #   http2 = false;
+      #   forceSSL = true;
+      #   locations."/" = {
+      #     proxyPass = "http://127.0.0.1:32400";
+      #     proxyWebsockets = true;
+      #   };
+      # };
+      # "b.${orgdomain}" = {
+      #   useACMEHost = "b.fff666.org";
+      #   http2 = false;
+      #   forceSSL = true;
+      #   locations."/" = {
+      #     proxyPass = "http://127.0.0.1:8083";
+      #     proxyWebsockets = true;
+      #   };
+      # };
+      # "e.${orgdomain}" = {
+      #   useACMEHost = "e.fff666.org";
+      #   http2 = false;
+      #   forceSSL = true;
+      #   locations."/" = {
+      #     proxyPass = "http://127.0.0.1:6052";
+      #     proxyWebsockets = true;
+      #   };
+      # };
+      # "k.${orgdomain}" = {
+      #   useACMEHost = "k.fff666.org";
+      #   http2 = false;
+      #   forceSSL = true;
+      #   locations."/" = {
+      #     proxyPass = "http://127.0.0.1:65535";
+      #     proxyWebsockets = true;
+      #   };
+      # };
+      # "h.${orgdomain}" = {
+      #   useACMEHost = "h.fff666.org";
+      #   http2 = false;
+      #   forceSSL = true;
+      #   locations."/" = {
+      #     proxyPass = "http://127.0.0.1:8123";
+      #     proxyWebsockets = true;
+      #   };
+      # };
+      # "m.${orgdomain}" = {
+      #   useACMEHost = "m.fff666.org";
+      #   http2 = false;
+      #   forceSSL = true;
+      #   locations."/" = {
+      #     proxyPass = "http://127.0.0.1:4533";
+      #     proxyWebsockets = true;
+      #   };
+      # };
+      # "d.${orgdomain}" = {
+      #   useACMEHost = "d.fff666.org";
+      #   http2 = false;
+      #   forceSSL = true;
+      #   locations."/" = {
+      #     proxyPass = "https://192.168.1.60:5001";
+      #     proxyWebsockets = true;
+      #   };
+      # };
     };
   };
 
-  services.calibre-server = {
-    enable = true;
-    libraries = [ "/mnt/books/calibre" ];
-    user = "root";
-  };
-  services.calibre-web = {
-    enable = true;
-    listen.ip = "0.0.0.0";
-    openFirewall = true;
-    options = {
-      calibreLibrary = "/mnt/books/calibre";
-      enableBookConversion = true;
-      enableBookUploading = true;
-    };
-    user = "root";
-  };
+  # services.calibre-server = {
+  #   enable = true;
+  #   libraries = [ "/mnt/books/calibre" ];
+  #   user = "root";
+  # };
+  # services.calibre-web = {
+  #   enable = true;
+  #   listen.ip = "0.0.0.0";
+  #   openFirewall = true;
+  #   options = {
+  #     calibreLibrary = "/mnt/books/calibre";
+  #     enableBookConversion = true;
+  #     enableBookUploading = true;
+  #   };
+  #   user = "root";
+  # };
 
   services.adguardhome = {
     enable = false;

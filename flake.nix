@@ -2,13 +2,13 @@
   description = "peel's env";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/release-22.11";
+    nixpkgs.url = "github:nixos/nixpkgs/release-23.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:nix-community/home-manager/release-22.11";
+    home-manager.url = "github:nix-community/home-manager/release-23.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
@@ -37,6 +37,7 @@
             homeManagerModules = linuxOr home-manager.nixosModules.home-manager home-manager.darwinModules.home-manager;
           in systemFn {
             inherit system;
+            specialArgs = { inherit system inputs; };
             modules = [
               { networking.hostName = hostname; }
               (./machines/${hostname}/configuration.nix)
@@ -63,7 +64,7 @@
             { peel.hassio = {
                 enable = true;
                 zigbee2mqtt = nixpkgs-unstable.legacyPackages.${system}.zigbee2mqtt;
-                home-assistant = "2023.11.2";
+                home-assistant = "2024.2.1";
               };
             }
           ];

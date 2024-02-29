@@ -10,8 +10,11 @@ in {
       default = pkgs.zigbee2mqtt;
     };
     home-assistant = lib.mkOption {
-      default = "2023.11.2";
+      default = "2024.2.1";
     };
+    # plex = lib.mkOption {
+    #   default = pkgs.plex;
+    # };
   };
   config = {
     services.navidrome = {
@@ -23,6 +26,40 @@ in {
         Port = 4533;
       };
     };
+
+    systemd.services.esphome.serviceConfig.ProcSubset = lib.mkForce "all"; # fixed in 23.11
+    services.esphome = {
+      enable = true;
+      allowedDevices = [
+        "/dev/serial/by-id/usb-Espressif_USB_JTAG_serial_debug_unit_34:B4:72:87:21:54-if00"
+      ];
+      address = "0.0.0.0";
+      openFirewall = true;
+    };
+
+    services.go2rtc = {
+      enable = true;
+      settings = {
+        streams = secrets.streams;
+        rtsp.listen = "0.0.0.0:8555";
+      };
+    };
+    # services.plex = {
+    #   enable = true;
+    #   package = cfg.plex;
+    #   openFirewall = true;
+    #   extraPlugins = [
+    #     (builtins.path {
+    #       name = "Audnexus.bundle";
+    #       path = pkgs.fetchFromGitHub {
+    #         owner = "laxamentumtech";
+    #         repo = "audnexus";
+    #         rev = "v1.8.0";
+    #         sha256 = "sha256-00000000000000000000000000000000000000000000";
+    #       };
+    #     })
+    #   ];
+    # };
     services.jellyfin = {
       enable = true;
       user = "root";
@@ -53,6 +90,7 @@ in {
       enable = true;
       jetstream = true;
       settings = {
+        http_port = 8222;
         mqtt = {
           port = 1883;
           authorization = {
@@ -79,6 +117,30 @@ in {
     '';
     };
     virtualisation.oci-containers.containers = {
+      # expose apcupsd to mqtt
+      apcupsd2mqtt = {
+        autoStart = true;
+        image = "ghcr.io/joeyeamigh/apcupsd-mqtt-exporter:v0.2.3";
+        environment = {
+          APCUPSD_HOST = "172.17.0.1";                     # host running apcupsd
+          APCUPSD_PORT = "3551";                          # port apcupsd is listening on
+          APCUPSD_STRIP_UNITS = "true";                   # strip units from apcupsd values
+          APCUPSD_POLL_INTERVAL = "10";                   # seconds between polling apcupsd
+          APCUPSD_POLL_TIMEOUT = "5";                     # seconds between polling apcupsd
+          MQTT_HOST = "172.17.0.1";                        # host running MQTT broker
+          MQTT_PORT = "1883";                             # port MQTT broker is listening on
+          MQTT_USERNAME = secrets.mqtt.username;          # MQTT username (optional)
+          MQTT_PASSWORD = secrets.mqtt.password;          # MQTT password (optional)
+          MQTT_CLIENT_ID = "upcupsd";                     # MQTT client ID
+          MQTT_TOPIC = "homeassistant/sensor/ups";        # MQTT topic to publish to
+          MQTT_SUFFIX = "status";                         # MQTT topic suffix (optional)
+          HOME_ASSISTANT_MODE = "true";                   # publish MQTT messages in Home Assistant-compatible JSON
+          HOME_ASSISTANT_UUID_PREFIX = "apcupsd_";        # prefix for Home Assistant UUIDs
+        };
+        extraOptions = [
+          "--network=host"
+        ];
+      };
       # expose navidrome to sonos
       bonob = {
         autoStart = true;
@@ -116,6 +178,8 @@ in {
         extraOptions = [
           "--privileged"
           "--network=host"
+          "--device=/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2256895-if00"
+          "--device=/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2686951-if00"
           "--device=/dev/ttyACM0:/dev/ttyACM0"
           "--device=/dev/ttyACM1:/dev/ttyACM1"
         ];
@@ -156,25 +220,6 @@ in {
         volumes = [
           "/mnt/download/influx/influxdb2:/var/lib/influxdb2"
           "/mnt/download/influx/config:/etc/influxdb2"
-        ];
-      };
-      esphome = {
-        autoStart = true;
-        image = "esphome/esphome:2022.11.1";
-        environment = {
-          TZ="Europe/Warsaw";
-        };
-        ports = [
-          "6052:6052"
-	        "6123:6123"
-        ];
-        volumes = [
-          "/home/peel/wrk/esphome:/config"
-          "/etc/localtime:/etc/localtime:ro"
-        ];
-        extraOptions = [
-          "--privileged"
-          "--network=host"
         ];
       };
     };
