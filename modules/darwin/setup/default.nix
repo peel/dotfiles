@@ -15,5 +15,9 @@
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
   programs.nix-index.enable = true;
+  nix.linux-builder = {
+    enable = true;
+    systems = [ "aarch64-linux" ];
+  };
   nixpkgs.config.allowBroken = false;
 }

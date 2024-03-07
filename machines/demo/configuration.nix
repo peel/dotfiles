@@ -38,7 +38,7 @@ in {
   boot.loader.efi.canTouchEfiVariables = true;
   boot.growPartition = true;
   boot.loader.grub.device = pkgs.lib.mkDefault "/dev/vda";
-  hardware.video.hidpi.enable = true;
+  # hardware.video.hidpi.enable = true;
   hardware.opengl = {
     enable = true;
     driSupport = true;

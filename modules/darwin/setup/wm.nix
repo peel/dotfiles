@@ -40,10 +40,11 @@ in {
     yabai -m config right_padding                 0
     yabai -m config window_gap                    0
 
-    yabai -m rule --add app="emacs" title!="(^$|${captureTitle})" manage="on"
+
+    yabai -m rule --add app="emacs" role="AXTextField" subrole="AXStandardWindow" manage="on"
     # grid="<rows>:<cols>:<start-x>:<start-y>:<width>:<height>"
-    yabai -m rule --add app="emacs" title="^${captureTitle}$" manage="off" sticky="on" grid="1:2:1:1:4:4"
-    yabai -m rule --add app="Synology Surveillance Station Client" sticky="on" grid="1:4:3:0:1:1"
+    # yabai -m rule --add app="emacs" role="AXTextField" subrole="AXStandardWindow" title="^${captureTitle}$" manage="off" sticky="on" grid="1:2:1:1:4:4"
+    yabai -m rule --add app="Synology Surveillance Station Client" sticky="on" grid="4:4:3:0:1:1"
     yabai -m rule --add app="Dash"                manage="off"
     yabai -m rule --add app="1Password"           manage="off"
     yabai -m rule --add app="System Preferences"  manage="off"
