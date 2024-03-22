@@ -64,7 +64,12 @@
             { peel.hassio = {
                 enable = true;
                 zigbee2mqtt = nixpkgs-unstable.legacyPackages.${system}.zigbee2mqtt;
-                home-assistant = "2024.2.1";
+                home-assistant = "2024.3.0";
+                plex = (import nixpkgs-unstable { #FIXME
+                  inherit system;
+                  config.allowUnfree = true;
+                }).plex;
+                actual.enable = true;
               };
             }
           ];

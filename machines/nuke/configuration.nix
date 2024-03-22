@@ -137,27 +137,27 @@ in {
   };
 
   fileSystems."/mnt/music" = {
-    device = "192.168.1.60:/volume1/music";
+    device = "192.168.1.6:/volume1/music";
     fsType = "nfs";
     options = [ "nfsvers=4.1" ];
   };
   fileSystems."/mnt/video" = {
-    device = "192.168.1.60:/volume1/video";
+    device = "192.168.1.6:/volume1/video";
     fsType = "nfs";
     options = [ "nfsvers=4.1" ];
   };
   fileSystems."/mnt/download" = {
-   device = "192.168.1.60:/volume1/download";
+   device = "192.168.1.6:/volume1/download";
    fsType = "nfs";
    options = [ "nfsvers=4.1" ];
   };
   fileSystems."/mnt/books" = {
-   device = "192.168.1.60:/volume1/books";
+   device = "192.168.1.6:/volume1/books";
    fsType = "nfs";
    options = [ "nfsvers=4.1" ];
   };
   fileSystems."/mnt/audiobooks" = {
-   device = "192.168.1.60:/volume1/audiobooks";
+   device = "192.168.1.6:/volume1/audiobooks";
    fsType = "nfs";
    options = [ "nfsvers=4.1" ];
   };
@@ -176,7 +176,7 @@ in {
         natsHttp = [ 8222 ];
         esphome = [ 6052 ];
         go2rtc = [ 1984 8555 ];
-      in [ 22 53 80 443 5001 8080 8083 21063 21064 21065 21066 32400 1883 ] ++ hass ++ navidrome ++ natsHttp ++ esphome ++ go2rtc;
+      in [ 22 53 80 443 5001 5006 8080 8083 21063 21064 21065 21066 32400 1883 ] ++ hass ++ navidrome ++ natsHttp ++ esphome ++ go2rtc;
     allowedUDPPorts = 
       let govee = [ 4001 4002];
       in [ 53 5353 config.services.tailscale.port ] ++ govee;
@@ -206,55 +206,62 @@ in {
   };
 
   security.acme.acceptTerms = true;
-  # security.acme.certs."px.fff666.org" = {
-  #   group = "nginx";
-  #   email = "digest_yowl.0o@icloud.com";
-  #   dnsResolver = "1.1.1.1:53";
-  #   dnsProvider = "route53";
-  #   credentialsFile = ./r53.conf;
-  # };
-  # security.acme.certs."e.fff666.org" = {
-  #   group = "nginx";
-  #   email = "digest_yowl.0o@icloud.com";
-  #   dnsResolver = "1.1.1.1:53";
-  #   dnsProvider = "route53";
-  #   credentialsFile = ./r53.conf;
-  # };
-  # security.acme.certs."h.fff666.org" = {
-  #   group = "nginx";
-  #   email = "digest_yowl.0o@icloud.com";
-  #   dnsResolver = "1.1.1.1:53";
-  #   dnsProvider = "route53";
-  #   credentialsFile = ./r53.conf;
-  # };
-  # security.acme.certs."b.fff666.org" = {
-  #   group = "nginx";
-  #   email = "digest_yowl.0o@icloud.com";
-  #   dnsResolver = "1.1.1.1:53";
-  #   dnsProvider = "route53";
-  #   credentialsFile = ./r53.conf;
-  # };
-  # security.acme.certs."k.fff666.org" = {
-  #   group = "nginx";
-  #   email = "digest_yowl.0o@icloud.com";
-  #   dnsResolver = "1.1.1.1:53";
-  #   dnsProvider = "route53";
-  #   credentialsFile = ./r53.conf;
-  # };
-  # security.acme.certs."m.fff666.org" = {
-  #   group = "nginx";
-  #   email = "digest_yowl.0o@icloud.com";
-  #   dnsResolver = "1.1.1.1:53";
-  #   dnsProvider = "route53";
-  #   credentialsFile = ./r53.conf;
-  # };
-  # security.acme.certs."d.fff666.org" = {
-  #   group = "nginx";
-  #   email = "digest_yowl.0o@icloud.com";
-  #   dnsResolver = "1.1.1.1:53";
-  #   dnsProvider = "route53";
-  #   credentialsFile = ./r53.conf;
-  # };
+  security.acme.certs."px.fff666.org" = {
+    group = "nginx";
+    email = "digest_yowl.0o@icloud.com";
+    dnsResolver = "1.1.1.1:53";
+    dnsProvider = "route53";
+    credentialsFile = ./r53.conf;
+  };
+  security.acme.certs."budget.fff666.org" = {
+    group = "nginx";
+    email = "digest_yowl.0o@icloud.com";
+    dnsResolver = "1.1.1.1:53";
+    dnsProvider = "route53";
+    credentialsFile = ./r53.conf;
+  };
+  security.acme.certs."e.fff666.org" = {
+    group = "nginx";
+    email = "digest_yowl.0o@icloud.com";
+    dnsResolver = "1.1.1.1:53";
+    dnsProvider = "route53";
+    credentialsFile = ./r53.conf;
+  };
+  security.acme.certs."h.fff666.org" = {
+    group = "nginx";
+    email = "digest_yowl.0o@icloud.com";
+    dnsResolver = "1.1.1.1:53";
+    dnsProvider = "route53";
+    credentialsFile = ./r53.conf;
+  };
+  security.acme.certs."b.fff666.org" = {
+    group = "nginx";
+    email = "digest_yowl.0o@icloud.com";
+    dnsResolver = "1.1.1.1:53";
+    dnsProvider = "route53";
+    credentialsFile = ./r53.conf;
+  };
+  security.acme.certs."k.fff666.org" = {
+    group = "nginx";
+    email = "digest_yowl.0o@icloud.com";
+    dnsResolver = "1.1.1.1:53";
+    dnsProvider = "route53";
+    credentialsFile = ./r53.conf;
+  };
+  security.acme.certs."m.fff666.org" = {
+    group = "nginx";
+    email = "digest_yowl.0o@icloud.com";
+    dnsResolver = "1.1.1.1:53";
+    dnsProvider = "route53";
+    credentialsFile = ./r53.conf;
+  };
+  security.acme.certs."d.fff666.org" = {
+    group = "nginx";
+    email = "digest_yowl.0o@icloud.com";
+    dnsResolver = "1.1.1.1:53";
+    dnsProvider = "route53";
+    credentialsFile = ./r53.conf;
+  };
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;
@@ -265,69 +272,78 @@ in {
     statusPage = true;
 
     virtualHosts = {
-      # "px.${orgdomain}" = {
-      #   useACMEHost = "px.fff666.org";
-      #   http2 = false;
-      #   forceSSL = true;
-      #   locations."/" = {
-      #     proxyPass = "http://127.0.0.1:32400";
-      #     proxyWebsockets = true;
-      #   };
-      # };
-      # "b.${orgdomain}" = {
-      #   useACMEHost = "b.fff666.org";
-      #   http2 = false;
-      #   forceSSL = true;
-      #   locations."/" = {
-      #     proxyPass = "http://127.0.0.1:8083";
-      #     proxyWebsockets = true;
-      #   };
-      # };
-      # "e.${orgdomain}" = {
-      #   useACMEHost = "e.fff666.org";
-      #   http2 = false;
-      #   forceSSL = true;
-      #   locations."/" = {
-      #     proxyPass = "http://127.0.0.1:6052";
-      #     proxyWebsockets = true;
-      #   };
-      # };
-      # "k.${orgdomain}" = {
-      #   useACMEHost = "k.fff666.org";
-      #   http2 = false;
-      #   forceSSL = true;
-      #   locations."/" = {
-      #     proxyPass = "http://127.0.0.1:65535";
-      #     proxyWebsockets = true;
-      #   };
-      # };
-      # "h.${orgdomain}" = {
-      #   useACMEHost = "h.fff666.org";
-      #   http2 = false;
-      #   forceSSL = true;
-      #   locations."/" = {
-      #     proxyPass = "http://127.0.0.1:8123";
-      #     proxyWebsockets = true;
-      #   };
-      # };
-      # "m.${orgdomain}" = {
-      #   useACMEHost = "m.fff666.org";
-      #   http2 = false;
-      #   forceSSL = true;
-      #   locations."/" = {
-      #     proxyPass = "http://127.0.0.1:4533";
-      #     proxyWebsockets = true;
-      #   };
-      # };
-      # "d.${orgdomain}" = {
-      #   useACMEHost = "d.fff666.org";
-      #   http2 = false;
-      #   forceSSL = true;
-      #   locations."/" = {
-      #     proxyPass = "https://192.168.1.60:5001";
-      #     proxyWebsockets = true;
-      #   };
-      # };
+      "px.${orgdomain}" = {
+        useACMEHost = "px.fff666.org";
+        http2 = false;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:32400";
+          proxyWebsockets = true;
+        };
+      };
+      "budget.${orgdomain}" = {
+        useACMEHost = "budget.fff666.org";
+        http2 = false;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:5006";
+          proxyWebsockets = true;
+        };
+      };
+      "b.${orgdomain}" = {
+        useACMEHost = "b.fff666.org";
+        http2 = false;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:8083";
+          proxyWebsockets = true;
+        };
+      };
+      "e.${orgdomain}" = {
+        useACMEHost = "e.fff666.org";
+        http2 = false;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:6052";
+          proxyWebsockets = true;
+        };
+      };
+      "k.${orgdomain}" = {
+        useACMEHost = "k.fff666.org";
+        http2 = false;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:65535";
+          proxyWebsockets = true;
+        };
+      };
+      "h.${orgdomain}" = {
+        useACMEHost = "h.fff666.org";
+        http2 = false;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:8123";
+          proxyWebsockets = true;
+        };
+      };
+      "m.${orgdomain}" = {
+        useACMEHost = "m.fff666.org";
+        http2 = false;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:4533";
+          proxyWebsockets = true;
+        };
+      };
+      "d.${orgdomain}" = {
+        useACMEHost = "d.fff666.org";
+        http2 = false;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "https://192.168.1.6:5001";
+          proxyWebsockets = true;
+        };
+      };
     };
   };
 

@@ -12,9 +12,18 @@ in {
     home-assistant = lib.mkOption {
       default = "2024.2.1";
     };
-    # plex = lib.mkOption {
-    #   default = pkgs.plex;
-    # };
+    plex = lib.mkOption {
+      default = pkgs.plex;
+    };
+    actual = {
+      enable = lib.mkEnableOption "actual";
+      backup = lib.mkOption {
+        default = true;
+      };
+      data = lib.mkOption {
+        default = "/var/lib/actual";
+      };
+    };
   };
   config = {
     services.navidrome = {
@@ -44,22 +53,23 @@ in {
         rtsp.listen = "0.0.0.0:8555";
       };
     };
-    # services.plex = {
-    #   enable = true;
-    #   package = cfg.plex;
-    #   openFirewall = true;
-    #   extraPlugins = [
-    #     (builtins.path {
-    #       name = "Audnexus.bundle";
-    #       path = pkgs.fetchFromGitHub {
-    #         owner = "laxamentumtech";
-    #         repo = "audnexus";
-    #         rev = "v1.8.0";
-    #         sha256 = "sha256-00000000000000000000000000000000000000000000";
-    #       };
-    #     })
-    #   ];
-    # };
+    services.plex = {
+      enable = true;
+      package = cfg.plex;
+      openFirewall = true;
+      user = "root";
+      extraPlugins = [
+        (builtins.path {
+          name = "Audnexus.bundle";
+          path = pkgs.fetchFromGitHub {
+            owner = "djdembeck";
+            repo = "Audnexus.bundle";
+            rev = "v1.3.1";
+            sha256 = "sha256-HgbPZdKZq3uT44n+4owjPajBbkEENexyPwkFuriiqU4=";
+          };
+        })
+      ];
+    };
     services.jellyfin = {
       enable = true;
       user = "root";
@@ -82,8 +92,18 @@ in {
           password = secrets.mqtt.password;
         };
         serial = {
-          port = "/dev/ttyACM0";
+          port = "/dev/ttyACM2";
         };
+        # groups = {
+        #   "1" = {
+        #     friendly_name = "Przedpokój";
+        #     devices = [  ];
+        #   };
+        #   "2" = {
+        #     friendly_name = "Gabinet Track";
+        #     devices = [  ];
+        #   };
+        # };
       };
     };
     services.nats = {
@@ -114,6 +134,9 @@ in {
       script = with pkgs; ''
       ${pkgs.gnutar}/bin/tar -cvf hassio-backup.tar /home/peel/wrk/hassio
       ${pkgs.coreutils}/bin/mv hassio-backup.tar /mnt/download
+      '' + lib.optionalString (cfg.actual.enable && cfg.actual.backup) ''
+      ${pkgs.gnutar}/bin/tar -cvf hassio-backup.tar /home/peel/wrk/hassio
+      ${pkgs.coreutils}/bin/mv hassio-backup.tar /mnt/download
     '';
     };
     virtualisation.oci-containers.containers = {
@@ -122,12 +145,13 @@ in {
         autoStart = true;
         image = "ghcr.io/joeyeamigh/apcupsd-mqtt-exporter:v0.2.3";
         environment = {
-          APCUPSD_HOST = "172.17.0.1";                     # host running apcupsd
+          RUST_LOG = "info";
+          APCUPSD_HOST = "172.17.0.1";                    # host running apcupsd
           APCUPSD_PORT = "3551";                          # port apcupsd is listening on
           APCUPSD_STRIP_UNITS = "true";                   # strip units from apcupsd values
           APCUPSD_POLL_INTERVAL = "10";                   # seconds between polling apcupsd
           APCUPSD_POLL_TIMEOUT = "5";                     # seconds between polling apcupsd
-          MQTT_HOST = "172.17.0.1";                        # host running MQTT broker
+          MQTT_HOST = "172.17.0.1";                       # host running MQTT broker
           MQTT_PORT = "1883";                             # port MQTT broker is listening on
           MQTT_USERNAME = secrets.mqtt.username;          # MQTT username (optional)
           MQTT_PASSWORD = secrets.mqtt.password;          # MQTT password (optional)
@@ -157,6 +181,18 @@ in {
         ];
         extraOptions = [
           "--network=host"
+        ];
+      };
+      actual = lib.mkIf cfg.actual.enable {
+        autoStart = true;
+        image = "actualbudget/actual-server";
+        environment = {
+        };
+        volumes = [
+          "${cfg.actual.data}:/data"
+        ];
+        ports = [
+          "5006:5006"
         ];
       };
       home-assistant = {
