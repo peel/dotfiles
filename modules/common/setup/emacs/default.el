@@ -269,15 +269,18 @@
   (defun peel/eglot-imports ()
     (interactive)
     (call-interactively #'eglot-code-action-organize-imports))
-  (add-to-list 'eglot-server-programs '((go-mode go-ts-mode) .
-    ("gopls" :initializationOptions
-      (:hints (:parameterNames t
-               :rangeVariableTypes t
-               :functionTypeParameters t
-               :assignVariableTypes t
-               :compositeLiteralFields t
-               :compositeLiteralTypes t
-               :constantValues t)))))
+  (add-to-list 'eglot-server-programs
+               '((go-mode go-ts-mode) .
+                 ("gopls" :initializationOptions
+                  (:hints (:parameterNames t
+                                           :rangeVariableTypes t
+                                           :functionTypeParameters t
+                                           :assignVariableTypes t
+                                           :compositeLiteralFields t
+                                           :compositeLiteralTypes t
+                                           :constantValues t))))
+               '((rust-ts-mode rust-mode) .
+                 ("rust-analyzer" :initializationOptions (:check (:command "clippy")))))
   :hook ((scala-mode . eglot-ensure)
          (js-mode . eglot-ensure)
          (typescript-mode . eglot-ensure)
@@ -350,8 +353,10 @@
 
 (use-package rustic
   :ensure t
-  :mode ("\\.rs?\\'" . rust-mode)
+  :mode ("\\.rs?\\'" . rustic-mode)
   :after nix-sandbox
+  :config
+  (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
   :custom
   (rustic-format-on-save t)
   (rustic-lsp-client 'eglot))
