@@ -90,6 +90,7 @@
   :bind (("C-x C-b" . consult-buffer)
          ("C-s"     . consult-line)
          ("C-c C-r" . consult-ripgrep)
+         ("M-g i"   . consult-imenu)
          ([remap switch-to-buffer] . consult-buffer))
   :config
   (recentf-mode +1)
@@ -263,7 +264,7 @@
                ("C-c C-l S" . eglot-reconnect)
                ("C-c C-l q" . eglot-shutdown)
                ("C-c C-l h" . flymake-show-project-diagnostics)))
-  :after (envrc)
+  :after (:all envrc inheritenv)
   :config
   (advice-add 'eglot :before #'envrc-reload)
   (defun peel/eglot-imports ()
@@ -286,7 +287,9 @@
          (typescript-mode . eglot-ensure)
          (haskell-mode . eglot-ensure)
          (rust-mode . eglot-ensure)
-         (go-mode . eglot-ensure)))
+         (rustic-mode . eglot-ensure)
+         (go-mode . eglot-ensure)
+         (go-ts-mode . eglot-ensure)))
 (use-package eglot-booster
 	:after eglot
 	:config	(eglot-booster-mode))
@@ -326,9 +329,14 @@
   :diminish
   :init (envrc-global-mode))
 
+(use-package inheritenv
+  :demand
+  :ensure t
+  :diminish)
+
 ;; ....................................................................... dhall
 (use-package dhall-mode
-  :ensure t
+  :ensure nil ;; disabled as it fails to build
   :mode "\\.dhall\\'"
   :custom (dhall-format-at-save . -1))
 
@@ -354,7 +362,7 @@
 (use-package rustic
   :ensure t
   :mode ("\\.rs?\\'" . rustic-mode)
-  :after nix-sandbox
+  :after inheritenv
   :config
   (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
   :custom
@@ -445,28 +453,7 @@
 
 (use-package org-capture
   :bind ("C-C n n" . org-capture)
-  :custom
-  ;; FIXME
-  (defun peel/org-roam-capture ()
-    "Create a new frame and run `org-capture'."
-    (interactive)
-    (make-frame '((name . "org-capture")
-                  (top . 300)
-                  (left . 700)
-                  (width . 80)
-                  (height . 25)))
-    (defun peel/delete-if-capture-frame ()
-      (let (this-frame-name (substring-no-properties
-                             (cdr (assoc 'name (frame-parameters)))))
-        (message this-frame-name)
-        (if (string-equal this-frame-name "org-capture")
-            'delete-frame
-          nil)))
-    (select-frame-by-name "org-capture")
-    (delete-other-windows)
-    (advice-add 'org-roam-capture--finalize :after 'delete-frame)
-    (org-roam-capture))
-
+  :init
   (setq org-capture-templates `(
     ("p" "Protocol" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
      "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
@@ -522,11 +509,28 @@
 (use-package org-roam-ui
   :ensure t
   :after org-roam
+  :bind ("C-c n g" . org-roam-ui-open)
   :config
     (setq org-roam-ui-sync-theme t
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
+
+(use-package readwise
+  :ensure t
+  :autoload readwise-pull
+  :after org-roam
+  :custom
+  (readwise-sync-db-path "~/Dropbox/Documents/roam/highlights.org")
+  (readwise-api-token (auth-source-pick-first-password :host "readwise.io" :user "credentials")))
+
+(use-package auth-source-1password
+  :ensure t
+  :custom
+  (auth-source-1password-vault "Private")
+  (auth-source-1password-executable "op")
+  :init
+  (auth-source-1passworqd-enable))
 
 (use-package gnuplot
   :ensure t

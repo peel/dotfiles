@@ -23,9 +23,17 @@ pkgs.emacsWithPackagesFromUsePackage {
      rev = "e79dea640356eb4a8ed9df3808fe73c7c6db4cc4";
      sha256 = "sha256-ybNqMHCGjzT2+4OfywS7hNw551kIzwI3QqC8tU/GsQI=";
    }) "eglot-booster";
+   readwise = elisp (pkgs.fetchFromGitHub {
+     owner = "wdavew";
+     repo = "readwise-el";
+     rev = "5db1374a5c9129be35f8466d53d103fb520c20c6";
+     sha256 = "sha256-8oe/hVh0+fLyupBYaqxT7H8RHLlkN1l+7+CJIBYqFvA=";
+   }) "readwise";
  };
  extraEmacsPackages = epkgs: with epkgs; [
    eglot-booster
+   readwise
+   auth-source-1password
    my-config
   ];
 }

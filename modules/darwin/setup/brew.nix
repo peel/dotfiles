@@ -33,6 +33,6 @@ in {
       "PopClip" = 445189367;
       "Tailscale" = 1475387142;
     };
-    cleanup = "zap";
+    onActivation.cleanup = "zap";
   };
 }

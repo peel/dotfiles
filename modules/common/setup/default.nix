@@ -24,18 +24,19 @@ in {
 
   nix = {
     package = pkgs.nixUnstable;
-    binaryCaches = builtins.map (x: x.url) caches;
-    binaryCachePublicKeys = builtins.map (x: x.key) caches;
+    settings.substituters = builtins.map (x: x.url) caches;
+    settings.trusted-public-keys = builtins.map (x: x.key) caches;
     settings.trusted-substituters = builtins.map (x: x.url) caches;
     gc = {
       automatic = true;
       options = "--delete-older-than 30d";
     };
     extraOptions = ''
-      experimental-features = nix-command flakes
+      experimental-features = nix-command flakes auto-allocate-uids configurable-impure-env
       builders = @/etc/nix/machines
       builders-use-substitutes = true
     '';
   };
   time.timeZone = "Europe/Warsaw";
+  environment.systemPackages = [pkgs._1password];
 }

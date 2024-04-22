@@ -14,8 +14,8 @@ let
       emacs-darwin = mkCache "https://cachix.org/api/v1/cache/emacs" "emacs.cachix.org-1:b1SMJNLY/mZF6GxQE+eDBeps7WnkT0Po55TAyzwOxTY=";
     in [ nixos peel cachix nix-community nix-tools ];
 in {
-  nix.useSandbox = !pkgs.targetPlatform.isx86;
-  nix.sandboxPaths = [] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+  nix.settings.sandbox = !pkgs.targetPlatform.isx86;
+  nix.settings.extra-sandbox-paths = [] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
     "/System/Library/Frameworks"
     "/System/Library/PrivateFrameworks"
     "/usr/lib"
@@ -24,9 +24,9 @@ in {
     "/usr/bin/env"
   ];
 
-  nix.binaryCaches = builtins.map (x: x.url) caches;
-  nix.binaryCachePublicKeys = builtins.map (x: x.key) caches;
-  nix.trustedUsers = [ "@admin" "root" "peel" ];
+  nix.settings.substituters = builtins.map (x: x.url) caches;
+  nix.settings.trusted-public-keys = builtins.map (x: x.key) caches;
+  nix.settings.trusted-users = [ "@admin" "root" "peel" ];
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreeRedistributable = true;

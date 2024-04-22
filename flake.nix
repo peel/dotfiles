@@ -66,6 +66,7 @@
           extraModules = [
             ./modules/nixos/setup
             {
+              peel.secrets.enable = false;
               virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin;
               nixpkgs.config.pkgs = nixpkgs.legacyPackages.aarch64-linux.pkgs;
               virtualisation.sharedDirectories = {
