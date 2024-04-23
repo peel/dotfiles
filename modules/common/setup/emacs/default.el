@@ -308,7 +308,6 @@
                             :inlayHints
                             (:typeParameters (:enable t)
                              :hintsInPatternMatch (:enable t)
-                             :implicitConversions (:enable t)
                              :inferredTypes (:enable t)))))))
   :hook ((scala-mode . eglot-ensure)
          (js-mode . eglot-ensure)
