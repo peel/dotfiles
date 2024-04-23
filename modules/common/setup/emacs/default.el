@@ -254,6 +254,21 @@
     ;; (alert status :title "Compilation" :severity 'trivial)
     (call-process "osascript" nil 0 nil "-e"
                   (concat "display notification \"Compilation: " status "\" with title \"Emacs\""))))
+
+(use-package fancy-narrow
+  :ensure t
+  :bind (("C-x n n" . peel/fancy-narrow-dwim)
+         ("C-x n d" . fancy-narrow-to-defun)
+         ("C-x n w" . fancy-widen))
+  :config
+  (defun peel/fancy-narrow-dwim ()
+                  (interactive)
+                  (if fancy-narrow--beginning
+                      (fancy-widen)
+                    (unless (region-active-p)
+                      (mark-paragraph -1))
+                    (call-interactively 'fancy-narrow-to-region))))
+
 (use-package eglot
   :bind (("C-c C-l s" . eglot)
          (:map eglot-mode-map
@@ -265,6 +280,8 @@
                ("C-c C-l q" . eglot-shutdown)
                ("C-c C-l h" . flymake-show-project-diagnostics)))
   :after (:all envrc inheritenv)
+  :custom
+  (eldoc-echo-area-use-multiline-p 5)
   :config
   (advice-add 'eglot :before #'envrc-reload)
   (defun peel/eglot-imports ()
@@ -279,9 +296,20 @@
                                            :assignVariableTypes t
                                            :compositeLiteralFields t
                                            :compositeLiteralTypes t
-                                           :constantValues t))))
+                                           :constantValues t)))))
+  (add-to-list 'eglot-server-programs
                '((rust-ts-mode rust-mode) .
                  ("rust-analyzer" :initializationOptions (:check (:command "clippy")))))
+  (add-to-list 'eglot-server-programs
+               '(scala-mode .
+                 ("metals" :initializationOptions
+                  (:metals (:isHttpEnabled t
+                            :automaticImportBuild t
+                            :inlayHints
+                            (:typeParameters (:enable t)
+                             :hintsInPatternMatch (:enable t)
+                             :implicitConversions (:enable t)
+                             :inferredTypes (:enable t)))))))
   :hook ((scala-mode . eglot-ensure)
          (js-mode . eglot-ensure)
          (typescript-mode . eglot-ensure)
