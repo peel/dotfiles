@@ -3,48 +3,167 @@
 let
   secrets = import ./secrets.nix;
   cfg = config.peel.hassio;
+  credentialsDir = "/run/secrets/credentials";
 in {
   options.peel.hassio = {
     enable = lib.mkEnableOption "hassio";
     zigbee2mqtt = lib.mkOption {
       default = pkgs.zigbee2mqtt;
     };
-    home-assistant = lib.mkOption {
-      default = "2024.2.1";
-    };
-    plex = lib.mkOption {
-      default = pkgs.plex;
-    };
-    actual = {
-      enable = lib.mkEnableOption "actual";
-      backup = lib.mkOption {
-        default = true;
-      };
+    home-assistant = lib.mkOption {};
+    music-assistant = {
+      enable = lib.mkEnableOption "music-assistant";
       data = lib.mkOption {
-        default = "/var/lib/actual";
+        default = "/var/lib/music-assistant";
+      };
+      media = lib.mkOption {};
+    };
+    matter-server = {
+      enable = lib.mkEnableOption "matter-server";
+      data = lib.mkOption {
+        default = "/var/lib/matter";
+      };
+      version = lib.mkOption {
+        default = "7.0.1";
+      };
+    };
+    govee2mqtt = {
+      enable = lib.mkEnableOption "govee2mqtt";
+      version = lib.mkOption {
+        default = "latest";
+      };
+    };
+    dashboard = {
+      enable = lib.mkEnableOption "dashboard";
+    };
+    scrypted = {
+      enable = lib.mkEnableOption "scrypted";
+      data = lib.mkOption {
+        default = "/var/lib/scrypted";
       };
     };
   };
   config = {
-    services.navidrome = {
-      enable = true;
-      settings = {
-        MusicFolder = "/mnt/music";
-        ScanSchedule = "@every 20m";
-        Address = "0.0.0.0";
-        Port = 4533;
+    # services.mealie = {
+    #   enable = true;
+    #   port = 9099;
+    #   credentialsFile = "${credentialsDir}/mealie.env";
+    # };
+    services.homepage-dashboard = {
+      enable = cfg.dashboard.enable;
+      listenPort = 8082;
+      openFirewall = true;
+      settings = {};
+      services = {
+        "Money" = [
+          {"Budget" = {
+            description = "Budget";
+            href = "https://budget.fff666.org/";
+          };}
+        ];
+        "Home" = [
+          {"Home Assistant" = {
+            description = "Home Assistant";
+            href = "https://nuke.local:8123";
+          };}
+          {"z2m" = {
+            description = "Zigbee2MQTT";
+            href = "http://nuke.local:8124/#/";
+          };}
+          {"Networking" = {
+            description = "Unifi Network";
+            href = "https://192.168.1.1/network/default/dashboard";
+          };}
+          {"NAS" = {
+            description = "Synology";
+            href = "https://nas.local:5001/#/signin/password";
+          };}
+          {"tailscale" = {
+            description = "";
+            href = "https://login.tailscale.com/admin/machines";
+          };}
+        ];
+        "Sports" = [
+          {"TrainHeroic" = {
+            description = "";
+            href = "https://athlete.trainheroic.com/#/training?pwId=68152701";
+          };}
+          {"btwb" = {
+            description = "";
+            href = "https://www.btwb.com/whiteboard";
+          };}
+          {"whoop" = {
+            description = "";
+            href = "https://app.whoop.com/athlete/11147439/1d/today";
+          };}
+          {"mobility manual" = {
+            description = "";
+            href = "https://members.mobilitymanual.com/?sfwd-courses=lifters-mobility-manual";
+          };}
+        ];
+        "Knowledge" = [
+          {"Books" = {
+            description = "Books Manager";
+            href = "http://192.168.1.220:8083/";
+          };}
+          {"Reader" = {
+            description = "Readwise Reader";
+            href = "https://read.readwise.io";
+          };}
+          {"Readwise" = {
+            description = "Readwise";
+            href = "https://readwise.io/dashboard";
+          };}
+        ];
+        "Media" = [
+          {"Video" = {
+            description = "Books Manager";
+            href = "https://px.fff666.org";
+          };}
+          {"Music" = {
+            description = "Navidrome";
+            href = "https://m.fff666.org/app/#/album/recentlyAdded?sort=recently_added&order=DESC&filter=%7B%7D";
+          };}
+        ];
+      };
+      widgets = [
+        {
+          resources = {
+            cpu = true;
+            disk = "/";
+            memory = true;
+          };
+        }
+        {
+          search = {
+            provider = "duckduckgo";
+            target = "_blank";
+          };
+        }
+      ];
+      docker = {
+        socket = "/var/run/docker.sock";
       };
     };
-
-    systemd.services.esphome.serviceConfig.ProcSubset = lib.mkForce "all"; # fixed in 23.11
-    services.esphome = {
-      enable = true;
-      allowedDevices = [
-        "/dev/serial/by-id/usb-Espressif_USB_JTAG_serial_debug_unit_34:B4:72:87:21:54-if00"
-      ];
+    services.paperless = {
+      enable = false;
+      passwordFile = "${credentialsDir}/paperless.env";
+      port = 28981;
+      dataDir = "/var/lib/paperless";
+      mediaDir = "/var/lib/paperless/media";
+      consumptionDir = "/var/lib/paperless/in";
+      consumptionDirIsPublic = true;
       address = "0.0.0.0";
-      openFirewall = true;
     };
+    # systemd.services.esphome.serviceConfig.ProcSubset = lib.mkForce "all"; # fixed in 23.11
+    # services.esphome = {
+    #   enable = true;
+    #   allowedDevices = [
+    #     "/dev/serial/by-id/usb-Espressif_USB_JTAG_serial_debug_unit_34:B4:72:87:21:54-if00"
+    #   ];
+    #   address = "0.0.0.0";
+    #   openFirewall = true;
+    # };
 
     services.go2rtc = {
       enable = true;
@@ -52,29 +171,6 @@ in {
         streams = secrets.streams;
         rtsp.listen = "0.0.0.0:8555";
       };
-    };
-    services.plex = {
-      enable = true;
-      package = cfg.plex;
-      openFirewall = true;
-      user = "root";
-      extraPlugins = [
-        (builtins.path {
-          name = "Audnexus.bundle";
-          path = pkgs.fetchFromGitHub {
-            owner = "djdembeck";
-            repo = "Audnexus.bundle";
-            rev = "v1.3.1";
-            sha256 = "sha256-HgbPZdKZq3uT44n+4owjPajBbkEENexyPwkFuriiqU4=";
-          };
-        })
-      ];
-    };
-    services.jellyfin = {
-      enable = true;
-      user = "root";
-      group = "root";
-      openFirewall = true;
     };
     services.zigbee2mqtt = {
       enable = true;
@@ -92,7 +188,7 @@ in {
           password = secrets.mqtt.password;
         };
         serial = {
-          port = "/dev/ttyACM2";
+          port = "/dev/ttyACM0";
         };
         # groups = {
         #   "1" = {
@@ -120,51 +216,51 @@ in {
         };
       };
     };
-    systemd.timers.hassio-backup = {
-      wantedBy = [ "timers.target" ];
-      timerConfig.OnCalendar = "*-*-* 4:00:00"; # everyday at 4AM
-    };
-    systemd.services.hassio-backup = {
-      description = "Backup hassio directory to nas";
-      after = [ "network-pre.target" "docker-home-assistant.service" ];
-      wants = [ "network-pre.target" "docker-home-assistant.service" ];
-      wantedBy = [ "timers.target" ];
-      serviceConfig.Type = "oneshot";
-      serviceConfig.WorkingDirectory = "/home/peel/wrk/hassio";
-      script = with pkgs; ''
-      ${pkgs.gnutar}/bin/tar -cvf hassio-backup.tar /home/peel/wrk/hassio
-      ${pkgs.coreutils}/bin/mv hassio-backup.tar /mnt/download
-      '' + lib.optionalString (cfg.actual.enable && cfg.actual.backup) ''
-      ${pkgs.gnutar}/bin/tar -cvf hassio-backup.tar /home/peel/wrk/hassio
-      ${pkgs.coreutils}/bin/mv hassio-backup.tar /mnt/download
-    '';
-    };
+    # systemd.timers.hassio-backup = {
+    #   wantedBy = [ "timers.target" ];
+    #   timerConfig.OnCalendar = "*-*-* 4:00:00"; # everyday at 4AM
+    # };
+    # systemd.services.hassio-backup = {
+    #   description = "Backup hassio directory to nas";
+    #   after = [ "network-pre.target" "docker-home-assistant.service" ];
+    #   wants = [ "network-pre.target" "docker-home-assistant.service" ];
+    #   wantedBy = [ "timers.target" ];
+    #   serviceConfig.Type = "oneshot";
+    #   serviceConfig.WorkingDirectory = "/home/peel/wrk/hassio";
+    #   script = with pkgs; ''
+    #   ${pkgs.gnutar}/bin/tar -cvf hassio-backup.tar /home/peel/wrk/hassio
+    #   ${pkgs.coreutils}/bin/mv hassio-backup.tar /mnt/download
+    #   '' + lib.optionalString (cfg.actual.enable && cfg.actual.backup) ''
+    #   ${pkgs.gnutar}/bin/tar -cvf hassio-backup.tar /home/peel/wrk/hassio
+    #   ${pkgs.coreutils}/bin/mv hassio-backup.tar /mnt/download
+    # '';
+    # };
     virtualisation.oci-containers.containers = {
       # expose apcupsd to mqtt
-      apcupsd2mqtt = {
-        autoStart = true;
-        image = "ghcr.io/joeyeamigh/apcupsd-mqtt-exporter:v0.2.3";
-        environment = {
-          RUST_LOG = "info";
-          APCUPSD_HOST = "172.17.0.1";                    # host running apcupsd
-          APCUPSD_PORT = "3551";                          # port apcupsd is listening on
-          APCUPSD_STRIP_UNITS = "true";                   # strip units from apcupsd values
-          APCUPSD_POLL_INTERVAL = "10";                   # seconds between polling apcupsd
-          APCUPSD_POLL_TIMEOUT = "5";                     # seconds between polling apcupsd
-          MQTT_HOST = "172.17.0.1";                       # host running MQTT broker
-          MQTT_PORT = "1883";                             # port MQTT broker is listening on
-          MQTT_USERNAME = secrets.mqtt.username;          # MQTT username (optional)
-          MQTT_PASSWORD = secrets.mqtt.password;          # MQTT password (optional)
-          MQTT_CLIENT_ID = "upcupsd";                     # MQTT client ID
-          MQTT_TOPIC = "homeassistant/sensor/ups";        # MQTT topic to publish to
-          MQTT_SUFFIX = "status";                         # MQTT topic suffix (optional)
-          HOME_ASSISTANT_MODE = "true";                   # publish MQTT messages in Home Assistant-compatible JSON
-          HOME_ASSISTANT_UUID_PREFIX = "apcupsd_";        # prefix for Home Assistant UUIDs
-        };
-        extraOptions = [
-          "--network=host"
-        ];
-      };
+      # apcupsd2mqtt = {
+      #   autoStart = true;
+      #   image = "ghcr.io/joeyeamigh/apcupsd-mqtt-exporter:v0.2.3";
+      #   environment = {
+      #     RUST_LOG = "info";
+      #     APCUPSD_HOST = "172.17.0.1";                    # host running apcupsd
+      #     APCUPSD_PORT = "3551";                          # port apcupsd is listening on
+      #     APCUPSD_STRIP_UNITS = "true";                   # strip units from apcupsd values
+      #     APCUPSD_POLL_INTERVAL = "10";                   # seconds between polling apcupsd
+      #     APCUPSD_POLL_TIMEOUT = "5";                     # seconds between polling apcupsd
+      #     MQTT_HOST = "172.17.0.1";                       # host running MQTT broker
+      #     MQTT_PORT = "1883";                             # port MQTT broker is listening on
+      #     MQTT_USERNAME = secrets.mqtt.username;          # MQTT username (optional)
+      #     MQTT_PASSWORD = secrets.mqtt.password;          # MQTT password (optional)
+      #     MQTT_CLIENT_ID = "upcupsd";                     # MQTT client ID
+      #     MQTT_TOPIC = "homeassistant/sensor/ups";        # MQTT topic to publish to
+      #     MQTT_SUFFIX = "status";                         # MQTT topic suffix (optional)
+      #     HOME_ASSISTANT_MODE = "true";                   # publish MQTT messages in Home Assistant-compatible JSON
+      #     HOME_ASSISTANT_UUID_PREFIX = "apcupsd_";        # prefix for Home Assistant UUIDs
+      #   };
+      #   extraOptions = [
+      #     "--network=host"
+      #   ];
+      # };
       # expose navidrome to sonos
       bonob = {
         autoStart = true;
@@ -183,16 +279,54 @@ in {
           "--network=host"
         ];
       };
-      actual = lib.mkIf cfg.actual.enable {
+      music-assistant = lib.mkIf cfg.music-assistant.enable {
         autoStart = true;
-        image = "actualbudget/actual-server";
+        image = "ghcr.io/music-assistant/server:beta";
+        volumes = [
+          "${cfg.music-assistant.data}:/data"
+        ] ++ lib.optionals (cfg.music-assistant.media != "") [ "${cfg.music-assistant.media}:/media" ];
+        extraOptions = [
+          "--network=host"
+          "--privileged"
+        ];
+      };
+      matter-server = lib.mkIf cfg.matter-server.enable {
+        image = "ghcr.io/home-assistant-libs/python-matter-server:${cfg.matter-server.version}";
+        volumes = [
+          "hass-matter:/data"
+          "/run/dbus:/run/dbus:ro"
+        ];
+        extraOptions = [
+          "--network=host"
+        ];
+      };
+      govee2mqtt = lib.mkIf cfg.govee2mqtt.enable {
+        image = "ghcr.io/wez/govee2mqtt:latest:${cfg.matter-server.version}";
+        environment = {
+          "GOVEE_EMAIL" = "";
+          "GOVEE_PASSWORD" = "";
+          "GOVEE_API_KEY" = "";
+          "GOVEE_MQTT_HOST" = "localhost";
+          "GOVEE_MQTT_PORT" = "1883";
+          "GOVEE_TEMPERATURE_SCALE" = "C";
+          "TZ" = "Europe/Berlin";
+        };
+        extraOptions = [
+          "--network=host"
+        ];
+      };
+      scrypted = lib.mkIf cfg.scrypted.enable {
+        autoStart = true;
+        image = "ghcr.io/koush/scrypted";
         environment = {
         };
-        volumes = [
-          "${cfg.actual.data}:/data"
+        extraOptions = [
+          "--network=host"
         ];
-        ports = [
-          "5006:5006"
+        volumes = [
+          "/var/run/dbus:/var/run/dbus:ro"
+          "/var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket"
+          "${cfg.scrypted.data}:/server/volume"
         ];
       };
       home-assistant = {
@@ -205,8 +339,10 @@ in {
           "/home/peel/wrk/hassio:/config"
           "/etc/localtime:/etc/localtime"
           "/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2256895-if00:/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2256895-if00" # zha
-          "/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2686951-if00:/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2686951-if00" # zigbee2mqtt
- 	        "/run/dbus:/run/dbus:ro"
+          # "/dev/ttyACM0:/dev/ttyACM0:ro"
+          # "/dev/ttyACM1:/dev/ttyACM1:ro"
+          "/dev/ttyACM1:/dev/ttyACM1:ro"
+          "/var/run/dbus:/var/run/dbus:ro"
         ];
         ports = [
           "8123:8123"
@@ -215,9 +351,10 @@ in {
           "--privileged"
           "--network=host"
           "--device=/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2256895-if00"
-          "--device=/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2686951-if00"
-          "--device=/dev/ttyACM0:/dev/ttyACM0"
-          "--device=/dev/ttyACM1:/dev/ttyACM1"
+          #"--device=/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2686951-if00"
+          "--device=/dev/ttyACM2:/dev/ttyACM2"
+          # "--device=/dev/ttyACM1:/dev/ttyACM1"
+          # "--device=/dev/ttyACM0:/dev/ttyACM0"
         ];
       };
       eufy-security = {
@@ -241,6 +378,13 @@ in {
         ports = [
           "8554:8554"
           "1935:1935"
+        ];
+      };
+      it-tools = {
+        autoStart = true;
+        image = "corentinth/it-tools:latest";
+        ports = [
+          "9090:80"
         ];
       };
       influxdb = {

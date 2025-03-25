@@ -10,6 +10,10 @@ let
       nix-direnv.enable = true;
       # nix-direnv.enableFlakes = true;
     };
+  sops = {
+    age.keyFile = "/home/user/.age-key.txt"; # must have no password!
+    defaultSopsFile = ./secrets.yaml;
+  };
   #     # programs.mbsync.enable = true;
   #     # programs.msmtp.enable = true;
   #     # programs.notmuch = {

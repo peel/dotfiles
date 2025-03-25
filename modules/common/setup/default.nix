@@ -15,15 +15,19 @@ let
 in {
   imports = [
     #./emacs.nix
+    ./arr.nix
+    ./budget.nix
     ./fonts.nix
     ./git.nix
     ./gnupg.nix
+    ./hassio.nix
+    ./media.nix
     ./packages.nix
     ./shells.nix
   ];
 
   nix = {
-    package = pkgs.nixUnstable;
+    # package = pkgs.nixUnstable;
     binaryCaches = builtins.map (x: x.url) caches;
     binaryCachePublicKeys = builtins.map (x: x.key) caches;
     gc = {
