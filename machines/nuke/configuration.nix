@@ -8,6 +8,7 @@ let
   # domain = builtins.extraBuiltins.pass "duckdns.domain";
   orgdomain = "fff666.org"; # builtins.extraBuiltins.pass "organisation.domain";
   s = import ../s.nix;
+  smbCnf = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,credentials=/home/${username}/smb-secrets";
 in {
   imports = [
     ./hardware-configuration.nix
@@ -21,8 +22,15 @@ in {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   #boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
-  hardware.bluetooth.package = pkgs.bluezFull;
+  hardware.graphics = {
+    enable = true;
+    extraPackages = [ pkgs.intel-media-sdk ];
+  };
+  hardware.bluetooth.package = pkgs.bluez;
+  hardware.bluetooth.disabledPlugins = ["sap"];
+  # hardware.bluetooth.settings = {
+  #   General.ControllerMode = "dual";
+  # };
   services.xserver.libinput = {
     enable = true;
     tapping = true;
@@ -83,45 +91,58 @@ in {
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
-  services = {
-    openssh = {
-      enable = true;
-    };
-    avahi = {
-      enable = true;
-      nssmdns = true;
-      publish.addresses = true;
-      publish.enable = true;
-      publish.workstation = true;
-      publish.domain = true;
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+    publish.addresses = true;
+    publish.enable = true;
+    publish.workstation = true;
+    publish.domain = true;
+  };
+
+  services.apcupsd = {
+    enable = true;
+    configText = ''
+      UPSTYPE usb
+      BATTERYLEVEL 20
+      NETSERVER on
+      NISIP 0.0.0.0
+    '';
+    hooks = {
+      doshutdown = let
+        shutdown = pkgs.writeShellScriptBin "ups-shutdown" ''
+          echo 'Staring Shutdown Scirpt, initiated by NUT client'
+          ssh -i /home/peel/.ssh/id_rsa root@192.168.50.1 'ubnt-systool' & sleep 2 && /sbin/shutdown -h +0
+        ''; in
+        "${shutdown} >> /var/log/ups/ups.log";
     };
   };
 
   fileSystems."/mnt/music" = {
-    device = "192.168.1.6:/volume1/music";
-    fsType = "nfs";
-    options = [ "nfsvers=4.1" ];
+    device = "//192.168.1.6/music";
+    fsType = "cifs";
+    options = [ smbCnf ];
   };
   fileSystems."/mnt/video" = {
-    device = "192.168.1.6:/volume1/video";
-    fsType = "nfs";
-    options = [ "nfsvers=4.1" ];
+    device = "//192.168.1.6/video";
+    fsType = "cifs";
+    options = [ smbCnf ];
   };
   fileSystems."/mnt/download" = {
-   device = "192.168.1.6:/volume1/download";
-   fsType = "nfs";
-   options = [ "nfsvers=4.1" ];
+   device = "//192.168.1.6/download";
+   fsType = "cifs";
+   options = [ smbCnf ];
   };
   fileSystems."/mnt/books" = {
-   device = "192.168.1.6:/volume1/books";
-   fsType = "nfs";
-   options = [ "nfsvers=4.1" ];
+   device = "//192.168.1.6/books";
+   fsType = "cifs";
+   options = [ smbCnf ];
   };
-
-  # monitoring  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+  fileSystems."/mnt/audiobooks" = {
+   device = "//192.168.1.6/audiobooks";
+   fsType = "cifs";
+   options = [ smbCnf ];
+  };
 
   # general routes  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
   services.fail2ban.enable = true;

@@ -16,8 +16,6 @@
     arguments = ["-profile" "b6c347"];
   };
 
-  services.activate-system.enable = true;
-  services.nix-daemon.enable = true;
   programs.nix-index.enable = true;
   nix.linux-builder = {
     enable = true;

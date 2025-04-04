@@ -13,7 +13,7 @@ let
     home.packages = [
       pkgs.mpv
       pkgs.awscli
-      pkgs._1password
+      pkgs._1password-cli
     ];
   };
   nixos = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {

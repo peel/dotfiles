@@ -317,9 +317,39 @@
          (rustic-mode . eglot-ensure)
          (go-mode . eglot-ensure)
          (go-ts-mode . eglot-ensure)))
+
 (use-package eglot-booster
 	:after eglot
 	:config	(eglot-booster-mode))
+
+(use-package claude-code
+  :ensure t
+  :after (:all envrc inheritenv vterm transient)
+  :config
+  (claude-code-mode)
+    (defun claude-code--vterm-no-window-delete (backend buffer-name program &optional switches)
+    "vterm backend without window deletion issues."
+    (claude-code--ensure-vterm)
+    (let* ((vterm-shell (if switches 
+                            (concat program " " (mapconcat #'identity switches " ")) 
+                          program))
+           (vterm-environment (append (list "TERM_PROGRAM=emacs" "FORCE_CODE_TERMINAL=true") 
+                                     vterm-environment))
+           (buffer (get-buffer-create buffer-name)))
+      (with-current-buffer buffer
+        (pop-to-buffer buffer)
+        (vterm-mode)
+        ;; Remove the delete-window call that causes the error
+        buffer)))
+
+  (advice-add 'claude-code--term-make :override #'claude-code--vterm-no-window-delete)
+  (setq claude-code-terminal-backend 'vterm)
+  (setq claude-code-enable-notifications t)
+  (setq claude-code-notification-function #'peel/claude-notify)
+  :bind-keymap ("C-c c" . claude-code-command-map))
+
+(use-package eat :ensure t)
+(use-package transient :ensure t)
 
 ;; ..................................................................... Haskell
 (use-package haskell-mode
@@ -359,7 +389,16 @@
 (use-package inheritenv
   :demand
   :ensure t
-  :diminish)
+  :diminish
+  :config
+  ;; Apply inheritenv to key commands that start processes
+  (inheritenv-add-advice 'shell-command)
+  (inheritenv-add-advice 'shell-command-to-string)
+  (inheritenv-add-advice 'async-shell-command)
+  (inheritenv-add-advice 'compile)
+  (inheritenv-add-advice 'project-compile)
+  (inheritenv-add-advice 'claude-code--term-make)
+  (inheritenv-add-advice 'claude-code-vterm))
 
 ;; ....................................................................... dhall
 (use-package dhall-mode
@@ -443,6 +482,9 @@
          ("\\.md\\'" . markdown-mode))
   :diminish (markdown-mode . " "))
 
+;; ;; ai  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+;; (use-package gptel
+;;   :ensure t )
 
 ;; org ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (setq papers-dir (expand-file-name "~/Dropbox/Documents/roam/")
@@ -557,7 +599,7 @@
   (auth-source-1password-vault "Private")
   (auth-source-1password-executable "op")
   :init
-  (auth-source-1passworqd-enable))
+  (auth-source-1password-enable))
 
 (use-package gnuplot
   :ensure t
@@ -629,11 +671,6 @@
   (org-static-blog-page-postamble nil)
   (org-static-blog-page-header "<link href= \"export/html/style.css\" rel=\"stylesheet\" type=\"text/css\" />"))
 
-;; browser ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-(use-package xwidget-webkit
-  :ensure nil
-  :custom (xwidget-webkit-enable-plugins nil))
-
 ;; terminal ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package vterm
   :ensure t
@@ -657,6 +694,13 @@
   ;;     (apply orig-fun args)))
   ;; (advice-add 'counsel-yank-pop-action :around #'vterm-counsel-yank-pop-action)
 
+  (defun peel/vterm-inherit-environment ()
+    "Ensure vterm gets the full environment including direnv."
+    (when (and (bound-and-true-p envrc-mode)
+               (string-prefix-p "*claude:" (buffer-name)))
+      (setq vterm-environment process-environment)))
+  
+  (add-hook 'vterm-mode-hook #'peel/vterm-inherit-environment)
   (defun peel/vterm-cd (dir)
     "Prompt for directory and cd"
     (interactive "Dcd ")

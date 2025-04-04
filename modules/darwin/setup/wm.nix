@@ -19,6 +19,7 @@ in {
   services.yabai.package = pkgs.yabai;
   services.yabai.enableScriptingAddition = true;
   services.yabai.extraConfig = ''
+    yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
     yabai -m config debug_output                  on
     yabai -m config mouse_follows_focus           off
     yabai -m config focus_follows_mouse           off

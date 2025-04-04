@@ -22,7 +22,9 @@ in {
     ./shells.nix
   ];
 
+  system.primaryUser = "peel";
   nix = {
+    enable = true;
     package = pkgs.nix;
     settings.substituters = builtins.map (x: x.url) caches;
     settings.trusted-public-keys = builtins.map (x: x.key) caches;
@@ -38,5 +40,5 @@ in {
     '';
   };
   time.timeZone = "Europe/Warsaw";
-  environment.systemPackages = [pkgs._1password];
+  environment.systemPackages = [pkgs._1password-cli];
 }

@@ -39,7 +39,7 @@ in {
   ];
   environment.variables.SHELL = "/run/current-system/sw/bin/bash";
   programs.bash = {
-    enableCompletion = true;
+    completion.enable = true;
     interactiveShellInit = ''
       shopt -s checkwinsize # track terminal window resize
       shopt -s extglob      # extended globbing capabilities

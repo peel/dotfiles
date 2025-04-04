@@ -2,21 +2,21 @@
   description = "peel's env";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    darwin.url = "github:lnl7/nix-darwin/master";
+    nixpkgs.url = "github:nixos/nixpkgs/release-25.05";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    darwin.url = "github:lnl7/nix-darwin/nix-darwin-25.05";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:nix-community/home-manager/release-23.05";
+    home-manager.url = "github:nix-community/home-manager/release-25.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     depot-tools.url = "github:cir0x/depot-tools-nix-flake";
     emacs-lsp-booster.url = "github:slotThe/emacs-lsp-booster-flake";
-    _1password-shell-plugins.url = "github:1Password/shell-plugins";
-    _1password-shell-plugins.inputs.nixpkgs.follows = "nixpkgs-unstable";
-  };
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+};
 
-  outputs = { self, darwin, nixpkgs, nixpkgs-unstable, emacs-overlay, home-manager, depot-tools, emacs-lsp-booster, ... }@inputs:
+  outputs = { self, darwin, nixpkgs, nixpkgs-unstable, emacs-overlay, home-manager, depot-tools, emacs-lsp-booster, sops-nix, ... }@inputs:
     let
       # FIXME nixpkgs.lib.extend
       myLib = (import ./lib {inherit (nixpkgs) lib targetSystem;});
@@ -29,7 +29,7 @@
         , user ? "peel"
         , system ? "x86_64-linux"
         , extraModules ? []
-        , homeModules ? import ./modules/common/setup/home.nix inputs._1password-shell-plugins.hmModules.default
+        , homeModules ? import ./modules/common/setup/home.nix
         , ...}:
           let
             linuxOr = a: b: if (hasInfix "linux" system) then a else b;
@@ -48,6 +48,7 @@
                home-manager.useGlobalPkgs = true;
                home-manager.useUserPackages = true;
                home-manager.users.${user} = homeModules;
+               home-manager.sharedModules = [ sops-nix.homeManagerModules.sops  ];
               }
             ] ++ overlayModules ++ systemModules ++ configModules ++ extraModules;
           };
