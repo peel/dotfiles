@@ -8,6 +8,7 @@ let
   # domain = builtins.extraBuiltins.pass "duckdns.domain";
   orgdomain = "fff666.org"; # builtins.extraBuiltins.pass "organisation.domain";
   s = import ../s.nix;
+  smbCnf = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,credentials=/home/${username}/smb-secrets";
 in {
   imports = [
     ./hardware-configuration.nix
@@ -21,7 +22,10 @@ in {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   #boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
+  hardware.graphics = {
+    enable = true;
+    extraPackages = [ pkgs.intel-media-sdk ];
+  };
   hardware.bluetooth.package = pkgs.bluez;
   hardware.bluetooth.disabledPlugins = ["sap"];
   # hardware.bluetooth.settings = {
@@ -80,12 +84,6 @@ in {
   };
 
   services.xserver.enable = true;
-  hardware = {
-    opengl = {
-      enable = true;
-      driSupport = true;
-    };
-  };
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.displayManager.defaultSession = "sway";
   services.xserver.desktopManager.gnome.enable = true;
@@ -110,8 +108,6 @@ in {
 
   services.printing.enable = true;
 
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
   services.avahi = {
     enable = true;
     nssmdns = true;
@@ -140,29 +136,29 @@ in {
   };
 
   fileSystems."/mnt/music" = {
-    device = "192.168.1.6:/volume1/music";
-    fsType = "nfs";
-    options = [ "nfsvers=4.1" ];
+    device = "//192.168.1.6/music";
+    fsType = "cifs";
+    options = [ smbCnf ];
   };
   fileSystems."/mnt/video" = {
-    device = "192.168.1.6:/volume1/video";
-    fsType = "nfs";
-    options = [ "nfsvers=4.1" ];
+    device = "//192.168.1.6/video";
+    fsType = "cifs";
+    options = [ smbCnf ];
   };
   fileSystems."/mnt/download" = {
-   device = "192.168.1.6:/volume1/download";
-   fsType = "nfs";
-   options = [ "nfsvers=4.1" ];
+   device = "//192.168.1.6/download";
+   fsType = "cifs";
+   options = [ smbCnf ];
   };
   fileSystems."/mnt/books" = {
-   device = "192.168.1.6:/volume1/books";
-   fsType = "nfs";
-   options = [ "nfsvers=4.1" ];
+   device = "//192.168.1.6/books";
+   fsType = "cifs";
+   options = [ smbCnf ];
   };
   fileSystems."/mnt/audiobooks" = {
-   device = "192.168.1.6:/volume1/audiobooks";
-   fsType = "nfs";
-   options = [ "nfsvers=4.1" ];
+   device = "//192.168.1.6/audiobooks";
+   fsType = "cifs";
+   options = [ smbCnf ];
   };
 
   # general routes  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁

@@ -17,6 +17,9 @@ in {
         default = "/var/lib/music-assistant";
       };
       media = lib.mkOption {};
+      environment = {
+        LOG_LEVEL = "warning";
+      };
     };
     matter-server = {
       enable = lib.mkEnableOption "matter-server";

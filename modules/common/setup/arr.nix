@@ -7,6 +7,7 @@ in {
   options.peel.arr = {
     enable = lib.mkEnableOption "arr";
     downloads = lib.mkEnableOption "downloads";
+    
     downloadsDir = lib.mkOption {
       default = "/mnt/download";
     };
@@ -41,6 +42,14 @@ in {
       enable = true;
       openFirewall = cfg.openFirewall;
     };
+		services.nzbget = lib.mkIf cfg.downloads {
+		  enable = true;
+			user = "root";
+			group = "root";
+			settings = {
+			  DestDir = cfg.downloadsDir;
+			};
+		};
     services.transmission = lib.mkIf cfg.downloads {
       enable = true;
       user = "root";

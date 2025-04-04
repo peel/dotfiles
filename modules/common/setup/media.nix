@@ -99,13 +99,15 @@ in {
         Address = "0.0.0.0";
         Port = 4533;
         MusicFolder = cfg.music.data;
-        ScanSchedule = "@every 20m";
+        "Scanner.Schedule" = "@every 20m";
         # make it big to work well with music assistant and sonos
-        TranscodingCacheSize = "1G";
+        TranscodingCacheSize = "10G";
         # https://www.navidrome.org/docs/usage/configuration-options/#advanced-configuration
         CoverArtPriority = "cover.*, embedded, front.*, folder.*";
         DefaultTheme = "nord";
+        EnableSharing = true;
         EnableMediaFileCoverArt = false;
+        EnableCoverAnimation = false;
         EnableTranscodingConfig = true;
       } // cfg.music.navidromeExtraSettings;
     };
