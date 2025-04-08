@@ -32,6 +32,7 @@ in {
     yabai -m config normal_window_opacity         0.85
     yabai -m config split_ratio                   0.62
     yabai -m config auto_balance                  off
+    yabai -m config window_animation_easing       [ ease_in_circ ease_out_circ]
 
     yabai -m config layout                        bsp
     yabai -m config top_padding                   0
@@ -48,7 +49,6 @@ in {
     yabai -m rule --add app="Dash"                manage="off"
     yabai -m rule --add app="1Password"           manage="off"
     yabai -m rule --add app="System Preferences"  manage="off"
-    yabai -m rule --add app="Plexamp"             manage="off"
  '';
   services.skhd.enable = true;
   services.skhd.package =  pkgs.skhd;
@@ -57,7 +57,7 @@ in {
     moveMask = "ctrl + cmd";
     myCapture = "emacsclient -c -F '((name . \"${captureTitle}\"))' --eval '(peel/org-roam-capture)'";
     myEditor = "emacsclient -a '' -nc";
-    myPlayer = "open /Applications/Plexamp.app";
+    myPlayer = "open ~/Applications/Music\ Assistant.app";
     noop = "/dev/null";
     prefix = "yabai -m";
     fstOrSnd = {fst, snd}: domain: "${prefix} ${domain} --focus ${fst} || ${prefix} ${domain} --focus ${snd}";
