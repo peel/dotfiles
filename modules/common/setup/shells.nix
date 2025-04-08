@@ -68,6 +68,7 @@ in {
       ${vtermIntegration}
       ${vtermClearScrollback}
       ${vtermPromptTracking}
+      PATH=$PATH:$HOME/.local/bin
     '';
   };
 

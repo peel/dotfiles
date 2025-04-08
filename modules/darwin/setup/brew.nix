@@ -19,8 +19,8 @@ in {
       "docker"
       "openaudible"
       "plexamp"
-      "utm"
-      "vmware-fusion"
+      # "utm"
+      # "vmware-fusion"
       "zoom"
     ];
     brews = [
@@ -33,6 +33,6 @@ in {
       "PopClip" = 445189367;
       "Tailscale" = 1475387142;
     };
-    onActivation.cleanup = "zap";
+    # onActivation.cleanup = "zap";
   };
 }

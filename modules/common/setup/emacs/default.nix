@@ -6,7 +6,7 @@ let
     mkdir -p $out/share/emacs/site-lisp
     cp -r ${src}/* $out/share/emacs/site-lisp/
   '';
-  myEmacs = pkgs.emacsGit.override{ withPgtk = pkgs.stdenv.isLinux; };
+  myEmacs = pkgs.emacs-git.override{ withPgtk = pkgs.stdenv.isLinux; };
   myEmacsConfig = ./default.el;
 in
 pkgs.emacsWithPackagesFromUsePackage {

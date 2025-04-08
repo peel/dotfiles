@@ -2,8 +2,8 @@
 
 {
   fonts = {
-    fontDir.enable = true;
-    fonts = [ pkgs.pragmatapro ];
+    # fontDir.enable = true;
+    packages = [ pkgs.pragmatapro ];
   } // lib.optionalAttrs pkgs.stdenvNoCC.isLinux {
     fontconfig.enable = true;
     enableDefaultFonts = false;

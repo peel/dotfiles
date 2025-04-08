@@ -1,19 +1,24 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
+  cfg = config.peel.emacs;
   emacs = (import emacs/default.nix {inherit pkgs;});
 in {
-  environment.variables.EDITOR = "/run/current-system/sw/bin/emacsclient -tc";
-  environment.variables.ALTERNATE_EDITOR = "/run/current-system/sw/bin/emacs";
-
-  environment.systemPackages = [ pkgs.binutils emacs pkgs.emacs-lsp-booster];# pkgs.nodePackages.mermaid-cli ];
-
-  services.emacs = {
-    enable = true;
-    package = emacs;
+  options.peel.emacs = {
+    enable = lib.mkEnableOption "emacs";
   };
-  environment.shellAliases = {
-    vim = "${emacs}/bin/emacsclient -nw";
-    e   = "${emacs}/bin/emacsclient -nw";
+  config = lib.mkIf cfg.enable {
+    environment.variables.EDITOR = "/run/current-system/sw/bin/emacsclient -tc";
+    environment.variables.ALTERNATE_EDITOR = "/run/current-system/sw/bin/emacs";
+    environment.systemPackages = [ pkgs.binutils emacs pkgs.emacs-lsp-booster];# pkgs.nodePackages.mermaid-cli ];
+
+    services.emacs = {
+      enable = true;
+      package = emacs;
+    };
+    environment.shellAliases = {
+      vim = "${emacs}/bin/emacsclient -nw";
+      e   = "${emacs}/bin/emacsclient -nw";
+    };
   };
 }

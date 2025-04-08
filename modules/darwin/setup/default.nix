@@ -10,7 +10,11 @@
 
   users.users.peel.home = "/Users/peel";
   networking.knownNetworkServices = ["Wi-Fi" "Bluetooth PAN" "Thunderbolt Bridge"];
-  networking.dns = ["1.1.1.1" "1.0.0.1" "2606:4700:4700::1111" "2606:4700:4700::1001"];
+  # networking.dns = ["45.90.28.76" "45.90.30.76" "2a07:a8c0::b6:c347" "2a07:a8c1::b6:c347"];
+  services.nextdns = {
+    enable = false;
+    arguments = ["-profile" "b6c347"];
+  };
 
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;

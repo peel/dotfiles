@@ -12,6 +12,8 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     depot-tools.url = "github:cir0x/depot-tools-nix-flake";
     emacs-lsp-booster.url = "github:slotThe/emacs-lsp-booster-flake";
+    _1password-shell-plugins.url = "github:1Password/shell-plugins";
+    _1password-shell-plugins.inputs.nixpkgs.follows = "nixpkgs-unstable";
   };
 
   outputs = { self, darwin, nixpkgs, nixpkgs-unstable, emacs-overlay, home-manager, depot-tools, emacs-lsp-booster, ... }@inputs:
@@ -27,7 +29,7 @@
         , user ? "peel"
         , system ? "x86_64-linux"
         , extraModules ? []
-        , homeModules ? import ./modules/common/setup/home.nix
+        , homeModules ? import ./modules/common/setup/home.nix inputs._1password-shell-plugins.hmModules.default
         , ...}:
           let
             linuxOr = a: b: if (hasInfix "linux" system) then a else b;
@@ -58,7 +60,11 @@
         nuke = mkSystem {
           hostname = "nuke";
           system = "x86_64-linux";
-          extraModules = [ ./modules/nixos/setup ./modules/common/setup/hassio.nix ];
+          extraModules = [
+            { peel.emacs.enable = true; }
+            ./modules/nixos/setup
+            ./modules/common/setup/hassio.nix
+          ];
         };
         demo = mkSystem {
           hostname = "demo";
@@ -67,6 +73,7 @@
             ./modules/nixos/setup
             {
               peel.secrets.enable = false;
+              peel.emacs.enable = false;
               virtualisation.host.pkgs = nixpkgs.legacyPackages.aarch64-darwin;
               nixpkgs.config.pkgs = nixpkgs.legacyPackages.aarch64-linux.pkgs;
               virtualisation.sharedDirectories = {
@@ -84,10 +91,12 @@
         snowflake = mkSystem {
           hostname = "snowflake";
           system = "x86_64-darwin";
+          extraModules = [{ peel.emacs.enable = true; }];
         };
         snowberry = mkSystem {
           hostname = "snowberry";
           system = "aarch64-darwin";
+          extraModules = [{ peel.emacs.enable = true; }];
         };
       };
 
@@ -153,19 +162,19 @@
         };
         aarch64-linux = {
           demo = 
-            self.nixosConfigurations.demo.config.system.build.vm.overrideAttrs(_: old: {
-              # FIXME MASSIVE HACK
-              # requires akirakyle/homebrew-qemu-virgl
-              # that has virgl embedded
-              # can't build it easily yet
-              meta.mainProgram = "run-darwin-vm";
-              buildCommand = ''
-                ${old.buildCommand}
-                sed 's#/nix/store/\(.*\)-qemu-\(.*\)/bin#/opt/homebrew/bin#g;s#-device virtio-gpu-pci##g' \
-                  $out/bin/run-demo-vm > $out/bin/run-darwin-vm
-                chmod +x $out/bin/run-darwin-vm
-              '';
-            });
+            self.nixosConfigurations.demo.config.system.build.vm; #.overrideAttrs(_: old: {
+              # # FIXME MASSIVE HACK
+              # # requires akirakyle/homebrew-qemu-virgl
+              # # that has virgl embedded
+              # # can't build it easily yet
+              # meta.mainProgram = "run-darwin-vm";
+              # buildCommand = ''
+              #   ${old.buildCommand}
+              #   sed 's#/nix/store/\(.*\)-qemu-\(.*\)/bin#/opt/homebrew/bin#g;s#-device virtio-gpu-pci##g' \
+              #     $out/bin/run-demo-vm > $out/bin/run-darwin-vm
+              #   chmod +x $out/bin/run-darwin-vm
+              # '';
+            #});
         };
       };
     };
