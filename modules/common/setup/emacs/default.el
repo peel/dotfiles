@@ -270,6 +270,7 @@
                     (call-interactively 'fancy-narrow-to-region))))
 
 (use-package eglot
+  :demand
   :bind (("C-c C-l s" . eglot)
          (:map eglot-mode-map
                ("C-c C-l f" . eglot-format)
@@ -319,37 +320,43 @@
          (go-ts-mode . eglot-ensure)))
 
 (use-package eglot-booster
+  :ensure t
 	:after eglot
 	:config	(eglot-booster-mode))
 
-(use-package claude-code
+(use-package claude-code-ide
   :ensure t
-  :after (:all envrc inheritenv vterm transient)
+  :after (:all transient envrc inheritenv vterm)
+  :bind ("C-c c" . claude-code-transient)
   :config
-  (claude-code-mode)
-    (defun claude-code--vterm-no-window-delete (backend buffer-name program &optional switches)
-    "vterm backend without window deletion issues."
-    (claude-code--ensure-vterm)
-    (let* ((vterm-shell (if switches 
-                            (concat program " " (mapconcat #'identity switches " ")) 
-                          program))
-           (vterm-environment (append (list "TERM_PROGRAM=emacs" "FORCE_CODE_TERMINAL=true") 
-                                     vterm-environment))
-           (buffer (get-buffer-create buffer-name)))
-      (with-current-buffer buffer
-        (pop-to-buffer buffer)
-        (vterm-mode)
-        ;; Remove the delete-window call that causes the error
-        buffer)))
+   (transient-define-prefix claude-code-transient ()
+    "Claude Code IDE Commands"
+    :transient-suffix     'transient--do-stay
+    :transient-non-suffix 'transient--do-exit
+    [
+     ["Session Management"
+      ("s" "Start Claude Code" claude-code-ide)
+      ("r" "Resume session" claude-code-ide-resume)
+      ("S" "Stop Claude Code" claude-code-ide-stop)
+      ("b" "Switch to buffer" claude-code-ide-switch-to-buffer)
+      ("l" "List sessions" claude-code-ide-list-sessions)]
 
-  (advice-add 'claude-code--term-make :override #'claude-code--vterm-no-window-delete)
-  (setq claude-code-terminal-backend 'vterm)
-  (setq claude-code-enable-notifications t)
-  (setq claude-code-notification-function #'peel/claude-notify)
-  :bind-keymap ("C-c c" . claude-code-command-map))
+     ["Interaction"
+      ("i" "Insert at mentioned" claude-code-ide-insert-at-mentioned)
+      ("e" "Send escape" claude-code-ide-send-escape)
+      ("n" "Insert newline" claude-code-ide-insert-newline)]
 
-(use-package eat :ensure t)
-(use-package transient :ensure t)
+     ["Debug & Status"
+      ("c" "Check status" claude-code-ide-check-status)
+      ("d" "Show debug" claude-code-ide-show-debug)
+      ("D" "Clear debug" claude-code-ide-clear-debug)]
+
+     ["Quit"
+      ("q" "Quit" transient-quit-one)]]))
+
+(use-package transient
+  :demand
+  :ensure t)
 
 ;; ..................................................................... Haskell
 (use-package haskell-mode
@@ -390,15 +397,15 @@
   :demand
   :ensure t
   :diminish
-  :config
-  ;; Apply inheritenv to key commands that start processes
+  :init
   (inheritenv-add-advice 'shell-command)
   (inheritenv-add-advice 'shell-command-to-string)
   (inheritenv-add-advice 'async-shell-command)
   (inheritenv-add-advice 'compile)
   (inheritenv-add-advice 'project-compile)
   (inheritenv-add-advice 'claude-code--term-make)
-  (inheritenv-add-advice 'claude-code-vterm))
+  (inheritenv-add-advice 'claude-code-vterm)
+  (inheritenv-add-advice 'claude-code-ide--create-vterm-session))
 
 ;; ....................................................................... dhall
 (use-package dhall-mode
@@ -597,9 +604,9 @@
   :ensure t
   :custom
   (auth-source-1password-vault "Private")
-  (auth-source-1password-executable "op")
-  :init
-  (auth-source-1password-enable))
+  (auth-source-1password-executable "op"))
+  ;; :init
+  ;; (auth-source-1password-enable))
 
 (use-package gnuplot
   :ensure t

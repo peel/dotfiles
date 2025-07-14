@@ -29,17 +29,17 @@ pkgs.emacsWithPackagesFromUsePackage {
      rev = "5db1374a5c9129be35f8466d53d103fb520c20c6";
      sha256 = "sha256-8oe/hVh0+fLyupBYaqxT7H8RHLlkN1l+7+CJIBYqFvA=";
    }) "readwise";
-   claude-code = elisp (pkgs.fetchFromGitHub {
-     owner = "stevemolitor";
-     repo = "claude-code.el";
-     rev = "6b91861794b3963bdee199166202be6886a350e1";
-     sha256 = "sha256-DbWEX4OZVagTVMon+A88q9XvK/5e2i3FUrOQYCsMQC4=";
-   }) "claude-code";
+   claude-code-ide = elisp (pkgs.fetchFromGitHub {
+     owner = "manzaltu";
+     repo = "claude-code-ide.el";
+     rev = "940f2d147f027309539d0f9f382e5300546d9303";
+     sha256 = "sha256-SkNKQ/vN9HJBdvxQozbmqVJNgAxKReZbJA72D8bJhIA=";
+   }) "claude-code-ide";
  };
  extraEmacsPackages = epkgs: with epkgs; [
    eglot-booster
    readwise
-   claude-code
+   claude-code-ide
    auth-source-1password
    my-config
   ];
