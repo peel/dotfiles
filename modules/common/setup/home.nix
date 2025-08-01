@@ -1,4 +1,4 @@
-{config, pkgs, stdenv, lib, ...}:
+{config, pkgs, stdenv, lib, ...}: 
 
 let
   common = {
@@ -10,10 +10,37 @@ let
       enableBashIntegration = true;
       nix-direnv.enable = true;
     };
+    programs.alacritty = {
+      enable = true;
+      theme = "gotham";
+      settings = {
+        keyboard.bindings = [{ key = "Slash"; mods = "Control"; chars = "\\u001f"; }];
+        window = {
+          option_as_alt = "Both";
+          decorations = "buttonless";
+          padding = {
+            x = 10;
+            y = 10;
+          };
+          dynamic_padding = true;
+        };
+        mouse.hide_when_typing = true;
+        font = {
+          size = 20;
+          offset.y = 8;
+          normal = {
+            family = "PragmataPro";
+            style = "Regular";
+          };
+        };
+      };
+    };
     home.packages = [
       pkgs.mpv
       pkgs.awscli
       pkgs._1password-cli
+      pkgs.docker
+      pkgs.colima
     ];
   };
   nixos = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {

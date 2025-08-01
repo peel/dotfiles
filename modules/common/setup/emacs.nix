@@ -10,7 +10,7 @@ in {
   config = lib.mkIf cfg.enable {
     environment.variables.EDITOR = "/run/current-system/sw/bin/emacsclient -tc";
     environment.variables.ALTERNATE_EDITOR = "/run/current-system/sw/bin/emacs";
-    environment.systemPackages = [ pkgs.binutils emacs pkgs.emacs-lsp-booster pkgs.claude-code ];# pkgs.nodePackages.mermaid-cli ];
+    environment.systemPackages = [ pkgs.binutils emacs pkgs.emacs-lsp-booster pkgs.claude-code pkgs.alacritty ];# pkgs.nodePackages.mermaid-cli ];
 
     services.emacs = {
       enable = true;

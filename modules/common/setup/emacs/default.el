@@ -40,6 +40,43 @@
   :ensure nil
   :config (winner-mode 1))
 
+;; pragmata pro ui borders ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+(use-package window
+  :ensure nil
+  :init
+  (defun my/setup-window-borders ()
+    "Setup window borders with Pragmata Pro box drawing characters."
+    ;; Only set window border characters, don't touch global display table
+    (set-face-attribute 'vertical-border nil :foreground "#404040" :background nil)
+    (set-face-attribute 'window-divider nil :foreground "#404040" :background nil)
+    (set-face-attribute 'window-divider-first-pixel nil :foreground "#404040" :background nil)
+    (set-face-attribute 'window-divider-last-pixel nil :foreground "#404040" :background nil)
+    (unless standard-display-table
+      (setq standard-display-table (make-display-table)))
+    (set-display-table-slot standard-display-table 'vertical-border (make-glyph-code ?\u2502)))
+  :hook (after-init . my/setup-window-borders)
+  :custom
+  (window-divider-default-bottom-width 1)
+  (window-divider-default-right-width 1)
+  (window-divider-default-places 'right-only)
+  (window-resize-pixelwise nil)
+  (frame-resize-pixelwise nil)
+  :config
+  (window-divider-mode 1)
+  (unless window-system
+    (require 'mouse)
+    (xterm-mouse-mode t)
+    (global-set-key [mouse-4] 'scroll-down-line)
+    (global-set-key [mouse-5] 'scroll-up-line))
+
+  ;; Better mouse wheel scrolling
+  (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+  (setq mouse-wheel-progressive-speed nil)
+  (setq mouse-wheel-follow-mouse 't)
+
+  ;; Enable track-mouse for better mouse support
+  (setq track-mouse t))
+
 ;; ivy ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package vertico
   :ensure t
@@ -63,6 +100,7 @@
   :ensure t
   :custom
   (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  (marginalia-separator " \u2502 ")
   :init
   (marginalia-mode))
 
@@ -78,6 +116,7 @@
               ("C-n" . corfu-next)
               ("C-p" . corfu-previous))
   :custom
+  (corfu-separator ?\u2502)
   (corfu-auto t)
   (corfu-auto-prefix 1)
   (corfu-commit-predicate nil)
@@ -90,6 +129,7 @@
   :bind (("C-x C-b" . consult-buffer)
          ("C-s"     . consult-line)
          ("C-c C-r" . consult-ripgrep)
+         ("C-c f"   . consult-flymake)
          ("M-g i"   . consult-imenu)
          ([remap switch-to-buffer] . consult-buffer))
   :config
@@ -158,7 +198,8 @@
   :ensure t
   :commands (dired-sidebar-toggle-sidebar)
   :bind ("C-x C-n" . dired-sidebar-toggle-sidebar)
-  :custom (setq dired-sidebar-subtree-line-prefix "▁"))
+  :custom 
+  (dired-sidebar-subtree-line-prefix "\u251c\u2500"))
 
 ;; bindings ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
@@ -171,8 +212,9 @@
   (setq which-key-idle-delay 0
         which-key-sort-order 'which-key-prefix-then-key-order)
   (which-key-add-key-based-replacements
-   "C-c f" "flycheck"
+   "C-c f" "consult-flymake"
    "C-c i" "unicode")
+  (setq which-key-separator " \u2502 ")
   (which-key-mode))
 
 
@@ -269,6 +311,19 @@
                       (mark-paragraph -1))
                     (call-interactively 'fancy-narrow-to-region))))
 
+(use-package flyover
+  :ensure t
+  :diminish
+  :after flymake
+  :hook (flymake-mode . flyover-mode)
+  :custom
+  (flyover-checkers '(flymake))
+  (flyover-virtual-line-type 'line-no-arrow)
+  (flyover-show-at-eol nil)
+  (flyover-info-icon "")
+  (flyover-warning-icon "")
+  (flyover-error-icon ""))
+
 (use-package eglot
   :demand
   :bind (("C-c C-l s" . eglot)
@@ -327,32 +382,9 @@
 (use-package claude-code-ide
   :ensure t
   :after (:all transient envrc inheritenv vterm)
-  :bind ("C-c c" . claude-code-transient)
+  :bind ("C-c c" . claude-code-ide-menu)
   :config
-   (transient-define-prefix claude-code-transient ()
-    "Claude Code IDE Commands"
-    :transient-suffix     'transient--do-stay
-    :transient-non-suffix 'transient--do-exit
-    [
-     ["Session Management"
-      ("s" "Start Claude Code" claude-code-ide)
-      ("r" "Resume session" claude-code-ide-resume)
-      ("S" "Stop Claude Code" claude-code-ide-stop)
-      ("b" "Switch to buffer" claude-code-ide-switch-to-buffer)
-      ("l" "List sessions" claude-code-ide-list-sessions)]
-
-     ["Interaction"
-      ("i" "Insert at mentioned" claude-code-ide-insert-at-mentioned)
-      ("e" "Send escape" claude-code-ide-send-escape)
-      ("n" "Insert newline" claude-code-ide-insert-newline)]
-
-     ["Debug & Status"
-      ("c" "Check status" claude-code-ide-check-status)
-      ("d" "Show debug" claude-code-ide-show-debug)
-      ("D" "Clear debug" claude-code-ide-clear-debug)]
-
-     ["Quit"
-      ("q" "Quit" transient-quit-one)]]))
+  (claude-code-ide-emacs-tools-setup))
 
 (use-package transient
   :demand
@@ -472,7 +504,7 @@
 ;; .................................................................. restclient
 (use-package restclient
   :ensure t
-  :diminish (restclient-mode . " ")
+  :diminish (restclient-mode . " ")
   :mode (("\\.http\\'" . restclient-mode)
 	       ("\\.rest\\'" . restclient-mode)
 	       ("\\.restclient\\'" . restclient-mode)))
@@ -487,7 +519,7 @@
   :ensure t
   :mode (("\\.markdown\\'" . markdown-mode)
          ("\\.md\\'" . markdown-mode))
-  :diminish (markdown-mode . " "))
+  :diminish (markdown-mode . " "))
 
 ;; ;; ai  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ;; (use-package gptel
@@ -680,10 +712,12 @@
 
 ;; terminal ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package vterm
+  :demand
   :ensure t
   :hook (vterm-mode . (lambda ()
                         (setq-local global-hl-line-mode nil)
                         (setq-local line-spacing nil)))
+  (add-hook 'vterm-mode-hook #'my/setup-window-borders)
   :bind ("C-c C-d" . peel/vterm-cd)
   :custom
   (vterm-max-scrollback 100000)
@@ -745,6 +779,15 @@
          ("M-+" . hs-show-all)
          ("M--" . hs-hide-level)))
 
+(use-package ediff
+  :ensure nil
+  :init
+  (defun peel/kill-ediff-buffers ()
+    (kill-buffer ediff-buffer-A)
+    (kill-buffer ediff-buffer-B)
+    (kill-buffer ediff-buffer-C))
+  (add-hook 'ediff-quit-hook 'peel/kill-ediff-buffers))
+
 ;; ui ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 ;; ...................................................................... themes
 (use-package emacs
@@ -792,6 +835,7 @@
     (tool-bar-mode -1)
     (scroll-bar-mode -1)
     (blink-cursor-mode -1)
+    (menu-bar-mode -1)
     (if (memq window-system '(mac ns))
         (progn
           (setq frame-title-format '("%b"))
@@ -871,13 +915,14 @@
 
   (setq-default
    mode-line-format
+   ;; Enhanced mode line with box drawing
    (list
-    '(:eval (propertize " %b " 'face 'font-lock-keyword-face)) ;; buffer
+    '(:eval (propertize "\u2524 %b " 'face 'font-lock-keyword-face)) ;; buffer
     '(:eval (propertize "%* " 'face 'font-lock-warning-face)) ;; ! ro | * mod | - clean
-    "%l:%c "
+    "\u251c %l:%c \u2502 "
     '(:eval (propertize "%m" 'face 'font-lock-comment-face)) ;; major
+    " \u2502"
     '(:eval (vc-status-mode-line))
-    '(:eval (propertize (cl-reduce 'ww/diff-hl-reducer (diff-hl-changes) :initial-value '(0 0 0))) 'face 'font-lock-comment-face)
     '(global-mode-string global-mode-string))))
 
 (setq backup-by-copying t

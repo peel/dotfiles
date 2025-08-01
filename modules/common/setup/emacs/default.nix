@@ -32,8 +32,8 @@ pkgs.emacsWithPackagesFromUsePackage {
    claude-code-ide = elisp (pkgs.fetchFromGitHub {
      owner = "manzaltu";
      repo = "claude-code-ide.el";
-     rev = "940f2d147f027309539d0f9f382e5300546d9303";
-     sha256 = "sha256-SkNKQ/vN9HJBdvxQozbmqVJNgAxKReZbJA72D8bJhIA=";
+     rev = "923206533a59ee8726674915c259aaba945391db";
+     sha256 = "sha256-eGihvj0syCbINN5XKyQpOq3IxkAMT/xtqvdUn4r5I1s=";
    }) "claude-code-ide";
  };
  extraEmacsPackages = epkgs: with epkgs; [
