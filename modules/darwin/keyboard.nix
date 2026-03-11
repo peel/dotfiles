@@ -12,7 +12,7 @@ let
                (mkMapping "<" "&lt;")
                (mkMapping "Bksp" "\U007F")
                (mkMapping "-" "")];
-  replaceMappings = strings.replaceChars (builtins.map (x: x.from) mappings) (builtins.map (x: x.to) mappings);
+  replaceMappings = str: builtins.replaceStrings  (builtins.map (x: x.from) mappings)  (builtins.map (x: x.to) mappings)  str;
   format = attrsets.mapAttrs' (k: v: nameValuePair (replaceMappings k) (if attrsets.isAttrs v then format v else v));
   keybindings = generators.toPlist {} (format cfg.mappings);
 in {

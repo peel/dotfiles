@@ -35,7 +35,6 @@ in {
   environment.systemPackages = [
     pkgs.coreutils
     pkgs.ripgrep
-    pkgs.cachix
   ];
   environment.variables.SHELL = "/run/current-system/sw/bin/bash";
   programs.bash = {

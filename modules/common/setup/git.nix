@@ -64,7 +64,6 @@ let
 in {
   environment.systemPackages =  [
     pkgs.git
-    pkgs.gitAndTools.git-crypt
     pkgs.difftastic
   ];
   

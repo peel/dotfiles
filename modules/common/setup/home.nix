@@ -10,11 +10,41 @@ let
       enableBashIntegration = true;
       nix-direnv.enable = true;
     };
+    programs.tmux = {
+      enable = true;
+      prefix = "C-a";
+      clock24 = true;
+      disableConfirmationPrompt = true;
+      focusEvents = true;
+      historyLimit = 5000;
+      keyMode = "emacs";
+      mouse = true;
+      plugins = [
+      ];
+      sensibleOnTop = true;
+      tmuxinator.enable = true;
+      tmuxp.enable = true;
+    };
+    home.sessionVariables.COLORTERM = "truecolor";
+    home.sessionVariables.BASH_ENV = "$HOME/.bashenv";
+    home.file.".bashenv".text = ''
+      if command -v direnv &>/dev/null; then
+        export DIRENV_LOG_FORMAT=""
+        eval "$(direnv export bash 2>/dev/null)"
+      fi
+    '';
     programs.alacritty = {
       enable = true;
       theme = "gotham";
       settings = {
-        keyboard.bindings = [{ key = "Slash"; mods = "Control"; chars = "\\u001f"; }];
+        env = {
+          TERM = "xterm-256color";
+          COLORTERM = "truecolor";
+        };
+        cursor.style.blinking = "Never";
+        keyboard.bindings = [
+          { key = "Slash"; mods = "Control"; chars = "\\u001f"; }
+        ];
         window = {
           option_as_alt = "Both";
           decorations = "buttonless";
@@ -26,8 +56,8 @@ let
         };
         mouse.hide_when_typing = true;
         font = {
-          size = 20;
-          offset.y = 8;
+          size = 23;
+          offset.y = 10;
           normal = {
             family = "PragmataPro";
             style = "Regular";
@@ -36,11 +66,10 @@ let
       };
     };
     home.packages = [
-      pkgs.mpv
       pkgs.awscli
       pkgs._1password-cli
       pkgs.docker
-      pkgs.colima
+      pkgs.jq
     ];
   };
   nixos = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {

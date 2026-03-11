@@ -2,13 +2,13 @@
   description = "peel's env";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/release-25.05";
+    nixpkgs.url = "github:nixos/nixpkgs/release-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    darwin.url = "github:lnl7/nix-darwin/nix-darwin-25.05";
+    darwin.url = "github:lnl7/nix-darwin/nix-darwin-25.11";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:nix-community/home-manager/release-25.05";
+    home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     depot-tools.url = "github:cir0x/depot-tools-nix-flake";
     emacs-lsp-booster.url = "github:slotThe/emacs-lsp-booster-flake";
@@ -97,7 +97,14 @@
         snowberry = mkSystem {
           hostname = "snowberry";
           system = "aarch64-darwin";
-          extraModules = [{ peel.emacs.enable = true; }];
+          extraModules = [
+            {
+              peel.emacs = {
+                enable = true;
+                terminal = nixpkgs-unstable.legacyPackages.aarch64-darwin.pkgs.ghostty-bin;
+              };
+            }
+          ];
         };
       };
 

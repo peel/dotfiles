@@ -36,7 +36,7 @@ in {
     extraOptions = ''
       experimental-features = nix-command flakes auto-allocate-uids
       builders = @/etc/nix/machines
-      builders-use-substitutes = true
+      builders-use-substitutes = false
     '';
   };
   time.timeZone = "Europe/Warsaw";

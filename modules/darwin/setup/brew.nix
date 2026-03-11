@@ -21,6 +21,7 @@ in {
     ];
     brews = [
       "akirakyle/qemu-virgl/qemu-virgl"
+      "esphome"
     ];
     masApps = {
       # "Slack" = 803453959;

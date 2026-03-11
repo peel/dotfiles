@@ -38,7 +38,22 @@
 ;; navigation ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package winner
   :ensure nil
-  :config (winner-mode 1))
+  :config (winner-mode 1)
+  :init
+  (defvar peel--window-configuration nil
+    "Store the window configuration before zooming.")
+
+  (defun peel--toggle-window-zoom ()
+    "Toggle between zoomed window and previous window configuration."
+    (interactive)
+    (if peel--window-configuration
+        (progn
+          (set-window-configuration peel--window-configuration)
+          (setq peel--window-configuration nil))
+      (setq peel--window-configuration (current-window-configuration))
+      (delete-other-windows)))
+
+  (global-set-key (kbd "s-1") 'peel--toggle-window-zoom))
 
 ;; pragmata pro ui borders ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 (use-package window
@@ -170,7 +185,25 @@
   :bind (("C-x g" . magit-status)
          ("C-x G" . magit-dispatch))
   :custom
-  (magit-completing-read-function 'magit-builtin-completing-read "Use vertico"))
+  (magit-completing-read-function 'magit-builtin-completing-read "Use vertico")
+  (defun peel/change-commit-author (arg)
+    "Change the commit author during an interactive rebase in Magit.
+With a prefix argument, insert a new change commit author command
+even when there is already another rebase command on the current
+line.  With empty input, remove the change commit author action
+on the current line, if any."
+    (interactive "P")
+    (let ((author
+           (magit-transient-read-person "Select a new author for this commit"
+                                        nil
+                                        nil)))
+      (git-rebase-set-noncommit-action
+       "exec"
+       (lambda (_) (if author
+                  (format "git commit --amend --author='%s'" author)
+                ""))
+       arg)))
+  (define-key git-rebase-mode-map (kbd "h") #'peek/change-commit-author))
 
 (use-package git-link
   :ensure t
@@ -379,12 +412,24 @@
 	:after eglot
 	:config	(eglot-booster-mode))
 
-(use-package claude-code-ide
+(use-package agent-shell
   :ensure t
-  :after (:all transient envrc inheritenv vterm)
-  :bind ("C-c c" . claude-code-ide-menu)
+  :after (:all envrc inheritenv)
   :config
-  (claude-code-ide-emacs-tools-setup))
+  (setq agent-shell-anthropic-claude-command '("claude-agent-acp"))
+  (agent-shell-anthropic-authentication
+   (agent-shell-anthropic-make-authentication :login t)))
+
+ (use-package claude-code-ide
+    :ensure t
+    :after (:all envrc inheritenv)
+    :bind ("C-c c" . claude-code-ide-menu)
+    :config
+    (claude-code-ide-emacs-tools-setup)
+    (advice-add 'claude-code-ide--start-session :before
+                (lambda (&rest _)
+                  (when-let ((path (executable-find "claude")))
+                    (setq-local claude-code-ide-cli-path path)))))
 
 (use-package transient
   :demand
@@ -403,7 +448,7 @@
   :functions xref-push-marker-stack
   :commands (haskell-session-maybe
              haskell-mode-find-def
-             haskell-ident-at-point
+             haskell-ident-at-pointoh
              haskell-mode-handle-generic-loc))
 (use-package haskell-interactive-mode)
 
@@ -711,6 +756,45 @@
   (org-static-blog-page-header "<link href= \"export/html/style.css\" rel=\"stylesheet\" type=\"text/css\" />"))
 
 ;; terminal ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+(defun lambda-term-keys-want-key-p-def (key mods)
+  "Lambda implementation for `term-keys/want-key-p-func'.
+
+This function controls which key combinations are to be encoded
+and decoded using the term-keys protocol extension.
+KEY is the KeySym name as listed in `term-keys/mapping'; MODS is
+a 6-element bool vector representing the modifiers Shift /
+Control / Meta / Super / Hyper / Alt respectively, with t or nil
+representing whether they are depressed or not.  Returns non-nil
+if the specified key combination should be encoded.
+
+Note that the ALT modifier rarely actually corresponds to the Alt
+key on PC keyboards; the META modifier will usually be used
+instead."
+  (let ((shift   (elt mods 0))
+        (control (elt mods 1))
+        (meta    (elt mods 2))
+        (super   (elt mods 3))
+        (hyper   (elt mods 4))
+        (alt     (elt mods 5)))
+    (and
+
+     ;; We don't care about Super/Hyper/Alt modifiers
+     (not super)
+     (not hyper)
+     (not alt)
+
+     (or
+      ;; Navigation keys and Control/Alt
+      (and (member key '("Left" "Right")) control)
+      ))))
+
+(use-package term-keys
+  :ensure t
+  :custom
+  (term-keys/want-key-p-func 'lambda-term-keys-want-key-p-def)
+  :config
+  (term-keys-mode t))
+
 (use-package vterm
   :demand
   :ensure t
@@ -836,6 +920,11 @@
     (scroll-bar-mode -1)
     (blink-cursor-mode -1)
     (menu-bar-mode -1)
+    (unless (display-graphic-p)
+        (progn
+          (setenv "COLORTERM" "truecolor")
+          (set-terminal-parameter nil 'background-mode 'dark)))
+    (setq ns-use-srgb-colorspace nil)
     (if (memq window-system '(mac ns))
         (progn
           (setq frame-title-format '("%b"))
@@ -863,8 +952,12 @@
   :custom
   (writeroom-fullscreen-effect "maximized")
   (writeroom-width 126)
-  (writeroom-bottom-divider-width 0))
+  (writeroom-bottom-divider-width 0)
+  (global-writeroom-mode))
 
+(use-package clipetty
+  :ensure t
+  :hook (after-init . global-clipetty-mode))
 
 ;; .................................................................... unclutter
 (use-package emacs
