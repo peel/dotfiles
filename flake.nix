@@ -11,6 +11,7 @@
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     depot-tools.url = "github:cir0x/depot-tools-nix-flake";
+    llm-agents.url = "github:numtide/llm-agents.nix";
     emacs-lsp-booster.url = "github:slotThe/emacs-lsp-booster-flake";
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -47,6 +48,7 @@
               homeManagerModules {
                home-manager.useGlobalPkgs = true;
                home-manager.useUserPackages = true;
+               home-manager.extraSpecialArgs = { pkgs-unstable = nixpkgs-unstable.legacyPackages.${system}; };
                home-manager.users.${user} = homeModules;
                home-manager.sharedModules = [ sops-nix.homeManagerModules.sops  ];
               }

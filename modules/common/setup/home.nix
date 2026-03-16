@@ -1,4 +1,4 @@
-{config, pkgs, stdenv, lib, ...}: 
+{config, pkgs, pkgs-unstable, stdenv, lib, ...}:
 
 let
   common = {
@@ -33,6 +33,99 @@ let
         eval "$(direnv export bash 2>/dev/null)"
       fi
     '';
+    programs.ghostty = {
+      enable = true;
+      package = if pkgs.stdenv.hostPlatform.isDarwin then pkgs-unstable.ghostty-bin else pkgs-unstable.ghostty;
+      settings = {
+        font-family = "PragmataPro";
+        font-size = 22;
+        font-thicken = true;
+        font-thicken-strength = 0;
+        adjust-cell-height = "50%";
+        mouse-shift-capture = "never";
+        shell-integration = "detect";
+        shell-integration-features = "cursor,sudo,title";
+        theme = "light:solo-jazz,dark:gotham";
+        cursor-style = "block";
+        cursor-style-blink = false;
+        scrollback-limit = 1000000;
+        window-inherit-working-directory = true;
+        window-inherit-font-size = true;
+        confirm-close-surface = false;
+        window-padding-x = 20;
+        window-padding-y = 5;
+        window-padding-color = "extend";
+        window-vsync = true;
+        term = "ghostty";
+        clipboard-read = "allow";
+        clipboard-write = "allow";
+        desktop-notifications = true;
+        macos-option-as-alt = true;
+        macos-titlebar-style = "tabs";
+        quick-terminal-position = "top";
+        quick-terminal-screen = "main";
+        quick-terminal-animation-duration = 0.2;
+        quick-terminal-autohide = true;
+        keybind = [
+          "super+shift+k=toggle_quick_terminal"
+          "super+shift+v=toggle_command_palette"
+          "shift+enter=text:\\x1b\\r"
+        ];
+      };
+      themes = {
+        gotham = {
+          background = "0c1014";
+          foreground = "99d1ce";
+          cursor-color = "599cab";
+          selection-background = "091f2e";
+          selection-foreground = "d3ebe9";
+          palette = [
+            "0=#0c1014"
+            "1=#c23127"
+            "2=#2aa889"
+            "3=#edb443"
+            "4=#195466"
+            "5=#4e5166"
+            "6=#33859e"
+            "7=#99d1ce"
+            "8=#11151c"
+            "9=#d26937"
+            "10=#091f2e"
+            "11=#245361"
+            "12=#0a3749"
+            "13=#888ca6"
+            "14=#599cab"
+            "15=#d3ebe9"
+          ];
+        };
+        solo-jazz = {
+          background = "fafafa";
+          foreground = "3b2685";
+          cursor-color = "04c4c7";
+          cursor-text = "fafafa";
+          selection-background = "eaeafa";
+          selection-foreground = "3b2685";
+          palette = [
+            "0=#24292e"
+            "1=#fe2500"
+            "2=#10d7ae"
+            "3=#ff5200"
+            "4=#005cc5"
+            "5=#c71585"
+            "6=#009c9f"
+            "7=#d0d0d0"
+            "8=#778ca3"
+            "9=#fa1090"
+            "10=#10d7ae"
+            "11=#ff5200"
+            "12=#00afef"
+            "13=#9d2dab"
+            "14=#04c4c7"
+            "15=#fafafa"
+          ];
+        };
+      };
+    };
     programs.alacritty = {
       enable = true;
       theme = "gotham";

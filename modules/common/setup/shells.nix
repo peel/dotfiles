@@ -50,18 +50,18 @@ in {
         shopt -s globstar     # enable **
       fi
       __git_ps1() {
-        [ -d .git ] && echo " $(command git branch --show-current)"
+        [ -d .git ] && echo "  $(command git branch --show-current)"
       }
       __prompt_nix() {
-        [ -z "$IN_NIX_SHELL" ] && echo " λ" || echo " "
+        [ -z "$IN_NIX_SHELL" ] && echo " λ" || echo "  "
       }
       __terraform_ps1() {
-        [ -d .terraform ] && echo " $(command terraform workspace show 2>/dev/null)" || echo " "
+        [ -d .terraform ] && echo "   $(command terraform workspace show 2>/dev/null)" || echo ""
       }
       if [[ $TERM == "dumb" ]]; then
         PS1="$ "
       else
-        PS1='\W$(__git_ps1 " %s")$(__terraform_ps1 " %s")$(__prompt_nix "%s")\[$(vterm_prompt_end)\] '
+        PS1='\W$(__git_ps1)$(__terraform_ps1)$(__prompt_nix)\[$(vterm_prompt_end)\] '
       fi
       ${direnvIntegration}
       ${vtermIntegration}

@@ -14,6 +14,7 @@ let
   clockwise = nav "last" "swap";
   counterClockwise = "nav" "first" "swap";
   captureTitle = "org-capture";
+  cropsTitle = "crops";
 in {
   services.yabai.enable = true;
   services.yabai.package = pkgs.yabai;
@@ -47,6 +48,7 @@ in {
     # grid="<rows>:<cols>:<start-x>:<start-y>:<width>:<height>"
     yabai -m rule --add app="emacs" role="AXTextField" subrole="AXStandardWindow" title="^${captureTitle}$" manage="off" sticky="on" grid="3:4:2:3:1:1"
     yabai -m rule --add app="Synology Surveillance Station Client" sticky="on" grid="4:4:3:0:1:1"
+    yabai -m rule --add app="Ghostty" title="^${cropsTitle}$" manage="off" sticky="on" grid="1:20:17:0:3:1"
     yabai -m rule --add app="Dash"                manage="off"
     yabai -m rule --add app="1Password"           manage="off"
     yabai -m rule --add app="System Preferences"  manage="off"
@@ -59,6 +61,7 @@ in {
     myCapture = "emacsclient -c -F '((name . \"${captureTitle}\"))' --eval '(peel/org-roam-capture)'";
     myEditor = "emacsclient -a '' -nc";
     myPlayer = "open ~/Applications/Music\ Assistant.app";
+    myCrops = "ghostty --title=${cropsTitle} -e crops";
     noop = "/dev/null";
     prefix = "yabai -m";
     fstOrSnd = {fst, snd}: domain: "${prefix} ${domain} --focus ${fst} || ${prefix} ${domain} --focus ${snd}";
@@ -101,11 +104,15 @@ in {
     ${moveMask} - right                       : ${prefix} window --display prev
     ${moveMask} - left                        : ${prefix} window --display next
 
+    # toggle ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+    ${modMask} + shift - f                    : ${prefix} window --toggle float
+    ${modMask} + shift - s                    : ${prefix} window --toggle sticky
+
     # apps  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
     ${modMask} - return                       : ${myEditor}
     ${modMask} + shift - return               : ${myCapture}
     ${modMask} - p                            : ${myPlayer}
-
+    ${modMask} - b                            : ${myCrops}
 
     # reset  ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
     ${modMask} - q                            : pkill yabai; pkill skhd; osascript -e 'display notification "wm restarted"'
